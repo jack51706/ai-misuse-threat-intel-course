@@ -216,7 +216,7 @@ def main():
     mds = []
     for dirpath, _, files in os.walk(ROOT):
         for fn in files:
-            if fn.endswith(".md"):
+            if fn.endswith(".md") and not fn.startswith("_"):
                 full = os.path.join(dirpath, fn)
                 rel = os.path.relpath(full, ROOT).replace("\\", "/")
                 mds.append((full, rel))

@@ -1,0 +1,131 @@
+<title>AI 濫用威脅情報</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#e9edf3; --panel:#ffffff; --panel2:#f3f6fa; --fg:#151a24; --muted:#5a6377;
+  --line:#d5dbe6; --accent:#b06d12; --accent-soft:#f3e3c9; --intel:#1c5793;
+  --sev:#c0392b; --scroll:#c3cbd8;
+  --sans:"IBM Plex Sans","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;
+  --mono:"IBM Plex Mono","Cascadia Code",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d1119; --panel:#141a24; --panel2:#1a212d; --fg:#e3e8f1; --muted:#8790a4;
+  --line:#252d3b; --accent:#d69a3e; --accent-soft:#3a2f18; --intel:#5695d6;
+  --sev:#e06a5c; --scroll:#2c3543;
+}}
+:root[data-theme="dark"]{
+  --bg:#0d1119; --panel:#141a24; --panel2:#1a212d; --fg:#e3e8f1; --muted:#8790a4;
+  --line:#252d3b; --accent:#d69a3e; --accent-soft:#3a2f18; --intel:#5695d6;
+  --sev:#e06a5c; --scroll:#2c3543;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);height:100vh;overflow:hidden}
+.app{display:flex;height:100vh}
+.sidebar{width:320px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;height:100vh}
+.brand{padding:18px 20px 14px;border-bottom:1px solid var(--line)}
+.brand .kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.brand h1{margin:.35em 0 .15em;font-size:19px;font-weight:700;letter-spacing:-.01em;line-height:1.2}
+.brand .sub{font-size:11.5px;color:var(--muted);line-height:1.5}
+.stats{display:flex;gap:0;margin-top:12px;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.stats div{flex:1;padding:7px 4px;text-align:center;background:var(--panel2)}
+.stats div+div{border-left:1px solid var(--line)}
+.stats .n{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--intel)}
+.stats .l{font-size:9.5px;color:var(--muted);margin-top:1px}
+.search{padding:12px 16px 8px}
+.search input{width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:7px;background:var(--panel2);color:var(--fg);font-family:var(--sans);font-size:13px;outline:none}
+.search input:focus{border-color:var(--intel);box-shadow:0 0 0 3px color-mix(in srgb,var(--intel) 18%,transparent)}
+nav{flex:1;overflow-y:auto;padding:4px 10px 40px}
+nav::-webkit-scrollbar{width:9px}nav::-webkit-scrollbar-thumb{background:var(--scroll);border-radius:5px;border:2px solid var(--panel)}
+.mod{margin:10px 0 4px}
+.mod-h{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:6px 8px 4px;position:sticky;top:0;background:var(--panel)}
+nav a{display:block;text-decoration:none;color:var(--fg);font-size:12.5px;line-height:1.35;padding:6px 9px;border-radius:6px;border-left:2px solid transparent;transition:background .12s}
+nav a .code{font-family:var(--mono);font-weight:600;color:var(--intel);font-size:11.5px}
+nav a .desc{color:var(--muted);font-size:11px}
+nav a:hover{background:var(--panel2)}
+nav a.active{background:var(--accent-soft);border-left-color:var(--accent)}
+nav a.active .code{color:var(--accent)}
+nav a.hidden{display:none}
+.viewer-wrap{flex:1;display:flex;flex-direction:column;min-width:0}
+.topbar{height:42px;flex-shrink:0;display:flex;align-items:center;gap:14px;padding:0 18px;background:var(--panel);border-bottom:1px solid var(--line)}
+.topbar .now{font-family:var(--mono);font-size:12px;color:var(--fg);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar .hint{margin-left:auto;font-size:11px;color:var(--muted)}
+.topbar .menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:6px;color:var(--fg);font-size:16px;padding:2px 9px;cursor:pointer}
+iframe{flex:1;width:100%;border:0;background:var(--bg)}
+.scrim{display:none}
+@media (max-width:760px){
+  .sidebar{position:fixed;z-index:20;left:0;top:0;transform:translateX(-100%);transition:transform .2s;box-shadow:0 0 40px rgba(0,0,0,.3)}
+  .app.open .sidebar{transform:translateX(0)}
+  .app.open .scrim{display:block;position:fixed;inset:0;z-index:15;background:rgba(0,0,0,.4)}
+  .topbar .menu-btn{display:block}
+}
+</style>
+
+<div class="app" id="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="kicker">Threat Intelligence · 2026-09</div>
+      <h1>AI 濫用威脅情報</h1>
+      <div class="sub">Anthropic《Detecting and countering misuse of AI: September 2026》逐案課程教材</div>
+      <div class="stats">
+        <div><div class="n">52</div><div class="l">教材</div></div>
+        <div><div class="n">236</div><div class="l">圖表</div></div>
+        <div><div class="n">7+1</div><div class="l">危害領域</div></div>
+      </div>
+    </div>
+    <div class="search"><input id="q" type="search" placeholder="搜尋 GTG 代號或主題…" autocomplete="off"></div>
+    <nav id="nav">
+<!--NAV-->
+    </nav>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+  <div class="viewer-wrap">
+    <div class="topbar">
+      <button class="menu-btn" id="menu">☰</button>
+      <span class="now" id="now">課程總索引</span>
+      <span class="hint">左側選教材 · 圖表與 Mermaid 已內嵌</span>
+    </div>
+    <iframe id="viewer" name="viewer" title="教材內容" src="00-index.html?e=3"></iframe>
+  </div>
+</div>
+
+<script>
+(function(){
+  var VER="?e=3";
+  var nav=document.getElementById('nav'), viewer=document.getElementById('viewer'),
+      now=document.getElementById('now'), app=document.getElementById('app');
+  nav.querySelectorAll('a').forEach(function(a){
+    var name=a.textContent.trim(), code='', desc=name;
+    var m=name.match(/^(GTG-[\d-]+)-(.+)$/);
+    if(m){code=m[1];desc=m[2].replace(/-/g,' ');}
+    else if(/^\d\d-/.test(name)){code='導論';desc=name.replace(/^\d\d-/,'').replace(/-/g,' ');}
+    else if(/^case/.test(name)){code='Case';desc=name.replace(/-/g,' ');}
+    else {desc=name.replace(/-/g,' ');}
+    a.innerHTML='<span class="code">'+code+'</span> <span class="desc">'+desc+'</span>';
+    a.dataset.hay=(name+' '+desc).toLowerCase();
+  });
+  function select(a){
+    nav.querySelectorAll('a.active').forEach(function(x){x.classList.remove('active')});
+    a.classList.add('active');
+    viewer.src=a.dataset.src+VER;
+    now.textContent=a.querySelector('.desc').textContent.trim();
+    app.classList.remove('open');
+  }
+  nav.addEventListener('click',function(e){
+    var a=e.target.closest('a'); if(!a)return; e.preventDefault(); select(a);
+  });
+  document.getElementById('q').addEventListener('input',function(e){
+    var v=e.target.value.trim().toLowerCase();
+    nav.querySelectorAll('a').forEach(function(a){
+      a.classList.toggle('hidden', v && a.dataset.hay.indexOf(v)<0);
+    });
+    nav.querySelectorAll('.mod').forEach(function(mod){
+      var any=mod.querySelector('a:not(.hidden)');
+      mod.style.display=any?'':'none';
+    });
+  });
+  document.getElementById('menu').addEventListener('click',function(){app.classList.toggle('open')});
+  document.getElementById('scrim').addEventListener('click',function(){app.classList.remove('open')});
+})();
+</script>

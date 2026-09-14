@@ -1,7 +1,7 @@
 {
- "generated": "2026-09-14T17:51:32",
+ "generated": "2026-09-14T17:58:19",
  "stats": {
-  "pages": 53,
+  "pages": 52,
   "figures": 290,
   "external": 0,
   "last_update": "2026-09-14"
@@ -266,11 +266,6 @@
    "local": "09-external-research/00-external-research-intro.html",
    "sha256": "9ae3eb36c808b2ee5206833264a89884f71f1fdaaaf574bc528434d7e70d2d87",
    "bytes": 5731
-  },
-  "09-external-research/_brief.html": {
-   "local": "09-external-research/_brief.html",
-   "sha256": "1e0fc1b305ac5c5e67c2726f641278dbf8fb554c7332f34e9f59d75f4f92e1dc",
-   "bytes": 10999
   },
   "00-index.html": {
    "local": "00-index.html",
@@ -549,8 +544,8 @@
   },
   "index.html": {
    "local": "_site/index.html",
-   "sha256": "256b6c814fb6849d9979cc44cf3bfe7ea3441152d6941c2baa784d634b2aae89",
-   "bytes": 21560
+   "sha256": "2bc0d32890e786b7c1f67251929abbad71aabb553f62be779f1809a79625d3e8",
+   "bytes": 21376
   }
  }
 }

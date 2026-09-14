@@ -133,7 +133,7 @@ def collect():
             continue
         items = []
         for fn in sorted(os.listdir(d)):
-            if not fn.endswith(".html"):
+            if not fn.endswith(".html") or fn.startswith("_"):
                 continue
             name = fn[:-5]
             full = os.path.join(d, fn)
