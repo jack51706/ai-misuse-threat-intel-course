@@ -1,335 +1,345 @@
 {
- "published": "2026-09-15T00:13:41",
+ "published": "2026-09-14T16:40:35",
  "files": {
   "shared/00-agent-brief.html": {
    "local": "_shared/00-agent-brief.html",
-   "sha256": "cfd69c1828d3560718bebd15b57b38a1b1ec7c7e8282659fc89dc685d0b945b8",
-   "bytes": 13481
+   "sha256": "3cf310d4cea1de2bad1d158be3adbb87dea7eda2798d827420e7d0a41ff31312",
+   "bytes": 13314
   },
   "shared/01-cross-cutting-analysis.html": {
    "local": "_shared/01-cross-cutting-analysis.html",
-   "sha256": "d2fdf5d07d232e57f68fa76e82d68a44563b664a3a6462d8c9aea90a62c6f635",
-   "bytes": 15297
+   "sha256": "a99b68f38927c541a6fd274cc853ca960fdb8b64ace4fe9f2680c56b80343300",
+   "bytes": 15159
   },
   "shared/02-claude-safeguards-and-bypass-paths.html": {
    "local": "_shared/02-claude-safeguards-and-bypass-paths.html",
-   "sha256": "59ac3035eed98fbed5d32a418ce7b36a338bc4e34732e7639f0cd4deb19c88ff",
-   "bytes": 18186
+   "sha256": "67be81864d91b8d60a471e4bfcfc25e6a76d6182cedd82006c104a3d9e1ac48d",
+   "bytes": 17957
   },
   "01-cyber/00-cyber-trends-and-skills.html": {
    "local": "01-cyber/00-cyber-trends-and-skills.html",
-   "sha256": "a5df1ce234b76031ceeeccf0ab0eb529daeb74e37f52def37623f4e6c9bb9333",
-   "bytes": 726964
+   "sha256": "4fe214d9ac52a8fb3352f8e9049f9b4397a658cc288e92e2663ed16bc1db6a5b",
+   "bytes": 725208
   },
   "01-cyber/GTG-10007-exploit-foundry.html": {
    "local": "01-cyber/GTG-10007-exploit-foundry.html",
-   "sha256": "0e7e1399936cf70b1706b8ed493c27002be9a979866effb82a4cfb3f2f2e9f84",
-   "bytes": 1627723
+   "sha256": "06d6ac492e9ed456f36339e388ff7e2504a50461f3707bd5cddf70ca4a55f7f4",
+   "bytes": 1625731
   },
   "01-cyber/GTG-20006-russian-espionage.html": {
    "local": "01-cyber/GTG-20006-russian-espionage.html",
-   "sha256": "9774700529b883da800f7adcb2ea686ec50643c903e2784654654759472bd326",
-   "bytes": 1056204
+   "sha256": "d5f2a8a68cd7bb61fa830c576fe6b09fab0b45e3d44686d8950e3fdab844eed8",
+   "bytes": 1053879
   },
   "01-cyber/GTG-50014-shinyhunters.html": {
    "local": "01-cyber/GTG-50014-shinyhunters.html",
-   "sha256": "38771797b73f78e15d04d2ccea5186541ef9a6a0a6f0e577ec4f8443196670b1",
-   "bytes": 3545025
+   "sha256": "34ea23a0aaa87ce97f4d7326958ffdbac2b7c311e3a8f0acfbe9272781f0944f",
+   "bytes": 3542853
   },
   "01-cyber/GTG-50020-ai-supply-chain.html": {
    "local": "01-cyber/GTG-50020-ai-supply-chain.html",
-   "sha256": "4133b9936c877929999efff9dcc32b3edb111129f293ebae195c6bad157fcd99",
-   "bytes": 1450450
+   "sha256": "07639f57793686e617c479eff8b7c847d66dc9fbb46e01b5372e1af25163e50b",
+   "bytes": 1448955
   },
   "01-cyber/GTG-50021-fake-reseller.html": {
    "local": "01-cyber/GTG-50021-fake-reseller.html",
-   "sha256": "10a2ccecda2c497e041ce186aac86dfd31bf985d34770f0f9dec48ddbe9bbc5c",
-   "bytes": 1315694
+   "sha256": "bd6ada6a8cfb95762b4ad5db1e254077001d2803eca900072fb4040673776e16",
+   "bytes": 1312493
   },
   "01-cyber/GTG-50029-hacktivist.html": {
    "local": "01-cyber/GTG-50029-hacktivist.html",
-   "sha256": "6dd989bfba66f0819f987278edf66c569ff36282216a457f3e7e878fa612e69f",
-   "bytes": 861683
+   "sha256": "ee04869f786d6ab6f213e94a61299dfe03c3e9dc37f7a057bfc3848ad22a34f8",
+   "bytes": 860038
   },
   "02-influence/00-influence-intro-and-breakout-scale.html": {
    "local": "02-influence/00-influence-intro-and-breakout-scale.html",
-   "sha256": "86665896e79e9d6e668c5b4901d452ec964bd93df699248b5c8210e5eb7079bf",
-   "bytes": 2572811
+   "sha256": "38d6d1815f391b0d1ac8cbadfe236cab881505f90cf7608c26cc860e8a05c547",
+   "bytes": 2568910
   },
   "02-influence/GTG-04001-russia-car-fimi.html": {
    "local": "02-influence/GTG-04001-russia-car-fimi.html",
-   "sha256": "12660c83dca9c52cce4caa3ce69f0f350399d07ff4d9d3701b9cb79916582476",
-   "bytes": 907363
+   "sha256": "4fb5552624bbdcf19003d2f4d5d3c7513788b86d234edacb44364ce6d81dbc13",
+   "bytes": 905250
   },
   "02-influence/GTG-24015-russian-state-media.html": {
    "local": "02-influence/GTG-24015-russian-state-media.html",
-   "sha256": "87add4b6ce895356516d247e6135d1b1d78510885df75dc8fc5f92ba5bf5fd89",
-   "bytes": 1192238
+   "sha256": "2dc70fa05eb2d5d7a02a3ec55f111b98b4077b15f80580661861774513e2deb5",
+   "bytes": 1189147
   },
   "02-influence/GTG-34001-iran-icco.html": {
    "local": "02-influence/GTG-34001-iran-icco.html",
-   "sha256": "743a6f81def0924f6f3ea05d8ac08c197b75ad34c7bfad26720a15435a60d6d0",
-   "bytes": 862415
+   "sha256": "4b1b55a6cc50601fde681901e7b71f84e439a90cd0bcd6be9639b1cc623089fc",
+   "bytes": 859929
   },
   "02-influence/GTG-54002-influence-as-a-service.html": {
    "local": "02-influence/GTG-54002-influence-as-a-service.html",
-   "sha256": "69e3500c8e712b516e9bde9df3008b319decdbecb2edc9e947f63f3956ca10ab",
-   "bytes": 2916948
+   "sha256": "9106e88e4e4dfd3bc4ac7b4a8dd9d4f02ec385d6d04a044bf47e580595053cb5",
+   "bytes": 2914050
   },
   "02-influence/GTG-54004-kenya-cib.html": {
    "local": "02-influence/GTG-54004-kenya-cib.html",
-   "sha256": "7f653196a4be011aefa55e2df239d43d7e7e55373441e320e3f6af46bb651ef7",
-   "bytes": 1117645
+   "sha256": "3c2abefddc40d301d4a319b15d16f3309c47ad534859959a7be5fec96d759a40",
+   "bytes": 1115219
   },
   "02-influence/GTG-54006-bangladesh-awami-league.html": {
    "local": "02-influence/GTG-54006-bangladesh-awami-league.html",
-   "sha256": "92c977dbd5387a62ceee9eafcc3f7765e5eefbd8290cfba18d451db1802f4667",
-   "bytes": 1414874
+   "sha256": "7fd71df095db47da65dd2255541d4a1353af29af21d55e9517f27e34156af663",
+   "bytes": 1411838
   },
   "02-influence/GTG-84002-uae-muslim-brotherhood.html": {
    "local": "02-influence/GTG-84002-uae-muslim-brotherhood.html",
-   "sha256": "16beb82f8aae8beda78353bae7c7818e499e3ff5bd50a781c8a1a83617b509b4",
-   "bytes": 2094935
+   "sha256": "bcc74cef21043550c7aa26c3c16f02e2649c971b91148ab38c7dc19e6e108da8",
+   "bytes": 2090975
   },
   "02-influence/GTG-84005-malaysia-election-platform.html": {
    "local": "02-influence/GTG-84005-malaysia-election-platform.html",
-   "sha256": "1b947d7ab975a948be3a18b672547fe8e1504519fbcf5cab49f8f8efe90732d7",
-   "bytes": 1950579
+   "sha256": "62b1f70975f8f82b08ae51533de4cb560ca81da61ef5abdf84c458f17ae666ab",
+   "bytes": 1947676
   },
   "02-influence/GTG-84006-mek-ncri-viktor.html": {
    "local": "02-influence/GTG-84006-mek-ncri-viktor.html",
-   "sha256": "478efd4c89babae6d016206c33251e5c3e760f838d56a953b614a68ba0629053",
-   "bytes": 1361859
+   "sha256": "75162888c8d608d71713a4669aefeaf77c3354f49950ed4a1bb99e81de83b273",
+   "bytes": 1357304
   },
   "03-surveillance/00-surveillance-intro.html": {
    "local": "03-surveillance/00-surveillance-intro.html",
-   "sha256": "68c70681d5bf1196eca6dcd83acf529904162888ab7625d060da7f8d913f0132",
-   "bytes": 3256814
+   "sha256": "60af58af33ac6c98fd6df596347b193e19807c199598625322db9ab634ffc12b",
+   "bytes": 3253140
   },
   "03-surveillance/GTG-14010-uyghurs-syria.html": {
    "local": "03-surveillance/GTG-14010-uyghurs-syria.html",
-   "sha256": "8d2fd599535420d5a270505551b31da273891a94af5e69cb77c70457923e5497",
-   "bytes": 859157
+   "sha256": "be795ac5423434935899edca1cff8016e3243f8f0ec40615fe840cc31cda2b81",
+   "bytes": 855865
   },
   "03-surveillance/GTG-14020-religious-affairs-taiwan-church.html": {
    "local": "03-surveillance/GTG-14020-religious-affairs-taiwan-church.html",
-   "sha256": "dd5fc0662abbaf63d36b1d40c84367d117a69d2c9119692d8c84d60d7c847d37",
-   "bytes": 879918
+   "sha256": "5f3e1c0c76392074909b7ffd0d2bcdbc1451ce20b8690ea6f7bcf23e02ba7620",
+   "bytes": 876284
   },
   "03-surveillance/GTG-14021-weiwen-transnational-repression.html": {
    "local": "03-surveillance/GTG-14021-weiwen-transnational-repression.html",
-   "sha256": "66b70a5c7c21dc244703ea1ebb5549de69eb981b94fb216c5465b48c37304995",
-   "bytes": 950207
+   "sha256": "d8ee93d2d9d57abdd2f8e94f19c80bfba67eb9cfadca549f3ad31e90eeb56339",
+   "bytes": 948742
   },
   "03-surveillance/GTG-14022-public-opinion-monitoring-taiwan.html": {
    "local": "03-surveillance/GTG-14022-public-opinion-monitoring-taiwan.html",
-   "sha256": "11b46384a88719cd91c10acc40b8efd2252532110a9d45f352c7eca8391c7fe5",
-   "bytes": 562776
+   "sha256": "b4c30316bd1c2f47d764f8d27052bc14ce26fdeb80e8e37d23cd01d27be4fbd0",
+   "bytes": 561344
   },
   "03-surveillance/GTG-30004-30005-30006-osint-recon.html": {
    "local": "03-surveillance/GTG-30004-30005-30006-osint-recon.html",
-   "sha256": "a2cd2c90665f446403cad1898cf77e74bb8d4d0e77866c2615c07ae04250ccab",
-   "bytes": 277888
+   "sha256": "7950395c7c85638f048902f1deec4dd171328a73bfca9fdcd8266f2c801e9611",
+   "bytes": 275829
   },
   "03-surveillance/GTG-34007-iran-surveillance.html": {
    "local": "03-surveillance/GTG-34007-iran-surveillance.html",
-   "sha256": "997727c8d6dc7744d1def9f4f79a0276364fed5a01a01d3cc8e7416ebf8c143c",
-   "bytes": 148593
+   "sha256": "9a7184c8914d725fa3e5c4420d79f85b4838981214a9b1022969f070426e4ddd",
+   "bytes": 146841
   },
   "03-surveillance/GTG-50027-mali-mass-interception.html": {
    "local": "03-surveillance/GTG-50027-mali-mass-interception.html",
-   "sha256": "10685a2ab68d1849f55501a4c3485923522b77f558fba33f3f5f95477fd376b7",
-   "bytes": 120112
+   "sha256": "0b3eef1f3dcd60fdb7bf8646312ef6fe7850398743960934fa2c4412fed4e24e",
+   "bytes": 118550
   },
   "03-surveillance/GTG-54009-s2t-commercial-spyware.html": {
    "local": "03-surveillance/GTG-54009-s2t-commercial-spyware.html",
-   "sha256": "3283b0f951a4da988548302a74b6f682e408f4d6fc7d777ad09c8e8eed62eec8",
-   "bytes": 809592
+   "sha256": "032b7b28c22e02029a64a3e6e3f1b6104a3fcbd73a17f69b7ce6f4de97f1718d",
+   "bytes": 806423
   },
   "04-weapons/00-weapons-intro-and-safeguards.html": {
    "local": "04-weapons/00-weapons-intro-and-safeguards.html",
-   "sha256": "7763662d13127f48e5d5cbe3461efc1c5d7426ec30dcb6fa358e959557540816",
-   "bytes": 157070
+   "sha256": "38189b4d819e4260c7ae094a90a6734fd327be2e0c05f891ceee759f7403efaf",
+   "bytes": 155054
   },
   "04-weapons/GTG-17001-fire-control-spec.html": {
    "local": "04-weapons/GTG-17001-fire-control-spec.html",
-   "sha256": "fc2a5d70248faf0c03ccaa8ad17ef3221762c750c1c1743bce99a333c50ae0c8",
-   "bytes": 568235
+   "sha256": "0dd592507f93e34c5b2061416861b4ed8d8063d4729041b4001d36f35464062f",
+   "bytes": 566526
   },
   "04-weapons/GTG-17002-ew-sead-taiwan.html": {
    "local": "04-weapons/GTG-17002-ew-sead-taiwan.html",
-   "sha256": "287df2df389dc1bf7b8700ca89093678a9373bbdc0e413ec6543e41c0b6b10ed",
-   "bytes": 553004
+   "sha256": "6e5978bb6666fe2ab1e4ef4812a6d6f4c519489bd70b382fe6c8c13d17de4cc6",
+   "bytes": 551981
   },
   "04-weapons/GTG-17003-directed-energy-intel.html": {
    "local": "04-weapons/GTG-17003-directed-energy-intel.html",
-   "sha256": "f3a3b3190c9023dd9b3d22691b875ba9f692f1f3032edffe093e9950135919ef",
-   "bytes": 423116
+   "sha256": "2db9830e79d7156b5bdf5ae1be7ede09929c78bbf95bcc8405630257cebfb44e",
+   "bytes": 420883
   },
   "04-weapons/GTG-27005-autonomous-fpv-drone.html": {
    "local": "04-weapons/GTG-27005-autonomous-fpv-drone.html",
-   "sha256": "485dd3d8364e4d5c028523d3dd7ca50849a10c2ba9e09946a05eae45c1597118",
-   "bytes": 423616
+   "sha256": "d106cc3bef65dd07a29261bd305c57c1525c32986cb4497cf79427d4186eef3b",
+   "bytes": 421684
   },
   "04-weapons/GTG-27006-procurement-diversion.html": {
    "local": "04-weapons/GTG-27006-procurement-diversion.html",
-   "sha256": "ffc6ee28bfabdff1744f0b2ed1b72f4f4095945d7b1df7b5851358aaf7ebd07f",
-   "bytes": 443403
+   "sha256": "ef1d6c67ebdc1a83ce11f65ee4ef656a4024decaa0fa4d83ca5bff949b8fa0a1",
+   "bytes": 440907
   },
   "04-weapons/GTG-87001-yemen-gnc.html": {
    "local": "04-weapons/GTG-87001-yemen-gnc.html",
-   "sha256": "e25cefca9f931308ab214e7eb457d7015d7b65dd1f0f63ac9d8ae46ec59bac54",
-   "bytes": 507336
+   "sha256": "85ee945ea66f95dd9dd33be6f5a3f6d1c64b21eed23b72ee68b51a81bd2b7e0a",
+   "bytes": 505439
   },
   "05-bio/00-bio-intro-and-safeguards.html": {
    "local": "05-bio/00-bio-intro-and-safeguards.html",
-   "sha256": "fd53ec4c8fdb96ea11f08c164083a03041ea9d0719408b5b8544cdd62d84d537",
-   "bytes": 112931
+   "sha256": "80b68e12ff07a307121c3c55b6c19609d96334ed4ff86c5cdf5cff564f1a1f82",
+   "bytes": 112019
   },
   "05-bio/case1-classifier-caught.html": {
    "local": "05-bio/case1-classifier-caught.html",
-   "sha256": "e3fcde68c3047b7dbdf53221b404c84162b1b8db176db158b3dab8d98ae2b2e1",
-   "bytes": 139590
+   "sha256": "b7acb5f07ae5e4cab41a9e68e2dfd3ae60a20b4de52ab69009a6cda556ebdd48",
+   "bytes": 138263
   },
   "05-bio/case2-weak-model-limit.html": {
    "local": "05-bio/case2-weak-model-limit.html",
-   "sha256": "f6054f7319a7133098c4debb2258daafd6e26a32f281f3cedae37d7ab024f3de",
-   "bytes": 21035
+   "sha256": "b759ad36df3bf2e56642657b95ea3b0e98687570aec96fd8301184195c4d1da2",
+   "bytes": 20776
   },
   "05-bio/case3-classifier-gap.html": {
    "local": "05-bio/case3-classifier-gap.html",
-   "sha256": "15248cba4e22875190676f3a881cb8005fee4428a991734c7f60eec470c8988a",
-   "bytes": 18193
+   "sha256": "adac15ed87dac2dd082bbece6ed2cdeeaf092e1c7d130a6b2a47c8efcfc235cb",
+   "bytes": 17949
   },
   "05-bio/case4-5-venoms-toxins-out-of-scope.html": {
    "local": "05-bio/case4-5-venoms-toxins-out-of-scope.html",
-   "sha256": "eb09074f7ea21875c7b1d6b3b3c1b9aaf5a1f74f5dbd75abe2d3e51cd5d841ae",
-   "bytes": 22699
+   "sha256": "b9efd450805a2aa2f102d14f7bd7055c298d94ba938aca9bb7b08d49e3d5c101",
+   "bytes": 22440
   },
   "06-scams/GTG-15001-dating-app-network.html": {
    "local": "06-scams/GTG-15001-dating-app-network.html",
-   "sha256": "5b94a096d9336c1c8941fa46f054f16bfd8b230482b5fac3a083c5b63d9404d6",
-   "bytes": 602268
+   "sha256": "2c3b6ce86b98f38f6d4553888c7bd9c637e16cb8eb6c86d8c8606a2cb92e873a",
+   "bytes": 600637
   },
   "07-distillation/00-distillation-intro-and-mitigations.html": {
    "local": "07-distillation/00-distillation-intro-and-mitigations.html",
-   "sha256": "f1fbc2baef6d059d3c1164029a37baf4a410d473857a99ba33e7b06ebeb6c182",
-   "bytes": 950935
+   "sha256": "af7550ed3284a36be2331a0113c59beb4168c477183dd310d2b3dfb4ae018990",
+   "bytes": 949576
   },
   "07-distillation/GTG-16001-deepseek.html": {
    "local": "07-distillation/GTG-16001-deepseek.html",
-   "sha256": "0661e3949b00f13e68d569ba215c7b6fa6bafd2df2a90944b82bb4df7a01ea4f",
-   "bytes": 133519
+   "sha256": "f3ff1d42c7f0e855d15e775488aa862817ec541244ff3e581569cd14f756cb5e",
+   "bytes": 131988
   },
   "07-distillation/GTG-16002-moonshot.html": {
    "local": "07-distillation/GTG-16002-moonshot.html",
-   "sha256": "109d9f35fce3257e6074b83380acf02c347f1f7d024baea5677fdab25ac0bd79",
-   "bytes": 119692
+   "sha256": "621a5e732b99e62813f916e479de20089caa28069272dbc6b732e7d06f65e123",
+   "bytes": 118464
   },
   "07-distillation/GTG-16005-alibaba.html": {
    "local": "07-distillation/GTG-16005-alibaba.html",
-   "sha256": "97e8c5910a6dbe1166d444cb31614a087bb3be95c6426966270e9ba574c4efed",
-   "bytes": 117109
+   "sha256": "5ee2795592df13d4720f282b460b5e1a163d41369553cfcfc5a7d9b5c2a2e657",
+   "bytes": 115704
   },
   "07-distillation/GTG-16006-zhipu.html": {
    "local": "07-distillation/GTG-16006-zhipu.html",
-   "sha256": "8ee3bf8baeab4828a813db584f1b91465596723174d52a527788ba6c60827690",
-   "bytes": 131397
+   "sha256": "a1b3e8d16dcd8435fa8a8062d2d5b0ec72ec2bbf0233652a89e27f0376f842a3",
+   "bytes": 129991
   },
   "07-distillation/GTG-16008-xiaomi.html": {
    "local": "07-distillation/GTG-16008-xiaomi.html",
-   "sha256": "ef6041d8ec2d13d0c7e9a150abc9a3b75455e81da1982836a7e7525b9beae959",
-   "bytes": 112999
+   "sha256": "027a6b39533313a4caec4d115309052244a4275a28c2c9a9184935c1c6b3e6bb",
+   "bytes": 111555
   },
   "07-distillation/GTG-16012-16003-sensetime-minimax.html": {
    "local": "07-distillation/GTG-16012-16003-sensetime-minimax.html",
-   "sha256": "3cc0e1268547da481624684652a8820b56738af2d8b03fc94afc66a9e755e188",
-   "bytes": 120710
+   "sha256": "cbaf0911b1f97cc56af09c0f4376bc50a1cca951af446708ba6d44d7bea2b9d1",
+   "bytes": 119293
   },
   "08-capability-research/01-targeting-evals.html": {
    "local": "08-capability-research/01-targeting-evals.html",
-   "sha256": "320d97a394bcb57be71803c47d7eb8eec282966b3eb1de4f9e755b9860bcb144",
-   "bytes": 318974
+   "sha256": "5eabb1658ebb0b1b4759a018fc41d115828ffc1d790dec70cd4830c865ba1abf",
+   "bytes": 314713
   },
   "08-capability-research/02-weapons-dev-evals-and-policy.html": {
    "local": "08-capability-research/02-weapons-dev-evals-and-policy.html",
-   "sha256": "0975ca60d415ea000672c979aa4ce4fd0926d88180860f584df74f60489f8c28",
-   "bytes": 127155
+   "sha256": "e19f036f41a79174b175810bfe67305c63868ebcc7205d35ce22901e5a41dba5",
+   "bytes": 125988
   },
   "09-external-research/00-external-research-intro.html": {
    "local": "09-external-research/00-external-research-intro.html",
-   "sha256": "e57af030f0c880f39eb0d4651fefe6f26b89251525dfef57bbfeae9db818ace4",
-   "bytes": 10114
+   "sha256": "4231a85d503dc18de1840479e4a3a4fe57479eaa57f939283055c4b834666973",
+   "bytes": 10847
   },
   "09-external-research/anthropic-2025-04-malicious-uses-report.html": {
    "local": "09-external-research/anthropic-2025-04-malicious-uses-report.html",
-   "sha256": "cf382337342589e5f4f2fc8b094a3e57afdae48f49f00e8c18d189521b88179d",
-   "bytes": 132503
+   "sha256": "59be9e30d4438337da07d5afe58a0d29a03e4c5c9df93ff5168c1b07fdd97f98",
+   "bytes": 130633
   },
   "09-external-research/anthropic-2025-08-threat-intel-report.html": {
    "local": "09-external-research/anthropic-2025-08-threat-intel-report.html",
-   "sha256": "cd7576f4d97d153c3fde0d6192a1a6a317d7b58a94e779bd4a16aa6a74f598f0",
-   "bytes": 124347
+   "sha256": "aa7388ec1df5709388c4b82fec60ebc3d026fc0aa910fb73f1867afd98b3beef",
+   "bytes": 122465
   },
   "09-external-research/anthropic-2025-11-ai-orchestrated-espionage.html": {
    "local": "09-external-research/anthropic-2025-11-ai-orchestrated-espionage.html",
-   "sha256": "bf10eb5312864f5e598eaae38693ece05e5a63f8f2e52ad5c7f7c2eca09e6e84",
-   "bytes": 111049
+   "sha256": "87b7238f2d4790d64aeccf7028868ba43d9483848c5ea873d33a0009da9aa93c",
+   "bytes": 109325
   },
   "09-external-research/anthropic-2026-02-distillation-disclosure.html": {
    "local": "09-external-research/anthropic-2026-02-distillation-disclosure.html",
-   "sha256": "12f27e121dbda98f047d557c541a00477971a2363fbf0fd14813669b0fceac93",
-   "bytes": 113592
+   "sha256": "de2ff8b6e19b54dca715cfb059343507c1fc9164e57e299d655778cdc5c89e44",
+   "bytes": 112065
   },
   "09-external-research/gtig-2025-01-adversarial-misuse-generative-ai.html": {
    "local": "09-external-research/gtig-2025-01-adversarial-misuse-generative-ai.html",
-   "sha256": "5433930d9aef784561a6e6e53992cfe4d7cbe22d0156dd8c7a780fe86816d197",
-   "bytes": 141907
+   "sha256": "070a3bca44720fbc7d77109088ac45e77fb26c64092671738fd698047e2f438c",
+   "bytes": 140108
   },
   "09-external-research/gtig-2025-11-ai-threat-tracker.html": {
    "local": "09-external-research/gtig-2025-11-ai-threat-tracker.html",
-   "sha256": "424a94b2e92a06a4bc474781b167de8f1cfe6df9b48e51c2880e78446e8170cb",
-   "bytes": 219181
+   "sha256": "baeaf777da9bff8a0a1fba26c7379c1792c00868b65ffc12f023899a38c90e5f",
+   "bytes": 216290
   },
   "09-external-research/gtig-2026-02-ai-threat-tracker.html": {
    "local": "09-external-research/gtig-2026-02-ai-threat-tracker.html",
-   "sha256": "149ac2e76a980a97e2cb94c1ff16961e264cdbf2db38a299edc7dc256b0ed507",
-   "bytes": 204305
+   "sha256": "78ea42b6675703fc11f76f44541c85fcbacb01dbfc0b16e7f1a97c47e4bb33eb",
+   "bytes": 201765
   },
   "09-external-research/gtig-2026-05-ai-threat-tracker.html": {
    "local": "09-external-research/gtig-2026-05-ai-threat-tracker.html",
-   "sha256": "9a1997249fd113a4cf0da5abf05d31a28ded758c68e57389b69cbd63aa58616c",
-   "bytes": 121941
+   "sha256": "4d88205fb0dffa68bfb77f30a6932280665433b00925a8c9eaf21d7cb13a8e69",
+   "bytes": 120412
   },
   "09-external-research/gtig-2026-09-ai-threat-tracker.html": {
    "local": "09-external-research/gtig-2026-09-ai-threat-tracker.html",
-   "sha256": "c02be00791f4bb60a2f6d7090dc82bac834c91c721ee93fb0825dc47561800fe",
-   "bytes": 148948
+   "sha256": "191853e4f17dc91c8b4495f6facdeca184c3dc524e82d61f9eb05cf32e613813",
+   "bytes": 147230
+  },
+  "09-external-research/microsoft-2026-03-ai-as-tradecraft.html": {
+   "local": "09-external-research/microsoft-2026-03-ai-as-tradecraft.html",
+   "sha256": "ed7e9a108947352f803e2e59596514a498866b4d59e04adfbbe1b2dfc9ee0387",
+   "bytes": 69197
+  },
+  "09-external-research/microsoft-2026-07-captivecrunch-storm-2945.html": {
+   "local": "09-external-research/microsoft-2026-07-captivecrunch-storm-2945.html",
+   "sha256": "0787057d51bce1e89e261c9033d84a3b620a70f18f7f051d96aa1c85f15c3c2b",
+   "bytes": 81947
   },
   "09-external-research/openai-2025-06-disrupting-malicious-uses.html": {
    "local": "09-external-research/openai-2025-06-disrupting-malicious-uses.html",
-   "sha256": "e10c8696c8e48e953807d2dfca4e3f9a55853b00809490c1fbcbe48076c0bc04",
-   "bytes": 201882
+   "sha256": "c49983fa513d2827c34444d43bd4ea43be3fff7b3b383f88ab44c8b85f94024f",
+   "bytes": 198945
   },
   "09-external-research/openai-2025-10-disrupting-malicious-uses.html": {
    "local": "09-external-research/openai-2025-10-disrupting-malicious-uses.html",
-   "sha256": "a25d057e86cba3d46427308c9b9a13ffb281b596ebb9cbea6cc62e70b4812233",
-   "bytes": 215473
+   "sha256": "7f4f8cf282ae176415c92045d55f6e5359d6a4c69d234fc6639454714934a2b7",
+   "bytes": 211983
   },
   "09-external-research/openai-2026-02-disrupting-malicious-uses.html": {
    "local": "09-external-research/openai-2026-02-disrupting-malicious-uses.html",
-   "sha256": "5719c982fa0f14e822be3e784c87f2d736d59a6414de0635e3b75512966c94c7",
-   "bytes": 216211
+   "sha256": "561d5c0f17887fab9f9e364d5b106fcd704d0b9a43f984c4dc2ebf2e702df88d",
+   "bytes": 212813
   },
   "00-index.html": {
    "local": "00-index.html",
-   "sha256": "e333cae15f55b56952eddf3664930f00c2cf31abb4a43e33b8ea1a378c3c0ffb",
-   "bytes": 20465
+   "sha256": "44bf3e82d9ba9ff56cc9846cfe19e7b824f6ef2208b3a265132bc27b0942da74",
+   "bytes": 20247
   },
   "index.html": {
    "local": "_site/index.html",
-   "sha256": "4a5213ce411d17da6805399e1c8040bb6627eec7ee5575df4cd4f6e3c0720b51",
-   "bytes": 25315
+   "sha256": "a39e810c2c32d84fb599f919e2875d40250bdd902a6b9cbb899737e04c90eccc",
+   "bytes": 25864
   }
  }
 }

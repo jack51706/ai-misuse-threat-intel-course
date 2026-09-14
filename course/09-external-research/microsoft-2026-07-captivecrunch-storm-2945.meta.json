@@ -1,0 +1,25 @@
+{
+  "id": "microsoft-2026-07-captivecrunch-storm-2945",
+  "org": "Microsoft Threat Intelligence",
+  "org_zh": "微軟威脅情報團隊",
+  "title": "CaptiveCrunch: Midnight Blizzard targets travelers worldwide for malware delivery and credential theft",
+  "title_zh": "旅館 WiFi 劫持與 CaptiveCrunch",
+  "published": "2026-07-31",
+  "url": "https://www.microsoft.com/en-us/security/blog/2026/07/31/captivecrunch-midnight-blizzard-targets-travelers-worldwide-for-malware-delivery-and-credential-theft/",
+  "source_type": "official-threat-report",
+  "related_modules": [
+    "01-cyber",
+    "03-surveillance",
+    "04-weapons"
+  ],
+  "related_materials": [
+    "01-cyber/GTG-20006-russian-espionage.md",
+    "01-cyber/00-cyber-trends-and-skills.md",
+    "03-surveillance/GTG-14020-religious-affairs-taiwan-church.md",
+    "03-surveillance/GTG-14022-public-opinion-monitoring-taiwan.md",
+    "04-weapons/GTG-17002-ew-sead-taiwan.md",
+    "_shared/01-cross-cutting-analysis.md"
+  ],
+  "summary_zh": "微軟以 Storm-2945 之名獨立揭露旅館 WiFi 劫持行動，兩個 SHA-256 與 Anthropic GTG-20006 完全相同。",
+  "added": "2026-09-14"
+}
