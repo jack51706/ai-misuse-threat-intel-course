@@ -19,7 +19,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `course/_shared/00-agent-brief.md`：製作規格與品質紅線（每份教材的一致性標準）。
 - `course/_shared/01-cross-cutting-analysis.md`：**跨案例分析**——貫穿全報告的六大主線（複雜度脫鉤、AI 作為勞動力、防線四種失效模式、單一來源情報紀律、圖表揭露、對台灣意涵）。
 - `course/01-cyber/` 到 `course/08-capability-research/`：八個模組，每個 GTG 案例一份教材，另有章節導論。檔名即 GTG 代號與主題。
-- `course/figures/`：報告圖表的渲染 PNG（`page-XXX.png`，三位數頁碼），教材以相對路徑 `../figures/` 引用。
+- `course/figures/`：報告圖表的渲染 PNG（`page-XXX.png`，三位數頁碼），教材 Markdown 以相對路徑 `../figures/` 引用。`build_html.py` 轉 HTML 時**預設把這些圖 base64 內嵌**（見下節），發布用的 HTML 因此是自足檔、不另帶 PNG；`figures/` 仍是版控來源（供內嵌讀取）。
 
 維護原則：每份案例教材固定 12 節結構（速覽、歸因、受害者、攻擊生命週期、TTP/ATT&CK、圖表判讀、IOC、防線缺口、第三方驗證、教學設計、原文引文、研究限制）。IOC 一律保留 defang（`example[.]com`）且不得連線；生物與常規武器模組只寫治理與偵測，不含可操作技術內容。撰寫生物章節案例時，交付 subagent 常因 PDF 頁面的病原體敘述觸發模型安全防護而中止（Opus 與 Sonnet 皆會），這幾份改由主編從全文擷取治理骨架後親自撰寫。
 
@@ -85,6 +85,7 @@ Cyber / Influence / Surveillance / Weapons 的案例大致都有這幾段，找�
 - 課程站台發布在 Artifact：https://claude.ai/code/artifact/f5f4f71c-6b3b-4df6-a817-c4b83d9a9b4e （側欄殼頁由 `course/build_site.py` 產生，不要手寫）。
 - `course/09-external-research/`：其他機構或 Anthropic 先前的同類研究。每份研究一份 `.md` 加同名 `.meta.json`，規格在 `_brief.md`（十二節格式、meta 欄位、安全紅線）。導論頁 `00-external-research-intro.md` 的收錄清單由建置腳本從 meta.json 產生，不要手改。底線開頭的 `.md` 不會被轉成 html。
 - 每週一 09:00（台北）雲端 routine「AI 濫用威脅情報：每週延伸研究」自動執行：掃描固定來源、寫最多 3 份新教材、建置、發布到 Artifact、commit 進 main（routine 管理頁 https://claude.ai/code/routines ，id `trig_01SZ1YivvVMMip4rbDmMsTKb`）。人工事後審核；發現錯誤直接改教材、重新建置發布。
+- **建置產物不進版控**（2026-09-14 起）：`course/` 下所有 `*.html` 與整個 `course/_site/` 已 gitignore，由 `build_html.py` / `build_site.py` 每次重建。版控只留原始碼：各 `.md`、`09-external-research/*.meta.json`、`figures/*.png`、兩支建置腳本。`build_html.py` 預設把報告圖 base64 內嵌成自足 HTML（`EMBED=0` 可關）；`build_site.py` 因此**不再發布獨立 PNG**，Artifact 靠自足 HTML 顯示圖片（相對路徑在 Artifact iframe 內不保證解析，內嵌最穩）。全站約 41 MB、遠低於 Artifact 64 MB 上限。
 - 建置與發布（在 `course/` 執行）：
 
 ```bash

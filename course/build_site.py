@@ -161,9 +161,7 @@ def collect():
     if os.path.exists(idx):
         manifest["00-index.html"] = {"local": "00-index.html", "sha256": sha256(idx), "bytes": os.path.getsize(idx)}
     figs = sorted(glob.glob(os.path.join(ROOT, "figures", "page-*.png")))
-    for p in figs:
-        rel = "figures/" + os.path.basename(p)
-        manifest[rel] = {"local": rel, "sha256": sha256(p), "bytes": os.path.getsize(p)}
+    # 圖片已 base64 內嵌於各教材 HTML；不再發布獨立 PNG（省發布容量、避免相對路徑在 Artifact iframe 失效）
     stats = {
         "pages": pages,
         "figures": len(figs) + mermaid,

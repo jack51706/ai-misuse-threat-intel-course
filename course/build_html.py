@@ -13,7 +13,7 @@ import markdown
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 FIG_DIR = os.path.join(ROOT, "figures")
-EMBED = os.environ.get("EMBED") == "1"   # EMBED=1 時把圖片內嵌成 base64 data URI（給 Artifact 用）
+EMBED = os.environ.get("EMBED", "1") != "0"   # 預設把圖片內嵌成 base64（Artifact 用）；EMBED=0 可關
 
 _b64cache = {}
 def _b64(fn):
