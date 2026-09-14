@@ -100,6 +100,11 @@
 - `08-capability-research/01-targeting-evals.md` — 情報鎖定三評測：身分關聯、照片地理定位（近超人級）、文字地理定位
 - `08-capability-research/02-weapons-dev-evals-and-policy.md` — 無人機模擬評測結果解讀、開源治理、如何讀 AI 能力評測報告
 
+### 模組 09：延伸研究（其他機構的同類研究）— 持續增補
+> 本模組收錄 Anthropic 先前的威脅報告，以及 OpenAI、Google GTIG 等其他機構的同類 AI 濫用研究。每份研究一份教材、固定十二節，第 4 節一律與 2026-09 報告對照。每週由排程研究代理自動增補，人工事後審核。
+- `09-external-research/00-external-research-intro.md` — 模組導論：收錄標準、閱讀路徑、自動維護的收錄清單
+- 個別教材依 `<機構>-<年月>-<主題>` 命名（例如 `openai-2026-02-disrupting-malicious-uses.md`），完整清單見導論頁
+
 ---
 
 ## 四、建議教學路徑

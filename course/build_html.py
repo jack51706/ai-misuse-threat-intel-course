@@ -8,11 +8,29 @@
 用法：python build_html.py    （在 course/ 目錄下執行）
 重跑安全：只讀 .md、只寫 .html，不改動任何 .md。
 """
-import os, re, html, glob
+import os, re, html, glob, base64
 import markdown
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 FIG_DIR = os.path.join(ROOT, "figures")
+EMBED = os.environ.get("EMBED") == "1"   # EMBED=1 時把圖片內嵌成 base64 data URI（給 Artifact 用）
+
+_b64cache = {}
+def _b64(fn):
+    if fn not in _b64cache:
+        try:
+            _b64cache[fn] = base64.b64encode(open(os.path.join(FIG_DIR, fn), "rb").read()).decode()
+        except Exception:
+            _b64cache[fn] = None
+    return _b64cache[fn]
+
+def embed_imgs(s):
+    if not EMBED:
+        return s
+    def rep(m):
+        d = _b64(m.group(1))
+        return f'src="data:image/png;base64,{d}"' if d else m.group(0)
+    return re.sub(r'src="\.\./figures/(page-\d+\.png)"', rep, s)
 
 # figures/ 裡實際存在的頁碼
 fig_pages = set()
@@ -179,6 +197,8 @@ def convert_one(md_path, rel_to_root):
         )
         gallery = f'<div class="figgallery"><h2>報告原圖（未在內文對應者）</h2>{items}</div>'
 
+    body = embed_imgs(body)
+    gallery = embed_imgs(gallery)
     title = fname.replace(".md", "")
     depth = rel_to_root.count("/") + rel_to_root.count("\\")
     up = "../" * depth

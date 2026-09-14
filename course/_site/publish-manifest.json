@@ -1,0 +1,556 @@
+{
+ "generated": "2026-09-14T17:51:32",
+ "stats": {
+  "pages": 53,
+  "figures": 290,
+  "external": 0,
+  "last_update": "2026-09-14"
+ },
+ "files": {
+  "shared/00-agent-brief.html": {
+   "local": "_shared/00-agent-brief.html",
+   "sha256": "cfd69c1828d3560718bebd15b57b38a1b1ec7c7e8282659fc89dc685d0b945b8",
+   "bytes": 13481
+  },
+  "shared/01-cross-cutting-analysis.html": {
+   "local": "_shared/01-cross-cutting-analysis.html",
+   "sha256": "d2fdf5d07d232e57f68fa76e82d68a44563b664a3a6462d8c9aea90a62c6f635",
+   "bytes": 15297
+  },
+  "shared/02-claude-safeguards-and-bypass-paths.html": {
+   "local": "_shared/02-claude-safeguards-and-bypass-paths.html",
+   "sha256": "59ac3035eed98fbed5d32a418ce7b36a338bc4e34732e7639f0cd4deb19c88ff",
+   "bytes": 18186
+  },
+  "01-cyber/00-cyber-trends-and-skills.html": {
+   "local": "01-cyber/00-cyber-trends-and-skills.html",
+   "sha256": "4fcfb4558673a66fc50b17f0084081542b64ef03e8ecf42842ca6f7db5ad8dea",
+   "bytes": 136289
+  },
+  "01-cyber/GTG-10007-exploit-foundry.html": {
+   "local": "01-cyber/GTG-10007-exploit-foundry.html",
+   "sha256": "ee56e04c0d76e0770fcf0dacecaa082021a1a05a6b6b9a0ee93e2b26bb89f503",
+   "bytes": 189318
+  },
+  "01-cyber/GTG-20006-russian-espionage.html": {
+   "local": "01-cyber/GTG-20006-russian-espionage.html",
+   "sha256": "9f02bca5c5e4ff387a462141bbff6fb165ea10f6bb80ab0d59aac37d2360c8cf",
+   "bytes": 175826
+  },
+  "01-cyber/GTG-50014-shinyhunters.html": {
+   "local": "01-cyber/GTG-50014-shinyhunters.html",
+   "sha256": "b37d89b52c37f50b0a6a5b359a46725a134762876bc4e4e91e850fa3aee87814",
+   "bytes": 162790
+  },
+  "01-cyber/GTG-50020-ai-supply-chain.html": {
+   "local": "01-cyber/GTG-50020-ai-supply-chain.html",
+   "sha256": "750f46db8561108e0966fd117119a1a14576e18761e20c2ee390877be9c35e93",
+   "bytes": 134149
+  },
+  "01-cyber/GTG-50021-fake-reseller.html": {
+   "local": "01-cyber/GTG-50021-fake-reseller.html",
+   "sha256": "10808ce5b67c5e197dcbed91100d8a9d388045e9a1354ffd8580ed9c715d3573",
+   "bytes": 227096
+  },
+  "01-cyber/GTG-50029-hacktivist.html": {
+   "local": "01-cyber/GTG-50029-hacktivist.html",
+   "sha256": "b64be70ebdfa1c1f7a41f437cf0951f1f880946a4cbd0dac168577e58e32d900",
+   "bytes": 147472
+  },
+  "02-influence/00-influence-intro-and-breakout-scale.html": {
+   "local": "02-influence/00-influence-intro-and-breakout-scale.html",
+   "sha256": "d0105b5f7c4024fbe28f1ec13e809bef52382e17cc221c22cb58d6e4ea9bb53a",
+   "bytes": 269379
+  },
+  "02-influence/GTG-04001-russia-car-fimi.html": {
+   "local": "02-influence/GTG-04001-russia-car-fimi.html",
+   "sha256": "64933cbdfa5465e23f0be0d06a9c6027b96eb83ea475512f6b98f05842a956a1",
+   "bytes": 166900
+  },
+  "02-influence/GTG-24015-russian-state-media.html": {
+   "local": "02-influence/GTG-24015-russian-state-media.html",
+   "sha256": "3d6497c8f090ed2c2826b802cef5570b8127716386bbed3545fb10ec2463ac4e",
+   "bytes": 236036
+  },
+  "02-influence/GTG-34001-iran-icco.html": {
+   "local": "02-influence/GTG-34001-iran-icco.html",
+   "sha256": "a0e772ab652ecf61680528f2b6d0334d6dff2472f1c88e69b784bce558527e06",
+   "bytes": 218005
+  },
+  "02-influence/GTG-54002-influence-as-a-service.html": {
+   "local": "02-influence/GTG-54002-influence-as-a-service.html",
+   "sha256": "99710f1b824bb4c2669afb9e7944d66e47c8bf772de2ec5204b049f823537203",
+   "bytes": 208988
+  },
+  "02-influence/GTG-54004-kenya-cib.html": {
+   "local": "02-influence/GTG-54004-kenya-cib.html",
+   "sha256": "be1036cbb3a13f79f0752f20764d155cf4113012296dc1ac8c7db110d192be31",
+   "bytes": 188522
+  },
+  "02-influence/GTG-54006-bangladesh-awami-league.html": {
+   "local": "02-influence/GTG-54006-bangladesh-awami-league.html",
+   "sha256": "dd1023ee42de713aec5f94a4c652bd89ed1e159524d566eb65875305da5d803a",
+   "bytes": 223948
+  },
+  "02-influence/GTG-84002-uae-muslim-brotherhood.html": {
+   "local": "02-influence/GTG-84002-uae-muslim-brotherhood.html",
+   "sha256": "83340ab5b02546697ef4140d7ade5d9e5b818d86d4d141ad9c985d51b31f6e19",
+   "bytes": 252777
+  },
+  "02-influence/GTG-84005-malaysia-election-platform.html": {
+   "local": "02-influence/GTG-84005-malaysia-election-platform.html",
+   "sha256": "f2c96cb0ed38a19e2f130123e37437c4356c80c4c007de1212d77299275ed5a5",
+   "bytes": 229801
+  },
+  "02-influence/GTG-84006-mek-ncri-viktor.html": {
+   "local": "02-influence/GTG-84006-mek-ncri-viktor.html",
+   "sha256": "da89980aed25e1744176c8800c15a307cc269577c3a5fc21a30e83e8c5983ff9",
+   "bytes": 285557
+  },
+  "03-surveillance/00-surveillance-intro.html": {
+   "local": "03-surveillance/00-surveillance-intro.html",
+   "sha256": "fdddb56740a2d10b1044bbbb30c7a83d3efd76cca257908c1772da712a0c6a53",
+   "bytes": 267082
+  },
+  "03-surveillance/GTG-14010-uyghurs-syria.html": {
+   "local": "03-surveillance/GTG-14010-uyghurs-syria.html",
+   "sha256": "c3aa0839000b96878ccb534ee632952ad6cbb899b0efb9b97bfbd62a57eb15eb",
+   "bytes": 240191
+  },
+  "03-surveillance/GTG-14020-religious-affairs-taiwan-church.html": {
+   "local": "03-surveillance/GTG-14020-religious-affairs-taiwan-church.html",
+   "sha256": "f08beb808065210f5a465f2a23413db5240816dfd5c0811ed74a43927a500b29",
+   "bytes": 250196
+  },
+  "03-surveillance/GTG-14021-weiwen-transnational-repression.html": {
+   "local": "03-surveillance/GTG-14021-weiwen-transnational-repression.html",
+   "sha256": "4a3f015dc6f96d755e522e1afc5e190f91a785e43eb3a29a994f7d447b44238e",
+   "bytes": 138445
+  },
+  "03-surveillance/GTG-14022-public-opinion-monitoring-taiwan.html": {
+   "local": "03-surveillance/GTG-14022-public-opinion-monitoring-taiwan.html",
+   "sha256": "8487e32d81e426aa169c00d7602e344c5165261423bbdb5daf5307d21e0c3d6e",
+   "bytes": 119909
+  },
+  "03-surveillance/GTG-30004-30005-30006-osint-recon.html": {
+   "local": "03-surveillance/GTG-30004-30005-30006-osint-recon.html",
+   "sha256": "5befa3f560b997d0f576bae0ca35c25f824495abcf69a005aa5aa0daf383c448",
+   "bytes": 147261
+  },
+  "03-surveillance/GTG-34007-iran-surveillance.html": {
+   "local": "03-surveillance/GTG-34007-iran-surveillance.html",
+   "sha256": "997727c8d6dc7744d1def9f4f79a0276364fed5a01a01d3cc8e7416ebf8c143c",
+   "bytes": 148593
+  },
+  "03-surveillance/GTG-50027-mali-mass-interception.html": {
+   "local": "03-surveillance/GTG-50027-mali-mass-interception.html",
+   "sha256": "10685a2ab68d1849f55501a4c3485923522b77f558fba33f3f5f95477fd376b7",
+   "bytes": 120112
+  },
+  "03-surveillance/GTG-54009-s2t-commercial-spyware.html": {
+   "local": "03-surveillance/GTG-54009-s2t-commercial-spyware.html",
+   "sha256": "2cd8738545d37523151189720d92b5aafb78232d505487501ac5b2a4fe74081a",
+   "bytes": 213898
+  },
+  "04-weapons/00-weapons-intro-and-safeguards.html": {
+   "local": "04-weapons/00-weapons-intro-and-safeguards.html",
+   "sha256": "7763662d13127f48e5d5cbe3461efc1c5d7426ec30dcb6fa358e959557540816",
+   "bytes": 157070
+  },
+  "04-weapons/GTG-17001-fire-control-spec.html": {
+   "local": "04-weapons/GTG-17001-fire-control-spec.html",
+   "sha256": "70128d224e128feb22f1a151212c07310522a89b624e5f2bd7037e369786b5e3",
+   "bytes": 130184
+  },
+  "04-weapons/GTG-17002-ew-sead-taiwan.html": {
+   "local": "04-weapons/GTG-17002-ew-sead-taiwan.html",
+   "sha256": "97855ea9105efbcad9a948e16f648d6de29e00a4ac1e9988dbc83bfdde42276f",
+   "bytes": 95262
+  },
+  "04-weapons/GTG-17003-directed-energy-intel.html": {
+   "local": "04-weapons/GTG-17003-directed-energy-intel.html",
+   "sha256": "be770e3710f33ddff454dbe7b4b71705c0664d6579afc2e0f8f404fc7b072c12",
+   "bytes": 190209
+  },
+  "04-weapons/GTG-27005-autonomous-fpv-drone.html": {
+   "local": "04-weapons/GTG-27005-autonomous-fpv-drone.html",
+   "sha256": "1a549f982a01fcaeab8959a891cdc19e5ac7f4c3bf3ea2bb77c6f996e26175ae",
+   "bytes": 136773
+  },
+  "04-weapons/GTG-27006-procurement-diversion.html": {
+   "local": "04-weapons/GTG-27006-procurement-diversion.html",
+   "sha256": "6323e72ae3ea7e08c43c17593edc96c44d135f1f707fd865a665ce907f8acf06",
+   "bytes": 158476
+  },
+  "04-weapons/GTG-87001-yemen-gnc.html": {
+   "local": "04-weapons/GTG-87001-yemen-gnc.html",
+   "sha256": "47b87903fb0bdaa4031585e205f75eede17ae08fb8d67c6a5a3b5979a44c7ba3",
+   "bytes": 176273
+  },
+  "05-bio/00-bio-intro-and-safeguards.html": {
+   "local": "05-bio/00-bio-intro-and-safeguards.html",
+   "sha256": "fd53ec4c8fdb96ea11f08c164083a03041ea9d0719408b5b8544cdd62d84d537",
+   "bytes": 112931
+  },
+  "05-bio/case1-classifier-caught.html": {
+   "local": "05-bio/case1-classifier-caught.html",
+   "sha256": "e3fcde68c3047b7dbdf53221b404c84162b1b8db176db158b3dab8d98ae2b2e1",
+   "bytes": 139590
+  },
+  "05-bio/case2-weak-model-limit.html": {
+   "local": "05-bio/case2-weak-model-limit.html",
+   "sha256": "f6054f7319a7133098c4debb2258daafd6e26a32f281f3cedae37d7ab024f3de",
+   "bytes": 21035
+  },
+  "05-bio/case3-classifier-gap.html": {
+   "local": "05-bio/case3-classifier-gap.html",
+   "sha256": "15248cba4e22875190676f3a881cb8005fee4428a991734c7f60eec470c8988a",
+   "bytes": 18193
+  },
+  "05-bio/case4-5-venoms-toxins-out-of-scope.html": {
+   "local": "05-bio/case4-5-venoms-toxins-out-of-scope.html",
+   "sha256": "eb09074f7ea21875c7b1d6b3b3c1b9aaf5a1f74f5dbd75abe2d3e51cd5d841ae",
+   "bytes": 22699
+  },
+  "06-scams/GTG-15001-dating-app-network.html": {
+   "local": "06-scams/GTG-15001-dating-app-network.html",
+   "sha256": "df6ebd4821794c38b7f7005cad567942dcb35850a8f6dd905f8fd9ab673ffda7",
+   "bytes": 127797
+  },
+  "07-distillation/00-distillation-intro-and-mitigations.html": {
+   "local": "07-distillation/00-distillation-intro-and-mitigations.html",
+   "sha256": "62cdabdf1e70aea7e4fc08923e0b6e7312488464471a315d8cb3e69678251620",
+   "bytes": 135402
+  },
+  "07-distillation/GTG-16001-deepseek.html": {
+   "local": "07-distillation/GTG-16001-deepseek.html",
+   "sha256": "0661e3949b00f13e68d569ba215c7b6fa6bafd2df2a90944b82bb4df7a01ea4f",
+   "bytes": 133519
+  },
+  "07-distillation/GTG-16002-moonshot.html": {
+   "local": "07-distillation/GTG-16002-moonshot.html",
+   "sha256": "109d9f35fce3257e6074b83380acf02c347f1f7d024baea5677fdab25ac0bd79",
+   "bytes": 119692
+  },
+  "07-distillation/GTG-16005-alibaba.html": {
+   "local": "07-distillation/GTG-16005-alibaba.html",
+   "sha256": "97e8c5910a6dbe1166d444cb31614a087bb3be95c6426966270e9ba574c4efed",
+   "bytes": 117109
+  },
+  "07-distillation/GTG-16006-zhipu.html": {
+   "local": "07-distillation/GTG-16006-zhipu.html",
+   "sha256": "8ee3bf8baeab4828a813db584f1b91465596723174d52a527788ba6c60827690",
+   "bytes": 131397
+  },
+  "07-distillation/GTG-16008-xiaomi.html": {
+   "local": "07-distillation/GTG-16008-xiaomi.html",
+   "sha256": "ef6041d8ec2d13d0c7e9a150abc9a3b75455e81da1982836a7e7525b9beae959",
+   "bytes": 112999
+  },
+  "07-distillation/GTG-16012-16003-sensetime-minimax.html": {
+   "local": "07-distillation/GTG-16012-16003-sensetime-minimax.html",
+   "sha256": "3cc0e1268547da481624684652a8820b56738af2d8b03fc94afc66a9e755e188",
+   "bytes": 120710
+  },
+  "08-capability-research/01-targeting-evals.html": {
+   "local": "08-capability-research/01-targeting-evals.html",
+   "sha256": "320d97a394bcb57be71803c47d7eb8eec282966b3eb1de4f9e755b9860bcb144",
+   "bytes": 318974
+  },
+  "08-capability-research/02-weapons-dev-evals-and-policy.html": {
+   "local": "08-capability-research/02-weapons-dev-evals-and-policy.html",
+   "sha256": "0975ca60d415ea000672c979aa4ce4fd0926d88180860f584df74f60489f8c28",
+   "bytes": 127155
+  },
+  "09-external-research/00-external-research-intro.html": {
+   "local": "09-external-research/00-external-research-intro.html",
+   "sha256": "9ae3eb36c808b2ee5206833264a89884f71f1fdaaaf574bc528434d7e70d2d87",
+   "bytes": 5731
+  },
+  "09-external-research/_brief.html": {
+   "local": "09-external-research/_brief.html",
+   "sha256": "1e0fc1b305ac5c5e67c2726f641278dbf8fb554c7332f34e9f59d75f4f92e1dc",
+   "bytes": 10999
+  },
+  "00-index.html": {
+   "local": "00-index.html",
+   "sha256": "e333cae15f55b56952eddf3664930f00c2cf31abb4a43e33b8ea1a378c3c0ffb",
+   "bytes": 20465
+  },
+  "figures/page-007.png": {
+   "local": "figures/page-007.png",
+   "sha256": "dc26087168964fba6ae4dd28ffe0376bac5ab1b58870dadaacabb2f7be8233b5",
+   "bytes": 524394
+  },
+  "figures/page-010.png": {
+   "local": "figures/page-010.png",
+   "sha256": "a079a06175eeab6962aee45174c19fe9451e37863c0bb4eb2f921b8d9d9fb004",
+   "bytes": 135889
+  },
+  "figures/page-012.png": {
+   "local": "figures/page-012.png",
+   "sha256": "10feb33725343c0d49ca43bbc0210f72ae1c217cec54268faf28a5f288740974",
+   "bytes": 351472
+  },
+  "figures/page-015.png": {
+   "local": "figures/page-015.png",
+   "sha256": "ae8376edfb3b1ae0c5a8a224e0bf729ad3c561690f6ea527bbde0c9ddf69450e",
+   "bytes": 453690
+  },
+  "figures/page-016.png": {
+   "local": "figures/page-016.png",
+   "sha256": "9249fb856fd21efa25f795a9dc0b5adfa966ea6a79109507d486e6511c79390e",
+   "bytes": 241521
+  },
+  "figures/page-017.png": {
+   "local": "figures/page-017.png",
+   "sha256": "4495e21691c7efa677dbea3e08c1afeeb4fc1ca06def19c090a0c07348eb64e9",
+   "bytes": 325761
+  },
+  "figures/page-018.png": {
+   "local": "figures/page-018.png",
+   "sha256": "c0df1d97b577493e15722f97a31c874c3325c5b87c91444a1bf24736699b23ea",
+   "bytes": 336471
+  },
+  "figures/page-019.png": {
+   "local": "figures/page-019.png",
+   "sha256": "6c53baaa320fcb0dece73f292070b105121ea0e366edb6f48c1f44467b160813",
+   "bytes": 238334
+  },
+  "figures/page-020.png": {
+   "local": "figures/page-020.png",
+   "sha256": "8f58a5bebf985d70a0987c4ea05c3f69610f177c18daae6061bffab8c01e3609",
+   "bytes": 118899
+  },
+  "figures/page-021.png": {
+   "local": "figures/page-021.png",
+   "sha256": "29f80e728b4a8ac49e517b82b8ec7b9c39121142aa23bfc68650a3b188819076",
+   "bytes": 347545
+  },
+  "figures/page-022.png": {
+   "local": "figures/page-022.png",
+   "sha256": "180c0089a70b2d61075be5a9117dcf0785b80583c0e678339d8d5f6a0de0b54c",
+   "bytes": 122983
+  },
+  "figures/page-025.png": {
+   "local": "figures/page-025.png",
+   "sha256": "4d00ddbffccb69baa86ae62aa0e49eab7ab042cae6308b4fe7e004173ab7dcf0",
+   "bytes": 555313
+  },
+  "figures/page-027.png": {
+   "local": "figures/page-027.png",
+   "sha256": "41031019480827b09b8a578ad99fcc87a050ba1bf1c407b66abe5d7a2683e1ad",
+   "bytes": 262934
+  },
+  "figures/page-028.png": {
+   "local": "figures/page-028.png",
+   "sha256": "3597332f9258e5c684f451699b68390ce2307921e2a77418bde984e88069dcce",
+   "bytes": 260554
+  },
+  "figures/page-031.png": {
+   "local": "figures/page-031.png",
+   "sha256": "7425a056af796178b0b3c0a025547dd6c084a0369124698b244e71eff355c98f",
+   "bytes": 555893
+  },
+  "figures/page-032.png": {
+   "local": "figures/page-032.png",
+   "sha256": "b4e90deca96cb05b252e59dcb67fbb7ace65ead019921e9431d260b88e96da5e",
+   "bytes": 237359
+  },
+  "figures/page-033.png": {
+   "local": "figures/page-033.png",
+   "sha256": "1f1fa5d61f3f70fb7271b55a4f1087f7a4bd2d1700fac739a75e88839e364e3f",
+   "bytes": 193974
+  },
+  "figures/page-035.png": {
+   "local": "figures/page-035.png",
+   "sha256": "0d9fc4813649da669c819143753dd70a4fbccab9e4cd613b1cb3890bf46d8135",
+   "bytes": 535657
+  },
+  "figures/page-040.png": {
+   "local": "figures/page-040.png",
+   "sha256": "c37fe62c8d21279dc71ed1791634b2b36028eee9638784c9615ec34b850070ee",
+   "bytes": 443005
+  },
+  "figures/page-046.png": {
+   "local": "figures/page-046.png",
+   "sha256": "0f1fec3b86f3b414038abf8f4c15c1f47ecf33adc07071447bc62b8f2c5bad6f",
+   "bytes": 555347
+  },
+  "figures/page-049.png": {
+   "local": "figures/page-049.png",
+   "sha256": "8a2f4e430b36ca04f094ee3cd595e46f1bd8b292e92f6d9fb603c1adba00d9fc",
+   "bytes": 363952
+  },
+  "figures/page-050.png": {
+   "local": "figures/page-050.png",
+   "sha256": "cbfe82ee4068706c44b65321fd6d99c8aaeeea825590e1fdaf4929ecdbd42310",
+   "bytes": 667543
+  },
+  "figures/page-051.png": {
+   "local": "figures/page-051.png",
+   "sha256": "ac0f616adb2eeb2bbb7dce4d6885b7ad22a1dd63c22db9802390547f640251c5",
+   "bytes": 510018
+  },
+  "figures/page-052.png": {
+   "local": "figures/page-052.png",
+   "sha256": "1e44c79155f79d19a8fed8cf1ed17d5780c3796d0274994a66f46bd9e1fa0e9f",
+   "bytes": 489454
+  },
+  "figures/page-056.png": {
+   "local": "figures/page-056.png",
+   "sha256": "20ba19f2128acdd7ae59a249e45c95f2b9d96b7d9306d8acac38c025cb55b111",
+   "bytes": 837659
+  },
+  "figures/page-057.png": {
+   "local": "figures/page-057.png",
+   "sha256": "2554da3e9e6191d92f695ed9aa013d77b0562fce30112731d18239de31c8c6f2",
+   "bytes": 452925
+  },
+  "figures/page-060.png": {
+   "local": "figures/page-060.png",
+   "sha256": "e4f772b22203a21462a8d21eb57f1434a5d652e3661be8d4d1cb3781469b414c",
+   "bytes": 319325
+  },
+  "figures/page-061.png": {
+   "local": "figures/page-061.png",
+   "sha256": "11d5a3de7adda379de646536f51f5ba82fe6617199fc77be14bd5853f011c0a6",
+   "bytes": 397826
+  },
+  "figures/page-065.png": {
+   "local": "figures/page-065.png",
+   "sha256": "43a863d938fc13ac6a6a885e8a82d09e947a075ca98d34ad2631d05a33157d35",
+   "bytes": 229368
+  },
+  "figures/page-066.png": {
+   "local": "figures/page-066.png",
+   "sha256": "8e5b2390f75ea4bbb01f477e78d4557a4d5a2436beace75653fa78b6d1a48710",
+   "bytes": 253941
+  },
+  "figures/page-069.png": {
+   "local": "figures/page-069.png",
+   "sha256": "966597d81de6cc381660fea75b2d4913862e2a866a74c15d29961b5f47d57e8c",
+   "bytes": 446597
+  },
+  "figures/page-073.png": {
+   "local": "figures/page-073.png",
+   "sha256": "181f24fde6fdf014734451a53225356327e8061d3961ae95b152e726aae817ea",
+   "bytes": 363447
+  },
+  "figures/page-074.png": {
+   "local": "figures/page-074.png",
+   "sha256": "226fe4a2a0afb0dcec4a7a6aa92b03b0c9dbbfab95b202d19d01d8f5d7541df9",
+   "bytes": 443780
+  },
+  "figures/page-077.png": {
+   "local": "figures/page-077.png",
+   "sha256": "209a30e3a11f63dda4b79b100dbc8d0fa98867cfda4edd14c4531aa3eacaa7ad",
+   "bytes": 696843
+  },
+  "figures/page-080.png": {
+   "local": "figures/page-080.png",
+   "sha256": "3843717e0e17ea40d69905680002f5a44a4a226204f91e1c0dd8697de14429a8",
+   "bytes": 690808
+  },
+  "figures/page-084.png": {
+   "local": "figures/page-084.png",
+   "sha256": "7fef80420dce7e46edac297a99f7b421b03a5398e54087fa5d8b9eae568e4fba",
+   "bytes": 223386
+  },
+  "figures/page-088.png": {
+   "local": "figures/page-088.png",
+   "sha256": "8f928a2ff354aa2cdaf895d5c0aded9a70f9592530ef96034bff72e01d62e446",
+   "bytes": 232113
+  },
+  "figures/page-091.png": {
+   "local": "figures/page-091.png",
+   "sha256": "9de295b46bb2f90d8413b867ca4668585134633c4e91fc0e1e6c5043afb01908",
+   "bytes": 194063
+  },
+  "figures/page-092.png": {
+   "local": "figures/page-092.png",
+   "sha256": "c8fb72bf63edf0e547be8903d02710759456f6aa6a4ef6d627ca0724a33fe192",
+   "bytes": 278227
+  },
+  "figures/page-095.png": {
+   "local": "figures/page-095.png",
+   "sha256": "79359d790a0bc6d20ededb73f0a9da9a94977faa2e14364144527740f28be9ba",
+   "bytes": 235283
+  },
+  "figures/page-096.png": {
+   "local": "figures/page-096.png",
+   "sha256": "d0730033ae3b297f5b34b4a50efef739365717562887b026ff954a3ee5f96015",
+   "bytes": 373538
+  },
+  "figures/page-100.png": {
+   "local": "figures/page-100.png",
+   "sha256": "6a17834449b20b508a922632af8a2a3f089965e22d582fb4ed7d5b8ac2c1f532",
+   "bytes": 332149
+  },
+  "figures/page-109.png": {
+   "local": "figures/page-109.png",
+   "sha256": "a1aedaee92009fd7afd71edc9ae4efcdd1ae9af3514432119e5dd6ee125ec6a9",
+   "bytes": 97970
+  },
+  "figures/page-114.png": {
+   "local": "figures/page-114.png",
+   "sha256": "7207a2cad0e795e0d583fb8766cd3f40db5136fc66f296875e6ce40433041c84",
+   "bytes": 248298
+  },
+  "figures/page-116.png": {
+   "local": "figures/page-116.png",
+   "sha256": "1d1ae31081d87297846e2635dda27a2b9ce1f39fc42c8e8ebcb9705eaf062bd8",
+   "bytes": 328538
+  },
+  "figures/page-118.png": {
+   "local": "figures/page-118.png",
+   "sha256": "cb19bd739c4b623e58c77c4a48f2965b85dfac38764db8d94884be44145c5014",
+   "bytes": 215131
+  },
+  "figures/page-121.png": {
+   "local": "figures/page-121.png",
+   "sha256": "b36429e8b5ea188b3e6f820663ecb582a7efe8463fc78ce3b0ea246d1281de02",
+   "bytes": 130783
+  },
+  "figures/page-122.png": {
+   "local": "figures/page-122.png",
+   "sha256": "499821ccf5eecb30fc0eb3c7ecf09701981a78a41f46caaf2c5d3673671a51dc",
+   "bytes": 212522
+  },
+  "figures/page-125.png": {
+   "local": "figures/page-125.png",
+   "sha256": "a65b5ed13a7067ba8658b3f5fd6d3a65163ac78cbb777e254e1cbf9e2fcfb4db",
+   "bytes": 213696
+  },
+  "figures/page-128.png": {
+   "local": "figures/page-128.png",
+   "sha256": "e2c96fc2f34d321d26c46a41420fc9046dee2b1d917942bd8cec82af384a2048",
+   "bytes": 174681
+  },
+  "figures/page-141.png": {
+   "local": "figures/page-141.png",
+   "sha256": "61f778e83d112d878b8d0093492d73fefa0ab89d7c01cebdc60302bd5aa63f62",
+   "bytes": 355853
+  },
+  "figures/page-143.png": {
+   "local": "figures/page-143.png",
+   "sha256": "14215f8f8eccc402bb782301021449d581eb56b31fd2cfca66725d618f291eae",
+   "bytes": 252849
+  },
+  "figures/page-144.png": {
+   "local": "figures/page-144.png",
+   "sha256": "eec7864f2022d8adf7dd4214f8fafd4fb8de034ebfe29df466748f8b061cb5ea",
+   "bytes": 313449
+  },
+  "figures/page-154.png": {
+   "local": "figures/page-154.png",
+   "sha256": "71c6cbcf2f1deed31380d1562c88eda7cc78748f824c3b7b082a9ab074e830d7",
+   "bytes": 45352
+  },
+  "index.html": {
+   "local": "_site/index.html",
+   "sha256": "256b6c814fb6849d9979cc44cf3bfe7ea3441152d6941c2baa784d634b2aae89",
+   "bytes": 21560
+  }
+ }
+}
