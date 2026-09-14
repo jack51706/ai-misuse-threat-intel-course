@@ -110,16 +110,14 @@ def sync_intro(metas):
         text, count=1, flags=re.S,
     )
     if new != text:
-        with open(INTRO_MD, "w", encoding="utf-8", newline="
-") as f:
+        with open(INTRO_MD, "w", encoding="utf-8", newline="\n") as f:
             f.write(new)
     # 重新轉這一頁（沿用 build_html 的轉換器，樣式與其他教材一致）
     sys.path.insert(0, ROOT)
     import build_html  # noqa: E402
     rel = os.path.relpath(INTRO_MD, ROOT).replace("\\", "/")
     out = build_html.convert_one(INTRO_MD, rel)
-    with open(INTRO_MD[:-3] + ".html", "w", encoding="utf-8", newline="
-") as f:
+    with open(INTRO_MD[:-3] + ".html", "w", encoding="utf-8", newline="\n") as f:
         f.write(out)
 
 
@@ -335,14 +333,12 @@ def main():
              .replace("@@EXTERNAL@@", str(stats["external"]))
              .replace("@@UPDATED@@", stats["last_update"]))
     shell_path = os.path.join(SITE, "index.html")
-    with open(shell_path, "w", encoding="utf-8", newline="
-") as f:
+    with open(shell_path, "w", encoding="utf-8", newline="\n") as f:
         f.write(shell)
     manifest["index.html"] = {"local": "_site/index.html", "sha256": sha256(shell_path), "bytes": os.path.getsize(shell_path)}
 
     now = datetime.datetime.now().isoformat(timespec="seconds")
-    with open(os.path.join(SITE, "publish-manifest.json"), "w", encoding="utf-8", newline="
-") as f:
+    with open(os.path.join(SITE, "publish-manifest.json"), "w", encoding="utf-8", newline="\n") as f:
         json.dump({"generated": now, "stats": stats, "files": manifest}, f, ensure_ascii=False, indent=1)
 
     state_path = os.path.join(SITE, "published-state.json")
@@ -351,14 +347,12 @@ def main():
         with open(state_path, encoding="utf-8") as f:
             state = json.load(f).get("files", {})
     if "--mark-published" in sys.argv:
-        with open(state_path, "w", encoding="utf-8", newline="
-") as f:
+        with open(state_path, "w", encoding="utf-8", newline="\n") as f:
             json.dump({"published": now, "files": manifest}, f, ensure_ascii=False, indent=1)
         pending = {}
     else:
         pending = {k: v for k, v in manifest.items() if state.get(k, {}).get("sha256") != v["sha256"]}
-    with open(os.path.join(SITE, "publish-pending.json"), "w", encoding="utf-8", newline="
-") as f:
+    with open(os.path.join(SITE, "publish-pending.json"), "w", encoding="utf-8", newline="\n") as f:
         json.dump({"generated": now, "count": len(pending), "files": pending}, f, ensure_ascii=False, indent=1)
 
     print(f"shell: _site/index.html | pages {stats['pages']} | figures {stats['figures']} | "

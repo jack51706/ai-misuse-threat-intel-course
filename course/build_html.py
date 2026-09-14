@@ -226,8 +226,7 @@ def main():
     for full, rel in mds:
         htmlpath = full[:-3] + ".html"
         out = convert_one(full, rel)
-        with open(htmlpath, "w", encoding="utf-8", newline="
-") as f:
+        with open(htmlpath, "w", encoding="utf-8", newline="\n") as f:
             f.write(out)
         made.append(rel[:-3] + ".html")
 
@@ -253,8 +252,7 @@ def main():
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>課程索引</title><style>{CSS}</style></head>
 <body>{''.join(lines)}</body></html>"""
-    with open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8", newline="
-") as f:
+    with open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8", newline="\n") as f:
         f.write(idx)
 
     print(f"produced {len(made)} html files + index.html")
