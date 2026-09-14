@@ -1,0 +1,27 @@
+{
+  "id": "anthropic-2025-04-malicious-uses-report",
+  "org": "Anthropic",
+  "org_zh": "Anthropic 威脅情報團隊",
+  "title": "Detecting and countering malicious uses of Claude: March 2025",
+  "title_zh": "首份 Claude 濫用報告",
+  "published": "2025-04-23",
+  "url": "https://www.anthropic.com/news/detecting-and-countering-malicious-uses-of-claude-march-2025",
+  "source_type": "official-threat-report",
+  "related_modules": [
+    "02-influence",
+    "01-cyber",
+    "06-scams"
+  ],
+  "related_materials": [
+    "02-influence/00-influence-intro-and-breakout-scale.md",
+    "02-influence/GTG-54002-influence-as-a-service.md",
+    "02-influence/GTG-54004-kenya-cib.md",
+    "02-influence/GTG-84002-uae-muslim-brotherhood.md",
+    "01-cyber/00-cyber-trends-and-skills.md",
+    "01-cyber/GTG-50029-hacktivist.md",
+    "06-scams/GTG-15001-dating-app-network.md",
+    "_shared/02-claude-safeguards-and-bypass-paths.md"
+  ],
+  "summary_zh": "Anthropic 首份威脅報告：影響力即服務網絡由模型決定 100 多個人設的互動，另含 IoT 憑證等三案。",
+  "added": "2026-09-14"
+}

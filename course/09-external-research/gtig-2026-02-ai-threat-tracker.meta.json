@@ -1,0 +1,32 @@
+{
+  "id": "gtig-2026-02-ai-threat-tracker",
+  "org": "Google GTIG",
+  "org_zh": "Google 威脅情報小組",
+  "title": "GTIG AI Threat Tracker: Distillation, Experimentation, and (Continued) Integration of AI for Adversarial Use",
+  "title_zh": "蒸餾、實驗與對抗性 AI 整合",
+  "published": "2026-02-13",
+  "url": "https://cloud.google.com/blog/topics/threat-intelligence/distillation-experimentation-integration-ai-adversarial-use",
+  "source_type": "official-threat-report",
+  "related_modules": [
+    "07-distillation",
+    "01-cyber",
+    "02-influence"
+  ],
+  "related_materials": [
+    "07-distillation/00-distillation-intro-and-mitigations.md",
+    "01-cyber/00-cyber-trends-and-skills.md",
+    "01-cyber/GTG-10007-exploit-foundry.md",
+    "01-cyber/GTG-20006-russian-espionage.md",
+    "01-cyber/GTG-50014-shinyhunters.md",
+    "01-cyber/GTG-50021-fake-reseller.md",
+    "01-cyber/GTG-50029-hacktivist.md",
+    "02-influence/GTG-24015-russian-state-media.md",
+    "02-influence/GTG-54006-bangladesh-awami-league.md",
+    "03-surveillance/GTG-14020-religious-affairs-taiwan-church.md",
+    "03-surveillance/GTG-14022-public-opinion-monitoring-taiwan.md",
+    "04-weapons/GTG-17002-ew-sead-taiwan.md",
+    "_shared/02-claude-safeguards-and-bypass-paths.md"
+  ],
+  "summary_zh": "GTIG 記錄 Gemini 遭模型萃取攻擊，與 Anthropic 同月的蒸餾揭露對照，並揭露 AI 整合惡意程式。",
+  "added": "2026-09-14"
+}

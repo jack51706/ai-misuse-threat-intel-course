@@ -1,5 +1,5 @@
 {
- "published": "2026-09-14T22:33:45",
+ "published": "2026-09-15T00:13:41",
  "files": {
   "shared/00-agent-brief.html": {
    "local": "_shared/00-agent-brief.html",
@@ -258,8 +258,13 @@
   },
   "09-external-research/00-external-research-intro.html": {
    "local": "09-external-research/00-external-research-intro.html",
-   "sha256": "653c9f4320dbea4638904e3a75da6f55c6fdae91981d34e9773da6b9cf346edb",
-   "bytes": 7957
+   "sha256": "e57af030f0c880f39eb0d4651fefe6f26b89251525dfef57bbfeae9db818ace4",
+   "bytes": 10114
+  },
+  "09-external-research/anthropic-2025-04-malicious-uses-report.html": {
+   "local": "09-external-research/anthropic-2025-04-malicious-uses-report.html",
+   "sha256": "cf382337342589e5f4f2fc8b094a3e57afdae48f49f00e8c18d189521b88179d",
+   "bytes": 132503
   },
   "09-external-research/anthropic-2025-08-threat-intel-report.html": {
    "local": "09-external-research/anthropic-2025-08-threat-intel-report.html",
@@ -276,6 +281,21 @@
    "sha256": "12f27e121dbda98f047d557c541a00477971a2363fbf0fd14813669b0fceac93",
    "bytes": 113592
   },
+  "09-external-research/gtig-2025-01-adversarial-misuse-generative-ai.html": {
+   "local": "09-external-research/gtig-2025-01-adversarial-misuse-generative-ai.html",
+   "sha256": "5433930d9aef784561a6e6e53992cfe4d7cbe22d0156dd8c7a780fe86816d197",
+   "bytes": 141907
+  },
+  "09-external-research/gtig-2025-11-ai-threat-tracker.html": {
+   "local": "09-external-research/gtig-2025-11-ai-threat-tracker.html",
+   "sha256": "424a94b2e92a06a4bc474781b167de8f1cfe6df9b48e51c2880e78446e8170cb",
+   "bytes": 219181
+  },
+  "09-external-research/gtig-2026-02-ai-threat-tracker.html": {
+   "local": "09-external-research/gtig-2026-02-ai-threat-tracker.html",
+   "sha256": "149ac2e76a980a97e2cb94c1ff16961e264cdbf2db38a299edc7dc256b0ed507",
+   "bytes": 204305
+  },
   "09-external-research/gtig-2026-05-ai-threat-tracker.html": {
    "local": "09-external-research/gtig-2026-05-ai-threat-tracker.html",
    "sha256": "9a1997249fd113a4cf0da5abf05d31a28ded758c68e57389b69cbd63aa58616c",
@@ -285,6 +305,16 @@
    "local": "09-external-research/gtig-2026-09-ai-threat-tracker.html",
    "sha256": "c02be00791f4bb60a2f6d7090dc82bac834c91c721ee93fb0825dc47561800fe",
    "bytes": 148948
+  },
+  "09-external-research/openai-2025-06-disrupting-malicious-uses.html": {
+   "local": "09-external-research/openai-2025-06-disrupting-malicious-uses.html",
+   "sha256": "e10c8696c8e48e953807d2dfca4e3f9a55853b00809490c1fbcbe48076c0bc04",
+   "bytes": 201882
+  },
+  "09-external-research/openai-2025-10-disrupting-malicious-uses.html": {
+   "local": "09-external-research/openai-2025-10-disrupting-malicious-uses.html",
+   "sha256": "a25d057e86cba3d46427308c9b9a13ffb281b596ebb9cbea6cc62e70b4812233",
+   "bytes": 215473
   },
   "09-external-research/openai-2026-02-disrupting-malicious-uses.html": {
    "local": "09-external-research/openai-2026-02-disrupting-malicious-uses.html",
@@ -298,8 +328,8 @@
   },
   "index.html": {
    "local": "_site/index.html",
-   "sha256": "38d5650e0ff58bb11592bd740a4037d7ae98390d0881a0f255956a5e4b8ca0f8",
-   "bytes": 23336
+   "sha256": "4a5213ce411d17da6805399e1c8040bb6627eec7ee5575df4cd4f6e3c0720b51",
+   "bytes": 25315
   }
  }
 }

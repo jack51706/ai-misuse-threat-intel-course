@@ -1,0 +1,33 @@
+{
+  "id": "openai-2025-10-disrupting-malicious-uses",
+  "org": "OpenAI",
+  "org_zh": "OpenAI 威脅情報團隊",
+  "title": "Disrupting malicious uses of AI: October 2025",
+  "title_zh": "AI 濫用處置報告 2025-10",
+  "published": "2025-10-07",
+  "url": "https://openai.com/global-affairs/disrupting-malicious-uses-of-ai-october-2025/",
+  "source_type": "official-threat-report",
+  "related_modules": [
+    "01-cyber",
+    "02-influence",
+    "03-surveillance",
+    "06-scams"
+  ],
+  "related_materials": [
+    "01-cyber/00-cyber-trends-and-skills.md",
+    "01-cyber/GTG-10007-exploit-foundry.md",
+    "01-cyber/GTG-20006-russian-espionage.md",
+    "02-influence/00-influence-intro-and-breakout-scale.md",
+    "02-influence/GTG-04001-russia-car-fimi.md",
+    "02-influence/GTG-24015-russian-state-media.md",
+    "02-influence/GTG-54002-influence-as-a-service.md",
+    "03-surveillance/00-surveillance-intro.md",
+    "03-surveillance/GTG-14010-uyghurs-syria.md",
+    "03-surveillance/GTG-14021-weiwen-transnational-repression.md",
+    "03-surveillance/GTG-14022-public-opinion-monitoring-taiwan.md",
+    "06-scams/GTG-15001-dating-app-network.md",
+    "_shared/02-claude-safeguards-and-bypass-paths.md"
+  ],
+  "summary_zh": "OpenAI 七案：俄語惡意程式積木法、鎖定台灣半導體的中文釣魚、東南亞詐騙園區、中國監控提案與南海影響力行動。",
+  "added": "2026-09-14"
+}

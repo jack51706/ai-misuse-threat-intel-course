@@ -1,0 +1,30 @@
+{
+  "id": "gtig-2025-11-ai-threat-tracker",
+  "org": "Google GTIG",
+  "org_zh": "Google 威脅情報小組",
+  "title": "GTIG AI Threat Tracker: Advances in Threat Actor Usage of AI Tools",
+  "title_zh": "執行期 AI 惡意程式登場",
+  "published": "2025-11-06",
+  "url": "https://cloud.google.com/blog/topics/threat-intelligence/threat-actor-usage-of-ai-tools",
+  "source_type": "official-threat-report",
+  "related_modules": [
+    "01-cyber",
+    "02-influence",
+    "03-surveillance",
+    "06-scams"
+  ],
+  "related_materials": [
+    "01-cyber/00-cyber-trends-and-skills.md",
+    "01-cyber/GTG-20006-russian-espionage.md",
+    "01-cyber/GTG-10007-exploit-foundry.md",
+    "01-cyber/GTG-50020-ai-supply-chain.md",
+    "01-cyber/GTG-50021-fake-reseller.md",
+    "02-influence/00-influence-intro-and-breakout-scale.md",
+    "03-surveillance/00-surveillance-intro.md",
+    "03-surveillance/GTG-34007-iran-surveillance.md",
+    "06-scams/GTG-15001-dating-app-network.md",
+    "_shared/02-claude-safeguards-and-bypass-paths.md"
+  ],
+  "summary_zh": "GTIG 首度記錄 PROMPTFLUX、PROMPTSTEAL 等執行期呼叫 LLM 的惡意程式與 AI 工具黑市。",
+  "added": "2026-09-14"
+}

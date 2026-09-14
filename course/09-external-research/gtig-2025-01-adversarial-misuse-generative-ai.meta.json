@@ -1,0 +1,30 @@
+{
+  "id": "gtig-2025-01-adversarial-misuse-generative-ai",
+  "org": "Google GTIG",
+  "org_zh": "Google 威脅情報小組",
+  "title": "Adversarial Misuse of Generative AI",
+  "title_zh": "生成式 AI 的對抗性濫用",
+  "published": "2025-01-30",
+  "url": "https://cloud.google.com/blog/topics/threat-intelligence/adversarial-misuse-generative-ai",
+  "source_type": "official-threat-report",
+  "related_modules": [
+    "01-cyber",
+    "02-influence",
+    "03-surveillance"
+  ],
+  "related_materials": [
+    "01-cyber/00-cyber-trends-and-skills.md",
+    "01-cyber/GTG-10007-exploit-foundry.md",
+    "01-cyber/GTG-20006-russian-espionage.md",
+    "01-cyber/GTG-50021-fake-reseller.md",
+    "02-influence/00-influence-intro-and-breakout-scale.md",
+    "02-influence/GTG-34001-iran-icco.md",
+    "02-influence/GTG-24015-russian-state-media.md",
+    "03-surveillance/GTG-34007-iran-surveillance.md",
+    "03-surveillance/GTG-30004-30005-30006-osint-recon.md",
+    "03-surveillance/GTG-14022-public-opinion-monitoring-taiwan.md",
+    "_shared/02-claude-safeguards-and-bypass-paths.md"
+  ],
+  "summary_zh": "GTIG 首份 Gemini 濫用報告：伊朗、中國、北韓、俄羅斯 APT 與 IO 的用法，結論是生產力工具非新能力。",
+  "added": "2026-09-14"
+}

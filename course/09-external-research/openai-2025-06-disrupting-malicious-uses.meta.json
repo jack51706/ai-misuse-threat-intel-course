@@ -1,0 +1,37 @@
+{
+  "id": "openai-2025-06-disrupting-malicious-uses",
+  "org": "OpenAI",
+  "org_zh": "OpenAI 威脅情報團隊",
+  "title": "Disrupting malicious uses of AI: June 2025",
+  "title_zh": "AI 濫用處置報告 2025-06",
+  "published": "2025-06-05",
+  "url": "https://openai.com/global-affairs/disrupting-malicious-uses-of-ai-june-2025/",
+  "source_type": "official-threat-report",
+  "related_modules": [
+    "01-cyber",
+    "02-influence",
+    "03-surveillance",
+    "06-scams",
+    "07-distillation"
+  ],
+  "related_materials": [
+    "01-cyber/GTG-10007-exploit-foundry.md",
+    "01-cyber/GTG-20006-russian-espionage.md",
+    "01-cyber/GTG-50021-fake-reseller.md",
+    "02-influence/00-influence-intro-and-breakout-scale.md",
+    "02-influence/GTG-24015-russian-state-media.md",
+    "02-influence/GTG-54002-influence-as-a-service.md",
+    "02-influence/GTG-84005-malaysia-election-platform.md",
+    "03-surveillance/00-surveillance-intro.md",
+    "03-surveillance/GTG-14020-religious-affairs-taiwan-church.md",
+    "03-surveillance/GTG-14021-weiwen-transnational-repression.md",
+    "03-surveillance/GTG-14022-public-opinion-monitoring-taiwan.md",
+    "04-weapons/GTG-17002-ew-sead-taiwan.md",
+    "06-scams/GTG-15001-dating-app-network.md",
+    "07-distillation/00-distillation-intro-and-mitigations.md",
+    "_shared/01-cross-cutting-analysis.md",
+    "_shared/02-claude-safeguards-and-bypass-paths.md"
+  ],
+  "summary_zh": "OpenAI 十案：北韓 IT 工作者、中國輿論戰攻擊台灣《逆統戰》、俄語 ScopeCreep 惡意程式。",
+  "added": "2026-09-14"
+}

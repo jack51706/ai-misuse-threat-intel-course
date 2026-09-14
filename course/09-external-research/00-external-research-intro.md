@@ -35,8 +35,14 @@
 | Google 威脅情報小組（Google GTIG） | 2026-05-12 | [GTIG AI Threat Tracker: Adversaries Leverage AI for Vulnerability Exploitation, Augmented Operations, and Initial Access](https://cloud.google.com/blog/topics/threat-intelligence/ai-vulnerability-exploitation-initial-access) | [AI 漏洞利用與初始存取](gtig-2026-05-ai-threat-tracker.html) |
 | OpenAI 威脅情報團隊（OpenAI） | 2026-02-25 | [Disrupting malicious uses of AI](https://openai.com/index/disrupting-malicious-ai-uses/) | [AI 濫用處置報告 2026-02](openai-2026-02-disrupting-malicious-uses.html) |
 | Anthropic（Anthropic） | 2026-02-23 | [Detecting and preventing distillation attacks](https://www.anthropic.com/news/detecting-and-preventing-distillation-attacks) | [偵測與防範蒸餾攻擊](anthropic-2026-02-distillation-disclosure.html) |
+| Google 威脅情報小組（Google GTIG） | 2026-02-13 | [GTIG AI Threat Tracker: Distillation, Experimentation, and (Continued) Integration of AI for Adversarial Use](https://cloud.google.com/blog/topics/threat-intelligence/distillation-experimentation-integration-ai-adversarial-use) | [蒸餾、實驗與對抗性 AI 整合](gtig-2026-02-ai-threat-tracker.html) |
 | Anthropic 威脅情報團隊（Anthropic） | 2025-11-13 | [Disrupting the first reported AI-orchestrated cyber espionage campaign](https://www.anthropic.com/news/disrupting-AI-espionage) | [首起 AI 編排網路間諜行動](anthropic-2025-11-ai-orchestrated-espionage.html) |
+| Google 威脅情報小組（Google GTIG） | 2025-11-06 | [GTIG AI Threat Tracker: Advances in Threat Actor Usage of AI Tools](https://cloud.google.com/blog/topics/threat-intelligence/threat-actor-usage-of-ai-tools) | [執行期 AI 惡意程式登場](gtig-2025-11-ai-threat-tracker.html) |
+| OpenAI 威脅情報團隊（OpenAI） | 2025-10-07 | [Disrupting malicious uses of AI: October 2025](https://openai.com/global-affairs/disrupting-malicious-uses-of-ai-october-2025/) | [AI 濫用處置報告 2025-10](openai-2025-10-disrupting-malicious-uses.html) |
 | Anthropic 威脅情報團隊（Anthropic） | 2025-08-27 | [Detecting and countering misuse of AI: August 2025](https://www.anthropic.com/news/detecting-countering-misuse-aug-2025) | [AI 濫用報告 2025-08](anthropic-2025-08-threat-intel-report.html) |
+| OpenAI 威脅情報團隊（OpenAI） | 2025-06-05 | [Disrupting malicious uses of AI: June 2025](https://openai.com/global-affairs/disrupting-malicious-uses-of-ai-june-2025/) | [AI 濫用處置報告 2025-06](openai-2025-06-disrupting-malicious-uses.html) |
+| Anthropic 威脅情報團隊（Anthropic） | 2025-04-23 | [Detecting and countering malicious uses of Claude: March 2025](https://www.anthropic.com/news/detecting-and-countering-malicious-uses-of-claude-march-2025) | [首份 Claude 濫用報告](anthropic-2025-04-malicious-uses-report.html) |
+| Google 威脅情報小組（Google GTIG） | 2025-01-30 | [Adversarial Misuse of Generative AI](https://cloud.google.com/blog/topics/threat-intelligence/adversarial-misuse-generative-ai) | [生成式 AI 的對抗性濫用](gtig-2025-01-adversarial-misuse-generative-ai.html) |
 <!-- LEDGER:END -->
 
 ## 5. 維護方式
