@@ -1,0 +1,26 @@
+{
+  "id": "anthropic-2025-08-threat-intel-report",
+  "org": "Anthropic",
+  "org_zh": "Anthropic 威脅情報團隊",
+  "title": "Detecting and countering misuse of AI: August 2025",
+  "title_zh": "AI 濫用報告 2025-08",
+  "published": "2025-08-27",
+  "url": "https://www.anthropic.com/news/detecting-countering-misuse-aug-2025",
+  "source_type": "official-threat-report",
+  "related_modules": [
+    "01-cyber",
+    "06-scams"
+  ],
+  "related_materials": [
+    "01-cyber/00-cyber-trends-and-skills.md",
+    "01-cyber/GTG-50014-shinyhunters.md",
+    "01-cyber/GTG-50021-fake-reseller.md",
+    "01-cyber/GTG-50020-ai-supply-chain.md",
+    "01-cyber/GTG-20006-russian-espionage.md",
+    "01-cyber/GTG-50029-hacktivist.md",
+    "06-scams/GTG-15001-dating-app-network.md",
+    "_shared/02-claude-safeguards-and-bypass-paths.md"
+  ],
+  "summary_zh": "Anthropic 第二份威脅報告，造出 vibe hacking 一詞，含資料勒索、北韓 IT 工作者等十案。",
+  "added": "2026-09-14"
+}

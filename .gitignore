@@ -8,3 +8,5 @@ desktop.ini
 # 建置產物：由 build_html.py / build_site.py 產生，routine 每次重建，不進版控以免灌爆歷史
 course/**/*.html
 course/_site/
+!course/_site/published-state.json
+course/09-external-research/_wip/

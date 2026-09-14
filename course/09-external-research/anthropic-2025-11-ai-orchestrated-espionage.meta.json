@@ -1,0 +1,19 @@
+{
+  "id": "anthropic-2025-11-ai-orchestrated-espionage",
+  "org": "Anthropic",
+  "org_zh": "Anthropic 威脅情報團隊",
+  "title": "Disrupting the first reported AI-orchestrated cyber espionage campaign",
+  "title_zh": "首起 AI 編排網路間諜行動",
+  "published": "2025-11-13",
+  "url": "https://www.anthropic.com/news/disrupting-AI-espionage",
+  "source_type": "official-threat-report",
+  "related_modules": ["01-cyber"],
+  "related_materials": [
+    "01-cyber/00-cyber-trends-and-skills.md",
+    "01-cyber/GTG-10007-exploit-foundry.md",
+    "01-cyber/GTG-20006-russian-espionage.md",
+    "_shared/02-claude-safeguards-and-bypass-paths.md"
+  ],
+  "summary_zh": "首起 AI 編排網路間諜行動 GTG-1002：Claude Code 自主執行八至九成戰術操作，鎖定約 30 個目標。",
+  "added": "2026-09-14"
+}

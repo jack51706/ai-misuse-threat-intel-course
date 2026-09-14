@@ -1,0 +1,24 @@
+{
+  "id": "gtig-2026-05-ai-threat-tracker",
+  "org": "Google GTIG",
+  "org_zh": "Google 威脅情報小組",
+  "title": "GTIG AI Threat Tracker: Adversaries Leverage AI for Vulnerability Exploitation, Augmented Operations, and Initial Access",
+  "title_zh": "AI 漏洞利用與初始存取",
+  "published": "2026-05-12",
+  "url": "https://cloud.google.com/blog/topics/threat-intelligence/ai-vulnerability-exploitation-initial-access",
+  "source_type": "official-threat-report",
+  "related_modules": ["01-cyber", "02-influence", "03-surveillance"],
+  "related_materials": [
+    "01-cyber/00-cyber-trends-and-skills.md",
+    "01-cyber/GTG-10007-exploit-foundry.md",
+    "01-cyber/GTG-20006-russian-espionage.md",
+    "01-cyber/GTG-50020-ai-supply-chain.md",
+    "01-cyber/GTG-50021-fake-reseller.md",
+    "01-cyber/GTG-50029-hacktivist.md",
+    "02-influence/GTG-24015-russian-state-media.md",
+    "03-surveillance/00-surveillance-intro.md",
+    "_shared/02-claude-safeguards-and-bypass-paths.md"
+  ],
+  "summary_zh": "GTIG 首度記錄 AI 開發的零日漏洞，並揭露 PROMPTSPY、匿名 LLM 黑市與 AI 供應鏈攻擊。",
+  "added": "2026-09-14"
+}

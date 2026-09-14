@@ -1,0 +1,26 @@
+{
+  "id": "gtig-2026-09-ai-threat-tracker",
+  "org": "Google GTIG",
+  "org_zh": "Google 威脅情報小組",
+  "title": "GTIG AI Threat Tracker: From Prompting to Autonomy – The Evolution of Adversarial AI",
+  "title_zh": "從提示到自主：對抗性 AI",
+  "published": "2026-09-09",
+  "url": "https://cloud.google.com/blog/topics/threat-intelligence/from-prompting-to-autonomy-the-evolution-of-adversarial-ai",
+  "source_type": "official-threat-report",
+  "related_modules": [
+    "01-cyber",
+    "02-influence",
+    "07-distillation"
+  ],
+  "related_materials": [
+    "01-cyber/00-cyber-trends-and-skills.md",
+    "01-cyber/GTG-10007-exploit-foundry.md",
+    "01-cyber/GTG-20006-russian-espionage.md",
+    "01-cyber/GTG-50014-shinyhunters.md",
+    "01-cyber/GTG-50020-ai-supply-chain.md",
+    "01-cyber/GTG-50021-fake-reseller.md",
+    "07-distillation/00-distillation-intro-and-mitigations.md"
+  ],
+  "summary_zh": "GTIG 第三季 AI 威脅追蹤：對手轉向 agentic 工作流，六小時完成大規模憑證收割，AI 資產成為竊取目標。",
+  "added": "2026-09-14"
+}

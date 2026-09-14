@@ -29,7 +29,14 @@
 下表由建置腳本依各教材的中繼資料自動產生，新到舊排序。
 
 <!-- LEDGER:START -->
-（尚無收錄）
+| 機構 | 發布 | 原文標題 | 教材 |
+|---|---|---|---|
+| Google 威脅情報小組（Google GTIG） | 2026-09-09 | [GTIG AI Threat Tracker: From Prompting to Autonomy – The Evolution of Adversarial AI](https://cloud.google.com/blog/topics/threat-intelligence/from-prompting-to-autonomy-the-evolution-of-adversarial-ai) | [從提示到自主：對抗性 AI](gtig-2026-09-ai-threat-tracker.html) |
+| Google 威脅情報小組（Google GTIG） | 2026-05-12 | [GTIG AI Threat Tracker: Adversaries Leverage AI for Vulnerability Exploitation, Augmented Operations, and Initial Access](https://cloud.google.com/blog/topics/threat-intelligence/ai-vulnerability-exploitation-initial-access) | [AI 漏洞利用與初始存取](gtig-2026-05-ai-threat-tracker.html) |
+| OpenAI 威脅情報團隊（OpenAI） | 2026-02-25 | [Disrupting malicious uses of AI](https://openai.com/index/disrupting-malicious-ai-uses/) | [AI 濫用處置報告 2026-02](openai-2026-02-disrupting-malicious-uses.html) |
+| Anthropic（Anthropic） | 2026-02-23 | [Detecting and preventing distillation attacks](https://www.anthropic.com/news/detecting-and-preventing-distillation-attacks) | [偵測與防範蒸餾攻擊](anthropic-2026-02-distillation-disclosure.html) |
+| Anthropic 威脅情報團隊（Anthropic） | 2025-11-13 | [Disrupting the first reported AI-orchestrated cyber espionage campaign](https://www.anthropic.com/news/disrupting-AI-espionage) | [首起 AI 編排網路間諜行動](anthropic-2025-11-ai-orchestrated-espionage.html) |
+| Anthropic 威脅情報團隊（Anthropic） | 2025-08-27 | [Detecting and countering misuse of AI: August 2025](https://www.anthropic.com/news/detecting-countering-misuse-aug-2025) | [AI 濫用報告 2025-08](anthropic-2025-08-threat-intel-report.html) |
 <!-- LEDGER:END -->
 
 ## 5. 維護方式

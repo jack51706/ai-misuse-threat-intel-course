@@ -1,0 +1,26 @@
+{
+  "id": "anthropic-2026-02-distillation-disclosure",
+  "org": "Anthropic",
+  "org_zh": "Anthropic",
+  "title": "Detecting and preventing distillation attacks",
+  "title_zh": "偵測與防範蒸餾攻擊",
+  "published": "2026-02-23",
+  "url": "https://www.anthropic.com/news/detecting-and-preventing-distillation-attacks",
+  "source_type": "official-threat-report",
+  "related_modules": [
+    "07-distillation",
+    "01-cyber"
+  ],
+  "related_materials": [
+    "07-distillation/00-distillation-intro-and-mitigations.md",
+    "07-distillation/GTG-16001-deepseek.md",
+    "07-distillation/GTG-16002-moonshot.md",
+    "07-distillation/GTG-16005-alibaba.md",
+    "07-distillation/GTG-16006-zhipu.md",
+    "07-distillation/GTG-16008-xiaomi.md",
+    "07-distillation/GTG-16012-16003-sensetime-minimax.md",
+    "01-cyber/GTG-50021-fake-reseller.md"
+  ],
+  "summary_zh": "首度具名 DeepSeek、Moonshot、MiniMax 非法蒸餾 Claude，為 9 月報告七家案的基準線。",
+  "added": "2026-09-14"
+}

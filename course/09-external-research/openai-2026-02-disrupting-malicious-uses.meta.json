@@ -1,0 +1,29 @@
+{
+  "id": "openai-2026-02-disrupting-malicious-uses",
+  "org": "OpenAI",
+  "org_zh": "OpenAI 威脅情報團隊",
+  "title": "Disrupting malicious uses of AI",
+  "title_zh": "AI 濫用處置報告 2026-02",
+  "published": "2026-02-25",
+  "url": "https://openai.com/index/disrupting-malicious-ai-uses/",
+  "source_type": "official-threat-report",
+  "related_modules": [
+    "02-influence",
+    "03-surveillance",
+    "06-scams"
+  ],
+  "related_materials": [
+    "02-influence/00-influence-intro-and-breakout-scale.md",
+    "02-influence/GTG-54002-influence-as-a-service.md",
+    "02-influence/GTG-04001-russia-car-fimi.md",
+    "02-influence/GTG-24015-russian-state-media.md",
+    "02-influence/GTG-54004-kenya-cib.md",
+    "03-surveillance/00-surveillance-intro.md",
+    "03-surveillance/GTG-14021-weiwen-transnational-repression.md",
+    "03-surveillance/GTG-14022-public-opinion-monitoring-taiwan.md",
+    "06-scams/GTG-15001-dating-app-network.md",
+    "_shared/02-claude-safeguards-and-bypass-paths.md"
+  ],
+  "summary_zh": "OpenAI 兩週年威脅報告七案：柬埔寨浪漫詐騙、假求償服務、中國公安「網絡特戰」；模型拒絕後行動照跑。",
+  "added": "2026-09-14"
+}

@@ -85,4 +85,6 @@ Cyber / Influence / Surveillance / Weapons 的案例大致都有這幾段，找�
 - 課程站台發布在 Claude Artifact：https://claude.ai/code/artifact/f5f4f71c-6b3b-4df6-a817-c4b83d9a9b4e （側欄殼頁由 `course/build_site.py` 產生，不要手寫）。
 - `course/09-external-research/`：其他機構或 Anthropic 先前的同類研究。每份研究一份 `.md` 加同名 `.meta.json`，規格在 `_brief.md`（十二節格式、meta 欄位、安全紅線）。導論頁 `00-external-research-intro.md` 的收錄清單由建置腳本從 meta.json 產生，不要手改。底線開頭的 `.md` 不會被轉成 html。
 - 每週一 09:00（台北）Claude Code 雲端 routine「AI 濫用威脅情報：每週延伸研究」自動執行：掃描固定來源、寫最多 3 份新教材、建置、發布到 Artifact、commit 進 main。人工事後審核；發現錯誤直接改教材、重新建置後由 Claude Code 發布。
+- **建置產物不進版控**（2026-09-14 起）：`course/` 下所有 `*.html` 與整個 `course/_site/` 已 gitignore，由 `build_html.py` / `build_site.py` 每次重建。版控只留原始碼：各 `.md`、`09-external-research/*.meta.json`、`figures/*.png`、兩支建置腳本。`build_html.py` 預設把報告圖 base64 內嵌成自足 HTML（`EMBED=0` 可關），`build_site.py` 因此不再發布獨立 PNG。
+- **唯一保留在版控的建置狀態**：`course/_site/published-state.json`（記錄線上版本各檔案的雜湊；發布成功後執行 `python build_site.py --mark-published` 更新並 commit）。有它，routine 與互動 session 才能只發布有變動的檔案；沒有它，每次都會重傳全站約 41 MB。
 - 建置（在 `course/` 執行）：`python build_html.py && python build_site.py`，待發布清單在 `_site/publish-pending.json`；發布只能由 Claude Code 的 Artifact 工具完成，發布後執行 `python build_site.py --mark-published`。
