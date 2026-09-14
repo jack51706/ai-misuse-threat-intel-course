@@ -10,3 +10,4 @@ course/**/*.html
 course/_site/
 !course/_site/published-state.json
 course/09-external-research/_wip/
+.claude/*.lock
