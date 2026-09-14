@@ -1,0 +1,3170 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GTG-54009-s2t-commercial-spyware</title>
+<style>
+:root{--fg:#1a1a1a;--bg:#fff;--muted:#666;--line:#e2e2e2;--link:#0b5cad;--code-bg:#f5f5f5;--accent:#0b5cad}
+@media(prefers-color-scheme:dark){:root{--fg:#e6e6e6;--bg:#141414;--muted:#9a9a9a;--line:#333;--link:#6cb6ff;--code-bg:#1e1e1e;--accent:#6cb6ff}}
+*{box-sizing:border-box}
+body{max-width:900px;margin:0 auto;padding:2rem 1.2rem 6rem;font-family:"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;line-height:1.75;color:var(--fg);background:var(--bg);font-size:16px}
+h1,h2,h3,h4{line-height:1.3;margin-top:1.8em}
+h1{font-size:1.7rem;border-bottom:2px solid var(--accent);padding-bottom:.3em}
+h2{font-size:1.35rem;border-bottom:1px solid var(--line);padding-bottom:.2em}
+h3{font-size:1.12rem}
+a{color:var(--link)}
+code{background:var(--code-bg);padding:.1em .35em;border-radius:4px;font-family:"Cascadia Code",Consolas,"Courier New",monospace;font-size:.9em}
+pre{background:var(--code-bg);padding:1em;border-radius:8px;overflow-x:auto;font-size:.86em;line-height:1.5}
+pre code{background:none;padding:0}
+pre.mermaid{background:transparent;text-align:center}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.92em;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:.5em .7em;text-align:left;vertical-align:top}
+th{background:var(--code-bg)}
+blockquote{border-left:4px solid var(--accent);margin:1em 0;padding:.4em 1em;color:var(--muted);background:var(--code-bg)}
+img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;margin:.5em 0}
+.figgallery{margin-top:2em;border-top:2px solid var(--accent);padding-top:1em}
+.figgallery figure{margin:1.5em 0}
+.figgallery figcaption{color:var(--muted);font-size:.9em;margin-top:.3em}
+.topbar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:.6em 0;margin:-2rem -1.2rem 1.5rem;padding-left:1.2rem;font-size:.9em}
+.topbar a{text-decoration:none;margin-right:1em}
+hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+</style></head>
+<body><div class="topbar"><a href="../index.html">◀ 課程索引</a></div><h1 id="gtg-54009-claude-s2t-unlocking-cyberspace">GTG-54009：商業監控平台以 Claude 側寫伊朗與波灣社群媒體使用者（歸因 S2T Unlocking Cyberspace）</h1>
+<blockquote>
+<p>課程模組：03 監控行動（Surveillance operations） ｜ 一手來源：Anthropic《Detecting and countering misuse of AI: September 2026》PDF p.82–86（含 p.81 章節導論、p.64 伊朗影響力行動交叉引用、p.89–93 GTG-14020 台灣交叉引用） ｜ 整理日期：2026-09-13</p>
+</blockquote>
+<hr />
+<h2 id="0">0. 本教材使用說明</h2>
+<p>這份案例在整份 154 頁威脅報告裡篇幅不算長（正文約兩頁半、圖表兩頁），但它是 <strong>03 監控行動模組中唯一一個「純商業供應商」案例</strong>——其他監控案例的行為者是國家安全機關、國家承包商或單一顧問，只有 GTG-54009 的行為者是一家<strong>在公開市場上有網站、有產品型錄、有展場攤位、有 LinkedIn 徵才頁的合法註冊公司</strong>。</p>
+<p>這個差別是本案全部教學價值的來源：</p>
+<ul>
+<li>它讓「監控產業」從抽象名詞變成<strong>可查證的商業實體</strong>——學員可以自己去看這家公司的官網與產品線。</li>
+<li>它是本報告中<strong>極少數能與三年前的獨立調查記者報導對得上</strong>的案例（Forbidden Stories, 2023-02-20），因此可以拿來教「多來源交叉驗證」。</li>
+<li>它是本報告中<strong>唯一在「試營運（pilot stage）」就被攔下</strong>、且 Anthropic 明確寫出「沒有證據顯示下游階段已對真實目標執行」的案例，可以拿來教「上游偵測（upstream detection）」的價值與其認識論限制。</li>
+<li>它把「監控」與「影響力行動」放進<strong>同一條產線</strong>：同一個平台既做人口分類側寫，又生成假帳號貼文、又輸出「建議反制敘事」。這條界線的模糊，是整個 AI 時代資訊治理最棘手的問題。</li>
+</ul>
+<p><strong>閱讀順序建議</strong>：第 1 節速覽 →<strong>第 6 節圖表判讀</strong>（Figure 1 是整個行動的骨架，兩張表是行動的血肉）→ 第 2、3 節（歸因與分類政治）→ 第 4、5 節（生命週期與 TTP）→ 第 8、9 節（防線缺口與外部驗證）→ 第 10 節教學設計。</p>
+<p><strong>一句話定位</strong>：這是一個「把整個國家的人口丟進分類器、貼上六個標籤、再依標籤量身訂做假帳號與反制敘事」的商業產品原型——它示範了<strong>當側寫成本降到接近零時，監控的預設對象會從「特定嫌疑人」變成「全體人口」</strong>。</p>
+<hr />
+<h2 id="1-tldr">1. 一頁速覽（TL;DR）</h2>
+<ol>
+<li>
+<p><strong>事件</strong>：2026 年 6 月，Anthropic 封禁一個帳號，該帳號使用 Claude 建構一個<strong>商業監控平台</strong>，用來「分析、分類、側寫」伊朗與波斯灣地區社群媒體使用者的活動（p.82）。</p>
+</li>
+<li>
+<p><strong>歸因對象</strong>：Anthropic 調查認定活動「由一個名為『S2T Unlocking Cyberspace』的實體執行，或代表該實體執行（carried out by, or on behalf of）」，並說「公開來源研究顯示（open-source research suggests）」這是一家<strong>以色列—新加坡的商業情報供應商（Israeli-Singaporean commercial intelligence vendor）</strong>（p.82）。注意這兩層都是<strong>降信度措辭</strong>，第 2 節會逐字拆解。</p>
+</li>
+<li>
+<p><strong>平台核心目的是監控</strong>：報告原文 "The platform's core purpose was surveillance"——(a) 繪製社群媒體使用者的<strong>位置</strong>；(b) 把人口<strong>分類進編碼過的人口群體（coded demographic groups）</strong>；(c) 產出<strong>以政府報告語域書寫的阿拉伯語情報簡報</strong>（p.82）。</p>
+</li>
+<li>
+<p><strong>六類編碼群體</strong>：報告逐字列出 "A demographic scheme comprising six groups (urban, clerical, military, youth, diaspora, rural)"（p.83）。<strong>這六個標籤本身就是本案最重要的教學素材</strong>——分類決定了誰被看見、誰被當成威脅；把人歸類為「軍事」或「教士」不是描述，而是一種<strong>權力行為</strong>。見第 3.3 節。</p>
+</li>
+<li>
+<p><strong>監控與影響力行動被做進同一條產線</strong>：最終簡報除了「依波灣國籍拆分的情緒分數」之外，還附上<strong>「建議反制敘事（recommended counternarratives）」</strong>（p.83）。同一個平台先告訴客戶「誰在想什麼」，再告訴客戶「該說什麼去壓過去」。第 4.5 節專論。</p>
+</li>
+<li>
+<p><strong>255 個以上的合成帳號</strong>：第二條工作線建立了 <strong>「超過 255 個合成社群網路帳號（more than 255 synthetic social network accounts）」</strong>，Anthropic 判讀為「行為者正在<strong>囤積</strong>一批之後才要部署的假帳號」（p.83）。報告在 p.85 只揭露了其中 <strong>26 個 handle</strong>（約 10%），分屬 7 個分眾代碼。</p>
+</li>
+<li>
+<p><strong>在試營運階段被攔下</strong>：報告逐字寫 "We identified this activity in its pilot stage, and found no evidence that later stages of S2T's surveillance chain (as described in the Forbidden Stories report) were used against real targets before we banned the account."（p.83）。第 8.3 節討論「上游偵測」為何有價值、又為何不能過度宣稱。</p>
+</li>
+<li>
+<p><strong>與 Forbidden Stories 2023 調查對得上、但劃清驗證界線</strong>：Anthropic 說自己的發現「independently corroborate（獨立佐證）」了 2023 年 2 月 Forbidden Stories 的調查（該調查從哥倫比亞軍方外洩檔案中找到一份 S2T 的公司型錄），並說型錄描述的能力「map closely onto（高度吻合）」本次觀察到的行為；<strong>但同時明說 "We were not able to independently confirm the downstream operational stages reported by Forbidden Stories."</strong>（p.83–84）。這是 CTI 寫作紀律的教科書級示範，第 2.5 與第 9 節專論。</p>
+</li>
+<li>
+<p><strong>本案在課程裡要教什麼</strong>：教「<strong>分類即權力（classification is power）</strong>」與「<strong>驗證界線的誠實標註</strong>」這兩件事。前者是監控技術批判的核心；後者是情報產品可信度的核心。附帶第三個教學點：<strong>商業供應商是威權監控能力的跨國輸送管道</strong>，而 AI 讓這條管道的邊際成本趨近於零。</p>
+</li>
+<li>
+<p><strong>情報信度提醒</strong>：本案的「<strong>這家公司用 Claude 做了這件事</strong>」這個具體主張，目前<strong>是單一來源（Anthropic）</strong>——沒有任何第三方獨立查證，S2T 也未公開回應。但「<strong>這家公司賣的就是這種能力</strong>」這個背景主張，<strong>已被 Forbidden Stories 於 2023 年獨立記錄</strong>。教學上必須把這兩層分開講（第 9、12 節）。</p>
+</li>
+</ol>
+<hr />
+<h2 id="2">2. 行為者側寫與歸因</h2>
+<h3 id="21">2.1 報告的歸因原文（逐字）</h3>
+<p>報告 p.82 的歸因句只有一句，但每個詞都經過法務與情報雙重考量：</p>
+<blockquote>
+<p>"In June 2026, we banned an account that used Claude to build a commercial surveillance platform to analyze, classify, and profile the social media activity of users in Iran and the Persian Gulf region. <strong>Our investigation found that the activity was carried out by, or on behalf of, an entity named "S2T Unlocking Cyberspace," which open-source research suggests is an Israeli-Singaporean commercial intelligence vendor.</strong>"</p>
+</blockquote>
+<p>（2026 年 6 月，我們封禁了一個帳號，該帳號使用 Claude 建構一個商業監控平台，以分析、分類並側寫伊朗與波斯灣地區使用者的社群媒體活動。我們的調查發現，該活動是由一個名為「S2T Unlocking Cyberspace」的實體所執行，或代表該實體執行；公開來源研究顯示該實體是一家以色列—新加坡的商業情報供應商。）</p>
+<h3 id="22">2.2 這句話裡有「三層降信度」，要逐層拆</h3>
+<p>這是本案最值得花時間講的一句話。它不是一個歸因，而是<strong>三個強度不同的主張疊在一起</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>層次</th>
+<th>原文措辭</th>
+<th>主張強度</th>
+<th>這代表什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第一層：活動事實</td>
+<td>"Our investigation <strong>found</strong>"</td>
+<td><strong>最強</strong>。用 found，不是 assess、不是 suspect</td>
+<td>Anthropic 對「帳號上發生了什麼」有第一手平台遙測，這部分是他們的主場，信度最高</td>
+</tr>
+<tr>
+<td>第二層：執行者身分</td>
+<td>"carried out <strong>by, or on behalf of</strong>, an entity named 'S2T Unlocking Cyberspace'"</td>
+<td><strong>中等</strong>。刻意保留「或代表其執行」</td>
+<td>Anthropic 能把活動綁到 S2T 這個名字，但<strong>無法判定操作者是 S2T 正職員工、外包商、經銷商、還是拿 S2T 產品去做 demo 的第三方</strong></td>
+</tr>
+<tr>
+<td>第三層：公司性質</td>
+<td>"<strong>open-source research suggests</strong> is an Israeli-Singaporean commercial intelligence vendor"</td>
+<td><strong>最弱</strong>。這不是 Anthropic 的判斷，是<strong>轉述別人的判斷</strong></td>
+<td>Anthropic 明白表示「這家公司是什麼國籍、什麼性質」不是他們查的，是公開研究說的。他們沒有背書</td>
+</tr>
+</tbody>
+</table>
+<p><strong>課堂關鍵提問</strong>：如果 Anthropic 對第三層有自己的把握，他們會怎麼寫？答案是會寫 "we assess with moderate confidence that..."。他們沒這樣寫，就是在告訴讀者：<strong>這一段請自己去查來源，出錯不算我的</strong>。這是專業 CTI 產品的責任切割，不是含糊其辭。</p>
+<h3 id="23-by-or-on-behalf-of">2.3 「by, or on behalf of」為什麼重要——商業監控產業的歸因結構性難題</h3>
+<p>商業監控供應商的商業模式天生就讓歸因變模糊，原因有四，本案全部命中：</p>
+<ol>
+<li><strong>多層經銷（reseller chain）</strong>。Forbidden Stories 2023 的報導指出，與哥倫比亞軍方接觸的是<strong>「一家 S2T 經銷商（an S2T reseller）」</strong>，而不是 S2T 本身。供應商賣工具、經銷商賣服務、客戶自己操作——三層之間誰按下按鈕，平台端看不出來。</li>
+<li><strong>展示與試用（demo / PoC）</strong>。同一份報導提到 S2T 曾對<strong>印度海軍做過展示（demo）</strong>。一次 demo 產生的流量與一次真實作戰行動，在 API 遙測上長得幾乎一樣。本案「pilot stage」的判定，正好落在這個模糊地帶。</li>
+<li><strong>多品牌包裝</strong>。報告 Key findings 第一條就寫：<strong>"The actor was building a portfolio of multi-branded systems, likely serving Arabic-language customers in the Gulf region."</strong>（p.83）——行為者在建「一組多品牌系統的投資組合」。多品牌是監控產業的標準做法：同一套引擎換不同名字賣給不同國家，出事時可以切割。</li>
+<li><strong>跨法域公司結構</strong>。見下節。</li>
+</ol>
+<h3 id="24-s2t-websearch-9">2.4 S2T 的公開資訊（WebSearch 結果，第 9 節有完整出處）</h3>
+<p>以下<strong>全部來自公開來源，不是 Anthropic 報告內容</strong>，用來幫學員理解「這家公司是什麼」：</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>公開資訊</th>
+<th>來源性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>成立年份</td>
+<td>2002 年</td>
+<td>Forbidden Stories（2023）、CyberDB 廠商資料庫</td>
+</tr>
+<tr>
+<td>創辦人</td>
+<td><strong>Ori Sasson</strong>，希伯來大學（Hebrew University of Jerusalem）資訊科學博士、機器學習專長，曾任新加坡管理大學（SMU）Practice Assistant Professor</td>
+<td>Forbidden Stories、Crunchbase、公司公開簡介</td>
+</tr>
+<tr>
+<td>辦公室</td>
+<td>Forbidden Stories 寫「現有或曾有辦公室位於<strong>新加坡、斯里蘭卡、英國、以色列</strong>」</td>
+<td>Forbidden Stories（2023）</td>
+</tr>
+<tr>
+<td>註冊地登載</td>
+<td>CyberDB 廠商資料庫登載 HQ 為<strong>英國 Slough</strong>、員工 11–50 人</td>
+<td>第三方廠商資料庫（可靠度中等）</td>
+</tr>
+<tr>
+<td>自我定位</td>
+<td>官網 s2t.ai 自稱 OSINT / WEBINT / Fusion Intelligence 平台；LinkedIn 頁面標語為 "AI-Powered Investigations, WEBINT, OSINT, FUSION"</td>
+<td>公司自述</td>
+</tr>
+<tr>
+<td>產品線</td>
+<td><strong>GoldenSpear</strong> 產品家族（含 GoldenSpear Deep Fusion 多源大數據調查平台，宣稱整合 SIGINT、HUMINT 與 web intelligence）</td>
+<td>公司官網</td>
+</tr>
+</tbody>
+</table>
+<p><strong>教學重點：Anthropic 說「以色列—新加坡」，但公開足跡至少橫跨四個法域（以色列、新加坡、英國、斯里蘭卡）。</strong> 這不是矛盾，而是這個產業的<strong>設計特徵</strong>：</p>
+<ul>
+<li>研發放以色列（人才與軍方情報單位校友網絡）；</li>
+<li>商務與出口主體放新加坡或英國（避開以色列國防出口管制署 DECA 的雲端管轄、也避開「以色列公司」這個政治標籤）；</li>
+<li>交付與支援放第三地。</li>
+</ul>
+<blockquote>
+<p><strong>這叫「法域套利（jurisdictional arbitrage）」。</strong> 以色列在 NSO/Pegasus 事件後由 DECA 收緊網路情報產品出口，要求終端使用者簽署「僅用於反恐或重大犯罪偵查」的聲明；但若產品由新加坡或英國實體出口，以色列的管制就未必及得上。這是課堂上討論「出口管制為何常常無效」的最佳具體案例。</p>
+</blockquote>
+<h3 id="25-forbidden-stories-2023">2.5 歸因的第二支柱：與 Forbidden Stories 2023 調查的行為吻合</h3>
+<p>Anthropic 沒有只靠「帳號上的身分線索」做歸因，他們用了<strong>行為比對（behavioural corroboration）</strong>——把觀察到的行為，與三年前記者從外洩檔案裡挖到的產品型錄比對。逐字（p.82–83）：</p>
+<blockquote>
+<p>"Our findings <strong>independently corroborate</strong> a February 2023 investigation by the journalism network Forbidden Stories; the investigation documented an S2T surveillance product, which the reporters discovered in a company brochure in leaked files from the Colombian military. <strong>The capabilities described in that brochure map closely onto the behavior we observed in this operation.</strong>"</p>
+</blockquote>
+<p>（我們的發現獨立佐證了新聞網絡 Forbidden Stories 於 2023 年 2 月的一項調查；該調查記錄了一項 S2T 的監控產品，記者是在哥倫比亞軍方外洩檔案中的一份公司型錄裡發現它的。該型錄所描述的能力，與我們在這次行動中觀察到的行為高度吻合。）</p>
+<p><strong>"independently corroborate" 是一個很強的用詞</strong>，意思是：我這邊的證據來源與你那邊完全不同（我看的是 API 流量，你看的是外洩 PDF），卻指向同一結論。在情報學上，這叫<strong>來源獨立性（source independence）</strong>，是提升信度最有效的方式——兩個非獨立來源互引一百次，信度不會上升；兩個獨立來源對上一次，信度就跳一級。</p>
+<p><strong>但緊接著的下一段（p.83–84），Anthropic 主動把界線劃回來</strong>：</p>
+<blockquote>
+<p>"The 2023 Forbidden Stories investigation into the leaked S2T brochure described S2T's services, including creating fake accounts to infiltrate private WhatsApp and Telegram groups, harvesting member lists, and escalating to phishing and compromising devices. The content this actor used Claude to generate <strong>might have served</strong> as a credibility layer to help targets trust these fake accounts. <strong>We were not able to independently confirm the downstream operational stages reported by Forbidden Stories.</strong>"</p>
+</blockquote>
+<p>（2023 年 Forbidden Stories 對外洩 S2T 型錄的調查描述了 S2T 的服務，包括建立假帳號以滲透私人 WhatsApp 與 Telegram 群組、收割成員名單，並升級為釣魚與裝置入侵。此行為者用 Claude 生成的內容<strong>可能</strong>曾作為一層可信度包裝，幫助目標信任這些假帳號。<strong>我們無法獨立確認 Forbidden Stories 所報導的下游作業階段。</strong>）</p>
+<p><strong>這兩段合起來，就是本案在情報紀律上的最高價值。</strong> Anthropic 做了三件事：</p>
+<ol>
+<li><strong>引用</strong>第三方調查來補自己視野之外的部分（他們看不到 WhatsApp 群組裡發生什麼）；</li>
+<li><strong>明確標示</strong>哪一段是自己觀察到的（Claude 生成內容）、哪一段是別人報導的（滲透、收割、釣魚、入侵）；</li>
+<li><strong>用情態動詞降級推測</strong>（"might have served"），而不是寫成 "served"。</li>
+</ol>
+<p>課堂上可以直接把這兩段做成投影片，標題就叫「<strong>一份負責任的情報報告長什麼樣子</strong>」。</p>
+<h3 id="26">2.6 行為者的語言與客戶側寫</h3>
+<p>報告沒有揭露操作者的語言、時區、handle 或 IP——這與 GTG-20006（俄語、handle "JackPoterz"）或 GTG-14010（中文）形成對比。本案能推出的只有<strong>產出物的語言</strong>與<strong>目標語言</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>語言</th>
+<th>出現位置</th>
+<th>推論</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>阿拉伯語（正式體）</strong></td>
+<td>最終情報簡報，"written in the register of a government report"、"written in formal Arabic and styled as official government communications"（p.82, 83）</td>
+<td><strong>客戶是阿拉伯語政府機關</strong>。報告 Key findings 明寫 "likely serving Arabic-language customers in the Gulf region"</td>
+</tr>
+<tr>
+<td>波斯語、阿拉伯語、英語、德語</td>
+<td>Claude 生成假人設貼文的四種語言（p.83）</td>
+<td><strong>監控與滲透的目標</strong>橫跨伊朗境內、波灣、以及西方僑民社群（德語＝德國伊朗僑民，見 @BerlinIranFree）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>注意這個不對稱：產出物是阿拉伯語，但被監控的主要人口是波斯語使用者。</strong> 這句話本身就是一條歸因線索——它把「誰付錢」與「誰被看」清楚分開。在本案中，<strong>付錢的是波灣阿拉伯語國家的政府客戶，被看的是伊朗人與波灣的外籍勞工</strong>。</p>
+</blockquote>
+<hr />
+<h2 id="3">3. 受害者與目標清單</h2>
+<h3 id="31-figure-1">3.1 目標人口（依報告與 Figure 1）</h3>
+<table>
+<thead>
+<tr>
+<th>目標群體</th>
+<th>依據</th>
+<th>規模</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>伊朗境內社群媒體使用者</td>
+<td>p.82 "users in Iran"；Figure 1「Whole Iranian... populations」</td>
+<td><strong>全體人口層級</strong>（報告與圖表用的是 "entire populations"、"whole... populations"，不是特定名單）</td>
+</tr>
+<tr>
+<td>波斯灣地區社群媒體使用者</td>
+<td>p.82 "the Persian Gulf region"；Figure 1「Gulf and Emirati populations」</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>阿聯（UAE）外籍勞工</td>
+<td>p.85 分眾表 "Synthetic: UAE expatriate"，handle 指向巴基斯坦籍、孟加拉籍杜拜/沙迦勞工</td>
+<td>未揭露</td>
+</tr>
+<tr>
+<td>沙烏地／GCC 教派社群</td>
+<td>p.85 分眾表 "Synthetic: Saudi/GCC sectarian"</td>
+<td>未揭露</td>
+</tr>
+<tr>
+<td>離散僑民（diaspora）</td>
+<td>p.83 Key findings "captured and sorted the locations of <strong>diaspora</strong> social network users"</td>
+<td>未揭露；handle 顯示洛杉磯、多倫多、柏林、杜拜、倫敦</td>
+</tr>
+<tr>
+<td>政治異議者／活動人士／記者</td>
+<td>p.84 Anthropic 引用自家 Usage Policy 禁止 "building dossiers on <strong>activists, journalists, and political dissidents</strong>"</td>
+<td>未揭露具體數量</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="報告原圖 · 第 84 頁（一手 PDF）" src="../figures/page-084.png" /></p>
+<p><strong>沒有具體受害人數。</strong> 這是本案與其他案例的重要差異：報告沒有給「X 個組織」「Y 名個人」的數字，因為<strong>行動在還沒對真實目標下手時就被攔了</strong>。唯一的量化指標來自 Figure 1：<strong>8,904 次 exchanges、30 天</strong>。見第 6.1 節的算術練習。</p>
+<h3 id="32">3.2 分類的第二個維度：政治立場</h3>
+<p>報告 Key findings 第二條（p.83）：</p>
+<blockquote>
+<p>"The system captured and sorted the locations of diaspora social network users, <strong>categorizing them as pro-government or opponents of the government.</strong>"</p>
+</blockquote>
+<p>（該系統擷取並整理了離散僑民社群網路使用者的位置，將他們分類為<strong>擁護政府者或政府的反對者</strong>。）</p>
+<p>這是一個<strong>二元政治標籤</strong>，疊加在六類人口標籤之上。所以一個人在系統裡至少有三個欄位：<strong>位置 × 人口分類 × 政治立場</strong>，每一項還帶信度分數（confidence ratings，p.83）。</p>
+<p>從資料模型的角度看，這就是一張<strong>人口普查表</strong>——只是這張表沒有經過任何人同意、由一家私人公司建立、賣給外國政府。</p>
+<h3 id="33">3.3 【核心教學】六類編碼群體：為什麼「分類」本身就是政治行為</h3>
+<p>這是本案最值得花整整一堂課討論的段落。報告 p.83 逐字：</p>
+<blockquote>
+<p>"<strong>A demographic scheme comprising six groups (urban, clerical, military, youth, diaspora, rural) was used to sort people into categories.</strong>"</p>
+</blockquote>
+<p>（一套包含六個群體的人口方案——<strong>都市、教士、軍事、青年、離散僑民、鄉村</strong>——被用來把人分類。）</p>
+<h4 id="331">3.3.1 先把六類列成表，並問「這是誰的分類法？」</h4>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>原文</th>
+<th>中譯</th>
+<th>這個標籤在伊朗語境下意味著什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>urban</td>
+<td>都市</td>
+<td>德黑蘭、伊斯法罕等大城市中產階級，2022–2023 抗議浪潮主力</td>
+</tr>
+<tr>
+<td>2</td>
+<td>clerical</td>
+<td>教士</td>
+<td>庫姆（Qom）、馬什哈德（Mashhad）宗教學院體系，政權意識形態核心</td>
+</tr>
+<tr>
+<td>3</td>
+<td>military</td>
+<td>軍事</td>
+<td>革命衛隊（IRGC）、巴斯基民兵（Basij）、聖城軍（Quds Force）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>youth</td>
+<td>青年</td>
+<td>大學生群體，抗議動員的主要人口</td>
+</tr>
+<tr>
+<td>5</td>
+<td>diaspora</td>
+<td>離散僑民</td>
+<td>洛杉磯、多倫多、柏林、倫敦、杜拜的伊朗僑民；流亡反對派所在</td>
+</tr>
+<tr>
+<td>6</td>
+<td>rural</td>
+<td>鄉村</td>
+<td>傳統上被視為政權支持基礎、但近年因通膨與缺水轉向</td>
+</tr>
+</tbody>
+</table>
+<p><strong>第一個提問：這六類是不是「中立的人口統計學」？</strong> 不是。一個中立的人口統計方案會是「年齡、性別、教育程度、收入」。這六類的選擇邏輯不是統計學的，而是<strong>政治動員學的</strong>——它切的是「誰可能上街、誰會鎮壓、誰在海外能組織、誰是意識形態守門人」。</p>
+<p><strong>第二個提問：這六類反映的是誰的世界觀？</strong> 反映的是<strong>伊朗政權自身的維穩世界觀</strong>，或者說，是一個<strong>想要替波灣客戶預測／操弄伊朗內部穩定的外部行為者</strong>的世界觀。注意「clerical」與「military」這兩類：一般人口普查不會把神職人員與軍人單獨切成兩個一級分類。只有當你的分析目的是「評估政權支柱是否鬆動」時，這兩類才會升格為一級分類。</p>
+<h4 id="332">3.3.2 分類的四重權力效應</h4>
+<p>課堂上要讓學員理解，「把人分類」不是描述世界，而是<strong>製造世界</strong>。具體有四個機制：</p>
+<ol>
+<li>
+<p><strong>分類決定可見性（visibility）</strong>：不在任何一類裡的人，在系統中不存在。反過來說，被分進「軍事」類的人，即使只是在推特上轉貼閱兵照片，也會被標記為軍方相關人員。<strong>分類器的假陽性直接等於一個人的人生風險。</strong></p>
+</li>
+<li>
+<p><strong>分類決定威脅度（threat attribution）</strong>：一旦系統把「青年＋都市＋反政府」定義成一個 segment，這個 segment 就會被當成一個<strong>可操作的目標集合</strong>，而不是一群個別的人。監控從「調查嫌疑人」滑向「管理人群」。</p>
+</li>
+<li>
+<p><strong>分類具有黏著性（stickiness）</strong>：標籤一旦寫進資料庫，會隨著資料轉手而流動、被下游系統當作事實使用，而且<strong>沒有申訴管道</strong>——被貼標籤的人根本不知道自己被貼了什麼。Figure 1 底部的回饋箭頭（「收割到的聯絡人與成員名單回灌分類器，作為下一輪掃描的種子」）意味著<strong>分類會自我強化</strong>：第一輪的分類誤差會決定第二輪要去掃誰。</p>
+</li>
+<li>
+<p><strong>分類把政治判斷偽裝成技術判斷</strong>：「這個人是 IR-YO 分眾，情緒分數 -0.7」看起來像一個工程輸出，但它實質上是「這個人是個不滿的年輕人，值得監控」這個政治判斷。<strong>技術語言洗白了政治決定。</strong> 這就是監控技術批判的核心命題。</p>
+</li>
+</ol>
+<h4 id="333">3.3.3 一個關鍵的文本觀察：六類與七碼對不上</h4>
+<p>這是必須帶學員自己發現的細節。</p>
+<ul>
+<li><strong>正文（p.83）說六類</strong>：urban, clerical, military, youth, diaspora, rural。</li>
+<li><strong>p.85 的「Synthetic handles by segment」表列出七個 segment code</strong>：IR-DI（Diaspora）、IR-YO（Youth/student）、IR-MI（Military）、IR-CL（Clerical）、IR-RU（Rural）、UAE（UAE expatriate）、GCC（Saudi/GCC sectarian）。</li>
+</ul>
+<p>比對結果：</p>
+<table>
+<thead>
+<tr>
+<th>正文六類</th>
+<th>p.85 表中對應的 segment code</th>
+<th>是否出現</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>diaspora</td>
+<td>IR-DI</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>youth</td>
+<td>IR-YO</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>military</td>
+<td>IR-MI</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>clerical</td>
+<td>IR-CL</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>rural</td>
+<td>IR-RU</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>urban</strong></td>
+<td><strong>（無）</strong></td>
+<td>❌ <strong>沒有對應的合成帳號列</strong></td>
+</tr>
+<tr>
+<td>（正文未列）</td>
+<td><strong>UAE</strong>（阿聯外籍勞工）</td>
+<td>➕ 表中多出</td>
+</tr>
+<tr>
+<td>（正文未列）</td>
+<td><strong>GCC</strong>（沙烏地／波灣教派）</td>
+<td>➕ 表中多出</td>
+</tr>
+</tbody>
+</table>
+<p><strong>三個可能的解釋，課堂上讓學員各自論證</strong>：</p>
+<ul>
+<li><strong>解釋 A（分析 vs 行動的分工）</strong>：六類是<strong>分析側（Segment and score）</strong>的人口分類方案；七碼是<strong>行動側（Infiltrate）</strong>的人設庫。都市人口被分析、被評分，但行為者選擇不對都市人口建專屬假帳號——因為「都市」太廣泛，不足以支撐一個有說服力的人設；而 UAE 與 GCC 是另外兩個被<strong>滲透</strong>（而非只被分析）的市場。</li>
+<li><strong>解釋 B（揭露不完整）</strong>：報告只揭露 255+ 帳號中的 26 個，「urban」那一列可能存在但未被列出。</li>
+<li><strong>解釋 C（產品仍在演化）</strong>：這是 pilot stage，分類方案與人設庫本來就還沒對齊。</li>
+</ul>
+<p><strong>教學價值</strong>：這個小差異訓練的是最基本也最常被跳過的情報技能——<strong>把正文主張與附表資料逐欄對帳</strong>。學員若只讀摘要，永遠不會發現「六類其實在資料裡是七碼、而且少了一類、多了兩類」。</p>
+<h4 id="334">3.3.4 延伸討論：這與人口普查、與「反恐名單」有什麼不同？</h4>
+<p>給學員一條光譜，讓他們自己標出本案的位置：</p>
+<pre class="mermaid">flowchart LR
+  A[&quot;國家人口普查&lt;br/&gt;有法源&quot;] --- B[&quot;市場研究分眾&lt;br/&gt;有退出權&quot;] --- C[&quot;平台廣告受眾&lt;br/&gt;有（形式）同意&quot;] --- D[&quot;選舉微定位&lt;br/&gt;爭議中&quot;] --- E[&quot;SOCMINT 政治側寫&lt;br/&gt;← 本案在這裡 →&quot;] --- F[&quot;情報機關目標名單&lt;br/&gt;有司法監督（理論上）&quot;]
+  style E fill:#ffe0e0,stroke:#c0392b,stroke-width:2px
+</pre>
+<p>本案的位置特別惡劣的原因：<strong>它同時失去光譜兩端的保護</strong>——既沒有商業側的同意與退出機制，也沒有國家側的法律授權與司法監督。它是一家私人公司，對一個外國的全體人口，做只有情報機關才會做的事，而且沒有任何一個司法管轄區的法院核准過。</p>
+<hr />
+<h2 id="4-ai">4. AI 濫用的攻擊生命週期（逐階段拆解）</h2>
+<p>報告的 "Attack lifecycle and AI usage" 段落（p.83–84）很短，只描述兩條工作線。但配上 Figure 1，可以還原出完整的四階段產線。下表把「報告明確觀察到的」與「Figure 1 標示為視野之外的」嚴格分開。</p>
+<h3 id="41">4.1 全景表</h3>
+<table>
+<thead>
+<tr>
+<th>階段</th>
+<th>Figure 1 標號</th>
+<th>人類做什麼</th>
+<th>Claude 做什麼</th>
+<th>自主程度</th>
+<th>Anthropic 是否親眼看到</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>監控（Monitor）</strong></td>
+<td>01</td>
+<td>決定監控哪些人口；抓取貼文；每批約 25 則餵入</td>
+<td>（本階段 Claude 不必然介入；資料取得在平台外）</td>
+<td>人類逐步指揮</td>
+<td>✅ 看到 8,904 次 exchanges／30 天</td>
+</tr>
+<tr>
+<td><strong>分眾與評分（Segment and score）</strong></td>
+<td>02</td>
+<td>下指令定義欄位與輸出格式；收集結構化輸出</td>
+<td><strong>標註 segment、推論城市級位置、評估政治傾向、給出信度分數、情緒評分</strong></td>
+<td><strong>對話式協助＋批次化</strong>（人類設定 schema，Claude 逐批填表）</td>
+<td>✅ <strong>這是本案的核心觀察</strong></td>
+</tr>
+<tr>
+<td><strong>人設生成（Persona generation）</strong></td>
+<td>（02 與 03 之間）</td>
+<td>指定人設所屬陣營與語言</td>
+<td><strong>以波斯語、阿拉伯語、英語、德語生成假人設的貼文</strong>，使人設能冒充不同的擁伊／反伊政權人口</td>
+<td>對話式協助</td>
+<td>✅ 觀察到內容生成</td>
+</tr>
+<tr>
+<td><strong>滲透（Infiltrate）</strong></td>
+<td>03</td>
+<td>操作 255+ 合成 avatar 加好友、進入封閉群組、收割成員名單</td>
+<td>（Anthropic 未觀察到 Claude 在此階段的直接參與）</td>
+<td>—</td>
+<td>❌ <strong>視野之外</strong>；依據為 2023 年 S2T 型錄</td>
+</tr>
+<tr>
+<td><strong>利用（Exploit）</strong></td>
+<td>04</td>
+<td>對指名個人進行釣魚、植入惡意程式、遠端存取裝置與攝影機</td>
+<td>（未觀察到）</td>
+<td>—</td>
+<td>❌ <strong>視野之外</strong>；依據為 2023 年 S2T 型錄</td>
+</tr>
+<tr>
+<td><strong>產出（Report）</strong></td>
+<td>（圖中未獨立標示）</td>
+<td>交付給客戶</td>
+<td><strong>產出正式阿拉伯語、政府公文語域的情報簡報</strong>，含依波灣國籍拆分的情緒分數與建議反制敘事</td>
+<td>對話式協助</td>
+<td>✅ 觀察到</td>
+</tr>
+<tr>
+<td><strong>回饋（Feedback loop）</strong></td>
+<td>圖底虛線箭頭</td>
+<td>把收割到的聯絡人與成員名單回灌</td>
+<td>作為下一輪分類掃描的種子</td>
+<td>系統性閉環</td>
+<td>⚠️ 圖中標示，橫跨可見與不可見區</td>
+</tr>
+</tbody>
+</table>
+<h3 id="42-02">4.2 階段 02 的細節：報告怎麼描述「批次側寫」</h3>
+<p>逐字（p.83）：</p>
+<blockquote>
+<p>"The actor used Claude to generate and analyze content. In one case, <strong>they fed Claude batches of roughly 25 social media posts at a time, directing Claude to analyze the content and return information such as the posters' demographic group, location, and political leanings, with confidence ratings for each finding.</strong>"</p>
+</blockquote>
+<p>（行為者用 Claude 生成並分析內容。其中一個情況是，他們一次餵給 Claude 約 25 則社群媒體貼文的批次，指示 Claude 分析內容，並回傳發文者的人口群體、位置、政治傾向等資訊，每一項發現都附帶信度評分。）</p>
+<p>這段話在技術上要注意三件事：</p>
+<ol>
+<li>
+<p><strong>「約 25 則一批」是一個工程參數，不是隨機數字</strong>。這個批次大小反映的是「在單次 context window 內能穩定輸出結構化結果的上限」的工程調校結果。它本身就是<strong>這是一個產品、不是一次性實驗</strong>的證據——有人為了吞吐量調過參數。</p>
+</li>
+<li>
+<p><strong>「附帶信度評分（confidence ratings）」是本案最狡猾的設計</strong>。信度分數讓輸出<strong>看起來像情報產品</strong>，讓下游客戶以為系統知道自己有多不確定。但 LLM 自報的信度分數與實際正確率的校準（calibration）關係，在這種無真值（no ground truth）的側寫任務上是<strong>完全未經驗證的</strong>。換句話說：<strong>這個系統生產的是有科學外觀的猜測。</strong></p>
+</li>
+<li>
+<p><strong>報告 p.81 的章節導論用同一個案例當作全章趨勢證據</strong>：「In one case, an actor uploaded batches of social media posts and directed Claude to produce structured records that outlined targets' locations, demographic data, and political leanings, along with confidence scores.」——同一件事在導論與案例正文各寫一次，代表 Anthropic 認為「批次上傳→結構化側寫」是<strong>跨案例的通用 TTP</strong>，不只是這一家公司的做法。教學上要把它當成一個<strong>可偵測的行為樣式（behavioural pattern）</strong>，而不是一個公司的特徵。</p>
+</li>
+</ol>
+<h3 id="43">4.3 人設生成：「兩邊都做」的關鍵句</h3>
+<p>逐字（p.83）：</p>
+<blockquote>
+<p>"In another case, the actor tasked Claude with generating posts for (likely fake) online personas in Persian, Arabic, English, and German. These personas were intended to pass as members of different pro- and anti-Iranian-regime populations. <strong>This behavior suggests an effort to mass-create fake social media accounts to work both sides of the conflict.</strong>"</p>
+</blockquote>
+<p>（另一個情況是，行為者要 Claude 為（可能是假的）線上人設生成貼文，語言包括波斯語、阿拉伯語、英語、德語。這些人設被設計來冒充不同的擁伊朗政權與反伊朗政權人口的成員。<strong>這個行為顯示，有人試圖大量建立假社群媒體帳號，以便在衝突的兩邊同時操作。</strong>）</p>
+<p><strong>"work both sides of the conflict"（在衝突兩邊同時操作）是整份案例最重要的六個字。</strong> 它揭露的不是「這家公司支持誰」，而是<strong>這家公司根本不在乎誰對</strong>——它販賣的是<strong>對資訊環境的操作能力本身</strong>。</p>
+<p>從 p.85 的分眾表可以直接看到這個「兩邊都做」：</p>
+<ul>
+<li><strong>反政權側人設</strong>：@BerlinIranFree、@DubaiIranOpposition、@LondonIranExile、@isfahanprotestkid、@tabriz_uni_protest、@ShirazYouthRebel</li>
+<li><strong>擁政權側人設</strong>：@BasijMashhad、@IRGC_Isfahan、@QudsForceChat、@QomSeminaryNews、@mashhad_clergy、@AyatollahKhamenei</li>
+<li><strong>第三方（波灣）側人設</strong>：@RiyadhDefender、@SaudiShiaWatcher、@ShiaThreatAlert、@EyeOnIranSA</li>
+</ul>
+<p>同一個 operator，同時養著「柏林的自由伊朗人」與「馬什哈德的巴斯基民兵」。<strong>這在情報學上叫做 "playing both ends"，是 HUMINT 中最高風險也最高收益的手法</strong>；在 AI 時代，它的邊際成本從「養兩組受過訓練的 case officer」降到「多寫一段 prompt」。</p>
+<h3 id="44">4.4 產出物：政府公文語域的阿拉伯語簡報</h3>
+<p>逐字（p.83）：</p>
+<blockquote>
+<p>"The final briefings were written in formal Arabic and styled as official government communications, with sentiment scores broken down by Gulf nationality alongside <strong>recommended counternarratives</strong>."</p>
+</blockquote>
+<p>（最終簡報以正式阿拉伯語書寫，樣式仿照官方政府公文，包含依波灣國籍拆分的情緒分數，以及<strong>建議反制敘事</strong>。）</p>
+<p>三個設計選擇，每個都有意義：</p>
+<ol>
+<li><strong>"styled as official government communications"</strong>——產出物被刻意做成<strong>客戶機關內部文件的樣子</strong>。這是一個商業產品設計決定：<strong>降低客戶的採用摩擦</strong>。分析師收到的東西一眼看起來就像自己單位發出來的，不需要重新格式化，可以直接往上呈。這叫「無縫嵌入客戶官僚流程」。</li>
+<li><strong>"sentiment scores broken down by Gulf nationality"</strong>——情緒分數<strong>依國籍拆分</strong>。這代表客戶關心的是「沙烏地人怎麼想 vs 阿聯人怎麼想 vs 巴林人怎麼想」，這是典型的<strong>波灣國家對內維穩＋對外（對伊朗）情勢評估</strong>的需求結構。</li>
+<li><strong>"recommended counternarratives"</strong>——見下節。</li>
+</ol>
+<h3 id="45">4.5 【核心教學】監控與影響力行動的一體化</h3>
+<p>這是本案第二個必須深挖的重點。</p>
+<h4 id="451">4.5.1 界線在哪裡被跨過</h4>
+<p>傳統上，情報循環（intelligence cycle）與資訊作戰（information operations）是兩個不同的組織、不同的授權、不同的法律框架：</p>
+<pre class="mermaid">flowchart LR
+  subgraph IC[&quot;情報循環&quot;]
+    direction LR
+    A1[&quot;需求&quot;] --&gt; A2[&quot;蒐集&quot;] --&gt; A3[&quot;處理&quot;] --&gt; A4[&quot;分析&quot;] --&gt; A5[&quot;分發&quot;] --&gt; A6[&quot;（交給決策者）&quot;]
+  end
+  GATE{{&quot;這裡本來有一道&lt;br/&gt;組織與法律的閘門&quot;}}
+  subgraph IO[&quot;資訊作戰&quot;]
+    direction LR
+    B1[&quot;規劃&quot;] --&gt; B2[&quot;敘事設計&quot;] --&gt; B3[&quot;投放&quot;] --&gt; B4[&quot;效果評估&quot;]
+  end
+  A6 --&gt; GATE
+  GATE --&gt;|&quot;（決策者授權後）&quot;| B1
+</pre>
+<p><strong>本案把這道閘門拆掉了。</strong> 同一個平台、同一次 API 呼叫序列，產出的簡報裡同時包含：</p>
+<ul>
+<li>「這群人現在的情緒分數是 X」（情報產品）</li>
+<li>「建議你們用以下敘事去反制」（作戰建議）</li>
+<li>以及在另一條工作線上，<strong>已經預先備好的 255+ 個可投放帳號</strong>（作戰資產）</li>
+</ul>
+<p><strong>分析、建議、投放能力，在一個商業套裝裡全包。</strong> 客戶買的不是「知道發生什麼」，而是「知道發生什麼＋知道該說什麼＋現在就有嘴可以說」。</p>
+<h4 id="452">4.5.2 為什麼這件事在治理上特別難處理</h4>
+<table>
+<thead>
+<tr>
+<th>面向</th>
+<th>純監控</th>
+<th>純影響力行動</th>
+<th><strong>兩者一體化（本案）</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主要受害法益</td>
+<td>隱私、人身安全</td>
+<td>公共論述完整性、資訊自主</td>
+<td><strong>兩者同時，且互相放大</strong></td>
+</tr>
+<tr>
+<td>既有法律框架</td>
+<td>通訊監察法、個資法、出口管制</td>
+<td>選罷法、平台自律、外國代理人登記</td>
+<td><strong>沒有任何一個框架涵蓋整條鏈</strong></td>
+</tr>
+<tr>
+<td>平台端可偵測的訊號</td>
+<td>批次側寫、結構化輸出</td>
+<td>多人設內容生成、跨語言一致主題</td>
+<td><strong>兩種訊號在同一帳號出現——這反而是最強的偵測特徵</strong></td>
+</tr>
+<tr>
+<td>政策條文</td>
+<td>Anthropic Usage Policy 的 surveillance 禁令</td>
+<td>Usage Policy 的 coordinated inauthentic behavior 禁令</td>
+<td><strong>Anthropic 在 p.84 同時援引兩條</strong>——見第 8 節</td>
+</tr>
+</tbody>
+</table>
+<p>注意最後一列：<strong>Anthropic 的處置段落同時引用了兩條不同的政策禁令</strong>（p.84）。這在整份報告中不常見，也正好證明了本案的混種性質。</p>
+<h4 id="453">4.5.3 回饋迴圈把兩者鎖死</h4>
+<p>Figure 1 底部那條容易被忽略的虛線箭頭，寫著：</p>
+<blockquote>
+<p>"Harvested contacts and member lists feed back into the classifier to seed the next sweep"<br />
+（收割到的聯絡人與成員名單回灌到分類器，作為下一輪掃描的種子）</p>
+</blockquote>
+<p>這句話的技術含意是：<strong>影響力行動階段（滲透）產生的資料，成為下一輪監控階段（分類）的輸入。</strong> 兩者不只是並列，而是<strong>互為燃料的閉環</strong>：</p>
+<pre class="mermaid">flowchart LR
+  M[&quot;監控&quot;] --&gt; C[&quot;分類&quot;] --&gt; P[&quot;人設&quot;] --&gt; I[&quot;滲透&quot;] --&gt; H[&quot;收割名單&quot;]
+  H --&gt;|&quot;名單擴大下一輪的監控範圍&quot;| M
+</pre>
+<p>這個閉環的關鍵性質是：<strong>它的覆蓋範圍隨時間單調遞增，且每一輪都更精準。</strong> 第一輪只能看公開貼文；第二輪就能看到封閉群組的成員名單；第三輪可以用成員名單反查更多公開帳號。從情報學角度，這是把 OSINT（公開來源）逐步升級成 HUMINT（人力情報）再升級成 TECHINT（技術入侵）的<strong>自動化階梯</strong>。</p>
+<p><strong>課堂提問</strong>：要打斷這個閉環，在哪一環最有效？（提示：第 8.3 節的答案是「在 02 之前」，但要讓學員自己論證為什麼不是在 03 或 04。）</p>
+<hr />
+<h2 id="5-ttp-mitre-attckdisarm">5. TTP 與 MITRE ATT&amp;CK／DISARM 對應</h2>
+<p>本案有個框架學上的重要特性：<strong>它主要不是網路攻擊，而是情報蒐集與影響力行動</strong>，所以單靠 MITRE ATT&amp;CK 會漏掉一大半。必須併用 <strong>DISARM</strong>（影響力行動框架）。這件事本身就是教材。</p>
+<h3 id="51-mitre-attck-enterprise">5.1 MITRE ATT&amp;CK Enterprise 對應（偏偵察與資源開發）</h3>
+<table>
+<thead>
+<tr>
+<th>戰術</th>
+<th>技術 ID</th>
+<th>技術名稱</th>
+<th>本案的具體作法</th>
+<th>偵測構想</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reconnaissance (TA0043)</td>
+<td><strong>T1593.001</strong></td>
+<td>Search Open Websites/Domains: Social Media</td>
+<td>抓取伊朗、波灣、阿聯人口的社群貼文，每批約 25 則送分析</td>
+<td>在 LLM 服務端：偵測「單一帳號持續上傳格式一致的第三方使用者生成內容批次」＋「要求輸出固定 schema」</td>
+</tr>
+<tr>
+<td>Reconnaissance (TA0043)</td>
+<td><strong>T1589</strong></td>
+<td>Gather Victim Identity Information</td>
+<td>推論發文者的人口群體、城市級位置、政治傾向</td>
+<td>偵測 prompt 中同時出現「位置推論」＋「政治傾向」＋「信度分數」三要素</td>
+</tr>
+<tr>
+<td>Resource Development (TA0042)</td>
+<td><strong>T1585.001</strong></td>
+<td>Establish Accounts: Social Media Accounts</td>
+<td>建立 255+ 個合成社群帳號，分 7 個 segment 囤積</td>
+<td>平台側：偵測同批註冊、命名模式同構（地名＋角色詞）、跨語言一致的 bio 生成痕跡</td>
+</tr>
+<tr>
+<td>Resource Development (TA0042)</td>
+<td><strong>T1587</strong></td>
+<td>Develop Capabilities</td>
+<td>建構「多品牌系統的投資組合」</td>
+<td>供應鏈情報：追蹤同一引擎的多品牌外殼</td>
+</tr>
+<tr>
+<td>Initial Access (TA0001)</td>
+<td><strong>T1566</strong></td>
+<td>Phishing</td>
+<td>Figure 1 階段 04「Phishing, malware...」</td>
+<td>⚠️ <strong>Anthropic 未觀察到</strong>，來自 2023 型錄</td>
+</tr>
+<tr>
+<td>Initial Access (TA0001)</td>
+<td><strong>T1566.003</strong></td>
+<td>Spearphishing via Service</td>
+<td>透過 WhatsApp／Telegram 私訊建立信任後投放</td>
+<td>⚠️ 同上，視野之外</td>
+</tr>
+<tr>
+<td>Collection (TA0009)</td>
+<td><strong>T1123 / T1125</strong></td>
+<td>Audio Capture / Video Capture</td>
+<td>Figure 1 階段 04「remote device and camera access」</td>
+<td>⚠️ 同上，視野之外</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-disarm">5.2 DISARM 對應（影響力行動側）——本案真正的骨架</h3>
+<p>以下技術 ID 均已對照 DISARM Foundation 公開框架庫核對。</p>
+<table>
+<thead>
+<tr>
+<th>DISARM 戰術</th>
+<th>技術 ID</th>
+<th>技術名稱</th>
+<th>本案的具體作法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>TA13 Target Audience Analysis</strong></td>
+<td><strong>T0072</strong></td>
+<td><strong>Segment Audiences</strong></td>
+<td>★<strong>本案核心</strong>。DISARM 對 T0072 的定義是「依影響力行動關注的特徵建立受眾分眾，包括政治傾向、地理位置、收入、人口統計與心理特徵」——<strong>本案的六類編碼群體＋政治二元標籤＋城市級位置＋情緒分數，是這條技術的完整實作</strong></td>
+</tr>
+<tr>
+<td>TA13 Target Audience Analysis</td>
+<td><strong>T0080</strong></td>
+<td>Map Target Audience Information Environment</td>
+<td>p.85–86 的「Hashtags by corpus」表就是一張資訊環境地圖：12 個語料庫、涵蓋反政權六主題、擁政權三主題、心理弱點一組、教派與地緣兩組</td>
+</tr>
+<tr>
+<td>TA16 Establish Legitimacy</td>
+<td><strong>T0097</strong></td>
+<td>Present Persona</td>
+<td>255+ 合成 avatar 冒充特定身分</td>
+</tr>
+<tr>
+<td>TA16 Establish Legitimacy</td>
+<td><strong>T0097.101</strong></td>
+<td>Local Persona</td>
+<td>@tehran_uni_student、@rural_khorasan、@IsfahanVillageNews、@AjmanLaborForum——<strong>大量使用地名以建立在地可信度</strong></td>
+</tr>
+<tr>
+<td>TA16 Establish Legitimacy</td>
+<td><strong>T0097.105</strong></td>
+<td>Military Personnel Persona</td>
+<td>@BasijMashhad、@IRGC_Isfahan、@QudsForceChat</td>
+</tr>
+<tr>
+<td>TA16 Establish Legitimacy</td>
+<td><strong>T0097.202</strong></td>
+<td>News Outlet Persona</td>
+<td>@TorontoPersianForum、@QomSeminaryNews、@IsfahanVillageNews、@VillageVoiceIR——冒充在地媒體或論壇</td>
+</tr>
+<tr>
+<td>TA06 Develop Content</td>
+<td><strong>T0085</strong></td>
+<td>Develop Text-Based Content</td>
+<td>用 Claude 以波斯語、阿拉伯語、英語、德語生成人設貼文</td>
+</tr>
+<tr>
+<td>（建立假帳號與社團）</td>
+<td><strong>T0007</strong></td>
+<td>Create Inauthentic Social Media Pages and Groups</td>
+<td>合成帳號群；Figure 1 階段 03 的「進入封閉 WhatsApp／Telegram 群組」</td>
+</tr>
+</tbody>
+</table>
+<p><strong>教學重點：把兩張表並排放給學員看。</strong> ATT&amp;CK 那張表大半格子寫著「⚠️ 視野之外」；DISARM 那張表格格填滿。這直觀說明了一件事：<strong>本案的主體不是入侵，是側寫與人設——而資安界最熟悉的框架，剛好對這一半最沒有話語權。</strong></p>
+<h3 id="53">5.3 框架缺口（明確標示）</h3>
+<p>以下行為在 ATT&amp;CK 與 DISARM <strong>都沒有</strong>恰當的技術 ID，必須標示為框架缺口：</p>
+<table>
+<thead>
+<tr>
+<th>行為</th>
+<th>為什麼現有框架接不住</th>
+<th>建議的暫定命名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>以 LLM 做批次人口側寫並輸出信度分數</strong></td>
+<td>ATT&amp;CK 的 T1589 只描述「蒐集身分資訊」，不描述「用生成式模型推論未公開屬性」；DISARM 的 T0072 只描述分眾，不描述分眾的自動化機制</td>
+<td><em>LLM-assisted population profiling</em>（LLM 輔助人口側寫）</td>
+</tr>
+<tr>
+<td><strong>在同一次作業中同時產出情報結論與反制敘事建議</strong></td>
+<td>ATT&amp;CK 完全無此概念；DISARM 把分析（TA13）與敘事開發（TA06）分在不同戰術，沒有描述「同一產品同時輸出兩者」</td>
+<td><em>Fused intelligence-and-influence product</em>（情報—影響力融合產品）</td>
+</tr>
+<tr>
+<td><strong>收割名單回灌分類器的自我擴張閉環</strong></td>
+<td>兩個框架都是線性 kill chain／戰術序列，沒有描述<strong>循環回饋</strong></td>
+<td><em>Self-seeding collection loop</em>（自我播種蒐集迴圈）</td>
+</tr>
+<tr>
+<td><strong>囤積但尚未部署的人設庫存</strong></td>
+<td>T1585.001 描述建立帳號，但不區分「已部署」與「囤積待命」——而這個區別正好是本案能被歸類為 pilot stage 的關鍵</td>
+<td><em>Persona inventory staging</em>（人設庫存整備）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>這張缺口表是課程的原創產出，可以直接當作學員的作業題</strong>：要學員自己補一條缺口，並說明為何現有 ID 不適用。</p>
+<h3 id="54">5.4 偵測工程視角：在哪裡最容易抓到</h3>
+<p>把本案的行為特徵整理成可操作的偵測假說（detection hypotheses）：</p>
+<table>
+<thead>
+<tr>
+<th>觀察點</th>
+<th>偵測訊號</th>
+<th>假陽性風險</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LLM 服務端（Anthropic 位置）</strong></td>
+<td>同一帳號長期上傳<strong>第三方使用者生成內容的固定大小批次</strong>（約 25 則），要求輸出含「位置＋人口分類＋政治傾向＋信度」的結構化欄位</td>
+<td><strong>中</strong>。學術社群媒體研究、市場輿情分析有相似形狀</td>
+<td>★ 本案實際被抓到的位置。區辨關鍵在<strong>政治傾向欄位</strong>與<strong>個人層級輸出</strong>（而非彙總統計）</td>
+</tr>
+<tr>
+<td><strong>LLM 服務端</strong></td>
+<td>同一帳號同時要求生成「互相對立立場」的多語言人設貼文</td>
+<td><strong>低</strong>。正當用途極少需要同時扮演衝突雙方</td>
+<td>這是 "work both sides" 的指紋，區辨力最高</td>
+</tr>
+<tr>
+<td><strong>LLM 服務端</strong></td>
+<td>產出文件的語域固定為某國政府公文格式，且反覆迭代</td>
+<td>中</td>
+<td>單獨不足為證，需與上兩項合併</td>
+</tr>
+<tr>
+<td><strong>社群平台端</strong></td>
+<td>同批註冊、命名模式同構（<code>@地名+角色詞</code>）、bio 跨語言但語感一致、活躍時區集中</td>
+<td>中</td>
+<td>平台方比 LLM 供應商更容易看到這層</td>
+</tr>
+<tr>
+<td><strong>公民社會端</strong></td>
+<td>封閉群組出現大量新成員，自我介紹符合特定分眾原型（在地學生、村民、僑民）</td>
+<td>高（誤傷真實新成員）</td>
+<td>只能做風險提示，不能做自動封鎖</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>關鍵洞見</strong>：本案之所以被抓到，是因為<strong>分類側寫與人設生成發生在同一個帳號上</strong>。如果行為者把這兩條工作線拆到兩個不同的供應商（例如用 A 家做分類、用 B 家生成人設），任何單一平台都只會看到一半，而<strong>一半的訊號不足以下判斷</strong>。這是第 8.4 節「防線缺口」的核心論點。</p>
+</blockquote>
+<hr />
+<h2 id="6">6. 圖表逐一判讀</h2>
+<blockquote>
+<p>本節是本教材的重點。以下三張圖表均以 130 DPI 渲染頁面逐一放大判讀，並與 PDF 文字層比對。<strong>p.84 的 Figure 1 已存入課程圖庫</strong>：；p.85、p.86 的兩張表格未被工具判定為「圖」，故未進課程圖庫，但本節已完整抄錄。</p>
+</blockquote>
+<h3 id="61-figure-1p84claude">6.1 Figure 1（p.84）：該行動的蒐集漏斗——Claude 驅動的分類與人設生成，可能使某些下游階段成為可能</h3>
+<p><img alt="Figure 1：GTG-54009 的蒐集漏斗" src="../figures/page-084.png" /></p>
+<p><strong>圖說原文（逐字）</strong>：</p>
+<blockquote>
+<p>"Figure 1. The operation's collection funnel: Claude-driven classification and persona generation, which likely enabled the actor to infiltrate the targeted communities."<br />
+（圖 1。該行動的蒐集漏斗：Claude 驅動的分類與人設生成，這很可能使該行為者得以滲透目標社群。）</p>
+</blockquote>
+<h4 id="611">6.1.1 圖片類型與整體構圖</h4>
+<p>這是一張<strong>水平漏斗圖（horizontal funnel diagram）</strong>，不是流程圖也不是架構圖。選擇漏斗這個視覺隱喻本身就有訊息：<strong>它要表達的是「從多到少」的收斂</strong>，而不是「步驟的先後」。</p>
+<p>構圖上分成左右兩個視覺區塊，由一條<strong>垂直虛線</strong>分隔：</p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>標題文字（逐字）</th>
+<th>意義</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>左半（虛線左側）</td>
+<td><strong>"Observed on Anthropic infrastructure"</strong></td>
+<td>在 Anthropic 基礎設施上<strong>實際觀察到</strong>的</td>
+</tr>
+<tr>
+<td>右半（虛線右側）</td>
+<td><strong>"Downstream of our visibility"</strong><br>副標：<strong>"Documented in leaked S2T brochure (Forbidden Stories, 2023)"</strong></td>
+<td>在 Anthropic <strong>視野之外的下游</strong>；依據是 2023 年外洩的 S2T 型錄</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>★ <strong>這條垂直虛線是整張圖最重要的元素，也是整份案例最重要的一個設計決定。</strong> Anthropic 用一條線，把「我親眼看到的」與「我引用別人的」在視覺上永久分開。任何做 CTI 簡報的人都應該學這一招——<strong>證據層級的差異，要畫在圖上，不要只寫在腳註裡。</strong></p>
+</blockquote>
+<h4 id="612">6.1.2 漏斗四段的完整抄錄</h4>
+<p>漏斗由左至右分成四段，每段有編號、標題、與下方的說明文字。顏色由左至右為藍→綠→黃／橘→紅／橙，寬度逐段收窄。</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>標題</th>
+<th>顏色</th>
+<th>下方說明文字（逐字）</th>
+<th>中譯</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>01</strong></td>
+<td><strong>Monitor</strong>（監控）</td>
+<td>藍</td>
+<td>"Whole Iranian, Gulf and Emirati populations; <strong>8,904 exchanges over 30 days</strong>."</td>
+<td>伊朗、波灣與阿聯的<strong>全體人口</strong>；30 天內 <strong>8,904 次交互</strong></td>
+</tr>
+<tr>
+<td><strong>02</strong></td>
+<td><strong>Segment and score</strong>（分眾與評分）</td>
+<td>綠</td>
+<td>"Claude tags each user by segment, <strong>infers city-level location (Natanz, Fordow)</strong>, scores sentiment."</td>
+<td>Claude 為每位使用者標註分眾，<strong>推論城市級位置（納坦茲、福爾多）</strong>，並評分情緒</td>
+</tr>
+<tr>
+<td><strong>03</strong></td>
+<td><strong>Infiltrate</strong>（滲透）</td>
+<td>黃／橘</td>
+<td>"<strong>255+ synthetic avatars</strong> befriend targets and enter closed WhatsApp and Telegram groups."</td>
+<td><strong>255 個以上的合成 avatar</strong> 與目標交友，並進入封閉的 WhatsApp 與 Telegram 群組</td>
+</tr>
+<tr>
+<td><strong>04</strong></td>
+<td><strong>Exploit</strong>（利用）</td>
+<td>紅／橙</td>
+<td>"Phishing, malware and <strong>remote device and camera access</strong> against named individuals."</td>
+<td>針對<strong>指名個人</strong>的釣魚、惡意程式，以及<strong>遠端裝置與攝影機存取</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>漏斗兩端的標籤</strong>：<br />
+- 最左端（藍色區塊內，白字）：<strong>"Entire populations"</strong>（全體人口）<br />
+- 最右端（漏斗尖端外，橘紅字）：<strong>"The individual target"</strong>（單一個人目標）</p>
+<p><strong>漏斗下方的回饋箭頭</strong>：一條由右指向左的<strong>虛線弧形箭頭</strong>，橫跨整個漏斗底部（且<strong>跨越了那條垂直虛線</strong>），下方文字：</p>
+<blockquote>
+<p><strong>"Harvested contacts and member lists feed back into the classifier to seed the next sweep"</strong><br />
+（收割到的聯絡人與成員名單回灌分類器，作為下一輪掃描的種子）</p>
+</blockquote>
+<h4 id="613">6.1.3 資料如何流動</h4>
+<pre class="mermaid">flowchart TD
+  POP[&quot;全體人口 (Entire populations)&quot;]
+  subgraph VIS[&quot;Anthropic 可見&quot;]
+    M01[&quot;01 Monitor&lt;br/&gt;← 8,904 exchanges / 30 days&quot;] --&gt; M02[&quot;02 Segment and score&lt;br/&gt;← Claude 標註分眾、推位置、評情緒&quot;]
+  end
+  BOUND[&quot;可見度邊界（垂直虛線）&quot;]
+  subgraph INVIS[&quot;Anthropic 不可見（依 2023 型錄）&quot;]
+    M03[&quot;03 Infiltrate&lt;br/&gt;← 255+ avatars 進入封閉群組&quot;] --&gt; M04[&quot;04 Exploit&lt;br/&gt;← 釣魚／惡意程式／攝影機&quot;]
+  end
+  TARGET[&quot;單一個人目標 (The individual target)&quot;]
+  POP --&gt; M01
+  M02 --&gt; BOUND
+  BOUND --&gt; M03
+  M04 --&gt; TARGET
+  TARGET -. &quot;收割名單回灌&quot; .-&gt; M02
+  style BOUND stroke-dasharray: 5 5
+</pre>
+<h4 id="614">6.1.4 圖上有、正文沒有的關鍵資料（極重要）</h4>
+<p>我以 <code>grep</code> 逐字比對了報告全文文字層，確認以下三項資料<strong>只出現在 Figure 1 的圖像中，在 p.82–86 的正文裡完全沒有</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>只在圖上的資料</th>
+<th>正文是否出現</th>
+<th>為何重要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>"8,904 exchanges over 30 days"</strong></td>
+<td>❌ 全文 grep 無 "8,904" 或 "8904"</td>
+<td>這是本案<strong>唯一的量化規模指標</strong></td>
+</tr>
+<tr>
+<td><strong>"Natanz, Fordow"</strong></td>
+<td>❌ 全文 grep 無此二字</td>
+<td>這是本案<strong>唯一的具體地名</strong>，而且是伊朗的兩座核設施所在地</td>
+</tr>
+<tr>
+<td><strong>"255+ synthetic avatars"</strong> 的「avatar」用詞</td>
+<td>正文用 "synthetic social network accounts"</td>
+<td>圖上用了 <strong>avatar</strong> 這個詞——<strong>這正是 2023 年 S2T 型錄裡的產業術語</strong>（Forbidden Stories 逐字報導 S2T 稱其假帳號為 "avatar"）。圖說用詞與型錄用詞一致，這是一個細微但真實的佐證線索</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>教學提醒（方法論）</strong>：這三項發現只能靠「用 Read 工具開圖親自判讀」＋「回頭 grep 文字層比對」得到。<strong>只讀 PDF 文字層的人會漏掉本案最具體的三項資料。</strong> 這件事本身就要在課堂上示範一次。</p>
+</blockquote>
+<h4 id="615">6.1.5 兩個值得深挖的細節</h4>
+<p><strong>(a) 8,904 次 exchanges 到底代表多大規模？——一個課堂算術練習</strong></p>
+<p>報告只給了「8,904 exchanges / 30 days」與「每批約 25 則貼文」兩個數字，沒有直接給「總共分析了幾則貼文」。可以讓學員自己算，並理解<strong>上界推估（upper-bound estimate）</strong>的作法：</p>
+<ul>
+<li>平均每日 exchanges：8,904 ÷ 30 ≈ <strong>297 次／日</strong></li>
+<li><strong>絕對上界</strong>：若每一次 exchange 都是一個滿載 25 則的分類批次 → 8,904 × 25 = <strong>222,600 則貼文</strong></li>
+<li><strong>但這是上界，實際一定更低</strong>，因為 exchanges 裡必然還混雜了：人設貼文生成、簡報撰寫、schema 調校、除錯對話、以及所有失敗重試。</li>
+<li><strong>合理的粗略區間</strong>：若假設分類批次佔全部 exchanges 的三到六成，則約 <strong>6.7 萬～13 萬則貼文</strong>。</li>
+</ul>
+<p>⚠️ <strong>必須明確告訴學員：上述所有推算都是本教材的算術，不是 Anthropic 的主張。報告只寫了 8,904 與「約 25」兩個數字。</strong> 這個練習的目的不是得到一個數字，而是訓練「<strong>從報告給的最小事實出發，明確標示假設，推出帶區間的結論</strong>」這個情報分析的基本動作。</p>
+<p><strong>(b) 為什麼是 Natanz 與 Fordow？——一個必須小心處理的觀察</strong></p>
+<p>納坦茲（Natanz）與福爾多（Fordow）是伊朗兩座最知名的鈾濃縮設施所在地。圖上把它們當成「城市級位置推論」的<strong>範例</strong>。</p>
+<p><strong>報告沒有說</strong>：行為者刻意鎖定核設施、或這與核情報有關。</p>
+<p><strong>可以合理指出的是</strong>：<br />
+- 這兩個地名被選為範例，至少代表分類器的位置推論<strong>粒度細到城鎮級</strong>，而不只是省級或國家級。<br />
+- 同一份報告的 p.64 提到 <strong>「2026 年美以伊戰爭（the 2026 US-Israel-Iran war）」</strong>，說明本案發生的時空背景是一場實際的軍事衝突期間。在該背景下，能把社群媒體發文者定位到核設施所在城鎮，具有明顯的軍事情報價值。<br />
+- <strong>但這是本教材的推論，不是報告的主張。</strong> 課堂上必須這樣標示。</p>
+<p>這個細節的教學價值在於示範「<strong>如何在不越過證據的前提下，指出一個值得注意的訊號</strong>」——先陳述圖上事實、再陳述報告未說的、最後才提出帶標示的推論。</p>
+<h4 id="616">6.1.6 這張圖傳達的核心訊息</h4>
+<p><strong>一句話</strong>：這是一張<strong>把「全體人口」漏斗化成「單一個人」的工業流程圖</strong>，而 Claude 的位置在漏斗的<strong>第二段</strong>——也就是<strong>最關鍵的收斂點</strong>。</p>
+<p>三層訊息：</p>
+<ol>
+<li><strong>監控的起點是「所有人」，不是「嫌疑人」。</strong> 漏斗最寬處寫的是 "Entire populations"、"Whole Iranian, Gulf and Emirati populations"。這與傳統「先有嫌疑、才有監控」的法治邏輯完全相反。</li>
+<li><strong>AI 的價值在於「把不可能的收斂變成可能」。</strong> 從幾十萬則貼文收斂到值得滲透的個人，傳統上需要一整個分析師團隊。Claude 把這一段的成本壓縮到「8,904 次 API 呼叫」。<strong>漏斗的第二段就是 AI 的變現點。</strong></li>
+<li><strong>圖說用了 "likely enabled"（很可能使…成為可能），而不是 "enabled"。</strong> 這是 Anthropic 對「Claude 的貢獻到底有多關鍵」這個因果主張的降級——他們不宣稱沒有 Claude 就做不到，只說 Claude 很可能讓後續階段變得可行。<strong>這個情態動詞值得在課堂上單獨圈出來。</strong></li>
+</ol>
+<h4 id="617">6.1.7 課堂上可以怎麼用這張圖</h4>
+<ul>
+<li><strong>開場圖</strong>：不加任何說明，先讓學員看 30 秒，問「這張圖裡哪一段是這家 AI 公司看得到的？」——大多數人會先看顏色與編號，不會注意到那條垂直虛線。這個「沒看到」本身就是最好的教學時刻。</li>
+<li><strong>證據分層練習</strong>：發下白紙，要學員把圖上四段分別標記為「一手觀察／第三方引用」，再對照第 2.5 節的原文。</li>
+<li><strong>反向設計練習</strong>：問「如果你是防守方，你要在哪一段設攔截點？成本各是多少？」（01 幾乎不可能攔——資料是公開的；02 是 AI 供應商的主場；03 是社群平台的主場；04 是端點安全廠商與電信商的主場。<strong>四段對應四個完全不同的防守社群，沒有任何一方看得到全貌</strong>——這正是本案最深刻的治理課題。）</li>
+<li><strong>與其他模組串接</strong>：把這張圖與 04 模組的 GTG-17002（電子戰／SEAD）、02 模組的影響力行動圖並排，說明「同一個 AI 能力，在不同模組裡扮演的是同一個角色：<strong>把需要專家團隊的收斂工作，降級為 API 呼叫</strong>」。</li>
+</ul>
+<hr />
+<h3 id="62-synthetic-handles-by-segmentp85">6.2 「Synthetic handles by segment」表（p.85）：合成帳號依分眾類別</h3>
+<p><strong>圖片類型</strong>：無標號的資料表格（報告未給 Figure 編號），三欄：Category（類別）／Segment code（分眾代碼）／Handles（帳號）。共 <strong>7 列</strong>，合計揭露 <strong>26 個 handle</strong>。</p>
+<h4 id="621">6.2.1 完整逐列抄錄</h4>
+<table>
+<thead>
+<tr>
+<th>Category（原文）</th>
+<th>中譯</th>
+<th>Segment code</th>
+<th>Handles（逐字，共 26 個）</th>
+<th>數量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Synthetic: Diaspora</td>
+<td>合成：離散僑民</td>
+<td><strong>IR-DI</strong></td>
+<td><code>@ShirazisInLA</code>, <code>@TorontoPersianForum</code>, <code>@BerlinIranFree</code>, <code>@DubaiIranOpposition</code>, <code>@LondonIranExile</code></td>
+<td>5</td>
+</tr>
+<tr>
+<td>Synthetic: Youth/student</td>
+<td>合成：青年／學生</td>
+<td><strong>IR-YO</strong></td>
+<td><code>@tehran_uni_student</code>, <code>@isfahanprotestkid</code>, <code>@tabriz_uni_protest</code>, <code>@ShirazYouthRebel</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td>Synthetic: Military</td>
+<td>合成：軍事</td>
+<td><strong>IR-MI</strong></td>
+<td><code>@BasijMashhad</code>, <code>@IRGC_Isfahan</code>, <code>@QudsForceChat</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td>Synthetic: Clerical</td>
+<td>合成：教士</td>
+<td><strong>IR-CL</strong></td>
+<td><code>@QomSeminaryNews</code>, <code>@mashhad_clergy</code>, <code>@AyatollahKhamenei</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td>Synthetic: Rural</td>
+<td>合成：鄉村</td>
+<td><strong>IR-RU</strong></td>
+<td><code>@IsfahanVillageNews</code>, <code>@rural_khorasan</code>, <code>@VillageVoiceIR</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td>Synthetic: UAE expatriate</td>
+<td>合成：阿聯外籍勞工</td>
+<td><strong>UAE</strong></td>
+<td><code>@PakistaniDubaiWorker</code>, <code>@AjmanLaborForum</code>, <code>@IntlCityWorkers</code>, <code>@BanglaExpatSharjah</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td>Synthetic: Saudi/GCC sectarian</td>
+<td>合成：沙烏地／波灣教派</td>
+<td><strong>GCC</strong></td>
+<td><code>@RiyadhDefender</code>, <code>@SaudiShiaWatcher</code>, <code>@ShiaThreatAlert</code>, <code>@EyeOnIranSA</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>合計</strong></td>
+<td><strong>26</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>安全紅線提醒</strong>：以上 handle 依課程規範<strong>僅作研究資料抄錄</strong>。不得以任何方式連線、查詢、訂閱或互動。報告未對這些 handle 做 defang 處理（社群 handle 非網域，無 defang 慣例），但<strong>「不連線」的紀律一樣適用</strong>。</p>
+</blockquote>
+<h4 id="622">6.2.2 這張表傳達的核心訊息：監控如何把人口編碼</h4>
+<p><strong>這張表是全案最有教學力的一頁，因為它把抽象的「分類」變成了看得見的字串。</strong></p>
+<p><strong>(a) 命名法本身就是分類法的實作</strong></p>
+<p>把 26 個 handle 拆解，會發現一個高度規律的<strong>構詞公式</strong>：</p>
+<pre><code>handle = [地理標記] + [身分角色標記] （+ 可選的立場標記）
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>構詞成分</th>
+<th>出現實例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>伊朗境內城市</strong>：Tehran, Isfahan, Shiraz, Tabriz, Mashhad, Qom, Khorasan</td>
+<td><code>@tehran_uni_student</code>、<code>@IRGC_Isfahan</code>、<code>@mashhad_clergy</code>、<code>@QomSeminaryNews</code>、<code>@rural_khorasan</code></td>
+</tr>
+<tr>
+<td><strong>僑居地城市</strong>：LA, Toronto, Berlin, London, Dubai</td>
+<td><code>@ShirazisInLA</code>、<code>@TorontoPersianForum</code>、<code>@BerlinIranFree</code>、<code>@LondonIranExile</code>、<code>@DubaiIranOpposition</code></td>
+</tr>
+<tr>
+<td><strong>波灣城市</strong>：Dubai, Ajman, Sharjah, Riyadh</td>
+<td><code>@PakistaniDubaiWorker</code>、<code>@AjmanLaborForum</code>、<code>@BanglaExpatSharjah</code>、<code>@RiyadhDefender</code></td>
+</tr>
+<tr>
+<td><strong>身分角色</strong>：student, kid, clergy, Seminary, Village, Worker, LaborForum, Forum, News</td>
+<td>幾乎每個 handle 都有</td>
+</tr>
+<tr>
+<td><strong>立場標記</strong>：Free, Opposition, Exile, protest, Rebel, Defender, Watcher, ThreatAlert, EyeOn</td>
+<td><code>@BerlinIranFree</code>、<code>@ShirazYouthRebel</code>、<code>@SaudiShiaWatcher</code>、<code>@ShiaThreatAlert</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>這個公式就是第 3.3 節那六類編碼的語言化。</strong> 分眾方案不只存在於資料庫欄位裡，它被直接寫進了帳號名稱。換句話說：<strong>行為者把分類法「穿」在假帳號身上</strong>。</p>
+<p><strong>(b) 三組值得特別注意的 handle</strong></p>
+<ol>
+<li>
+<p><strong><code>@AyatollahKhamenei</code></strong>——這個 handle 被歸類在「Synthetic: Clerical（IR-CL）」。它冒充的是<strong>伊朗最高領袖本人的名字</strong>。這在假帳號策略上屬於最高風險的一類（極易被平台認定為冒充公眾人物而下架），也顯示行為者的人設庫在 pilot 階段還相當粗糙。<strong>這是「pilot stage」判定的一個側面佐證</strong>——成熟的行動不會用這種一望即知的名字。</p>
+</li>
+<li>
+<p><strong>UAE 那一列的四個 handle 全部指向南亞外籍勞工</strong>（<code>@PakistaniDubaiWorker</code> 巴基斯坦籍杜拜勞工、<code>@BanglaExpatSharjah</code> 孟加拉籍沙迦僑民、<code>@AjmanLaborForum</code> 阿治曼勞工論壇、<code>@IntlCityWorkers</code> 國際城勞工——「International City」是杜拜著名的低價外勞住宅區）。<strong>這揭露了一個正文完全沒提的目標群體：波灣的南亞移工。</strong> 這是波灣國家最龐大、最無政治權利、也最常被視為「潛在不穩定來源」的人口。<strong>正文只說 "users in Iran and the Persian Gulf region"，是這張表讓我們知道波灣那一半具體指的是誰。</strong></p>
+</li>
+<li>
+<p><strong>GCC 那一列帶有明顯的教派挑動性</strong>（<code>@SaudiShiaWatcher</code> 沙烏地什葉派觀察者、<code>@ShiaThreatAlert</code> 什葉派威脅警報、<code>@EyeOnIranSA</code> 沙烏地盯伊朗）。這些不是中性的在地人設，而是<strong>預先裝載了教派敵意的人設</strong>。搭配 p.86「UAE/GCC sectarian」的阿拉伯語主題標籤（#خطر_شيعي「什葉派威脅」、#صراع_سني_شيعي「遜尼—什葉衝突」），可以看出這一組人設的設計用途不是潛伏觀察，而是<strong>主動放大教派對立</strong>。</p>
+</li>
+</ol>
+<p><strong>(c) 26 vs 255+：揭露率約 10%</strong></p>
+<p>報告正文說「超過 255 個」合成帳號，表中只列 26 個。這意味著：</p>
+<ul>
+<li><strong>這張表是一個樣本，不是清單。</strong> 教學上必須強調：學員看到的是 Anthropic 選擇揭露的 10%，而選擇本身有偏誤（通常會選最有代表性、最不會造成誤傷、且已確認為合成的）。</li>
+<li><strong>剩下 229+ 個帳號仍在野外。</strong> Anthropic 說已「與追蹤 surveillance-for-hire 行為者的夥伴分享指標」（p.84），這些完整名單很可能走的是私下情報分享管道。</li>
+<li><strong>對防守方的實務意義</strong>：拿這 26 個 handle 去做精確比對的價值很低（它們大概率已被封或棄用），<strong>但拿構詞公式去做模式比對的價值很高</strong>。這是第 7 節「偵測價值與壽命」的核心論點。</li>
+</ul>
+<h4 id="623">6.2.3 課堂上可以怎麼用這張表</h4>
+<ul>
+<li><strong>「找出違和感」練習</strong>：把 26 個 handle 混入 10 個真實存在的伊朗異議帳號名稱（教師自行從公開報導取得、去識別化），要學員分辨哪些是合成的。<strong>目的是讓學員體會到：他們分不出來。</strong> 然後再揭曉構詞公式。</li>
+<li><strong>分類倫理辯論</strong>：把七個 segment code 寫在白板上，要學員試著「把自己分類進去」——如果有人要用這六類來分台灣人口，會是哪六類？誰會被分到「威脅」那一類？這個練習通常會讓分類的政治性瞬間變得切身。</li>
+<li><strong>與 Figure 1 串接</strong>：這張表是 Figure 1 階段 03 的「彈藥庫存」。可以問：「255 個帳號、7 個分眾，每個分眾平均 36 個帳號——這個庫存規模想服務多大的行動？」</li>
+</ul>
+<hr />
+<h3 id="63-hashtags-by-corpusp85-p86">6.3 「Hashtags by corpus」表（p.85 下半 ＋ p.86 上半）：主題標籤依語料庫</h3>
+<p><strong>圖片類型</strong>：跨頁資料表格（報告未給 Figure 編號），兩欄：Corpus（語料庫）／Hashtags（主題標籤）。共 <strong>12 列</strong>，橫跨 p.85 與 p.86。</p>
+<blockquote>
+<p>⚠️ <strong>抄錄方法說明</strong>：PDF 的文字層對波斯語／阿拉伯語（RTL，由右至左書寫）的擷取是<strong>亂序且破碎的</strong>（例如文字層把「#ایران_آزاد」輸出成 <code>#ﺩﺍﺯﺁ_ﻥﺍﺭﯼﺍ</code>）。本節的 RTL 內容是<strong>以 Read 工具開啟 p.85／p.86 渲染圖、局部放大三倍後目視判讀</strong>得出，並附上羅馬轉寫與中譯。<strong>這是本案例研究中最容易出錯的一段，任何只靠 PDF 文字層的抄錄都會是錯的。</strong></p>
+</blockquote>
+<h4 id="631-12">6.3.1 完整逐列抄錄（12 列）</h4>
+<p><strong>【p.85 部分：反政權語料庫（Anti-regime），6 列】</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Corpus（原文）</th>
+<th>中譯</th>
+<th>Hashtags（逐字）</th>
+<th>轉寫與釋義</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Anti-regime: IRGC/Khamenei</td>
+<td>反政權：革命衛隊／哈梅內意</td>
+<td><code>#sepah_fased</code>, <code>#IRGCcorruption</code>, <code>#trust_Khamenei</code></td>
+<td><em>sepah fased</em> = 「腐敗的革命衛隊」（sepah 即 IRGC）；<code>#trust_Khamenei</code> 語意曖昧，可能是反諷標籤或被監測的擁護標籤</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Anti-regime: Conscription</td>
+<td>反政權：徵兵</td>
+<td><code>#faraar_az_sarbazi</code>, <code>#flee_draft</code></td>
+<td><em>farār az sarbāzi</em> = 「逃避兵役」</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Anti-regime: Press freedom</td>
+<td>反政權：新聞自由</td>
+<td><code>#PressFreedomIran</code>, <code>#IranCensorship</code></td>
+<td>英語標籤，主要供國際傳播</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Anti-regime: Economy</td>
+<td>反政權：經濟</td>
+<td><code>#tavarrom</code>, <code>#gerani</code>, <code>#hyperinflation_iran</code></td>
+<td><em>tavarrom</em> = 通貨膨脹；<em>gerāni</em> = 物價高漲</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Anti-regime: Diplomatic isolation</td>
+<td>反政權：外交孤立</td>
+<td><code>#IranTanha</code>, <code>#EnzevaYeDiplomasi</code></td>
+<td><em>Irān tanhā</em> = 「伊朗孤獨／孤立」；<em>enzevā-ye diplomāsi</em> = 外交孤立</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Anti-regime: Regime change</td>
+<td>反政權：政權更迭</td>
+<td><code>#سرنگونی</code>, <code>#ایران_آزاد</code></td>
+<td><em>sarnegouni</em> = 「推翻／垮台」；<em>Irān-e āzād</em> = 「自由伊朗」</td>
+</tr>
+</tbody>
+</table>
+<p><strong>【p.86 部分：擁政權、心理側寫與教派／地緣語料庫，6 列】</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Corpus（原文）</th>
+<th>中譯</th>
+<th>Hashtags（逐字）</th>
+<th>轉寫與釋義</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7</td>
+<td>Pro-regime: Nuclear rights</td>
+<td>擁政權：核權利</td>
+<td><code>#hagh-e-hasteh-i</code>, <code>#حق_هسته_ای</code></td>
+<td><em>haqq-e hasteh-i</em> = 「核（能）權利」，波斯文與羅馬轉寫兩種寫法並列</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Pro-regime: Resistance/martyrdom</td>
+<td>擁政權：抵抗／殉道</td>
+<td><code>#mehvar_e_moghavemat</code>, <code>#AxisOfResistance</code>, <code>#shahid</code></td>
+<td><em>mehvar-e moqāvemat</em> = 「抵抗軸心」；<em>shahid</em> = 「烈士／殉道者」</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Pro-regime: Patriotic mobilization</td>
+<td>擁政權：愛國動員</td>
+<td><code>#vatanparasti</code>, <code>#defa_az_keshvar</code></td>
+<td><em>vatanparasti</em> = 愛國主義；<em>defā' az keshvar</em> = 「保衛國家」</td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>Psychographic/vulnerability</strong></td>
+<td><strong>心理側寫／脆弱性</strong></td>
+<td><code>#PTSD_Iran</code>, <code>#salamat_e_ravan</code>, <code>#trauma_ye_jang</code>, <code>#suicide_rate_war</code></td>
+<td><em>salāmat-e ravān</em> = 心理健康；<em>trauma-ye jang</em> = 「戰爭創傷」；<code>#suicide_rate_war</code> = 戰爭自殺率</td>
+</tr>
+<tr>
+<td>11</td>
+<td>UAE/GCC sectarian</td>
+<td>阿聯／波灣教派</td>
+<td><code>#خطر_شيعي</code>, <code>#صراع_سني_شيعي</code></td>
+<td><em>khaṭar shī'ī</em> = 「什葉派威脅／危險」；<em>ṣirā' sunnī–shī'ī</em> = 「遜尼—什葉衝突」</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Saudi-aligned anti-Iran</td>
+<td>親沙烏地反伊朗</td>
+<td><code>#USBaseGulf</code>, <code>#FifthFleetBahrain</code></td>
+<td>美軍波灣基地、駐巴林第五艦隊</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>註：表格在 p.85 結束於第 6 列（Anti-regime: Regime change），p.86 以重複的欄位標題（Corpus / Hashtags）續接第 7 列起。<strong>總列數為 12 列</strong>：p.85 六列（全為 Anti-regime），p.86 六列（擁政權三列、心理側寫一列、教派／地緣兩列）。</p>
+</blockquote>
+<h4 id="632">6.3.2 這張表傳達的核心訊息</h4>
+<p><strong>(a) 語料庫結構＝目標資訊環境的完整地圖</strong></p>
+<p>12 個語料庫不是隨意挑的主題，它們構成一張結構化的資訊環境地圖：</p>
+<pre><code>反政權側（6 個）：革命衛隊貪腐、逃兵役、新聞自由、通膨、外交孤立、政權更迭
+                    └──── 覆蓋伊朗國內不滿的六大來源 ────┘
+
+擁政權側（3 個）：核權利、抵抗／殉道、愛國動員
+                    └──── 覆蓋政權合法性的三大支柱 ────┘
+
+心理側（1 個）：  PTSD、心理健康、戰爭創傷、自殺率
+                    └──── 覆蓋「人群的心理弱點」 ────┘
+
+教派／地緣側（2 個）：遜尼—什葉對立、美軍基地
+                    └──── 覆蓋波灣客戶自身的關切 ────┘
+</code></pre>
+<p><strong>要監控一個社會的不滿，你必須先知道這個社會在哪些事情上不滿。</strong> 這 12 個語料庫就是那份清單——而且它同時是<strong>監控的檢索詞</strong>與<strong>假帳號要發什麼內容的題庫</strong>。同一份清單，兩種用途。這是第 4.5 節「監控—影響力一體化」在資料層的具體證據。</p>
+<p><strong>(b) 第 10 列「Psychographic/vulnerability」是整張表最應該停下來討論的一列</strong></p>
+<p>這一列與其他十列的性質完全不同：</p>
+<table>
+<thead>
+<tr>
+<th>其他十列</th>
+<th>第 10 列</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>追蹤的是<strong>政治立場</strong>（你支持誰／反對誰）</td>
+<td>追蹤的是<strong>心理狀態</strong>（你是否創傷、是否有自殺傾向、心理健康如何）</td>
+</tr>
+<tr>
+<td>對應 DISARM 的地理／人口／政治分眾</td>
+<td>對應 DISARM 的<strong>心理特徵分眾（psychographic segmentation）</strong></td>
+</tr>
+<tr>
+<td>用途：判定陣營</td>
+<td>用途：<strong>判定誰最好操弄、誰最容易被說服、誰最脆弱</strong></td>
+</tr>
+</tbody>
+</table>
+<p><code>#PTSD_Iran</code>、<code>#trauma_ye_jang</code>（戰爭創傷）、<code>#suicide_rate_war</code>（戰爭自殺率）這幾個標籤合在一起，說明行為者在<strong>系統性地尋找戰爭創傷人口</strong>。</p>
+<p><strong>在 HUMINT 的語言裡，尋找「弱點（vulnerability）」是招募（recruitment）的前置步驟。</strong> 而在影響力行動的語言裡，找到心理脆弱的人群，是決定「往哪裡投放最容易見效」的前置步驟。<strong>這一列不論解釋成哪一種，都指向同一件事：把人的心理創傷當成可利用的資源。</strong></p>
+<blockquote>
+<p><strong>課堂上必須把這一列單獨投影出來，並停留至少三分鐘。</strong> 這是整份 154 頁報告裡，最能讓非技術背景聽眾理解「為什麼監控是一種傷害」的一張投影片。技術細節可以爭論，但「有人在系統性搜尋一個戰爭中國家的 PTSD 與自殺話題標籤，以便更有效地操弄他們」這件事，不需要任何技術背景就能理解其道德重量。</p>
+</blockquote>
+<p><strong>(c) 語言選擇透露的目標分層</strong></p>
+<table>
+<thead>
+<tr>
+<th>語言</th>
+<th>出現的語料庫</th>
+<th>推論的投放對象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>波斯語羅馬轉寫</strong>（sepah_fased, tavarrom, mehvar_e_moghavemat…）</td>
+<td>幾乎所有伊朗相關語料庫</td>
+<td>伊朗人在社群平台上常用羅馬轉寫（因輸入法與規避關鍵字過濾），<strong>這顯示行為者對伊朗網路文化有實務理解</strong>，不是拿字典翻的</td>
+</tr>
+<tr>
+<td><strong>波斯文原文</strong>（#سرنگونی, #ایران_آزاد, #حق_هسته_ای）</td>
+<td>政權更迭、核權利</td>
+<td>境內傳播、最高情緒動員力的標籤用原文</td>
+</tr>
+<tr>
+<td><strong>英語</strong>（#PressFreedomIran, #AxisOfResistance, #USBaseGulf, #FifthFleetBahrain）</td>
+<td>新聞自由、抵抗軸心、美軍基地</td>
+<td><strong>國際／西方受眾</strong>，或供客戶閱讀</td>
+</tr>
+<tr>
+<td><strong>阿拉伯語</strong>（#خطر_شيعي, #صراع_سني_شيعي）</td>
+<td>波灣教派</td>
+<td>波灣阿拉伯語受眾</td>
+</tr>
+</tbody>
+</table>
+<p><strong>波斯語同時用羅馬轉寫與原文兩套</strong>，是一個很細但很有力的觀察：這代表建構這個語料庫的人（或模型）<strong>知道伊朗使用者在不同場合用不同書寫系統</strong>。這種在地知識，正是 Claude 這類模型能夠低成本提供的東西——而這就是報告全章導論所說的「AI 取代了工程人力（AI is now being used in place of an engineering workforce）」在<strong>語言學層面</strong>的版本。</p>
+<h4 id="633">6.3.3 課堂上可以怎麼用這張表</h4>
+<ul>
+<li><strong>「語料庫即世界觀」練習</strong>：要學員為「台灣」設計一張同樣結構的 12 列語料庫表，會是哪些主題？做完之後問：這張表如果落到一個外國情報承包商手上，會怎麼被使用？</li>
+<li><strong>心理側寫倫理討論</strong>：單獨拿第 10 列，問「如果一個公共衛生研究團隊做完全一樣的事（追蹤 #PTSD_Iran 以評估戰爭心理健康影響），差別在哪裡？」——答案關鍵在<strong>目的、同意、與輸出對象</strong>，而不在技術。這是最好的「兩用性（dual-use）」教學案例。</li>
+<li><strong>偵測工程練習</strong>：問「如果你是社群平台的信任與安全團隊，看到一個帳號在 30 天內對這 12 組標籤做系統性檢索，你會怎麼處理？你的誤判成本是什麼？」（提示：真正的研究者、記者、NGO 也會這樣做。）</li>
+</ul>
+<hr />
+<h3 id="64-p82-p83">6.4 p.82 與 p.83（正文頁）的版面判讀</h3>
+<p>雖然這兩頁沒有圖表，但版面本身有兩個值得指出的編排訊息：</p>
+<ul>
+<li><strong>p.82 下半</strong>：GTG-54009 的大標題佔滿三行，字級明顯大於內文——這是 Anthropic 報告中每個案例的起始標記。標題本身就是一句完整的摘要：「Disrupting a commercial surveillance platform using Claude to profile the social media accounts of Iranian and Persian Gulf-based users」。注意動詞是 <strong>Disrupting</strong>（正在中斷），不是 Disrupted——這是報告全篇的標題慣例，強調處置是持續進行的。</li>
+<li><strong>p.82 內文中的 "Forbidden Stories" 帶有底線</strong>，在 PDF 中是一個超連結。<strong>Anthropic 在案例正文中直接超連結到第三方調查報導</strong>——這是一個刻意的編輯決定，等於在說「讀者可以自己去查證我引用的部分」。在 CTI 寫作規範上，這叫<strong>可追溯性（traceability）</strong>，是判斷一份報告是否專業的重要外部特徵。</li>
+<li><strong>p.83 的 Key findings 使用五個項目符號</strong>，且五條的順序是：商業結構 → 分類與位置 → 六類方案 → 產出物 → 假帳號庫存。<strong>這個順序把「六類方案」放在正中間</strong>，前兩條建立脈絡、後兩條說明用途。編排上，六類方案是本案的重心。</li>
+</ul>
+<hr />
+<h2 id="7-ioc">7. IOC 與技術指標</h2>
+<h3 id="71-ioc">7.1 重要前提：本案沒有傳統 IOC 表</h3>
+<p>與 GTG-14010（p.89 有 Category／Indicator 表）、GTG-20006（有檔案雜湊與釣魚網域）不同，<strong>GTG-54009 的頁段裡沒有任何網域、IP、檔案雜湊、Telegram 帳號或憑證指標</strong>。報告提供的「指標」只有兩類：</p>
+<ol>
+<li><strong>26 個合成社群帳號 handle</strong>（p.85）</li>
+<li><strong>12 組主題標籤語料庫</strong>（p.85–86）</li>
+</ol>
+<p>這個缺席本身就是資訊：<strong>因為行動在滲透與利用階段之前就被攔下，根本還沒產生基礎設施層級的 IOC。</strong> 這是「上游偵測」的直接後果——你抓得越早，能留給別人的鑑識痕跡越少。</p>
+<h3 id="72">7.2 指標表（含偵測價值與壽命評估）</h3>
+<table>
+<thead>
+<tr>
+<th>類型</th>
+<th>指標</th>
+<th>偵測價值</th>
+<th>壽命</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>合成帳號 handle（26 個，見 6.2.1）</td>
+<td><code>@ShirazisInLA</code> 等</td>
+<td><strong>低</strong>（作為精確比對）</td>
+<td><strong>極短</strong>（數週至數月）</td>
+<td>帳號早已被封或棄用；作為 atomic indicator 幾乎無用</td>
+</tr>
+<tr>
+<td><strong>Handle 構詞模式</strong> <code>[地名]+[角色]+[立場]</code></td>
+<td>見 6.2.2(a)</td>
+<td><strong>高</strong></td>
+<td><strong>長</strong>（數年）</td>
+<td>這是行為特徵不是原子指標。可轉成平台側的命名相似度偵測規則</td>
+</tr>
+<tr>
+<td><strong>分眾代碼命名法</strong> <code>IR-XX</code> / <code>UAE</code> / <code>GCC</code></td>
+<td>IR-DI, IR-YO, IR-MI, IR-CL, IR-RU</td>
+<td><strong>中</strong></td>
+<td><strong>中</strong>（數月至一年）</td>
+<td>若同一 schema 出現在其他平台或外洩文件中，可作為同源線索</td>
+</tr>
+<tr>
+<td>主題標籤（12 組）</td>
+<td>見 6.3.1</td>
+<td><strong>低至中</strong></td>
+<td><strong>中</strong></td>
+<td>大部分是真實流通的公共標籤，不能當惡意指標；價值在於「<strong>被一起檢索</strong>」這個組合</td>
+</tr>
+<tr>
+<td><strong>批次大小 ≈ 25 則／次</strong></td>
+<td>p.83</td>
+<td><strong>中</strong></td>
+<td><strong>短至中</strong></td>
+<td>工程參數，容易被改；但作為異常偵測的特徵之一有效</td>
+</tr>
+<tr>
+<td><strong>8,904 exchanges / 30 天的節奏</strong></td>
+<td>Figure 1</td>
+<td><strong>中</strong></td>
+<td><strong>中</strong></td>
+<td>約 297 次／日的穩定節奏，不像人工互動，像自動化管線</td>
+</tr>
+<tr>
+<td><strong>輸出 schema：<code>{人口群體, 位置, 政治傾向, 信度分數}</code></strong></td>
+<td>p.83, p.81</td>
+<td><strong>高</strong></td>
+<td><strong>長</strong></td>
+<td>★ <strong>最有價值的指標</strong>。這個四欄組合幾乎不會出現在正當用途中</td>
+</tr>
+<tr>
+<td><strong>「兩邊都做」的人設生成</strong></td>
+<td>p.83</td>
+<td><strong>高</strong></td>
+<td><strong>長</strong></td>
+<td>同一帳號生成互相對立立場的多語言人設內容</td>
+</tr>
+<tr>
+<td>產出物語域：正式阿拉伯語政府公文體</td>
+<td>p.83</td>
+<td>中</td>
+<td>長</td>
+<td>需與其他訊號合併使用</td>
+</tr>
+</tbody>
+</table>
+<h3 id="73">7.3 給不同防守方的可操作建議</h3>
+<table>
+<thead>
+<tr>
+<th>防守方</th>
+<th>可用的指標層級</th>
+<th>具體作法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LLM／AI 服務供應商</strong></td>
+<td>行為層（schema、批次、跨立場生成）</td>
+<td>對「結構化人物側寫輸出」建立分類器；對「同帳號生成對立人設」建立跨工作階段關聯</td>
+</tr>
+<tr>
+<td><strong>社群平台信任與安全團隊</strong></td>
+<td>帳號層（構詞模式、註冊批次、bio 生成痕跡）</td>
+<td>命名相似度叢集分析；跨語言 bio 的 LLM 生成偵測</td>
+</tr>
+<tr>
+<td><strong>公民社會／NGO／記者</strong></td>
+<td>情境層</td>
+<td>對「符合特定分眾原型的新成員」保持警覺；封閉群組加入採雙人確認制</td>
+</tr>
+<tr>
+<td><strong>威脅情報團隊</strong></td>
+<td>供應商層</td>
+<td>追蹤 S2T 及其經銷商的多品牌外殼；監控其產品發表、展會、徵才訊號</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>安全紅線重申</strong>：本節所有指標僅供研究與偵測規則設計。<strong>不得</strong>對任何 handle 發起連線、訂閱、私訊或互動；<strong>不得</strong>對報告中出現的任何識別符進行主動查詢。</p>
+</blockquote>
+<hr />
+<h2 id="8-anthropic">8. Anthropic 的偵測、處置與防線缺口</h2>
+<h3 id="81-anthropic-p84">8.1 Anthropic 做了什麼（逐字，p.84）</h3>
+<blockquote>
+<p>"<strong>Disruption and mitigations</strong><br />
+This activity violated our Usage Policy prohibitions on surveillance—including profiling, scoring, and building dossiers on activists, journalists, and political dissidents—as well as our prohibition on coordinated inauthentic behavior. We banned the account and are implementing mitigations to counter future misuse. We have also shared indicators with partners who track surveillance-for-hire actors to disrupt the campaign beyond our own platform."</p>
+</blockquote>
+<p>（<strong>中斷與緩解</strong>：此活動違反了我們《使用政策》對監控的禁令——包括對活動人士、記者與政治異議人士進行側寫、評分與建立卷宗——以及我們對協同不實行為的禁令。我們封禁了該帳號，並正在實施緩解措施以對抗未來的濫用。我們也已與追蹤「僱傭式監控」行為者的夥伴分享指標，以在我們自身平台之外中斷此行動。）</p>
+<p>拆成四個動作：</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>動作</th>
+<th>原文</th>
+<th>評註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>援引<strong>兩條</strong>政策</td>
+<td>"surveillance" ＋ "coordinated inauthentic behavior"</td>
+<td>見 4.5.2——雙重援引正是本案混種性質的證據</td>
+</tr>
+<tr>
+<td>2</td>
+<td>封禁帳號</td>
+<td>"We banned the account"</td>
+<td>單數 account。與 GTG-14010 的 "banned the accounts" 複數不同</td>
+</tr>
+<tr>
+<td>3</td>
+<td>實施緩解</td>
+<td>"<strong>are implementing</strong> mitigations"</td>
+<td><strong>現在進行式</strong>——代表發報告時尚未完成。措辭誠實但也暴露防線未閉合</td>
+</tr>
+<tr>
+<td>4</td>
+<td>分享指標</td>
+<td>"shared indicators with partners who track <strong>surveillance-for-hire</strong> actors"</td>
+<td>明確把 S2T 歸入「僱傭式監控」產業類別。這是對業界的分類定性</td>
+</tr>
+</tbody>
+</table>
+<p>另外，章節層級的處置說明（p.81）適用於本案：</p>
+<blockquote>
+<p>"In each case, we banned the accounts associated with the activity; improved our ability to detect the tactics, techniques, and procedures (TTPs) we observed; and, where the operation involved activity or impacts beyond our platform, shared identifiers and intelligence with industry partners and authorities as appropriate."</p>
+</blockquote>
+<h3 id="82">8.2 政策條文本身的教學價值</h3>
+<p>Anthropic 引用的禁令文字非常具體：</p>
+<blockquote>
+<p>"profiling, scoring, and building dossiers on <strong>activists, journalists, and political dissidents</strong>"</p>
+</blockquote>
+<p>三個動詞（側寫 profiling、評分 scoring、建卷宗 building dossiers）與三類對象（活動人士、記者、政治異議人士）。</p>
+<p><strong>這組文字值得與本案的行為逐項對照</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>政策禁止的行為</th>
+<th>本案對應的行為</th>
+<th>頁碼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>profiling（側寫）</td>
+<td>"analyze, classify, and profile the social media activity of users"</td>
+<td>p.82</td>
+</tr>
+<tr>
+<td>scoring（評分）</td>
+<td>"scores sentiment"（Figure 1）、"sentiment scores broken down by Gulf nationality"、"with confidence ratings for each finding"</td>
+<td>p.83, p.84 圖</td>
+</tr>
+<tr>
+<td>building dossiers（建卷宗）</td>
+<td>"produce structured records that outlined targets' locations, demographic data, and political leanings"（p.81 導論）</td>
+<td>p.81</td>
+</tr>
+</tbody>
+</table>
+<p><strong>三個動詞，三項全中。</strong> 這種「政策條文→行為證據」的逐項對照，是課堂上示範「合規判定怎麼做」的最佳範例。實務上，任何 AI 服務的信任與安全團隊都必須能做出這張對照表，才能支撐封禁決定。</p>
+<h3 id="83-pilot">8.3 【核心教學】「在 pilot 階段被攔下」——上游偵測的價值與界線</h3>
+<h4 id="831-p83">8.3.1 原文逐字（p.83）</h4>
+<blockquote>
+<p>"<strong>We identified this activity in its pilot stage, and found no evidence that later stages of S2T's surveillance chain (as described in the Forbidden Stories report) were used against real targets before we banned the account.</strong>"</p>
+</blockquote>
+<p>（我們在此活動的試營運階段就辨識出它，且未發現任何證據顯示 S2T 監控鏈的後續階段（如 Forbidden Stories 報告所描述者）在我們封禁該帳號之前，曾被用於對付真實目標。）</p>
+<h4 id="832">8.3.2 這句話的三個層次，要逐層解讀</h4>
+<table>
+<thead>
+<tr>
+<th>層次</th>
+<th>文字</th>
+<th>這是在說什麼</th>
+<th>這<strong>不是</strong>在說什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>"identified this activity <strong>in its pilot stage</strong>"</td>
+<td>行動被抓到時還在試營運</td>
+<td>不是說「行動剛開始」——pilot 已經跑了至少 30 天、8,904 次 exchanges、囤了 255+ 個帳號</td>
+</tr>
+<tr>
+<td>2</td>
+<td>"<strong>found no evidence that</strong> later stages... were used against real targets"</td>
+<td>Anthropic 沒有找到下游階段對真實目標執行的證據</td>
+<td><strong>絕對不是說「下游階段沒有發生」</strong>。這是 <strong>absence of evidence</strong>，不是 <strong>evidence of absence</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>"before we banned the account"</td>
+<td>時間界線劃在封禁的那一刻</td>
+<td>不涵蓋封禁之後；也不涵蓋透過其他管道（自建模型、其他供應商）進行的活動</td>
+</tr>
+</tbody>
+</table>
+<p><strong>第 2 層是本節最重要的教學點。</strong> "found no evidence" 這個措辭，在情報學上是一個<strong>明確的信度限定</strong>，不是一個保證。Anthropic 只能在自己的可見範圍內尋找證據——而 Figure 1 那條垂直虛線已經明白告訴我們，階段 03 與 04 <strong>根本不在他們的可見範圍內</strong>。</p>
+<p>所以嚴格地說，這句話的完整意思是：</p>
+<blockquote>
+<p>「在我們<strong>看得到的那一半漏斗裡</strong>，我們沒有看到下游階段的痕跡。至於看不到的那一半，我們無從得知。」</p>
+</blockquote>
+<p><strong>課堂上要讓學員自己說出這句話。</strong> 這是訓練「讀出情報報告字面下的認識論界線」最好的練習。</p>
+<h4 id="833-upstream-detection">8.3.3 上游偵測（upstream detection）為什麼有價值</h4>
+<p>即使有上述限制，「在 pilot 階段攔下」仍然是本案最值得肯定的成果。理由有五：</p>
+<ol>
+<li>
+<p><strong>避免了實害的發生</strong>。傳統的監控產業問責模式是<strong>事後鑑識</strong>：Citizen Lab 或 Amnesty Security Lab 在某位記者的手機裡找到 Pegasus，反推回去找供應商。那時傷害已經造成，記者的通訊、聯絡人、位置都已外洩。<strong>本案是在傷害發生之前中止的</strong>——這在整個商業監控問責史上是罕見的位置。</p>
+</li>
+<li>
+<p><strong>AI 供應商佔據了產業鏈的上游瓶頸</strong>。Figure 1 的階段 02（分眾與評分）是整條鏈的<strong>收斂點</strong>：沒有這一段，從幾十萬則貼文到值得滲透的個人這個跳躍就不成立。<strong>攔住瓶頸，比攔住任何其他環節都有效率。</strong></p>
+</li>
+<li>
+<p><strong>成本不對稱對防守方有利</strong>。對行為者而言，重建整套分類管線（換供應商、自建模型、重新調參）的成本，遠高於換一個網域或重編譯一次惡意程式。<strong>上游攔截課的是結構性成本，不是戰術性成本。</strong></p>
+</li>
+<li>
+<p><strong>它產生了可分享的情報</strong>。因為在 pilot 階段抓到，Anthropic 能看到的是<strong>完整的方法論</strong>（schema、批次大小、分眾方案、人設庫），而不是零碎的事後遺留物。這種情報對其他平台的防守價值遠高於一組雜湊值。</p>
+</li>
+<li>
+<p><strong>它把「產品開發」本身變成可偵測事件</strong>。過去監控產業的研發是黑箱；現在，<strong>如果研發需要用到雲端 LLM，研發過程本身就在別人的遙測裡</strong>。這是 AI 時代監控問責的結構性新機會。</p>
+</li>
+</ol>
+<h4 id="834">8.3.4 但也要誠實說出上游偵測的四個界線</h4>
+<ol>
+<li><strong>可見度只覆蓋一半漏斗</strong>。已詳述。</li>
+<li><strong>只能看到「用我家模型」的那部分</strong>。行為者完全可以改用開源模型本地部署。報告在另一個案例（p.104，GTG-11005 語境）明確承認過這種失效模式：「The end-user deployed the platform locally with an on-premises LLM. Our account enforcement actions disrupted the actor's software and design activities, but not the deployment of the platform.」（終端使用者以地端 LLM 在本地部署了該平台。我們的帳號執法行動中斷了該行為者的軟體與設計活動，但沒有中斷該平台的部署。）<strong>同樣的失效邏輯完全適用於本案。</strong></li>
+<li><strong>封禁帳號 ≠ 中斷公司</strong>。被封的是一個帳號。S2T（或其經銷商、或其客戶）可以開新帳號、換公司主體、換法域、或直接向其他 AI 供應商採購。報告自己的措辭也很小心——它說中斷的是 "the campaign"，而且需要「與夥伴分享指標，以在我們自身平台之外中斷此行動」。</li>
+<li><strong>「pilot stage」的判定本身帶不確定性</strong>。判斷一個行動處於試營運而非實戰，依據的是「規模、產出物的成熟度、以及沒有看到下游痕跡」。但一個成熟行為者<strong>刻意把敏感階段拆到別的供應商</strong>，在遙測上看起來會跟 pilot 一模一樣。</li>
+</ol>
+<h3 id="84">8.4 防線缺口盤點</h3>
+<table>
+<thead>
+<tr>
+<th>缺口</th>
+<th>證據</th>
+<th>嚴重性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>緩解措施在發報時尚未完成</strong></td>
+<td>"are implementing mitigations"（進行式，p.84）</td>
+<td>中。誠實揭露，但代表同類行為在報告發布時可能仍可通過</td>
+</tr>
+<tr>
+<td><strong>視野只覆蓋漏斗上半</strong></td>
+<td>Figure 1 的垂直虛線；"We were not able to independently confirm the downstream operational stages"（p.84）</td>
+<td><strong>高</strong>。這是結構性缺口，不是可修補的缺陷</td>
+</tr>
+<tr>
+<td><strong>地端模型完全繞過</strong></td>
+<td>報告他處自承此失效模式（p.104 語境）</td>
+<td><strong>高</strong>。無法由單一供應商解決</td>
+</tr>
+<tr>
+<td><strong>未揭露是如何被發現的</strong></td>
+<td>報告全段沒有說明偵測是來自分類器、人工審查、還是外部通報</td>
+<td>中。對防守方複製此偵測能力構成障礙</td>
+</tr>
+<tr>
+<td><strong>未說明帳號是否曾成功規避管制</strong></td>
+<td>章節導論說「In every case we describe below, the threat actors violated our Usage Policy <strong>and attempted to circumvent controls designed to detect such misuse</strong>」（p.81），但本案正文未說明<strong>具體規避手法</strong></td>
+<td>中。導論宣稱有規避行為，個案卻未舉證，是本案的資訊缺口</td>
+</tr>
+<tr>
+<td><strong>229+ 個合成帳號仍在野</strong></td>
+<td>255+ vs 揭露 26</td>
+<td>中。已透過夥伴管道分享，但公開資訊不足以讓一般防守方自行比對</td>
+</tr>
+<tr>
+<td><strong>跨供應商拼圖無人負責</strong></td>
+<td>若行為者把分類與人設生成拆到不同供應商，沒有任何一方看得到全貌</td>
+<td><strong>高</strong>。這是產業級治理缺口，需要跨平台情報共享機制</td>
+</tr>
+</tbody>
+</table>
+<h3 id="85-vs">8.5 一個值得注意的對比：本案 vs 章節導論的宣稱</h3>
+<p>章節導論（p.81）說：「In every case we describe below, the threat actors violated our Usage Policy <strong>and attempted to circumvent controls designed to detect such misuse.</strong>」</p>
+<p>但 GTG-54009 的正文<strong>完全沒有描述任何規避手法</strong>——沒有提到重新提示（re-prompting）、沒有提到繞過分類器、沒有提到帳號輪替。</p>
+<p><strong>這個落差有兩種解讀</strong>，課堂上可讓學員判斷：<br />
+- <strong>解讀 A</strong>：Anthropic 選擇不揭露具體規避手法，以免被複製（這是合理的 OPSEC 決定）。<br />
+- <strong>解讀 B</strong>：導論的「every case」是概括性陳述，本案實際上規避程度很低——<strong>這也符合 pilot stage 的判定</strong>（還在試營運的產品，通常還沒開始做反偵測強化）。</p>
+<p><strong>解讀 B 更可能，且更有教學意義</strong>：它說明了為什麼 pilot 階段是最容易攔截的時間窗——<strong>行為者的 OPSEC 成熟度通常落後於其能力成熟度</strong>。</p>
+<hr />
+<h2 id="9">9. 第三方驗證與外部來源</h2>
+<h3 id="91">9.1 核心結論先講</h3>
+<table>
+<thead>
+<tr>
+<th>主張</th>
+<th>驗證狀態</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>「S2T 這家公司販售能夠側寫、假帳號滲透、釣魚入侵的監控產品」</strong></td>
+<td>✅ <strong>已被獨立查證</strong>。Forbidden Stories 於 2023-02-20 依據哥倫比亞軍方外洩檔案中的 93 頁公司型錄報導，早於 Anthropic 報告三年半</td>
+</tr>
+<tr>
+<td><strong>「S2T（或代表其者）在 2026 年用 Claude 建構伊朗／波灣側寫平台」</strong></td>
+<td>❌ <strong>單一來源（Anthropic）</strong>。截至本教材整理日，<strong>沒有任何第三方獨立查證</strong>，S2T 亦未公開回應</td>
+</tr>
+<tr>
+<td><strong>「S2T 是以色列—新加坡商業情報供應商」</strong></td>
+<td>⚠️ <strong>部分佐證但需修正</strong>。Anthropic 自己就說這是「open-source research suggests」。公開資料顯示公司足跡至少橫跨以色列、新加坡、英國、斯里蘭卡四個法域</td>
+</tr>
+</tbody>
+</table>
+<h3 id="92">9.2 來源清單（逐條標示性質）</h3>
+<h4 id="a-anthropic">【A 類：獨立查證——早於且獨立於 Anthropic】</h4>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>性質</th>
+<th>關鍵內容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A1</td>
+<td><strong>Forbidden Stories</strong>, "When your 'friends' spy on you: The firm pitching Orwellian social media surveillance to militaries"（作者 Phineas Rueckert，協同報導 Omer Benjakob、Jurre van Bergen、Felipe Morales）</td>
+<td>https://forbiddenstories.org/osint-s2t-unlocking-cyberspace-journalists-activists/</td>
+<td><strong>2023-02-20</strong></td>
+<td>★ <strong>獨立查證</strong>。這是 Anthropic 報告明確引用的那份調查</td>
+<td>93 頁 S2T 型錄；出自 Guacamaya 駭客集團外洩的哥倫比亞軍方 <strong>50 萬份以上</strong>文件；型錄附在 <strong>2022 年 3 月</strong>哥倫比亞情報分析師之間的一封 email；哥軍 2022 年初的 OSINT 採購招標中接觸了<strong>七家</strong>公司，含一家 <strong>S2T 經銷商</strong>；能力包括「avatar」假帳號（藏在代理伺服器網路後、平台幾乎無法偵測）、自動化釣魚遠端植入惡意程式、<strong>成功釣魚後遠端啟動目標攝影機</strong>、行動 App 資料結合地理定位、臉部辨識＋AI＋NLP、從「已知活動人士資料庫」出發「辨識值得進一步調查的目標」、由「在地政治議題」出發「辨識關鍵論點與情緒」的自動化影響力行動；型錄自稱 <strong>"We can reach nearly every smartphone user"</strong>；S2T <strong>未回應採訪請求</strong></td>
+</tr>
+<tr>
+<td>A2</td>
+<td><strong>Story Killers</strong> 專案（Forbidden Stories 主導，逾 100 名記者、30 家媒體）</td>
+<td>https://forbiddenstories.org/story-killers-about/ ； https://www.occrp.org/en/project/story-killers</td>
+<td>2023</td>
+<td><strong>獨立查證（脈絡）</strong></td>
+<td>A1 所屬的跨國調查專案，主題為全球「造謠產業（disinformation-for-hire）」</td>
+</tr>
+<tr>
+<td>A3</td>
+<td>專家評論（收於 A1）</td>
+<td>同 A1</td>
+<td>2023-02-20</td>
+<td><strong>獨立專家意見</strong></td>
+<td>Etienne Maynier（Amnesty International）：「a new surveillance industry that we didn't know about that seems to be growing」；Jack Poulson（Tech Inquiry）：「I haven't seen such a comprehensive map tying together the whole process and so many techniques」；Eva Galperin（EFF）：這是「reconnaissance phase of a level of surveillance that ends with arrests, visits from security apparatus」；Rachel Levinson-Waldman（Brennan Center for Justice）：「targeting is in fact indiscriminate and includes journalists, dissidents, critics」</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>★ <strong>A3 的 Galperin 引言值得在課堂上單獨投影</strong>：「這是一種監控的偵察階段，而這種監控的終點是逮捕、是國安單位上門。」——它把「側寫」與「人身後果」之間的因果鏈講得極清楚，正好補上 Anthropic 報告刻意不做的那一步價值判斷。</p>
+</blockquote>
+<h4 id="b">【B 類：公司公開資訊——一手但為公司自述或商業資料庫】</h4>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>性質</th>
+<th>關鍵內容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B1</td>
+<td>S2T 官網</td>
+<td>https://www.s2t.ai/ 、https://www.s2t.ai/products.html</td>
+<td><strong>公司自述</strong></td>
+<td>產品家族 <strong>GoldenSpear</strong>；GoldenSpear Deep Fusion 宣稱為多源大數據調查平台、整合 SIGINT／HUMINT／web intelligence、支援從蒐集到分析到報告的完整情報循環</td>
+</tr>
+<tr>
+<td>B2</td>
+<td>LinkedIn 公司頁</td>
+<td>https://www.linkedin.com/company/s2tcyber</td>
+<td><strong>公司自述</strong></td>
+<td>標語 "AI-Powered Investigations, WEBINT, OSINT, FUSION"；曾發文宣傳參展新加坡 ISS Asia（香格里拉）</td>
+</tr>
+<tr>
+<td>B3</td>
+<td>CyberDB 廠商資料庫</td>
+<td>https://www.cyberdb.co/vendor/s2tunlockingcyberspace/</td>
+<td><strong>第三方商業資料庫（可靠度中等）</strong></td>
+<td>登載 HQ 為英國 Slough、成立 2002、員工 11–50 人、估計營收約 500 萬美元</td>
+</tr>
+<tr>
+<td>B4</td>
+<td>Crunchbase（公司與 Ori Sasson 個人頁）</td>
+<td>https://www.crunchbase.com/organization/s2t-unlocking-cyberspace 、https://www.crunchbase.com/person/ori-sasson-e003</td>
+<td>第三方商業資料庫</td>
+<td>Ori Sasson 列為 Founder &amp; Director</td>
+</tr>
+<tr>
+<td>B5</td>
+<td>Surveillance Watch 實體頁</td>
+<td>https://www.surveillancewatch.io/entities/s2t-unlocking-cyberspace</td>
+<td><strong>NGO 監控產業資料庫</strong></td>
+<td>頁面存在，但本次抓取未取得內文（僅取得標題）。<strong>列為未完成驗證項</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>B3 與 Anthropic 的說法不一致</strong>：CyberDB 登載英國 Slough 為 HQ，Anthropic 說「以色列—新加坡」。依課程規範<strong>以 PDF 原文為準</strong>，但此差異必須告知學員——它正是第 2.4 節「法域套利」的實證。另有第三方公司資料聚合網站列出一份包含新加坡政府機關、Elbit Systems、以色列銀行等的「客戶名單」，<strong>但該類聚合網站的客戶名單可靠度低，本教材不採為證據</strong>，僅記錄其存在。</p>
+</blockquote>
+<h4 id="c-anthropic">【C 類：僅引述 Anthropic——無獨立查證】</h4>
+<p>以下所有報導都只是轉述 Anthropic 報告，<strong>沒有任何一家聯繫 S2T 求證、沒有任何一家提出新證據</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>附加價值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1</td>
+<td>Cyber Kendra, "Anthropic Threat Report 2026: Every Case Explained"</td>
+<td>https://www.cyberkendra.com/2026/09/anthropic-threat-report-says-ai-now.html</td>
+<td>2026-09-10</td>
+<td>逐案摘要；本案僅一段轉述</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>Muslim Network TV, "AI used by Israeli intelligence vendor to profile Iranians and Gulf citizens"</td>
+<td>https://www.muslimnetwork.tv/ai-used-by-israeli-intelligence-vendor-to-profile-iranians-and-gulf-citizens/</td>
+<td>2026-09-11</td>
+<td>引述一句據稱來自 Anthropic 威脅情報負責人的說法：AI 並未改變這類操作者<strong>鎖定誰</strong>，而是讓監控變得 <strong>"cheaper and more efficient"</strong>（更便宜、更有效率）。⚠️ <strong>此引言未能核對到一手逐字稿，列為未驗證</strong></td>
+</tr>
+<tr>
+<td>C3</td>
+<td>ZeroHedge（轉載自 The Cradle）</td>
+<td>https://www.zerohedge.com/geopolitical/anthropic-bans-israeli-account-over-iran-gulf-social-media-citizen-profiling</td>
+<td>2026-09（日期不明）</td>
+<td>加入了與本案<strong>無直接關聯</strong>的地緣政治敘事（摩薩德人事、2026 年伊朗政局）。<strong>教學上應作為「脈絡漂移（context drift）」的負面範例</strong>：轉述方把一個技術案例包裝進自己的政治框架</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>The Print（印度）、fonearena、Eurasia Review、explainx.ai、unwire.hk（2026-09-12）等</td>
+<td>見各站</td>
+<td>2026-09-10～12</td>
+<td>全為摘要轉述</td>
+</tr>
+<tr>
+<td>C5</td>
+<td>多個中文技術站（cn-sec、locdd、topstip 等）之報告翻譯與摘要</td>
+<td>見各站</td>
+<td>2026-09</td>
+<td>翻譯轉述；<strong>部分為機器翻譯，術語不穩定，不建議作為課程引用來源</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>教學重點：C 類全部是同一個來源的迴音。</strong> 讓學員數一數——搜尋引擎回傳了十幾條「不同」的報導，但它們的資訊來源是<strong>同一份 PDF 的同一段</strong>。這叫<strong>來源迴聲室（source echo chamber）</strong>，是當代情報分析最常見的陷阱：<strong>媒體數量的增加，不等於證據的增加。</strong></p>
+</blockquote>
+<h4 id="d">【D 類：產業與法律脈絡——不涉本案，但課程需要】</h4>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D1</td>
+<td>Privacy International, "Social Media Intelligence" 說明頁</td>
+<td>https://privacyinternational.org/explainer/55/social-media-intelligence</td>
+<td>SOCMINT 的定義與法律爭議。關鍵論點：「SOCMINT can be deployed on content that is private or public, while OSINT is about strictly publicly available content」；即使是公開貼文，蒐集仍具侵入性（「tweets posted from a mobile phone can reveal location data, and their content can also reveal individual opinions (including political opinions) as well as information about a person's preferences, sexuality, and health status」）；主張需要「strong and auditable rules and procedures, including requiring authorisation... and a record of activity」；並明指執法或情治單位「covertly add the targeted user as a validated contact, to use fake profiles」構成須嚴格法律規範的秘密監控</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>Amnesty International Security Lab：Intellexa Leaks（2025-12）、Predator Files、Inside Pegasus（2026-07）</td>
+<td>https://securitylab.amnesty.org/</td>
+<td>商業監控產業的事後鑑識問責模式，與本案的上游攔截模式形成對照</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>The Citizen Lab（多倫多大學 Munk School）商業間諜軟體研究</td>
+<td>https://citizenlab.ca/shedding-light-on-the-surveillance-industry/</td>
+<td>同上。<strong>注意：本次檢索未發現 Citizen Lab 曾針對 S2T 發表專文</strong></td>
+</tr>
+<tr>
+<td>D4</td>
+<td>EU DisinfoLab / EUvsDisinfo：造謠產業（disinformation-for-hire）研究</td>
+<td>https://www.disinfo.eu/ ； https://euvsdisinfo.eu/the-rise-of-the-disinformation-for-hire-industry/</td>
+<td>「整套 FIMI 服務包」（假社群活動、駭侵、資料外洩、敘事管理）的產業分析，正好對應本案的「監控＋反制敘事」一體化</td>
+</tr>
+<tr>
+<td>D5</td>
+<td>以色列國防出口管制署（DECA）近年對網路情報產品出口管制的收緊</td>
+<td>見 Janes、Lawfare 等報導</td>
+<td>終端使用者須聲明僅用於反恐與重大犯罪偵查；2025-11 撤銷加密品項管制令（2026-03-21 生效）。用於第 2.4 節法域套利討論</td>
+</tr>
+<tr>
+<td>D6</td>
+<td>台灣人權促進會，〈防範跨國鎮壓：即刻建立保護機制〉</td>
+<td>https://www.tahr.org.tw/news/3844/</td>
+<td>2026-02-05。用於第 10.4 節</td>
+</tr>
+<tr>
+<td>D7</td>
+<td>行政院《科技偵查及保障法》草案（2024-05-09 院會通過）</td>
+<td>https://www.ey.gov.tw/Page/24727DA92A709DBF/9b95e9b8-5d4d-4def-966c-80553239f706</td>
+<td>用於第 10.4 節</td>
+</tr>
+<tr>
+<td>D8</td>
+<td>《個人資料保護法》第 19、20 條（全國法規資料庫）</td>
+<td>https://law.moj.gov.tw/LawClass/LawSingle.aspx?pcode=I0050021&amp;flno=19</td>
+<td>用於第 10.4 節</td>
+</tr>
+</tbody>
+</table>
+<h3 id="93-forbidden-stories-vs-anthropic">9.3 交叉比對：Forbidden Stories 型錄 vs Anthropic 觀察</h3>
+<p>這張表是本案最有價值的教學產出——它把「兩個獨立來源如何對上」做成可視化：</p>
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>Forbidden Stories 2023（型錄描述）</th>
+<th>Anthropic 2026（實際觀察）</th>
+<th>對上了嗎</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>從「已知活動人士資料庫」出發辨識調查目標</td>
+<td>✅ 型錄明載</td>
+<td>✅ 觀察到批次人口側寫與政治傾向分類</td>
+<td><strong>✅ 對上</strong>（機制不同但目的相同）</td>
+</tr>
+<tr>
+<td>由「在地政治議題」出發辨識「關鍵論點與情緒」</td>
+<td>✅ 型錄明載</td>
+<td>✅ 觀察到情緒評分＋12 組主題語料庫＋<strong>建議反制敘事</strong></td>
+<td><strong>✅ 高度對上</strong></td>
+</tr>
+<tr>
+<td>「avatar」假帳號、藏於代理網路</td>
+<td>✅ 型錄明載並有 workflow 圖</td>
+<td>✅ 觀察到 255+ 合成帳號（Figure 1 亦使用 "avatar" 一詞）</td>
+<td><strong>✅ 對上</strong>（Anthropic 看到的是<strong>製造</strong>，型錄描述的是<strong>使用</strong>）</td>
+</tr>
+<tr>
+<td>滲透私人 WhatsApp／Telegram 群組、收割成員名單</td>
+<td>✅ 型錄明載</td>
+<td>❌ <strong>未觀察到</strong></td>
+<td>⚠️ <strong>未驗證</strong>——Anthropic 明說無法獨立確認</td>
+</tr>
+<tr>
+<td>自動化釣魚、遠端植入惡意程式</td>
+<td>✅ 型錄明載</td>
+<td>❌ 未觀察到</td>
+<td>⚠️ <strong>未驗證</strong></td>
+</tr>
+<tr>
+<td>遠端啟動目標攝影機</td>
+<td>✅ 型錄明載（含一次成功案例描述）</td>
+<td>❌ 未觀察到</td>
+<td>⚠️ <strong>未驗證</strong></td>
+</tr>
+<tr>
+<td>臉部辨識</td>
+<td>✅ 型錄明載</td>
+<td>❌ 未提及</td>
+<td>⚠️ 未涉及</td>
+</tr>
+<tr>
+<td>行動 App 資料＋地理定位</td>
+<td>✅ 型錄明載</td>
+<td>✅ 觀察到城市級位置推論（但機制為<strong>貼文內容推論</strong>，非 App 資料）</td>
+<td>⚠️ <strong>部分對上，但機制不同</strong>——值得注意的差異</td>
+</tr>
+<tr>
+<td>多語言操作</td>
+<td>型錄未特別強調</td>
+<td>✅ 波斯語、阿拉伯語、英語、德語</td>
+<td>➕ <strong>Anthropic 的新增資訊</strong></td>
+</tr>
+<tr>
+<td>依政府公文語域產出簡報</td>
+<td>型錄未提及</td>
+<td>✅ 正式阿拉伯語、官方公文體</td>
+<td>➕ <strong>Anthropic 的新增資訊</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>讀這張表的正確方式</strong>：<br />
+- 綠色「對上」的部分：<strong>兩個獨立來源交叉確認，信度最高</strong>。<br />
+- 黃色「未驗證」的部分：<strong>只有型錄說有，Anthropic 沒看到</strong>——這正是 Anthropic 那句 "We were not able to independently confirm" 所指的範圍。<strong>行銷型錄是宣傳文件，宣稱的能力未必存在或未必被使用。</strong><br />
+- 「機制不同」那一列（地理定位）<strong>特別值得討論</strong>：型錄說的是用 App 資料與廣告 ID 做定位，Anthropic 看到的是用 LLM 從貼文內容<strong>推論</strong>位置。<strong>這是 AI 帶來的真實改變——從「買資料」變成「推論資料」，成本更低、也更難被資料保護法規攔截。</strong><br />
+- 兩個「➕」：<strong>Anthropic 貢獻了型錄裡沒有的新資訊</strong>。這證明了他們的「independently corroborate」不是空話——獨立來源不只確認舊資訊，還會帶來新資訊。</p>
+<hr />
+<h2 id="10">10. 課程教學設計</h2>
+<h3 id="101">10.1 核心教學要點</h3>
+<h4 id="_1">要點一：分類即權力——監控技術批判的核心命題</h4>
+<p><strong>教學目標</strong>：讓學員理解「把人分類」不是中立的技術動作，而是政治行為。</p>
+<p><strong>素材</strong>：p.83 的六類編碼群體；p.85 的七個 segment code；p.86 的心理側寫語料庫。</p>
+<p><strong>教學路徑</strong>：<br />
+1. 先把六類寫在白板上，問學員：「這六類是怎麼來的？誰決定要這六類？」<br />
+2. 引導出：這六類反映的是「政權穩定分析」的需求，不是人口統計學的需求。<br />
+3. 指出第 3.3.3 節的落差（六類 vs 七碼、缺 urban、多 UAE/GCC）。<br />
+4. 最後拉到第 3.3.2 節的四重權力效應：可見性、威脅度、黏著性、政治判斷技術化。<br />
+5. <strong>收尾金句</strong>：「當一個系統可以用近乎零的成本把所有人分類時，『先有嫌疑才能監控』這條法治原則，在技術上就失去了它的物理基礎。」</p>
+<h4 id="_2">要點二：情報紀律——引用第三方，但標明自己的驗證界線</h4>
+<p><strong>教學目標</strong>：讓學員能寫出（與讀出）一份分層標示證據強度的情報產品。</p>
+<p><strong>素材</strong>：p.82–84 的三段話（independently corroborate ／ map closely onto ／ were not able to independently confirm）＋ Figure 1 的垂直虛線。</p>
+<p><strong>教學路徑</strong>：<br />
+1. 投影 Figure 1，只問一個問題：「這條虛線是什麼？」<br />
+2. 投影三段原文，讓學員標出每段的信度措辭。<br />
+3. 做第 9.3 節的交叉比對表：哪些對上了、哪些只有單邊。<br />
+4. <strong>收尾金句</strong>：「一份好的情報報告，不是把知道的都寫出來，而是把『知道』與『聽說』畫在不同的格子裡。」</p>
+<h4 id="_3">要點三：監控與影響力行動的一體化</h4>
+<p><strong>教學目標</strong>：理解為何現行的治理框架接不住這種混種行動。</p>
+<p><strong>素材</strong>：p.83 的 "recommended counternarratives"；p.84 Anthropic 同時援引兩條政策；Figure 1 的回饋箭頭；第 5.3 節的框架缺口表。</p>
+<p><strong>收尾金句</strong>：「當同一個平台既告訴你『人們在想什麼』又告訴你『該說什麼去改變它』，情報與作戰之間那道由法律與組織建立起來的閘門，就被一個 API 呼叫繞過了。」</p>
+<h4 id="_4">要點四：上游偵測的價值與認識論界線</h4>
+<p><strong>素材</strong>：第 8.3 節全部。</p>
+<p><strong>收尾金句</strong>：「'We found no evidence' 不是 'It did not happen'。前者是誠實，後者是保證——分清楚這兩者，是讀情報報告的第一課。」</p>
+<h4 id="_5">要點五：商業監控產業的結構——威權客戶、民主供應商、第三國法域</h4>
+<p><strong>教學目標</strong>：理解這不是「壞國家做壞事」，而是一條<strong>跨國產業鏈</strong>。</p>
+<p><strong>素材</strong>：第 2.4 節的公司足跡表；第 9.2 節 A1 的哥倫比亞招標、孟加拉 DGFI、印度海軍展示；D5 的以色列出口管制。</p>
+<p><strong>教學路徑</strong>：畫出這條鏈：</p>
+<pre class="mermaid">flowchart LR
+  R[&quot;以色列／新加坡研發&quot;] --&gt; X[&quot;英國／新加坡出口主體&quot;] --&gt; D[&quot;區域經銷商&quot;] --&gt; G[&quot;波灣政府客戶&quot;] --&gt; S[&quot;監控伊朗與南亞移工人口&quot;]
+  N1[&quot;民主國家的技術與人才&quot;] -.-&gt; R
+  N3[&quot;美國 AI 公司提供的模型能力&lt;br/&gt;（本案的新變數）&quot;] -.-&gt; X
+  N2[&quot;威權治理的需求&quot;] -.-&gt; S
+</pre>
+<p><strong>這條鏈上的每一環都在合法的邊緣運作，而整條鏈的產出是對一整個國家人口的非自願側寫。</strong> 這是「合法性的分散（diffusion of legality）」——沒有任何單一環節明顯違法，但整體結果明顯不正當。</p>
+<p><strong>收尾金句</strong>：「監控產業的商業模式，就是把道德責任切碎、分散到足夠多的法域與公司主體裡，讓每一片都小到不足以究責。」</p>
+<h4 id="socmint">要點六：SOCMINT 的兩用性——同樣的技術，研究者也在做</h4>
+<p><strong>素材</strong>：D1（Privacy International）；第 6.3.3 節的心理側寫倫理討論。</p>
+<p><strong>關鍵區辨</strong>：本案與正當的社群媒體研究，技術上幾乎一樣。差別在四點：<br />
+1. <strong>目的</strong>：理解現象 vs 鎖定個人<br />
+2. <strong>同意與倫理審查</strong>：IRB／研究倫理 vs 無<br />
+3. <strong>輸出粒度</strong>：彙總統計 vs 個人層級卷宗<br />
+4. <strong>輸出對象</strong>：公開發表 vs 賣給外國政府</p>
+<p><strong>這四點應該成為學員判斷任何 SOCMINT 專案是否正當的檢查表。</strong></p>
+<h3 id="102">10.2 課堂討論題（有爭議性、無標準答案）</h3>
+<p><strong>討論題 1：Anthropic 應該公開點名 S2T 嗎？</strong></p>
+<blockquote>
+<p>Anthropic 在報告中直接寫出 "S2T Unlocking Cyberspace" 這個公司名稱，但同時用「open-source research suggests」把公司性質的判斷推給別人，而且 S2T 從未被給予回應機會（Forbidden Stories 2023 曾聯繫但未獲回應；本次檢索也未見 S2T 對 2026 年指控的任何回應）。</p>
+<ul>
+<li>一家 AI 公司，在沒有司法程序的情況下，公開指名一家在營運中的商業公司，這個門檻應該設在哪裡？</li>
+<li>如果之後證明操作者其實是一個拿 S2T 產品做 demo 的經銷商業務，Anthropic 該負什麼責任？</li>
+<li>反過來說，如果 Anthropic 不點名，這份報告對防守方還有多少價值？</li>
+</ul>
+</blockquote>
+<p><strong>討論題 2：「在 pilot 階段被攔下」到底是成功還是運氣？</strong></p>
+<blockquote>
+<p>行動被抓到時已經跑了 30 天、8,904 次 exchanges、囤了 255+ 個假帳號。</p>
+<ul>
+<li>這算「早期攔截」，還是「攔得不夠早」？</li>
+<li>如果行為者把批次大小改成 5、把節奏拉長到 90 天，還會被抓到嗎？</li>
+<li>「pilot stage」這個判定，有多少成分是證據、有多少成分是「我們只看得到這麼多」？</li>
+</ul>
+</blockquote>
+<p><strong>討論題 3：六類編碼群體——如果換成台灣，會是哪六類？</strong></p>
+<blockquote>
+<p>要求學員實際設計一套「台灣人口的六類編碼方案」，供一個假想的外國情報承包商使用。</p>
+<ul>
+<li>設計出來之後，問：你自己會被分到哪一類？</li>
+<li>這個練習本身是否不道德？教學上做這種練習的界線在哪裡？</li>
+<li>如果這套分類被洩漏出去，會造成什麼傷害？</li>
+</ul>
+</blockquote>
+<p><strong>討論題 4：心理脆弱性語料庫（#PTSD_Iran、#suicide_rate_war）</strong></p>
+<blockquote>
+<p>一個公共衛生研究團隊追蹤完全相同的標籤，以評估戰爭對心理健康的影響。</p>
+<ul>
+<li>技術上完全相同的行為，為什麼一個是研究、一個是侵害？</li>
+<li>如果那個公共衛生團隊的資料後來被政府徵用，責任在誰？</li>
+<li>平台應該區別對待這兩種檢索嗎？可能嗎？</li>
+</ul>
+</blockquote>
+<p><strong>討論題 5：AI 供應商應該扮演什麼角色？</strong></p>
+<blockquote>
+<p>Anthropic 在本案中實際上做了三件事：偵測、封禁、分享情報給業界夥伴。這使一家私人公司事實上執行了類似<strong>出口管制與跨國執法</strong>的功能。</p>
+<ul>
+<li>這是好事（有能力者應該行動）還是壞事（私人公司不受民主問責卻行使準執法權）？</li>
+<li>如果 Anthropic 的判斷錯了，被封禁的公司有什麼救濟管道？</li>
+<li>台灣的 AI 服務供應商，未來會面對同樣的問題嗎？我們的法制準備好了嗎？</li>
+</ul>
+</blockquote>
+<p><strong>討論題 6：如果行為者改用地端開源模型，整個故事還剩下什麼？</strong></p>
+<blockquote>
+<p>報告在另一案例中自承：帳號執法「中斷了軟體與設計活動，但沒有中斷平台的部署」。</p>
+<ul>
+<li>上游偵測是一個「只在雲端 AI 時代成立」的暫時性優勢嗎？</li>
+<li>開源模型能力持續提升，會讓這種攔截徹底失效嗎？</li>
+<li>如果會，那防守的重心應該移到哪裡？（社群平台端？端點安全？法律？）</li>
+</ul>
+</blockquote>
+<h3 id="103">10.3 實作／桌面演練建議</h3>
+<blockquote>
+<p>⚠️ <strong>全部演練均不涉及任何真實目標、不連線任何 IOC、不建立任何假帳號。</strong></p>
+</blockquote>
+<p><strong>演練 A：證據分層工作坊（60 分鐘，紙筆）</strong><br />
+1. 發下 p.82–84 的原文（去除段落標題）。<br />
+2. 要求學員用三種顏色標記：🟩 Anthropic 一手觀察／🟨 引用第三方／🟥 推測性陳述（含情態動詞）。<br />
+3. 對照答案後，要學員回答：如果你是決策者，看完這份報告，你敢下什麼決定、不敢下什麼決定？<br />
+4. <strong>學習成果</strong>：能在任何情報產品中自動識別證據層級。</p>
+<p><strong>演練 B：分類器紅隊（90 分鐘，桌面）</strong><br />
+1. 分兩組。A 組扮演 AI 供應商的信任與安全團隊，要寫出<strong>三條</strong>偵測規則，抓出「批次人口政治側寫」。<br />
+2. B 組扮演行為者，看到規則後設計<strong>繞過方式</strong>（僅在紙上設計，不實作）。<br />
+3. 兩輪攻防後，全班討論：哪些規則撐得住兩輪？為什麼？<br />
+4. <strong>關鍵引導</strong>：讓學員自己發現——<strong>基於「輸出 schema 語意」的規則比基於「關鍵字」的規則耐打</strong>。</p>
+<p><strong>演練 C：合成帳號模式辨識（45 分鐘）</strong><br />
+1. 教師預先準備 40 個帳號名稱：26 個來自 p.85，14 個由教師自行編造的「無害的真實風格」名稱。<br />
+2. 學員分辨哪些是合成的，統計正確率（通常會很低）。<br />
+3. 揭曉第 6.2.2(a) 的構詞公式，重做一次。<br />
+4. <strong>學習成果</strong>：理解「模式偵測」為何優於「名單比對」。</p>
+<p><strong>演練 D：台灣版語料庫設計與倫理煞車（60 分鐘）</strong><br />
+1. 分組設計「台灣資訊環境的 12 組語料庫」（對應 p.85–86 的結構）。<br />
+2. <strong>強制要求</strong>：每組必須同時寫出「這套語料庫若被濫用，會傷害誰」。<br />
+3. 全班投票：哪一組的設計最有研究價值？哪一組最危險？兩者是同一組嗎？<br />
+4. <strong>學習成果</strong>：親身體驗兩用性。</p>
+<p><strong>演練 E：CTI 寫作練習（作業）</strong><br />
+1. 要求學員把本案改寫成<strong>一頁 A4 的高階主管簡報（executive brief）</strong>。<br />
+2. 硬性規定：必須包含一句明確的「我們不知道什麼」。<br />
+3. 互評標準：信度措辭是否精準、是否有過度宣稱、是否可追溯到頁碼。</p>
+<p><strong>演練 F：公民社會防護桌演（90 分鐘）</strong><br />
+1. 情境：某台灣 NGO 的封閉 Telegram 群組在兩週內湧入 12 名新成員，自我介紹都很合理。<br />
+2. 學員扮演該 NGO 的資安負責人，設計一套<strong>不傷害真實新成員</strong>的查核流程。<br />
+3. 討論：查核流程本身會不會造成社群排他與信任崩壞？這個代價該由誰承擔？</p>
+<h3 id="104">10.4 對台灣的意涵</h3>
+<h4 id="1041">10.4.1 為什麼台灣要在意一個伊朗／波灣的案例</h4>
+<p>三條直接的關聯：</p>
+<ol>
+<li>
+<p><strong>商業監控供應商是跨國產業，沒有地理忠誠。</strong> S2T 的公開足跡橫跨以色列、新加坡、英國、斯里蘭卡，已知或可能的客戶名單包含哥倫比亞軍方（招標接觸）、孟加拉 DGFI（疑似出貨）、印度海軍（展示）。<strong>這條產業鏈沒有任何理由在亞太地區止步。</strong> 台灣的公民團體、記者、以及在台的中國／香港／西藏／維吾爾異議社群，在商業監控供應商眼中，與伊朗僑民社群屬於<strong>同一類可分眾、可側寫、可滲透的目標</strong>。</p>
+</li>
+<li>
+<p><strong>同一份報告已經證明台灣在監控目標清單上。</strong> 本報告 p.89–93 的 <strong>GTG-14020</strong> 案例，記錄了一個中國境內、與中共政府一致的宗教事務情報行動，其目標明確包含 <strong>「台灣基督長老教會的領導階層（the leadership of the Presbyterian Church in Taiwan）」</strong>，並且該行動除了建立卷宗之外，還進行了<strong>宗教場所的場地偵察（venue reconnaissance），包括平面圖、外觀與結構圖</strong>（p.90）。報告另於 p.93 一帶列出目標集包含「台灣的政治人物、勞工與學生運動者」。<strong>本案（GTG-54009）示範的技術方法，與 GTG-14020 針對台灣的實際行動，是同一套方法論。</strong></p>
+</li>
+<li>
+<p><strong>本案的分眾方法論可以被直接移植到台灣。</strong> 第 6.3.3 節的演練不是假設題：一套「都市／宗教／軍公教／青年／僑民／鄉村」的台灣版六類編碼，在技術上與伊朗版沒有任何差別。<strong>唯一需要的只是換一批主題標籤。</strong></p>
+</li>
+</ol>
+<h4 id="1042-socmint">10.4.2 台灣的法制現況：SOCMINT 落在哪些法律的縫隙裡</h4>
+<p>這是本節最需要讓學員弄清楚的部分。<strong>台灣目前沒有任何一部法律直接規範 SOCMINT。</strong> 相關法律的適用界線如下：</p>
+<table>
+<thead>
+<tr>
+<th>法律</th>
+<th>是否適用於本案類型的行為</th>
+<th>界線與缺口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>《通訊保障及監察法》（通保法）</strong></td>
+<td><strong>多半不適用</strong></td>
+<td>通保法保護的是「通訊」的秘密——其核心是對<strong>傳輸中的通訊內容</strong>進行監察。<strong>公開的社群媒體貼文一般不被認為是受通保法保護的「通訊」</strong>，因為發文者對其不具有合理的隱私期待。→ <strong>缺口一：把整個社會的公開貼文拿去做政治側寫，通保法管不到。</strong><br><br>但若行為進一步發展到 Figure 1 的<strong>階段 03</strong>（用假帳號進入封閉群組），情況會改變：封閉群組的訊息具有相當的隱私期待，若由公權力機關以偽裝身分潛入取得，是否構成「監察」，在我國法上<strong>尚無明確定論</strong>。→ <strong>缺口二：假帳號滲透封閉群組，落在灰色地帶。</strong></td>
+</tr>
+<tr>
+<td><strong>《個人資料保護法》（個資法）</strong></td>
+<td><strong>部分適用，但保護力薄弱</strong></td>
+<td>第 19 條允許非公務機關在「當事人自行公開或其他已合法公開之個人資料」「一般可得之來源」等情形下蒐集處理，第 20 條要求利用須在蒐集之特定目的必要範圍內。個資保護委員會籌備處的函釋也強調，即使資料屬已合法公開或一般可得來源，仍須受第 5 條<strong>比例原則</strong>拘束，不得任意使用。<br><br>→ <strong>缺口三：「已公開」這個例外，正好是 SOCMINT 的主戰場。</strong> 把公開貼文拿去推論政治傾向、心理狀態，實質上是<strong>產生新的、當事人從未公開的個人資料</strong>（甚至是個資法第 6 條的特種個資：政治立場雖非明列，但健康、心理狀態相關推論可能觸及）。<strong>現行法對「推論而生的個資」規範幾乎是空白的。</strong><br><br>→ <strong>缺口四：域外適用與執行困難。</strong> 若行為者是境外公司、資料在境外處理，個資法的執行手段有限。</td>
+</tr>
+<tr>
+<td><strong>《科技偵查及保障法》草案</strong>（行政院 2024-05-09 院會通過送立法院）</td>
+<td><strong>規範的是我國偵查機關，不是境外商業行為者</strong></td>
+<td>草案規範偵查機關使用科技方法（GPS 定位追蹤、行動通訊裝置調查、對具合理隱私期待空間的非實體侵入性調查）之聲請、核准、期限、資料保存銷毀與事後通知。<br><br>→ <strong>意義</strong>：它至少會把<strong>我國公權力</strong>使用科技偵查手段納入法律控制與事後通知義務。<br>→ <strong>缺口五</strong>：草案處理的是「我國國家機關對內」，<strong>完全沒有處理「境外商業供應商對台灣人」這一整類威脅</strong>，也沒有處理 SOCMINT 特有的「大規模、非針對特定嫌疑人」的問題。</td>
+</tr>
+<tr>
+<td><strong>《國家安全法》《反滲透法》</strong></td>
+<td>間接相關</td>
+<td>處理的是滲透來源與危害國安行為，<strong>不是資料處理行為本身</strong>。對「一家中立第三國公司把台灣人口分類後賣給第三方」這種行為，適用困難。</td>
+</tr>
+<tr>
+<td><strong>出口管制／投資審查</strong></td>
+<td>幾乎不適用</td>
+<td>台灣沒有針對「網路情報／SOCMINT 產品」的專門進出口或採購限制。<strong>我國政府機關若採購此類產品，目前沒有專門的人權盡職調查（human rights due diligence）要求。</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>結論：台灣對「境外商業監控供應商大規模側寫台灣人口」這件事，目前處於「幾乎沒有法律工具」的狀態。</strong> 通保法管不到公開貼文，個資法的「已公開」例外開得太大且域外執行困難，科技偵查法草案只管我國自己的偵查機關。</p>
+</blockquote>
+<h4 id="1043">10.4.3 政策建議方向（供課堂討論，非定論）</h4>
+<ol>
+<li><strong>在個資法或其後續立法中處理「推論性個資（inferred data）」</strong>。核心問題不是「你蒐集了什麼」，而是「你從公開資料推論出了什麼」。政治傾向、宗教立場、心理健康狀態的<strong>推論結果</strong>，應被視為高敏感個資，不因其來源資料公開而降級。</li>
+<li><strong>建立政府採購的人權盡職調查要求</strong>。我國各級機關若採購 OSINT／WEBINT／輿情分析產品，應要求供應商揭露其客戶國家、人權紀錄、以及產品是否具備假帳號（avatar）功能。<strong>採購清單本身就是一種出口管制。</strong></li>
+<li><strong>釐清「假身分滲透封閉群組」的法律定性</strong>。不論行為者是我國公權力、境外機關或商業公司，這個行為都應有明確的法律評價。</li>
+<li><strong>在科技偵查及保障法立法過程中納入 SOCMINT 條款</strong>，特別是「大規模、非針對特定嫌疑人」的蒐集類型。</li>
+<li><strong>建立跨國鎮壓通報機制</strong>。台灣人權促進會等團體於 2026-02-05 已具體呼籲：建立跨國鎮壓通報及追蹤機制並定期發布案例統計、強化跨部會協作與救濟管道、公開譴責、提升政府與公民社會意識。該團體並明指<strong>台灣目前「尚未有專門針對跨國鎮壓的法律對策、受害者通報機制、降低風險措施，以及相對應的保護與支持系統」</strong>，而高風險社群包含<strong>在台港人與反送中運動者、藏人與維吾爾人等被迫離散群體、人權記者與民間團體工作者</strong>。</li>
+</ol>
+<h4 id="1044">10.4.4 公民社會的防護實務（可立即執行）</h4>
+<p>給台灣 NGO、記者、離散社群的具體建議，<strong>全部對應本案 Figure 1 的某一階段</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>對應階段</th>
+<th>威脅</th>
+<th>防護作法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>01 Monitor</strong></td>
+<td>公開貼文被大規模蒐集</td>
+<td>這階段幾乎無法防守。<strong>務實的作法是「操作安全的發文習慣」</strong>：避免在公開貼文中透露可推論位置的細節（打卡、可辨識地標、通勤規律）；理解「公開＝永久＋可被聚合」</td>
+</tr>
+<tr>
+<td><strong>02 Segment and score</strong></td>
+<td>被推論出政治傾向、心理狀態</td>
+<td>減少「情緒性揭露」與「身分標記」的疊加。特別注意：<strong>心理健康相關的公開發文，在本案中被明確列為一個語料庫</strong>。不是要人不能談，而是要知道這類內容具有特殊的被利用價值</td>
+</tr>
+<tr>
+<td><strong>03 Infiltrate</strong> ★<strong>最關鍵的防守點</strong></td>
+<td>假帳號進入封閉群組、收割成員名單</td>
+<td>★ <strong>這是公民社會唯一能有效防守的環節</strong>：<br>‧ 封閉群組採<strong>推薦制＋雙人背書</strong>，不接受純線上自我介紹入群<br>‧ 新成員入群後設觀察期，限制存取歷史訊息<br>‧ <strong>定期檢視成員名單</strong>（本案的回饋迴圈就是靠成員名單擴張）<br>‧ 群組管理員權限最小化、關閉「任何人可邀請」<br>‧ 對「自我介紹剛好完美符合本群目標受眾原型」的新成員保持健康懷疑</td>
+</tr>
+<tr>
+<td><strong>04 Exploit</strong></td>
+<td>釣魚、惡意程式、裝置入侵</td>
+<td>‧ 高風險者啟用 <strong>Apple 鎖定模式（Lockdown Mode）／Android 進階保護</strong><br>‧ 實體安全金鑰（FIDO2）取代簡訊 OTP<br>‧ 定期更新、避免側載<br>‧ 遇疑似鎖定攻擊，聯繫 Access Now Digital Security Helpline 或 Amnesty Security Lab 等具鑑識能力的機構</td>
+</tr>
+<tr>
+<td><strong>回饋迴圈</strong></td>
+<td>成員名單成為下一輪蒐集種子</td>
+<td><strong>降低「社群圖譜」的外洩面</strong>：群組成員清單不外流、活動報名表不公開、合影照不標記全部參與者</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>給台灣的一句話總結</strong>：本案最該讓台灣公民社會記住的不是 S2T 這家公司，而是 <strong>Figure 1 階段 03 那一格</strong>——因為那是整條監控鏈上，<strong>唯一一個由社群自身的組織慣例（而非政府或平台）決定成敗的環節</strong>。</p>
+</blockquote>
+<hr />
+<h2 id="11">11. 關鍵原文引文（講義用）</h2>
+<blockquote>
+<p>以下引文皆逐字抄錄自 PDF，標註頁碼。中譯為本教材所作。</p>
+</blockquote>
+<p><strong>引文 1｜歸因（p.82）</strong></p>
+<blockquote>
+<p>"Our investigation found that the activity was carried out by, or on behalf of, an entity named 'S2T Unlocking Cyberspace,' which open-source research suggests is an Israeli-Singaporean commercial intelligence vendor."</p>
+<p>我們的調查發現，該活動是由一個名為「S2T Unlocking Cyberspace」的實體所執行，或代表該實體執行；公開來源研究顯示該實體是一家以色列—新加坡的商業情報供應商。</p>
+<p><em>【教學用途】三層降信度措辭的拆解（第 2.2 節）。</em></p>
+</blockquote>
+<p><strong>引文 2｜平台的核心目的（p.82）</strong></p>
+<blockquote>
+<p>"The platform's core purpose was surveillance: it mapped the locations of the social media users, sorted the population into coded demographic groups, and produced Arabic-language intelligence briefings written in the register of a government report."</p>
+<p>該平台的核心目的就是監控：它繪製了社群媒體使用者的位置，把人口分類進編碼過的人口群體，並產出以政府報告語域書寫的阿拉伯語情報簡報。</p>
+<p><em>【教學用途】「sorted the population」——注意受詞是 population（人口）而非 users（使用者）。這個用詞選擇本身就說明了監控的尺度（第 3.1 節）。</em></p>
+</blockquote>
+<p><strong>引文 3｜六類編碼群體（p.83）</strong></p>
+<blockquote>
+<p>"A demographic scheme comprising six groups (urban, clerical, military, youth, diaspora, rural) was used to sort people into categories."</p>
+<p>一套包含六個群體的人口方案（都市、教士、軍事、青年、離散僑民、鄉村）被用來把人分類。</p>
+<p><em>【教學用途】本案最核心的一句。第 3.3 節全節。</em></p>
+</blockquote>
+<p><strong>引文 4｜產出物＝情報＋反制敘事（p.83）</strong></p>
+<blockquote>
+<p>"The final briefings were written in formal Arabic and styled as official government communications, with sentiment scores broken down by Gulf nationality alongside recommended counternarratives."</p>
+<p>最終簡報以正式阿拉伯語書寫、樣式仿照官方政府公文，包含依波灣國籍拆分的情緒分數，以及建議反制敘事。</p>
+<p><em>【教學用途】監控與影響力行動一體化（第 4.5 節）。</em></p>
+</blockquote>
+<p><strong>引文 5｜兩邊都做（p.83）</strong></p>
+<blockquote>
+<p>"These personas were intended to pass as members of different pro- and anti-Iranian-regime populations. This behavior suggests an effort to mass-create fake social media accounts to work both sides of the conflict."</p>
+<p>這些人設被設計來冒充不同的擁伊朗政權與反伊朗政權人口的成員。這個行為顯示，有人試圖大量建立假社群媒體帳號，以便在衝突的兩邊同時操作。</p>
+<p><em>【教學用途】商業供應商販售的是「操作能力本身」，而非任何政治立場（第 4.3 節）。</em></p>
+</blockquote>
+<p><strong>引文 6｜獨立佐證第三方調查（p.82–83）</strong></p>
+<blockquote>
+<p>"Our findings independently corroborate a February 2023 investigation by the journalism network Forbidden Stories; the investigation documented an S2T surveillance product, which the reporters discovered in a company brochure in leaked files from the Colombian military. The capabilities described in that brochure map closely onto the behavior we observed in this operation."</p>
+<p>我們的發現獨立佐證了新聞網絡 Forbidden Stories 於 2023 年 2 月的一項調查；該調查記錄了一項 S2T 的監控產品，記者是在哥倫比亞軍方外洩檔案中的一份公司型錄裡發現它的。該型錄所描述的能力，與我們在這次行動中觀察到的行為高度吻合。</p>
+<p><em>【教學用途】來源獨立性如何提升信度（第 2.5 節）。</em></p>
+</blockquote>
+<p><strong>引文 7｜劃清驗證界線（p.83–84）★ 本教材認為最重要的一句</strong></p>
+<blockquote>
+<p>"The content this actor used Claude to generate might have served as a credibility layer to help targets trust these fake accounts. We were not able to independently confirm the downstream operational stages reported by Forbidden Stories."</p>
+<p>此行為者用 Claude 生成的內容，可能曾作為一層可信度包裝，幫助目標信任這些假帳號。我們無法獨立確認 Forbidden Stories 所報導的下游作業階段。</p>
+<p><em>【教學用途】CTI 寫作紀律的教科書範例（第 2.5、8.3 節）。</em></p>
+</blockquote>
+<p><strong>引文 8｜在 pilot 階段攔下（p.83）</strong></p>
+<blockquote>
+<p>"We identified this activity in its pilot stage, and found no evidence that later stages of S2T's surveillance chain (as described in the Forbidden Stories report) were used against real targets before we banned the account."</p>
+<p>我們在此活動的試營運階段就辨識出它，且未發現任何證據顯示 S2T 監控鏈的後續階段（如 Forbidden Stories 報告所描述者）在我們封禁該帳號之前，曾被用於對付真實目標。</p>
+<p><em>【教學用途】上游偵測的價值與 "found no evidence" 的認識論界線（第 8.3 節）。</em></p>
+</blockquote>
+<p><strong>引文 9｜政策依據與雙重援引（p.84）</strong></p>
+<blockquote>
+<p>"This activity violated our Usage Policy prohibitions on surveillance—including profiling, scoring, and building dossiers on activists, journalists, and political dissidents—as well as our prohibition on coordinated inauthentic behavior."</p>
+<p>此活動違反了我們《使用政策》對監控的禁令——包括對活動人士、記者與政治異議人士進行側寫、評分與建立卷宗——以及我們對協同不實行為的禁令。</p>
+<p><em>【教學用途】政策條文與行為證據的逐項對照（第 8.2 節）；雙重援引證明行動的混種性質（第 4.5.2 節）。</em></p>
+</blockquote>
+<p><strong>引文 10｜Figure 1 圖說（p.84）</strong></p>
+<blockquote>
+<p>"Figure 1. The operation's collection funnel: Claude-driven classification and persona generation, which likely enabled the actor to infiltrate the targeted communities."</p>
+<p>圖 1。該行動的蒐集漏斗：Claude 驅動的分類與人設生成，這很可能使該行為者得以滲透目標社群。</p>
+<p><em>【教學用途】注意 "likely enabled" 的情態降級（第 6.1.6 節）。</em></p>
+</blockquote>
+<p><strong>引文 11｜章節導論的趨勢判斷（p.81）</strong></p>
+<blockquote>
+<p>"Second, AI is being used not only to build tools but to ingest data in bulk to identify targets. In one case, an actor uploaded batches of social media posts and directed Claude to produce structured records that outlined targets' locations, demographic data, and political leanings, along with confidence scores."</p>
+<p>第二，AI 不只被用來打造工具，還被用來大量吞入資料以辨識目標。在一個案例中，一名行為者上傳了成批的社群媒體貼文，並指示 Claude 產出結構化紀錄，勾勒出目標的位置、人口統計資料與政治傾向，並附上信度分數。</p>
+<p><em>【教學用途】本案被 Anthropic 當成全章的趨勢代表案例（第 4.2 節）。</em></p>
+</blockquote>
+<p><strong>引文 12｜章節導論的受害者學觀察（p.82）</strong></p>
+<blockquote>
+<p>"In nearly every case described in this section, the operators were state-aligned organizations that targeted the same diaspora and dissident communities these regimes have historically targeted."</p>
+<p>在本節描述的幾乎每一個案例中，操作者都是與國家一致的組織，且鎖定的正是這些政權歷來鎖定的同一批離散與異議社群。</p>
+<p><em>【教學用途】AI 沒有改變「誰被監控」，只改變了「用多少成本監控」——這正是第 9.2 節 C2 所引述的 Anthropic 說法（AI 讓監控 "cheaper and more efficient"）。也是第 10.4 節台灣意涵的立論基礎。</em></p>
+</blockquote>
+<hr />
+<h2 id="12">12. 未能驗證之處與研究限制</h2>
+<h3 id="121">12.1 報告本身未揭露的資訊</h3>
+<table>
+<thead>
+<tr>
+<th>未揭露項目</th>
+<th>影響</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>操作者的語言、時區、handle、IP、註冊資訊</strong></td>
+<td>無法獨立評估歸因強度；也無法與其他報告交叉比對</td>
+</tr>
+<tr>
+<td><strong>Anthropic 是如何發現這個帳號的</strong>（分類器？人工審查？外部通報？）</td>
+<td>其他平台無法複製此偵測能力</td>
+</tr>
+<tr>
+<td><strong>帳號的實際存續期間</strong></td>
+<td>只知道 Figure 1 的「30 天內 8,904 次 exchanges」與「2026 年 6 月封禁」，不知道帳號何時建立</td>
+</tr>
+<tr>
+<td><strong>具體的規避手法</strong></td>
+<td>導論宣稱「every case」都有規避行為，本案正文未舉證（第 8.5 節）</td>
+</tr>
+<tr>
+<td><strong>229+ 個未揭露的合成帳號</strong></td>
+<td>公開資訊不足以讓一般防守方比對</td>
+</tr>
+<tr>
+<td><strong>「多品牌系統投資組合」的品牌名稱</strong></td>
+<td>無法追蹤這些品牌在市場上的流通</td>
+</tr>
+<tr>
+<td><strong>客戶的具體身分</strong>（哪一個波灣國家？哪一個機關？）</td>
+<td>只知道「likely serving Arabic-language customers in the Gulf region」</td>
+</tr>
+<tr>
+<td><strong>是否有實際的受害個人</strong></td>
+<td>報告只說 pilot stage、no evidence，未說明是否對任何個人產生後果</td>
+</tr>
+<tr>
+<td><strong>緩解措施的具體內容</strong></td>
+<td>"are implementing mitigations" 沒有說明是什麼</td>
+</tr>
+</tbody>
+</table>
+<h3 id="122">12.2 本教材的推論（明確標示為非報告內容）</h3>
+<p>以下內容是本教材的分析，<strong>不是 Anthropic 的主張</strong>，引用時必須標明：</p>
+<ol>
+<li><strong>6.1.5(a) 的貼文數量推估</strong>（22 萬則上界、6.7 萬～13 萬則區間）——報告只給了 8,904 與「約 25」兩個數字。</li>
+<li><strong>6.1.5(b) 關於 Natanz／Fordow 的軍事情報價值評註</strong>——報告只把這兩個地名當成位置推論的範例。</li>
+<li><strong>3.3.3 的「六類 vs 七碼」三種解釋</strong>——報告沒有解釋這個落差。</li>
+<li><strong>2.4 的「法域套利」分析</strong>——報告只說「Israeli-Singaporean」。</li>
+<li><strong>6.2.2(a) 的 handle 構詞公式</strong>——這是本教材對 26 個 handle 的模式分析。</li>
+<li><strong>6.2.2(b) 關於 <code>@AyatollahKhamenei</code> 作為 pilot stage 側面佐證的推論。</strong></li>
+<li><strong>5.3 的框架缺口命名</strong>（LLM-assisted population profiling 等四項）——這是本教材的原創提議，不是任何官方框架的用語。</li>
+<li><strong>8.5 的「解讀 B 更可能」判斷。</strong></li>
+<li><strong>第 7.2 節的偵測價值與壽命評級</strong>——這是本教材的評估。</li>
+</ol>
+<h3 id="123">12.3 第三方驗證的限制</h3>
+<ol>
+<li><strong>本案的核心主張是單一來源</strong>。除 Anthropic 自己的報告外，<strong>沒有任何獨立來源查證「S2T 或代表其者在 2026 年使用 Claude 建構此平台」</strong>。所有中英文報導（第 9.2 節 C 類）均為轉述。</li>
+<li><strong>S2T 從未回應</strong>。Forbidden Stories 2023 年報導時，S2T 未回應採訪請求；本次檢索也未發現 S2T 對 2026 年指控的任何公開回應、否認或法律行動。<strong>這意味著本案只有一方的陳述被記錄在案。</strong></li>
+<li><strong>Citizen Lab 未曾針對 S2T 發表專文</strong>（依本次檢索）。這與 NSO、Intellexa、Cytrox 等被大量鑑識研究覆蓋的供應商形成對比——<strong>S2T 屬於「被報導過但未被技術鑑識過」的供應商</strong>，這使其產品的實際能力難以獨立驗證。</li>
+<li><strong>Surveillance Watch 的 S2T 實體頁未能取得內文</strong>（僅取得標題），列為未完成的查證項目。</li>
+<li><strong>公司註冊地資訊互相矛盾</strong>：CyberDB 登載英國 Slough；Forbidden Stories 寫新加坡／斯里蘭卡／英國／以色列；Anthropic 寫「以色列—新加坡」。<strong>依課程規範以 PDF 原文為準，但此矛盾未能解決。</strong></li>
+<li><strong>C2（Muslim Network TV）引述的 Anthropic 威脅情報負責人說法</strong>（監控變得 "cheaper and more efficient"）<strong>未能核對到一手逐字稿或官方新聞稿</strong>，僅在該二手報導中出現。引用時應標示為未經核實的二手引言。</li>
+<li><strong>ZeroHedge／The Cradle 版本加入了與本案無關的地緣政治敘事</strong>（第 9.2 節 C3），<strong>不建議作為課程引用來源</strong>。</li>
+</ol>
+<h3 id="124-rtl">12.4 RTL 文字抄錄的技術限制</h3>
+<p>p.85–86 的波斯語與阿拉伯語主題標籤，<strong>PDF 文字層的擷取結果是亂序破碎的</strong>。本教材的抄錄是以渲染圖像放大目視判讀所得，並附羅馬轉寫與釋義。</p>
+<p><strong>風險說明</strong>：<br />
+- 目視判讀 RTL 文字在低解析度渲染下仍可能出錯（特別是連字與變音符號）。<br />
+- 部分標籤的釋義（例如 <code>#trust_Khamenei</code> 是反諷還是擁護）<strong>在缺乏原始語境的情況下無法確定</strong>，本教材已在表中標示語意曖昧。<br />
+- 若課程要正式引用這些標籤，<strong>建議另請波斯語／阿拉伯語母語人士複核</strong>。</p>
+<h3 id="125">12.5 頁段界線說明</h3>
+<p>本教材涵蓋 PDF <strong>p.82（案例起始）至 p.86 上半（Hashtags by corpus 表結束，其後轉入 GTG-14010）</strong>，並引用 p.81（章節導論）、p.64（2026 年美以伊戰爭脈絡）、p.89–93（GTG-14020 台灣交叉引用）、p.104 一帶（地端 LLM 失效模式）、p.111 與 p.153（Anthropic 處置方法論）作為必要脈絡。<strong>本頁段內沒有 IOC 表格</strong>（見第 7.1 節）。</p>
+<hr />
+<h2 id="_6">附錄：本案一頁速記卡（可印給學員）</h2>
+<pre><code>GTG-54009  ｜  2026 年 6 月封禁  ｜  PDF p.82–86
+────────────────────────────────────────────────
+行為者    S2T Unlocking Cyberspace（或代表其者）
+          「公開來源研究顯示」為以色列—新加坡商業情報供應商
+          公開足跡：以色列 / 新加坡 / 英國 / 斯里蘭卡
+
+目標      伊朗＋波斯灣＋阿聯「全體人口」；離散僑民；波灣南亞移工
+
+Claude    ① 批次分類（每批約 25 則貼文）→ 人口群體 / 位置 / 政治傾向 + 信度分數
+做了什麼  ② 生成假人設貼文（波斯語 / 阿拉伯語 / 英語 / 德語，兩邊都做）
+          ③ 產出正式阿拉伯語政府公文體簡報 + 情緒分數 + 建議反制敘事
+
+六類編碼  urban 都市 / clerical 教士 / military 軍事
+群體      youth 青年 / diaspora 僑民 / rural 鄉村
+          （但 p.85 表中是 7 個 code，缺 urban，多 UAE 與 GCC）
+
+規模      8,904 exchanges / 30 天（僅見於 Figure 1）
+          255+ 合成帳號（僅揭露 26 個）
+          12 組主題標籤語料庫
+
+漏斗      01 Monitor → 02 Segment and score ┊ 03 Infiltrate → 04 Exploit
+          ├──── Anthropic 看得到 ────┤    ├── 視野之外（依 2023 型錄）──┤
+          回饋：收割名單 → 回灌分類器 → 下一輪掃描
+
+處置      封禁帳號（單數）；援引 surveillance + coordinated inauthentic behavior
+          兩條政策；緩解「正在實施中」；與追蹤 surveillance-for-hire 的夥伴分享指標
+
+信度      「這家公司賣這種產品」= Forbidden Stories 2023 獨立查證 ✅
+          「這家公司 2026 年用 Claude 做這件事」= 單一來源（Anthropic）⚠️
+
+三句話    ①「把人分類」不是描述世界，是製造世界。
+要記住    ②「We found no evidence」不等於「It did not happen」。
+          ③ 公民社會唯一守得住的一格，是 Figure 1 的階段 03。
+</code></pre>
+<hr />
+<p><em>本教材整理日期：2026-09-13。一手來源：Anthropic《Detecting and countering misuse of AI: September 2026》（2026-09-10 發布，154 頁）p.82–86。所有頁碼均指 PDF 印刷頁碼。</em></p>
+<hr />
+<h1 id="pass2026-09-13">技術附錄（第二階段：技術深化 pass，2026-09-13 追加）</h1>
+<blockquote>
+<p><strong>本附錄性質</strong>：這是對前述第 1–12 節的<strong>技術增補</strong>，不取代任何既有內容。前述章節（尤其第 4、5、6、8 節）已完整處理「發生了什麼、報告怎麼寫、圖表怎麼判讀」；本附錄補的是<strong>技術高手要據以理解與防禦所需的實作層細節</strong>——SOCMINT 產線怎麼被搭起來、合成帳號怎麼被辨識、人口分群的 ML 怎麼運作、商業監控產業的技術堆疊長什麼樣，以及<strong>可直接部署的偵測規則</strong>。</p>
+<p><strong>模組界線</strong>：本案屬「03 監控行動」，依共用簡報規範，<strong>補到最完整的防禦性技術深度、無保留</strong>。本附錄所有規則、程式碼、流程皆為<strong>偵測與保護受監控者</strong>之用，不含任何可用於執行監控／攻擊的操作步驟。</p>
+<p><strong>圖表完整性確認</strong>：p.82–86 頁段內的全部視覺元素——Figure 1（p.84 蒐集漏斗）、Synthetic handles by segment 表（p.85）、Hashtags by corpus 表（p.85–86）——已於第 6 節逐一完整判讀（圖片類型、圖上文字、資料流、核心訊息、課堂用法）。本頁段無其他未解說圖表。</p>
+<p><strong>安全紅線重申</strong>：第 6.2.1 的 26 個 handle、第 6.3.1 的主題標籤、s2t.ai 等識別符<strong>僅供研究與規則設計</strong>。不得連線、訂閱、私訊、DNS 查詢或任何互動。本附錄的 WebSearch／WebFetch 只觸及新聞機構（Forbidden Stories 等）與學術預印本，未觸及任何 IOC。</p>
+</blockquote>
+<hr />
+<h2 id="a-socmint">A. SOCMINT 蒐集漏斗的技術實作與偵測</h2>
+<p>本節把第 6.1 節的 Figure 1（漏斗四段）翻譯成<strong>一條可被工程實作的產線</strong>，並在每一層給出<strong>受監控者可用的偵測角度</strong>。核心對照：Figure 1 的視覺隱喻是「漏斗（從多到少）」，但實作上它是一條 <strong>資料湖 → 富化/分類 → 知識圖譜 → 人設生成 → 投放 → 回饋</strong> 的 ETL＋ML 管線。</p>
+<h3 id="a1-mermaid-persona">A.1 產線總覽（Mermaid：資料湖 → 分類器 → persona 生成 → 投放 → 回饋）</h3>
+<pre class="mermaid">flowchart LR
+  subgraph SRC[&quot;公開資料源 (Sources)&quot;]
+    S1[&quot;社群平台 API / 網頁爬取&quot;]
+    S2[&quot;Telegram / 論壇公開頻道&quot;]
+    S3[&quot;外購資料集 / 資料仲介 (data broker)&quot;]
+  end
+  subgraph INGEST[&quot;01 Monitor｜擷取層&quot;]
+    I1[&quot;爬蟲叢集 (headless browser + API 輪替)&quot;]
+    I2[&quot;代理池 (residential / mobile proxy)&quot;]
+    I3[&quot;去重 + 語言偵測 + 正規化&quot;]
+  end
+  DL[(&quot;資料湖 Data Lake&lt;br/&gt;物件儲存 + 全文索引&quot;)]
+  subgraph ENRICH[&quot;02 Segment and score｜富化與分類層&quot;]
+    E1[&quot;NER + 實體解析 (entity resolution)&quot;]
+    E2[&quot;地理定位推論 (geo-inference)&quot;]
+    E3[&quot;LLM 分類器 Claude&lt;br/&gt;zero-shot stance + segment + confidence&quot;]
+    E4[&quot;情緒 / 心理側寫評分&quot;]
+  end
+  KG[(&quot;知識圖譜 Knowledge Graph&lt;br/&gt;人 × 位置 × 立場 × 分眾 × 信度&quot;)]
+  subgraph PERSONA[&quot;人設生成層 (Persona factory)&quot;]
+    P1[&quot;人設規格 (segment, 語言, 陣營)&quot;]
+    P2[&quot;LLM 生成貼文 (fa / ar / en / de)&quot;]
+    P3[&quot;GAN 頭像 + 竊用個資拼裝&quot;]
+  end
+  subgraph DEPLOY[&quot;03 Infiltrate｜投放層&quot;]
+    D1[&quot;255+ avatar 帳號池&quot;]
+    D2[&quot;anti-detect 瀏覽器 + 代理綁定&quot;]
+    D3[&quot;加好友 / 進封閉群組 / 收割名單&quot;]
+  end
+  RPT[&quot;Report｜阿拉伯語政府公文簡報&lt;br/&gt;+ recommended counternarratives&quot;]
+  SRC --&gt; INGEST --&gt; DL --&gt; ENRICH --&gt; KG
+  KG --&gt; PERSONA --&gt; DEPLOY
+  KG --&gt; RPT
+  D3 -. &quot;收割名單回灌 (self-seeding)&quot; .-&gt; ENRICH
+</pre>
+<blockquote>
+<p>對照 Figure 1：<code>INGEST</code>＝階段 01，<code>ENRICH</code>＋<code>KG</code>＝階段 02（<strong>Claude 的變現點</strong>），<code>PERSONA</code>＋<code>DEPLOY</code>＝階段 03（報告視野邊界的另一側），<code>RPT</code>＝正文的政府公文簡報，虛線＝Figure 1 底部的回饋箭頭。<strong>注意 Claude 在圖上只出現在 <code>ENRICH</code> 與 <code>PERSONA</code> 兩個框——這正是為什麼 Anthropic 只看得到漏斗上半（第 8.3 節）。</strong></p>
+</blockquote>
+<h3 id="a2-01-monitor">A.2 階段 01 Monitor：大規模社群爬取的技術實作</h3>
+<p>報告只寫「8,904 exchanges / 30 天」與「每批約 25 則」（第 6.1.4），沒有描述資料<strong>怎麼取得</strong>——因為取得發生在平台外。但要理解防禦，必須知道這一層的典型技術：</p>
+<table>
+<thead>
+<tr>
+<th>元件</th>
+<th>典型技術</th>
+<th>為何監控者需要它</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>爬取</td>
+<td>官方 API（受配額限制）＋ headless browser（Playwright/Puppeteer）＋ 第三方 scraping API</td>
+<td>官方 API 拿不到的公開時間軸、留言串、關注圖</td>
+</tr>
+<tr>
+<td>反封鎖</td>
+<td><strong>residential / mobile proxy 輪替</strong>、User-Agent 池、請求節流</td>
+<td>避免被平台以速率或 IP 特徵封鎖</td>
+</tr>
+<tr>
+<td>資料湖</td>
+<td>物件儲存（S3 相容）＋ 全文索引（Elasticsearch/OpenSearch）＋ 欄位化（Parquet）</td>
+<td>把非結構化貼文變成可查詢語料，供下游批次餵給 LLM</td>
+</tr>
+<tr>
+<td>排程</td>
+<td>以 hashtag／關鍵字語料庫（見第 6.3）為種子的週期性 sweep</td>
+<td>「每輪掃描」對應 Figure 1 回饋箭頭的 next sweep</td>
+</tr>
+</tbody>
+</table>
+<p><strong>這一層對受監控者幾乎無法防守</strong>（資料是公開的、爬取在對方基礎設施上），第 10.4.4 節已給出「操作安全發文習慣」的務實建議。技術上唯一能留下痕跡的是<strong>爬蟲的請求指紋</strong>，但那只有社群平台方看得到。</p>
+<h3 id="a3-02-segment-and-scoreclaude">A.3 階段 02 Segment and score：Claude 驅動的分類管線（技術實作）</h3>
+<p>這是全案唯一 Anthropic 親眼看到的階段（第 4.2 節），也是本附錄第 C 節深挖的重點。實作上，「每批約 25 則貼文 → 回傳 {人口群體, 位置, 政治傾向, 信度}」是一個典型的 <strong>LLM 結構化抽取（structured extraction）＋ zero-shot 分類</strong> 管線：</p>
+<ol>
+<li><strong>批次組裝</strong>：把資料湖裡的 N≈25 則貼文串接成單一 prompt（25 是 context window 吞吐量與輸出穩定度的工程折衷，見第 4.2 節）。</li>
+<li><strong>schema 約束輸出</strong>：要求模型回傳固定 JSON schema（segment enum、city、political_leaning enum、confidence float）。這是 SOCMINT 產品化的關鍵——<strong>固定 schema 讓輸出可直接寫入知識圖譜</strong>。</li>
+<li><strong>zero-shot stance detection</strong>：把「擁政權／反政權」當成 zero-shot 立場偵測任務。學術界已證實 LLM 可在<strong>未見過的主題</strong>上做立場推論（Tweets2Stance 以 NLI 預訓練模型做五值立場；Political DEBATE 提供 zero/few-shot 政治文本分類器），這正是本案「不必為伊朗政治另外標註訓練集」就能運作的技術基礎。</li>
+<li><strong>地理定位推論</strong>：從貼文內容（方言、地標、在地事件、時區）推論 city-level 位置（Figure 1 的 Natanz/Fordow）。這是<strong>推論而非查詢</strong>——第 9.3 節指出的「從『買資料』變成『推論資料』」的技術本體。</li>
+</ol>
+<blockquote>
+<p><strong>偵測（LLM 服務端，Sigma 風格）</strong>：這一層之所以是最佳攔截點（第 8.3.3），是因為它的<strong>輸出 schema 幾乎不出現在正當用途</strong>。第 E 節給出可部署的 Sigma-style／KQL 規則。</p>
+</blockquote>
+<h3 id="a4">A.4 人設生成層：技術管線</h3>
+<p>報告觀察到「以 fa/ar/en/de 生成假人設貼文，兩邊都做」（第 4.3）。實作上，一個 persona factory 需要三個子系統：</p>
+<ul>
+<li><strong>人設規格庫</strong>：每個 persona 綁定 {segment code, 母語, 陣營, 語域, 履歷背景故事}。第 6.2.1 的七個 segment code 就是這個規格庫的鍵。</li>
+<li><strong>內容生成</strong>：LLM 依規格生成符合該 persona 語感的貼文（Claude 在此）。跨語言一致的<strong>主題</strong>、卻各自在地化的<strong>語感</strong>，是本案最強的偵測指紋（第 5.4 節、第 B.3 節）。</li>
+<li><strong>視覺身分</strong>：GAN 生成頭像（thispersondoesnotexist 類）＋ 竊用真實個資拼裝（Graphika 稱 "GAN collage"）。第 B.2 節專論偵測。</li>
+</ul>
+<h3 id="a5">A.5 給受監控者：偵測「異常帳號互動模式」</h3>
+<p>這是 Figure 1 階段 03 落到受監控者身上的接觸面，也是<strong>公民社會唯一守得住的一格</strong>（第 10.4.4 結論）。把「異常互動」拆成可觀測訊號：</p>
+<table>
+<thead>
+<tr>
+<th>異常訊號</th>
+<th>技術描述</th>
+<th>個人／社群可觀測性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>好友請求速度異常</strong></td>
+<td>短期內來自「完美符合本群原型」的新帳號批次加好友</td>
+<td>高（個人可感知）</td>
+</tr>
+<tr>
+<td><strong>入群叢集性</strong></td>
+<td>封閉群組在 1–2 週湧入多名新成員，建立時間相近、handle 構詞同型</td>
+<td>高（管理員可查）</td>
+</tr>
+<tr>
+<td><strong>互惠互動環</strong></td>
+<td>新帳號之間互相按讚/留言（Forbidden Stories：avatar「被程式設定為互相按讚分享」），形成小而密的互動子圖</td>
+<td>中（需圖分析）</td>
+</tr>
+<tr>
+<td><strong>淺歷史深熱情</strong></td>
+<td>帳號歷史短、貼文少，卻對本群核心議題異常積極</td>
+<td>中</td>
+</tr>
+<tr>
+<td><strong>一問就露餡的在地細節</strong></td>
+<td>冒充在地人設，但對在地生活細節（學校、街區、方言俚語）回答含糊</td>
+<td>高（人際互動可測）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>關鍵洞見</strong>：avatar 之間「互相按讚」這個為了製造可信度而設計的行為，反而製造了<strong>一個異常緊密的互動子圖</strong>——這是把「社會工程資產」變成「圖偵測目標」的轉折點，第 B.4 節的叢集偵測正是利用它。</p>
+</blockquote>
+<hr />
+<h2 id="b_1">B. 合成人設帳號的技術辨識</h2>
+<p>本節把第 6.2 節的 26 個 handle 從「人讀的清單」升級成「機器可偵測的模式」，並補上頭像、文本、行為三個維度的技術指紋，最後給出<strong>叢集偵測</strong>的完整方法。核心原則（承第 6.2.2(c)）：<strong>不要拿 26 個 handle 做名單比對（壽命極短），要拿它們背後的「生成規律」做模式偵測（壽命長）。</strong></p>
+<h3 id="b1-handle">B.1 handle 構詞模式的形式化與偵測</h3>
+<p>第 6.2.2(a) 已歸納出構詞公式 <code>handle = [地理標記] + [身分角色標記] (+ 立場標記)</code>。把它形式化成可執行的文法與偵測器：</p>
+<pre><code class="language-python">import re
+
+GEO = {  # 伊朗境內 / 僑居地 / 波灣（可持續擴充）
+    &quot;tehran&quot;,&quot;isfahan&quot;,&quot;shiraz&quot;,&quot;tabriz&quot;,&quot;mashhad&quot;,&quot;qom&quot;,&quot;khorasan&quot;,&quot;natanz&quot;,&quot;fordow&quot;,
+    &quot;la&quot;,&quot;toronto&quot;,&quot;berlin&quot;,&quot;london&quot;,&quot;dubai&quot;,&quot;ajman&quot;,&quot;sharjah&quot;,&quot;riyadh&quot;,&quot;saudi&quot;,&quot;gcc&quot;
+}
+ROLE = {&quot;student&quot;,&quot;kid&quot;,&quot;uni&quot;,&quot;clergy&quot;,&quot;seminary&quot;,&quot;village&quot;,&quot;worker&quot;,&quot;laborforum&quot;,
+        &quot;forum&quot;,&quot;news&quot;,&quot;chat&quot;,&quot;expat&quot;}
+STANCE = {&quot;free&quot;,&quot;opposition&quot;,&quot;exile&quot;,&quot;protest&quot;,&quot;rebel&quot;,&quot;defender&quot;,&quot;watcher&quot;,
+          &quot;threat&quot;,&quot;alert&quot;,&quot;eye&quot;,&quot;rebel&quot;,&quot;watch&quot;}
+
+def tokenize(handle: str):
+    s = handle.lstrip(&quot;@&quot;)
+    s = re.sub(r&quot;(?&lt;=[a-z])(?=[A-Z])&quot;, &quot; &quot;, s)      # 拆 camelCase
+    return [t.lower() for t in re.split(r&quot;[_\s\d]+&quot;, s) if t]
+
+def morpho_flags(handle: str):
+    toks = set(tokenize(handle))
+    return {&quot;geo&quot;: bool(toks &amp; GEO),
+            &quot;role&quot;: bool(toks &amp; ROLE),
+            &quot;stance&quot;: bool(toks &amp; STANCE)}
+
+def is_persona_pattern(handle: str) -&gt; bool:
+    f = morpho_flags(handle)
+    # [地名] 為必要，且至少再命中 [角色] 或 [立場]
+    return f[&quot;geo&quot;] and (f[&quot;role&quot;] or f[&quot;stance&quot;])
+</code></pre>
+<p>以 p.85 的 26 個 handle 回測，命中率極高（如 <code>@tehran_uni_student</code>：geo+role；<code>@BerlinIranFree</code>：geo+stance；<code>@SaudiShiaWatcher</code>：geo+stance）。<strong>這個偵測器的價值不在抓這 26 個，而在抓「用同一套生成規律造出的下一批 229+」。</strong> 誤報控制見第 B.4 的叢集門檻。</p>
+<h3 id="b2-ai">B.2 AI 生成頭像的技術偵測</h3>
+<p>合成人設的視覺身分多用 GAN 臉（StyleGAN 系）。學界已有數種<strong>可直接實作</strong>的偵測法，依可靠度與成本排列：</p>
+<p><strong>(a) 眼睛定位法（GANEyeDistance）——最便宜、對 StyleGAN 對齊臉近乎滿分</strong></p>
+<p>StyleGAN 因為訓練時臉部對齊，<strong>會把眼睛固定放在幾乎相同的像素位置</strong>。把偵測到的眼睛歸一化座標與「GAN 期望位置」比距離即可：</p>
+<pre><code class="language-python">import face_recognition, numpy as np
+
+# 期望眼睛中心（歸一化座標；實務上應以一批已知 GAN 臉統計得出，此為示意錨點）
+EXP_LEFT  = np.array([0.373, 0.480])
+EXP_RIGHT = np.array([0.627, 0.480])
+
+def gan_eye_distance(path: str):
+    img = face_recognition.load_image_file(path)
+    h, w = img.shape[:2]
+    lms = face_recognition.face_landmarks(img)
+    if not lms:
+        return None
+    le = np.mean(lms[0][&quot;left_eye&quot;],  axis=0) / np.array([w, h])
+    re_ = np.mean(lms[0][&quot;right_eye&quot;], axis=0) / np.array([w, h])
+    # 論文以 2*sqrt(2) 正規化（單位正方形內雙眼最大可能距離）
+    return (np.linalg.norm(le - EXP_LEFT) + np.linalg.norm(re_ - EXP_RIGHT)) / (2*np.sqrt(2))
+
+# 判定：距離 &lt; 0.02 → 高度疑似 GAN
+</code></pre>
+<p>依 Yang 等人（arXiv:2401.02627）實測，門檻 <strong>0.02</strong> 在 AcademicGAN 取得 <strong>100% recall</strong>、TwitterGAN <strong>99.5%</strong>；且 <code>face_recognition</code> 對 GAN 臉的臉部偵測成功率 99%+，對隨機真人頭像僅約 35.7%（真人頭像姿態/裁切變異大），這個差異本身也是弱訊號。</p>
+<p><strong>(b) 配件與邊緣瑕疵（人工複核用）</strong>：GAN「難以生成逼真的帽子、眼鏡、耳朵」，耳環/項鍊常不對稱、衣領/牙齒/背景常有破綻。該研究人工標註發現 <strong>60.1% 的 TwitterGAN 頭像有明顯瑕疵</strong>（Cohen's Kappa=0.90，標註者高度一致）。</p>
+<p><strong>(c) 頻域指紋（對抗新模型較穩健）</strong>：GAN 上採樣（up-sampling）在頻譜留下人眼看不見的規律性偽影；以 2D-FFT／DCT 取頻譜、餵 ResNet 類分類器可偵測（Fourier-based GAN fingerprint, arXiv:2510.19840）。StyleGAN2 偽影較少但仍可區分。</p>
+<p><strong>(d) 瞳孔幾何（強假設下有效）</strong>：真人雙眼角膜反光應一致、瞳孔應為規則橢圓；GAN 常出現<strong>不規則瞳孔形狀</strong>與左右反光不一致（"Eyes Tell All", arXiv:2109.00162）。限制：需正面、高解析、瞳孔清晰。</p>
+<blockquote>
+<p><strong>實務組合</strong>：頭像偵測<strong>單獨不可作為封鎖依據</strong>（會誤傷用 AI 頭貼的真人、也漏掉「GAN collage」拼貼）。正確用法是把它當<strong>多訊號融合中的一票</strong>（第 B.4）。Graphika 的 "Portrait Mode" 報告即指出：GAN 拼貼比純 GAN 臉更難偵測，需分析師先判斷「值得查」再逐塊拆解。</p>
+</blockquote>
+<h3 id="b3-digital-dna-lcs">B.3 行為指紋：Digital DNA 與 LCS 群體偵測</h3>
+<p>真正抗規避的不是頭像或名字（都可改），而是<strong>行為序列</strong>。Cresci 等人的 <strong>Digital DNA</strong>（arXiv:1602.00110、1703.04482）把帳號行為編碼成字串，再用<strong>最長共同子字串（LCS）</strong>揭露機器化的一致性：</p>
+<pre><code class="language-python"># 兩種編碼（可擇一或串接）
+# Tweet Type   : A=原創, T=回覆, C=轉推
+# Tweet Content: A=含URL, T=含hashtag, C=含mention, G=含媒體, X=混合, N=皆無
+def encode_type(actions):
+    m = {&quot;tweet&quot;:&quot;A&quot;, &quot;reply&quot;:&quot;T&quot;, &quot;retweet&quot;:&quot;C&quot;}
+    return &quot;&quot;.join(m[a] for a in actions)
+
+def lcs_len(a: str, b: str) -&gt; int:      # 標準 DP 最長共同「子字串」
+    prev = [0]*(len(b)+1); best = 0
+    for i in range(len(a)):
+        cur = [0]*(len(b)+1)
+        for j in range(len(b)):
+            if a[i] == b[j]:
+                cur[j+1] = prev[j] + 1
+                best = max(best, cur[j+1])
+        prev = cur
+    return best
+</code></pre>
+<p><strong>判讀曲線</strong>：對 k 個帳號求兩兩 LCS，畫「LCS 長度 vs k」曲線——</p>
+<ul>
+<li><strong>合成帳號叢集</strong>：即使 k 變大，LCS 仍<strong>維持相當長</strong>（程式化行為高度一致），到 k 接近群體規模時才驟降。</li>
+<li><strong>真人</strong>：LCS 隨 k <strong>指數衰減</strong>，很快降到極小值（人的行為多樣）。</li>
+<li><strong>切群</strong>：對曲線取一階導數找「陡降點」，即為分離「同構叢集 vs 其餘」的切點。</li>
+</ul>
+<p>本案的 avatar 由同一套 persona factory 產生、行為受同一套腳本驅動（互相按讚、同節奏發文），在 Digital DNA 上會呈現<strong>異常長的共同子字串</strong>——這是名字與頭像都改了也甩不掉的指紋。</p>
+<h3 id="b4">B.4 合成帳號叢集偵測的技術方法（多訊號融合 + 圖分群）</h3>
+<p>把 B.1–B.3 的訊號，加上帳號詮釋資料與時間同步，融合成一條<strong>協同不實叢集（CIB cluster）</strong>偵測管線。這是本節要交付的「一個偵測合成帳號叢集的技術方法」：</p>
+<pre class="mermaid">flowchart TD
+  A[&quot;輸入：候選帳號集&quot;] --&gt; B1[&quot;訊號① 詮釋資料&lt;br/&gt;建立時間叢集 / follower ratio / handle 構詞 (B.1)&quot;]
+  A --&gt; B2[&quot;訊號② 頭像&lt;br/&gt;GANEyeDistance / 配件瑕疵 / 頻域 (B.2)&quot;]
+  A --&gt; B3[&quot;訊號③ 文本&lt;br/&gt;stylometry + 跨語言主題一致 + LLM 生成偵測&quot;]
+  A --&gt; B4[&quot;訊號④ 行為序列&lt;br/&gt;Digital DNA + LCS (B.3)&quot;]
+  A --&gt; B5[&quot;訊號⑤ 時間同步&lt;br/&gt;發文間隔 0h 峰值 / co-activity&quot;]
+  B1 --&gt; C[&quot;特徵彙整 (per-account 向量)&quot;]
+  B2 --&gt; C
+  B3 --&gt; C
+  B4 --&gt; C
+  B5 --&gt; C
+  C --&gt; D[&quot;建立帳號相似度圖&lt;br/&gt;邊 = 共同行動 / 互惠互動 / 內容相似&quot;]
+  D --&gt; E[&quot;社群偵測 Leiden (多切片模組度)&quot;]
+  E --&gt; F{&quot;叢集內相似度&lt;br/&gt;遠高於隨機基線?&quot;}
+  F -- 是 --&gt; G[&quot;標記為 CIB 叢集&lt;br/&gt;人工複核 → 分享指標給夥伴&quot;]
+  F -- 否 --&gt; H[&quot;保留觀察 / 內容降權&quot;]
+</pre>
+<p><strong>技術要點</strong>：</p>
+<ul>
+<li><strong>相似度圖的邊</strong>：可用「共同轉推同一則」「幾乎同時發文（co-activity）」「內容 n-gram 相似」「互惠按讚」建邊。文獻常用作法是<strong>先建圖再對圖或其 embedding 分群</strong>。</li>
+<li><strong>分群演算法</strong>：<strong>Leiden</strong>（多切片加權模組度）能找出「內部連結強、對外連結弱」的帳號叢集（見 arXiv:2512.19677 對 temporal/multiplex/collaborative 分析的整理）。</li>
+<li><strong>時間同步是最硬的訊號</strong>：協同帳號的「發文時間間隔」在 <strong>0 小時附近有陡峰</strong>、且集中在特定時段；真人分布寬得多。VigDet（arXiv:2110.15454）用「知識導引的時間點過程」把這種同步性建進神經模型。</li>
+<li><strong>判定用相對基線</strong>：不要用絕對門檻，要問「這個叢集的內部一致性，比隨機抽同樣多帳號高多少個標準差」。這能把「真的有共同興趣的社群」與「被同一腳本驅動的 avatar 群」分開。</li>
+</ul>
+<blockquote>
+<p><strong>對應本案</strong>：報告說已「與追蹤 surveillance-for-hire 的夥伴分享指標」（第 8.1）。上述管線輸出的「叢集＋其構詞規律＋行為指紋」，正是比「26 個死 handle」更有分享價值的<strong>行為層指標</strong>（承第 7.2 節「壽命長」論點）。</p>
+</blockquote>
+<hr />
+<h2 id="c">C. 「六類編碼群體」的分群技術與政治批判</h2>
+<p>本節把第 3.3 節的政治批判<strong>扣回 ML 技術本身</strong>：不是空泛地說「分類是權力」，而是指出<strong>這套技術在方法論上為什麼必然不可靠、而其不可靠又如何精確地轉化為對人的傷害</strong>。</p>
+<h3 id="c1-ml">C.1 監控平台怎麼用 ML 把人口分類（技術實作）</h3>
+<p>把「都市/教士/軍事/青年/僑民/鄉村」六類（第 3.3.1）落成 ML，有三條典型技術路線，本案（pilot、無標註訓練集）最可能走第一條：</p>
+<pre class="mermaid">flowchart TB
+  IN[&quot;原始貼文批次 (約25則/批)&quot;] --&gt; FE1 &amp; FE2 &amp; FE3 &amp; FE4
+  FE1[&quot;特徵① 文本 embedding (多語)&quot;] --&gt; MODEL
+  FE2[&quot;特徵② n-gram / hashtag / 關鍵字&quot;] --&gt; MODEL
+  FE3[&quot;特徵③ 網路特徵 (追蹤/互動圖)&quot;] --&gt; MODEL
+  FE4[&quot;特徵④ 中繼資料 (語言/時區/位置線索)&quot;] --&gt; MODEL
+  MODEL{&quot;分類/分群模型&quot;} --&gt; OUT[&quot;輸出: segment + 位置 + 政治立場 + confidence&quot;]
+  OUT --&gt; KG[(&quot;卷宗資料庫 dossier DB&quot;)]
+  OUT -. &quot;無 ground truth → 校準無法驗證&quot; .-&gt; CR1[&quot;政治批判① 校準謊言&quot;]
+  FE2 -. &quot;代理特徵重建敏感屬性&quot; .-&gt; CR2[&quot;政治批判② proxy discrimination&quot;]
+  KG -. &quot;名單回灌下一輪掃描&quot; .-&gt; CR3[&quot;政治批判③ 自我實現迴圈&quot;]
+</pre>
+<table>
+<thead>
+<tr>
+<th>路線</th>
+<th>技術</th>
+<th>本案適配度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A. zero-shot LLM 分類</strong></td>
+<td>直接 prompt Claude：「把這位使用者歸入 {urban, clerical, ...} 並給信度」</td>
+<td>★ 最可能。無需標註、跨語言、立即上線（第 A.3）</td>
+</tr>
+<tr>
+<td><strong>B. 監督式分類器</strong></td>
+<td>標一批訓練資料，微調多語 transformer（如 XLM-R）</td>
+<td>需要標註成本，pilot 階段較不划算</td>
+</tr>
+<tr>
+<td><strong>C. 非監督分群</strong></td>
+<td>對 embedding 跑 HDBSCAN/k-means，事後貼標籤</td>
+<td>用於「發現新分眾」，但六類是<strong>預先給定</strong>的，故非主路線</td>
+</tr>
+</tbody>
+</table>
+<p><strong>特徵工程的關鍵陷阱</strong>：六類的判別特徵（追蹤了哪些帳號、用哪些 hashtag、貼文語域、書寫系統——見第 6.3.2(c) 波斯語羅馬轉寫 vs 原文）<strong>全都是行為代理特徵，不是自陳屬性</strong>。沒有人在推特上填「我是巴斯基民兵」；模型是<strong>從弱代理特徵拼出強推論</strong>。這直接引出下面三項批判。</p>
+<h3 id="c2">C.2 三項技術批判（每項都是可驗證的方法論缺陷）</h3>
+<p><strong>批判① 沒有 ground truth，「信度分數」是校準謊言。</strong><br />
+本案輸出「每項發現附信度評分」（第 4.2(2)）。但「這個人<strong>真的</strong>是反政府青年嗎」這件事<strong>沒有真值標籤</strong>——沒有人能去問伊朗的每個推特帳號本人。沒有真值，就<strong>無法計算校準誤差（Expected Calibration Error）</strong>，於是「confidence=0.87」只是模型輸出的<strong>流暢度假象</strong>，不是「87% 會答對」的機率保證。LLM 立場偵測的實證研究（PLOS One 2025、Springer ML 2024）反覆顯示：準確率<strong>隨主題、prompt、模型劇烈波動</strong>。<strong>一個無法被驗證的信度分數，其唯一功能是讓政治猜測「看起來像情報產品」</strong>（呼應第 4.2 節）。</p>
+<p><strong>批判② 代理歧視（proxy discrimination）：分類器在洗白敏感屬性。</strong><br />
+即使不把「宗教、政治、族裔」當輸入欄位，ML 也能用 hashtag、關注圖、語域這些<strong>代理變數</strong>把它們重建出來——「機器學習能把敏感屬性的多個弱指標，組合成一個強指標」（proxy variables 文獻；Mehrabi 等 2019 的 bias/fairness survey）。所以「clerical/military」標籤本質上是<strong>用無害訊號反推受保護屬性</strong>，這在任何反歧視法框架下都是規避手段。<strong>技術中立性在這裡是幻覺：省略敏感欄位不會讓系統變公平，只會讓歧視變得無法被審計。</strong></p>
+<p><strong>批判③ 自我實現的回饋迴圈（performative feedback loop）。</strong><br />
+Figure 1 的回饋箭頭（收割名單回灌分類器，第 4.5.3）在 ML 上是一個<strong>取樣回饋迴圈（sampling feedback loop）</strong>：第一輪把某人標成「反對者」→ 據此把 avatar 派去接觸他→ 收割到他的聯絡人→ 這些聯絡人成為下一輪的種子。於是<strong>分類結果改變了下一輪的資料分布</strong>，而不是被動描述世界（performative prediction，arXiv:2601.04447；feedback loops，AISel JAIS 2024）。後果有二：(a) 第一輪的偏誤會被<strong>放大而非自我修正</strong>；(b) 把一個人標為「opponent」這件事本身，會<strong>促成使他成為 opponent 的後續行動</strong>（被監控、被騷擾）——標籤製造了它宣稱在描述的現實。</p>
+<p><strong>批判④（規模層）基率謬誤：population-scale 掃描必然淹沒在假陽性裡。</strong><br />
+承第 3.3.2「假陽性=人生風險」：在「全體人口」尺度上（第 6.1.5 推估 6.7 萬～13 萬則貼文），即使分類器有 99% 精確率，掃描數百萬人時，<strong>絕對假陽性數仍是天文數字</strong>。當被監控的目標屬性（如「危險異議者」）在人口中是稀有事件，貝氏基率使得「被標記者實際為真陽性」的後驗機率可能低得驚人。<strong>這是對一切大規模預測式監控的硬性數學反駁：準確率再高，乘上人口基數與稀有基率，產出的仍是大量被錯誤標記、卻要承擔真實後果的人。</strong></p>
+<blockquote>
+<p><strong>收束</strong>：第 3.3 節說「分類把政治判斷偽裝成技術判斷」。本節給出這句話的技術證明——<strong>這套技術的每一個環節（無真值的信度、代理特徵、回饋迴圈、基率謬誤）都不是實作瑕疵，而是方法論上不可修復的結構。</strong> 把它做得更「準」不會解決問題，只會讓偽裝更完美。</p>
+</blockquote>
+<hr />
+<h2 id="d-s2t">D. 商業間諜軟體產業的技術供應鏈（S2T 型錄對照）</h2>
+<p>本節以 Forbidden Stories 揭露的 S2T 型錄（經本次 WebFetch 取得更完整技術細節）為錨，勾勒 <strong>SOCMINT 平台的典型技術堆疊</strong>，並補上第 2.4 節「法域套利」的技術供應鏈視角。</p>
+<h3 id="d1-socmint">D.1 SOCMINT 平台的典型技術堆疊</h3>
+<table>
+<thead>
+<tr>
+<th>層</th>
+<th>功能</th>
+<th>典型技術</th>
+<th>對應 S2T 型錄／本案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>擷取 Ingestion</strong></td>
+<td>多源蒐集</td>
+<td>爬蟲、API 輪替、residential/mobile proxy、資料仲介外購</td>
+<td>型錄：「行動 App 資料 + 地理定位 + 住房登記」</td>
+</tr>
+<tr>
+<td><strong>儲存 Storage</strong></td>
+<td>資料湖</td>
+<td>物件儲存 + Elasticsearch/OpenSearch + Parquet</td>
+<td>本案階段 01 資料湖</td>
+</tr>
+<tr>
+<td><strong>富化 Enrichment</strong></td>
+<td>實體化</td>
+<td>NER、實體解析、共指消解、知識圖譜（Neo4j 類）、地理定位推論</td>
+<td>型錄：facial recognition + NLP；本案：city-level 推論</td>
+</tr>
+<tr>
+<td><strong>分析 Analytics</strong></td>
+<td>分類/評分</td>
+<td>zero-shot LLM 分類、情緒/立場、心理側寫、分群</td>
+<td>★ 本案 Claude 的位置（階段 02）</td>
+</tr>
+<tr>
+<td><strong>人設作業 Persona Ops</strong></td>
+<td>假身分</td>
+<td>GAN 頭像、LLM 內容生成、anti-detect 瀏覽器、proxy 綁定、帳號農場</td>
+<td>型錄：「avatar」；本案：255+ 合成帳號</td>
+</tr>
+<tr>
+<td><strong>交付 Delivery</strong></td>
+<td>客戶介面</td>
+<td>儀表板、報告產生器、告警</td>
+<td>型錄：「Deep Fusion」使用者面板；本案：政府公文簡報</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>關鍵技術轉變（AI 帶來的）</strong>：傳統 SOCMINT 的「分析層」需要<strong>大量分析師人力</strong>與<strong>購買資料</strong>；本案示範了 LLM 把分析層變成 <strong>API 呼叫</strong>、把「買資料」變成「<strong>推論資料</strong>」（第 9.3 節）。這就是報告全章導論「AI 被用來取代工程人力」的產業供應鏈意涵——<strong>AI 不是新增一層，而是替換掉最貴的一層（人）。</strong></p>
+</blockquote>
+<h3 id="d2-avatar-forbidden-stories">D.2 avatar 投放基礎設施（Forbidden Stories 型錄技術細節）</h3>
+<p>本次 WebFetch 從 Forbidden Stories 取得的型錄技術細節（比第 9.2 節 A1 更細）：avatar「藏在<strong>複雜的代理網路</strong>後，讓社群平台幾乎無法偵測」、被「程式設定為<strong>互相按讚、分享、留言</strong>」、透過索取 WhatsApp 號碼/邀入群組/誘點連結建立接觸，連結一經點擊「你的裝置就成了虛擬間諜機器」、可<strong>即時啟動攝影機</strong>。工作流：<code>已知活動人士資料庫 → 辨識調查目標 → avatar 滲透封閉群組/私訊 → 自動化釣魚遠端植入惡意程式 → 攝影機啟動與資料外洩 → 假帳號放大訊息（影響力）</code>。型錄自稱 <strong>"We can reach nearly every smartphone user"</strong>。</p>
+<pre class="mermaid">flowchart LR
+  OP[&quot;操作者 (operator console / Deep Fusion 面板)&quot;] --&gt; ADB[&quot;anti-detect 瀏覽器&lt;br/&gt;(每 avatar 獨立瀏覽器指紋)&quot;]
+  ADB --&gt; PROXY[&quot;代理層&lt;br/&gt;residential / mobile IP 輪替&quot;]
+  PROXY --&gt; A1[&quot;avatar #1&quot;]
+  PROXY --&gt; A2[&quot;avatar #2&quot;]
+  PROXY --&gt; An[&quot;avatar #N (255+)&quot;]
+  A1 &amp; A2 &amp; An --&gt; SM[&quot;目標社群平台&lt;br/&gt;WhatsApp / Telegram / X&quot;]
+  A1 &lt;-. &quot;互相按讚/留言 (製造可信度)&quot; .-&gt; A2
+  A2 &lt;-. &quot;互相按讚/留言&quot; .-&gt; An
+</pre>
+<blockquote>
+<p><strong>防禦轉折點</strong>：型錄設計 avatar 互相按讚是為了<strong>製造可信度</strong>；但這恰恰在圖上留下「異常緊密互惠子圖」，成為第 B.4 叢集偵測的最佳切入訊號。<strong>攻方的可信度工程，就是守方的偵測特徵。</strong></p>
+</blockquote>
+<h3 id="d3-24">D.3 技術供應鏈的法域切割（承第 2.4 節）</h3>
+<pre class="mermaid">flowchart TB
+  subgraph J_IL[&quot;以色列 (研發 / 人才)&quot;]
+    T1[&quot;核心引擎研發&lt;br/&gt;ML / NLP / avatar 自動化&quot;]
+  end
+  subgraph J_SGUK[&quot;新加坡 / 英國 (出口與商務主體)&quot;]
+    T2[&quot;公司登記 / 出口合約&lt;br/&gt;多品牌外殼 (multi-branded)&quot;]
+  end
+  subgraph J_3RD[&quot;第三地 (斯里蘭卡等, 交付/支援)&quot;]
+    T3[&quot;部署 / 客服 / 資料處理&quot;]
+  end
+  LLM[&quot;美國 AI 供應商模型能力&lt;br/&gt;(本案的新變數)&quot;] -. API .-&gt; T1
+  T1 --&gt; T2 --&gt; T3 --&gt; RES[&quot;區域經銷商 (reseller)&quot;] --&gt; CUST[&quot;波灣政府客戶&quot;]
+  CUST --&gt; TGT[&quot;監控對象：伊朗人口 + 波灣南亞移工&quot;]
+</pre>
+<p><strong>供應鏈的偵測與問責槓桿點</strong>（技術與治理交界）：</p>
+<table>
+<thead>
+<tr>
+<th>環節</th>
+<th>可施力的槓桿</th>
+<th>限制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>研發（IL）</td>
+<td>以色列 DECA 出口管制（第 9.2 節 D5）</td>
+<td>若出口主體在 SG/UK 則管轄旁落</td>
+</tr>
+<tr>
+<td>模型能力（US AI 商）</td>
+<td>★ <strong>上游偵測 + 帳號封禁 + 指標分享</strong>（本案 Anthropic 的位置）</td>
+<td>地端開源模型可完全繞過（第 8.3.4）</td>
+</tr>
+<tr>
+<td>出口主體（SG/UK）</td>
+<td>商務登記透明化、多品牌外殼追蹤</td>
+<td>多品牌設計即為規避追蹤</td>
+</tr>
+<tr>
+<td>經銷商</td>
+<td>政府採購人權盡職調查（第 10.4.3 建議 2）</td>
+<td>台灣目前無此要求</td>
+</tr>
+<tr>
+<td>客戶（波灣政府）</td>
+<td>國際規範、揭露</td>
+<td>主權管轄外，施力最弱</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>技術結論</strong>：這條鏈上，<strong>唯一具備「跨法域、跨環節可見性」的節點，是提供模型能力的 AI 供應商</strong>——因為研發、分類、人設生成都可能經過它的 API。這在技術上解釋了為什麼「上游偵測」在 AI 時代成為新的問責支點（第 8.3.3），也解釋了它為何脆弱（地端模型一旦成熟即失效，第 8.3.4）。</p>
+</blockquote>
+<hr />
+<h2 id="e">E. 可部署偵測規則彙整（防禦用）</h2>
+<p>以下規則對應第 5.4 節的偵測假說，供不同防守方<strong>直接改寫部署</strong>。所有規則皆為<strong>偵測</strong>用途，且<strong>必須搭配人工複核</strong>（見各規則 falsepositives）。</p>
+<h3 id="e1-llm-sigma">E.1 LLM 服務端：批次人口側寫偵測（Sigma 風格）</h3>
+<pre><code class="language-yaml">title: LLM-assisted bulk population profiling (SOCMINT indicator)
+id: 5t2c-54009-a1
+status: experimental
+description: 單一主體反覆提交「固定大小的第三方 UGC 批次」，要求輸出「人口分類+位置+政治傾向+信度」結構化欄位
+logsource:
+  product: llm_api
+  service: completions
+detection:
+  schema_intent:
+    prompt|contains|all:
+      - 'demographic'
+      - 'location'
+      - 'political'
+      - 'confidence'
+  ugc_batch:
+    prompt|re: '(?is)(post\s*\d+\s*[:\-\.].{20,}){10,}'   # 多則第三方貼文串接
+  timeframe: 30d
+  condition: (schema_intent and ugc_batch) | count(request_id) by principal_id &gt; 50
+fields: [principal_id, request_id, output_schema_hash]
+falsepositives:
+  - 具 IRB 的學術社群媒體研究（通常輸出彙總、非個人層級卷宗）
+  - 品牌輿情分析（通常無「政治傾向」個人欄位）
+level: high
+</code></pre>
+<p><strong>區辨關鍵</strong>（承第 5.4）：正當用途極少同時要求 <strong>政治傾向 + 個人層級輸出 + 信度</strong>三者。單看「情緒分析」誤報高；三者合取誤報低。</p>
+<h3 id="e2-llm">E.2 LLM 服務端：「兩邊都做」人設生成偵測（最強指紋）</h3>
+<p>概念規則（跨工作階段關聯）：同一 <code>principal_id</code> 在時間窗內，既生成 <strong>pro-X</strong> 又生成 <strong>anti-X</strong> 的多語言人設內容 → 標記。這是第 4.3 節 "work both sides" 的可操作化，正當用途幾乎不需要同時扮演衝突雙方（第 5.4 表「假陽性風險：低」）。</p>
+<pre><code>principal 於 T 窗內：
+  count(distinct stance_label in {pro_regime, anti_regime}) == 2
+  AND count(distinct target_language) &gt;= 3
+  AND intent == persona_post_generation
+  → 高信度 CIB 前兆
+</code></pre>
+<h3 id="e3-kql">E.3 平台側：合成帳號構詞叢集初篩（KQL）</h3>
+<pre><code class="language-kql">// 平台側：以「同日建立 + 同構詞模式」初篩合成人設叢集
+let geo = dynamic([&quot;tehran&quot;,&quot;isfahan&quot;,&quot;shiraz&quot;,&quot;tabriz&quot;,&quot;mashhad&quot;,&quot;qom&quot;,&quot;khorasan&quot;,
+                   &quot;dubai&quot;,&quot;ajman&quot;,&quot;sharjah&quot;,&quot;riyadh&quot;,&quot;berlin&quot;,&quot;london&quot;,&quot;toronto&quot;,&quot;la&quot;]);
+let role = dynamic([&quot;student&quot;,&quot;kid&quot;,&quot;clergy&quot;,&quot;seminary&quot;,&quot;village&quot;,&quot;worker&quot;,
+                    &quot;forum&quot;,&quot;news&quot;,&quot;opposition&quot;,&quot;exile&quot;,&quot;protest&quot;,&quot;rebel&quot;,
+                    &quot;defender&quot;,&quot;watcher&quot;,&quot;threatalert&quot;]);
+Accounts
+| extend h = tolower(handle)
+| extend toks = extract_all(@&quot;([a-z]+)&quot;, h)
+| extend geoHit  = set_intersect(geo,  toks)
+| extend roleHit = set_intersect(role, toks)
+| where array_length(geoHit) &gt;= 1 and array_length(roleHit) &gt;= 1
+| extend createDay = bin(created_utc, 1d)
+| summarize accts = make_set(handle, 50), n = count()
+    by createDay, geoPat = tostring(geoHit), rolePat = tostring(roleHit)
+| where n &gt;= 3            // 同日、同構詞叢集：至少 3 個才進人工複核
+| order by n desc
+</code></pre>
+<blockquote>
+<p>這只是<strong>初篩</strong>（第一票）。命中後應接第 B.4 的多訊號融合（頭像、Digital DNA、時間同步）再判定，避免誤傷真實的在地帳號。</p>
+</blockquote>
+<h3 id="e4-gan-python-b2">E.4 帳號層：GAN 頭像批次篩檢（Python，見 B.2 完整版）</h3>
+<p>對候選叢集的頭像跑 <code>gan_eye_distance() &lt; 0.02</code> 初篩，再以配件瑕疵人工複核、頻域分類器交叉驗證。<strong>三法皆命中才計為「頭像為合成」這一票。</strong></p>
+<h3 id="e5-digital-dna-python-b3">E.5 行為層：Digital DNA 群體一致性（Python，見 B.3 完整版）</h3>
+<p>對候選叢集計算兩兩 <code>lcs_len()</code>，若叢集內 LCS 顯著長於「隨機同規模帳號組」的基線（如 &gt; 均值 + 3σ）→ 計為「行為同構」這一票。</p>
+<blockquote>
+<p><strong>融合判定原則</strong>：構詞、頭像、文本、行為序列、時間同步——<strong>五票中命中 ≥3 票才進入處置流程</strong>。單票偵測必然高誤報，這是保護「真實異議帳號不被誤殺」的必要設計（第 5.4 節公民社會端「誤傷成本」）。</p>
+</blockquote>
+<hr />
+<h2 id="f-session-websearch">F. 新增第三方技術來源（本 session 新 WebSearch 配額補查）</h2>
+<blockquote>
+<p>依第二階段規則，以下為本次（新配額）補查的<strong>技術方法文獻與新聞佐證</strong>，與第 9 節既有來源互補。標明性質。<strong>與 PDF 原文衝突時仍以 PDF 為準。</strong></p>
+</blockquote>
+<h3 id="f1-s2t-92">F.1 S2T／商業監控產業（補強第 9.2 節）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>性質</th>
+<th>新增價值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1</td>
+<td>Forbidden Stories, "When your 'friends' spy on you"（本次 WebFetch 取得更細技術層）</td>
+<td>https://forbiddenstories.org/osint-s2t-unlocking-cyberspace-journalists-activists/</td>
+<td>2023-02-20</td>
+<td>★獨立查證</td>
+<td>avatar 藏於 proxy web、互相按讚、點連結即啟攝影機、"reach nearly every smartphone user"、Deep Fusion 面板、facial recognition + 住房登記 + 地理定位；DGFI 出貨（2021-12/2022-01）、印度海軍 demo（約 2020）</td>
+</tr>
+<tr>
+<td>T2</td>
+<td>Haaretz, "Fake Friends: Leak Reveals Israeli Firms Turning Social Media Into Spy Tech"</td>
+<td>https://www.haaretz.com/israel-news/security-aviation/2023-02-28/...</td>
+<td>2023-02-28</td>
+<td>佐證（同 Story Killers 聯合報導體系，記者 Omer Benjakob；<strong>非完全獨立</strong>）</td>
+<td>以色列面向的產業脈絡；強化「以色列研發」一環</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>Rappler 轉載 Forbidden Stories 調查</td>
+<td>https://www.rappler.com/technology/features/osint-s2t-unlocking-cyberspace-journalists-activists-forbidden-stories/</td>
+<td>2023</td>
+<td>轉載（可讀性替代來源）</td>
+<td>同 T1 內容之公開鏡像</td>
+</tr>
+<tr>
+<td>T4</td>
+<td>Surveillance Watch — S2T 實體頁</td>
+<td>https://www.surveillancewatch.io/entities/s2t-unlocking-cyberspace</td>
+<td>—</td>
+<td>NGO 監控產業資料庫</td>
+<td>承第 9.2 節 B5、第 12.3 節（仍列未完成查證項）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="f2-ai">F.2 合成帳號／AI 生成臉偵測（技術方法）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>性質</th>
+<th>用於本附錄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T5</td>
+<td>"Characteristics and prevalence of fake social media profiles with AI-generated faces"（arXiv:2401.02627 / J. Online Trust &amp; Safety）</td>
+<td>https://arxiv.org/html/2401.02627v1</td>
+<td>學術（同儕審查期刊版）</td>
+<td>GANEyeDistance、門檻 0.02、face_recognition landmark、60.1% 配件瑕疵、0.021–0.044% 盛行率（第 B.2）</td>
+</tr>
+<tr>
+<td>T6</td>
+<td>Graphika, "Portrait Mode: GAN Collages and Fake Personas"</td>
+<td>https://www.graphika.com/blogs/portrait-mode-gan-collages-and-fake-personas</td>
+<td>業界威脅情報</td>
+<td>GAN collage 比純 GAN 臉難偵測；一致眼位法（第 B.2(a)、註記）</td>
+</tr>
+<tr>
+<td>T7</td>
+<td>"AI-Generated Faces in the Real World: ... Twitter Profile Images"（arXiv:2404.14244）</td>
+<td>https://arxiv.org/pdf/2404.14244</td>
+<td>學術</td>
+<td>真實世界規模的 GAN 頭像盛行與偵測（第 B.2 佐證）</td>
+</tr>
+<tr>
+<td>T8</td>
+<td>"Eyes Tell All: Irregular Pupil Shapes Reveal GAN-generated Faces"（arXiv:2109.00162）</td>
+<td>https://arxiv.org/pdf/2109.00162</td>
+<td>學術</td>
+<td>瞳孔幾何法（第 B.2(d)）</td>
+</tr>
+<tr>
+<td>T9</td>
+<td>"Fourier-Based GAN Fingerprint Detection using ResNet50"（arXiv:2510.19840）</td>
+<td>https://arxiv.org/pdf/2510.19840</td>
+<td>學術</td>
+<td>頻域指紋法（第 B.2(c)）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="f3-sockpuppet">F.3 協同不實行為／sockpuppet 偵測（技術方法）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>性質</th>
+<th>用於本附錄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T10</td>
+<td>Cresci et al., "DNA-inspired online behavioral modeling ... spambot detection"（arXiv:1602.00110）／"Social Fingerprinting"（arXiv:1703.04482）</td>
+<td>https://arxiv.org/pdf/1602.00110</td>
+<td>學術（經典）</td>
+<td>Digital DNA 編碼 + LCS 群體偵測（第 B.3）</td>
+</tr>
+<tr>
+<td>T11</td>
+<td>"Detecting Coordinated Activities Through Temporal, Multiplex, and Collaborative Analysis"（arXiv:2512.19677）</td>
+<td>https://arxiv.org/html/2512.19677</td>
+<td>學術</td>
+<td>相似度圖 + Leiden 多切片模組度（第 B.4）</td>
+</tr>
+<tr>
+<td>T12</td>
+<td>VigDet（arXiv:2110.15454）</td>
+<td>https://arxiv.org/pdf/2110.15454</td>
+<td>學術</td>
+<td>時間點過程建模時間同步（第 B.4）</td>
+</tr>
+<tr>
+<td>T13</td>
+<td>"Detecting CIB Under Symmetry Breaking: Adaptive Memory-Guided Causal Framework"（ACCD, Preprints 202601.0547）</td>
+<td>https://www.preprints.org/manuscript/202601.0547</td>
+<td>預印本</td>
+<td>因果式協同偵測前沿（第 B.4 延伸）</td>
+</tr>
+<tr>
+<td>T14</td>
+<td>"Sockpuppet Detection: a Telegram case study"（arXiv:2105.10799）；"Social Media Bot Detection: Review"（arXiv:2503.22838）</td>
+<td>https://arxiv.org/pdf/2105.10799</td>
+<td>學術</td>
+<td>stylometry / 行為指紋方法總覽（第 B.3）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="f4-ml-socmint">F.4 人口分類 ML 與其批判、SOCMINT 治理</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>性質</th>
+<th>用於本附錄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T15</td>
+<td>"Promises and pitfalls of using LLMs to identify actor stances in political discourse"（PLOS One 2025）</td>
+<td>https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0335547</td>
+<td>學術</td>
+<td>LLM 立場偵測隨主題/prompt 劇烈波動（批判①）</td>
+</tr>
+<tr>
+<td>T16</td>
+<td>"Political DEBATE: Efficient Zero-Shot ... Classifiers for Political Text"（Cambridge, Political Analysis）</td>
+<td>https://www.cambridge.org/core/journals/political-analysis/article/political-debate-efficient-zeroshot-and-fewshot-classifiers-for-political-text/8D0B3E2AAF711F4812E42466DE503A13</td>
+<td>學術</td>
+<td>zero-shot 政治文本分類技術基礎（第 A.3、C.1）</td>
+</tr>
+<tr>
+<td>T17</td>
+<td>"How Discrimination occurs ... Proxy Variables"（Čevora）</td>
+<td>https://medium.com/data-science/how-discrimination-occurs-in-data-analytics-and-machine-learning-proxy-variables-7c22ff20792</td>
+<td>技術評論</td>
+<td>代理歧視（批判②）</td>
+</tr>
+<tr>
+<td>T18</td>
+<td>Mehrabi et al., "A Survey on Bias and Fairness in Machine Learning"（arXiv:1908.09635）</td>
+<td>https://arxiv.org/pdf/1908.09635</td>
+<td>學術</td>
+<td>偏誤/公平性框架（批判②④）</td>
+</tr>
+<tr>
+<td>T19</td>
+<td>"Feedback Loops in Machine Learning ..."（AISel JAIS 2024）；"Performative Predictions ..."（arXiv:2601.04447）</td>
+<td>https://aisel.aisnet.org/jais/vol25/iss4/9/</td>
+<td>學術</td>
+<td>回饋迴圈 / performative prediction（批判③）</td>
+</tr>
+<tr>
+<td>T20</td>
+<td>Privacy International, "Social Media Intelligence"</td>
+<td>https://privacyinternational.org/explainer/55/social-media-intelligence</td>
+<td>NGO 治理</td>
+<td>SOCMINT vs OSINT 之別、侵入性、須授權（承第 9.2 節 D1）</td>
+</tr>
+<tr>
+<td>T21</td>
+<td>Neo4j, "text to knowledge graph pipeline"；AWS "Social Media Data Pipeline"</td>
+<td>https://neo4j.com/blog/genai/text-to-knowledge-graph-information-extraction-pipeline/</td>
+<td>業界架構文件</td>
+<td>SOCMINT 技術堆疊之知識圖譜/資料管線參照（第 A.1、D.1）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="g">G. 本附錄的技術限制與未驗證處（誠實標註）</h2>
+<ol>
+<li><strong>偵測門檻多為文獻值，非本案實測</strong>。GANEyeDistance 門檻 0.02、Digital DNA 的 LCS 曲線行為、時間同步 0h 峰值等，均來自各自的學術資料集（Twitter/X 等），<strong>未在本案的 26 個 handle 上重跑驗證</strong>（帳號早已被封或棄用，且安全紅線禁止連線）。部署時務必以自家資料重新校準門檻。</li>
+<li><strong>偵測規則為示意骨架，非開箱即用</strong>。E 節的 Sigma logsource（<code>llm_api</code>）、KQL 表結構（<code>Accounts</code>）、Python 錨點座標（EXP_LEFT/RIGHT）皆需依實際遙測 schema 與資料改寫。規則邏輯正確，欄位名稱需在地化。</li>
+<li><strong>S2T 技術堆疊為「型錄描述 + 產業典型」的合成推論</strong>。D 節的堆疊表結合 Forbidden Stories 型錄（宣稱能力）與 SOCMINT 產業通例；<strong>型錄是行銷文件，宣稱的能力未必等於實際部署</strong>（承第 9.3 節黃色「未驗證」列）。本案 Anthropic 只實證了「分類 + 人設生成」兩層（階段 02 與人設工廠）。</li>
+<li><strong>Haaretz（T2）非完全獨立來源</strong>。它屬 Story Killers 聯合報導體系，與 Forbidden Stories 共享調查素材；列為「佐證」而非「第二個獨立來源」，以維持第 2.5 節的來源獨立性紀律。</li>
+<li><strong>C 節的四項批判是方法論分析，非對本案輸出品質的實測</strong>。本教材無從取得本案分類器的實際準確率或校準數據（報告未揭露）；四項批判指的是<strong>這類技術在方法論上的結構性缺陷</strong>，適用於本案，但非「已量測到本案犯了這些錯」。</li>
+<li><strong>「六類 → ML 三路線」的路線 A 判定為推論</strong>。報告未說明本案用 zero-shot LLM、微調分類器還是分群；本附錄依「pilot、無標註、跨語言、Claude 在迴圈中」推斷路線 A 最可能（第 C.1），此為本教材推論，非報告主張。</li>
+<li><strong>本附錄未新增任何 IOC，亦未連線任何識別符</strong>。WebFetch 僅觸及 Forbidden Stories（新聞機構）與 arXiv（學術預印本）；WebSearch 為公開檢索。第 6.2、6.3 的 handle 與標籤維持「僅抄錄、不接觸」。</li>
+</ol>
+<hr />
+<p><em>技術附錄整理日期：2026-09-13（第二階段技術深化 pass）。新增技術來源見第 F 節（T1–T21）。本附錄為增補，前述第 0–12 節與速記卡全部保留。所有偵測規則、程式碼與流程僅供防禦與保護受監控者之用。</em></p>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script>
+(function(){
+  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (window.mermaid) {
+    mermaid.initialize({startOnLoad:true, theme: dark ? 'dark' : 'default', securityLevel:'loose', flowchart:{useMaxWidth:true}});
+  }
+})();
+</script>
+</body></html>

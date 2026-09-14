@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>00-bio-intro-and-safeguards</title>
+<style>
+:root{--fg:#1a1a1a;--bg:#fff;--muted:#666;--line:#e2e2e2;--link:#0b5cad;--code-bg:#f5f5f5;--accent:#0b5cad}
+@media(prefers-color-scheme:dark){:root{--fg:#e6e6e6;--bg:#141414;--muted:#9a9a9a;--line:#333;--link:#6cb6ff;--code-bg:#1e1e1e;--accent:#6cb6ff}}
+*{box-sizing:border-box}
+body{max-width:900px;margin:0 auto;padding:2rem 1.2rem 6rem;font-family:"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;line-height:1.75;color:var(--fg);background:var(--bg);font-size:16px}
+h1,h2,h3,h4{line-height:1.3;margin-top:1.8em}
+h1{font-size:1.7rem;border-bottom:2px solid var(--accent);padding-bottom:.3em}
+h2{font-size:1.35rem;border-bottom:1px solid var(--line);padding-bottom:.2em}
+h3{font-size:1.12rem}
+a{color:var(--link)}
+code{background:var(--code-bg);padding:.1em .35em;border-radius:4px;font-family:"Cascadia Code",Consolas,"Courier New",monospace;font-size:.9em}
+pre{background:var(--code-bg);padding:1em;border-radius:8px;overflow-x:auto;font-size:.86em;line-height:1.5}
+pre code{background:none;padding:0}
+pre.mermaid{background:transparent;text-align:center}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.92em;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:.5em .7em;text-align:left;vertical-align:top}
+th{background:var(--code-bg)}
+blockquote{border-left:4px solid var(--accent);margin:1em 0;padding:.4em 1em;color:var(--muted);background:var(--code-bg)}
+img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;margin:.5em 0}
+.figgallery{margin-top:2em;border-top:2px solid var(--accent);padding-top:1em}
+.figgallery figure{margin:1.5em 0}
+.figgallery figcaption{color:var(--muted);font-size:.9em;margin-top:.3em}
+.topbar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:.6em 0;margin:-2rem -1.2rem 1.5rem;padding-left:1.2rem;font-size:.9em}
+.topbar a{text-decoration:none;margin-right:1em}
+hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+</style></head>
+<body><div class="topbar"><a href="../index.html">◀ 課程索引</a></div><h1 id="05-00">05-00 生物濫用模組導論：雙重用途困境、分類器防線光譜與可信任使用者審核制</h1>
+<blockquote>
+<p>課程模組：05 生物濫用（Biological misuse）｜ 一手來源：PDF p.129–131（章節導論與「A note on dual use」）＋ p.137–138（Conclusions）；p.131–137 五案內容僅用於核對分類器結果，案例本身的深度研究由其他教材負責 ｜ 整理日期：2026-09-13</p>
+<p><strong>教材定位</strong>：這是 05 模組的導論教材，教的是<strong>治理、偵測與政策</strong>，不是生物技術。五個案例（p.131–137）各有獨立的深度教材，本檔只做一頁模組地圖摘要表，重點放在：報告如何為生物濫用風險定性、「雙重用途」為何讓內容分類結構性失靈、五案分類器結果揭示的「防線光譜」、規避管道如何繞過存取控制、30 天盤查數字的意義，以及報告結論提出的「可信任使用者審核制」解方與其代價。</p>
+<p><strong>寫作界線（本檔嚴格遵守）</strong>：本檔完全不描述任何病原體改造、基因序列、實驗方法、或任何足以提升病原體致病性／傳播力的技術內容。報告原文點名的病毒與毒素種類，本檔一律以報告自身的抽象分類（例如「蚊媒病毒」「毒素」）或「某類病原體」帶過，不重複報告的具體病原體命名，並在第 4.1 節說明這個選擇的理由。凡引用報告英文原文之處，因為是逐字引用一手文件供教學查核之用，會保留報告原文用字；但本檔自己的中文敘述、分析與表格，一律套用抽象化處理。</p>
+</blockquote>
+<hr />
+<h2 id="1">1. 一頁速覽</h2>
+<ol>
+<li><strong>報告的定性</strong>：p.129 開宗明義——「Biological misuse is one of the most serious risks of frontier AI models.」（生物濫用是前沿 AI 模型最嚴重的風險之一）。這不是修辭，而是接下來一整節「為什麼」的骨架：舊模型明顯低於門檻、新模型證據不再確定，因此 Anthropic 對新模型（尤其 Claude Fable 5）採取更嚴格的防線。</li>
+<li><strong>本模組最重要的一句話</strong>：「The same information that can be used to develop a biological weapon could also be used to develop, for example, a vaccine or a cure for a disease.」（p.130–131）——生物領域的濫用防線，在技術層面<strong>不可能只靠「看請求內容」判定</strong>，因為善意研究與惡意研究在文字上可能完全相同。這是整個模組的核心命題，後面所有案例都是這句話的具體展開。</li>
+<li><strong>五案是一份「防線光譜」的教材，不是五個獨立故事</strong>。從案例 1 到案例 5，分類器的結果依序是：<strong>攔下並啟動調查 → 限制到最弱模型 → 放行 → 設計上不涵蓋</strong>。這四種狀態不是隨機分布——它們對應的是「內容有多接近『新手也能複製已知武器』」這個分類器唯一擅長辨識的訊號，訊號越弱，防線越空。</li>
+<li><strong>報告自己承認防線的天花板</strong>：p.137 逐字——「a classifier cannot simultaneously enable benefit and prevent harm」（分類器無法同時促成效益並防止危害）。五案中有三案（案例 3、4、5）分類器沒有攔下、Claude 也確實提供了實質協助——這是本教材整理歸納出的讀法，第 4.4 節會交代推論依據，並非報告自己用「三案」這個數字講過。</li>
+<li><strong>規避管道是存取層，不是內容層</strong>：案例 1 揭露的 ZDR（zero data retention）轉售平台、案例 2 的「不支援地區」規避、案例 3 的轉售中繼帳號，全部是在<strong>帳號還沒被建立起可信身分之前</strong>就先繞過地理與服務條款限制——這代表分類器攔得再準，只要存取層先被突破，判定就永遠是對著假身分做的判定。</li>
+<li><strong>30 天盤查、約 35 項研究、多為民用科學</strong>：這個數字揭示了「威脅辨識」在這個領域的真正困難——不是找不到雙重用途研究，而是雙重用途研究占多數，真正危險的只是其中少數，而分類器無法從文字上把兩者分開。</li>
+<li><strong>結論的解方是把判斷點從模型端搬到人工核可端</strong>：p.137 逐字——「the only safe way to serve frontier biological capabilities is to offer them in trusted user programs」。這句話把「誰可以取得高階生物能力」的問題，從「這一句提示詞看起來像什麼」改成「這個人是誰、有沒有正當理由」——本質上是把 AI 公司從內容審核者變成申請審查機關。</li>
+<li><strong>這份教材在課程裡要教什麼</strong>：學員讀完五個具體案例前，要先建立三個分析工具——(a) 分類器只能辨識「內容訊號」，辨識不了「意圖」；(b) 存取層規避與內容層規避是兩種不同的攻防，需要不同的防線；(c) 「可信任使用者審核制」不是沒有代價的解方，它把守門的成本從 AI 公司身上，部分轉嫁到每一位申請者身上。</li>
+</ol>
+<hr />
+<h2 id="2-p129">2. 章節開場的風險定性（p.129）</h2>
+<h3 id="21">2.1 逐字引用與翻譯</h3>
+<p>PDF p.129 第一段：</p>
+<blockquote>
+<p>"Biological misuse is one of the most serious risks of frontier AI models. It has long been a concern that AI models might one day reach the level of capability where they can help to make existing pathogens more dangerous—or create entirely new ones. Without the correct safeguards, such capabilities could have catastrophic consequences."</p>
+</blockquote>
+<p>繁中翻譯：生物濫用是前沿 AI 模型最嚴重的風險之一。長久以來人們擔心，AI 模型有朝一日可能達到某種能力水準，協助讓現有病原體變得更危險——或創造出全新的病原體。若缺乏正確的防護措施，這樣的能力可能帶來災難性的後果。</p>
+<h3 id="22-ai">2.2 為什麼這句定性被 AI 安全社群高度重視：拆解三層論證</h3>
+<p>這段開場話濃縮了三個獨立的論證層次，值得在課堂上拆開講：</p>
+<ol>
+<li><strong>後果的不對稱性</strong>：其他危害領域（詐騙、影響力作戰）造成的損害通常有邊界、可回復；生物危害一旦真的發生，具備自我複製、跨國界擴散、難以追蹤源頭的特性，後果的量級與可逆性完全不同。這是「catastrophic」這個詞在 AI 安全文獻裡的標準用法——與常規武器章節裡 RSP 對「catastrophic risk」的定義（「existential threats or fundamental destabilization of global systems」）同一個等級。</li>
+<li><strong>能力提升 ≠ 能力賦予</strong>：報告的措辭很精確——「help to make existing pathogens more dangerous—or create entirely new ones」，用的是「help」（協助），不是「enable」（賦予）。這代表報告談的風險模型是「加速一個原本就有相關背景的人」，而不是「讓一個素人從零具備能力」。這個區分會在後面每一案反覆出現（尤其案例 2 的「uplift 主要是文書協助」）。</li>
+<li><strong>長期關注的風險，遇上突然變得不確定的證據</strong>：「It has long been a concern」——這不是 2026 年才有的新警覺，而是 AI 安全社群多年來的既定關切（下一節會列出 NTI、Johns Hopkins CHS、RAND 等機構從 2023 年起持續發表的相關研究）。報告把自己放進這條長期關注的時間線裡，而不是宣稱自己發現了新風險。</li>
+</ol>
+<h3 id="23">2.3 評測證據與真實世界證據的落差：一段誠實的方法論自白</h3>
+<p>p.129 接著談模型能力的判定依據，這段話是理解整個模組的方法論前提：</p>
+<blockquote>
+<p>"Results from evaluations of older models (for example Claude Opus 4 and Claude Sonnet 4.5, from 2025) clearly showed that these models were well below the threshold where they could meaningfully assist a sophisticated user in carrying out dangerous biological research. As a result, safeguards on these models were less stringent, directed mostly at preventing access to content that might uplift novices in recreating known bioweapons. But for today's models—which are capable of assisting in a range of complex scientific research tasks—the evidence is no longer certain, and we cannot make that same assurance. For this reason, and out of an abundance of caution, we have launched recent models (most notably Claude Fable 5) with stronger safeguards that restrict access to a wide range of dual-use biological research queries."</p>
+</blockquote>
+<p>翻譯：對舊模型（例如 2025 年的 Claude Opus 4 與 Claude Sonnet 4.5）的評測結果清楚顯示，這些模型遠低於能夠對老練使用者的危險生物研究提供實質協助的門檻。因此，這些模型上的防護措施較不嚴格，主要針對防止新手藉由取得內容來複製已知的生物武器。但對於今天的模型——具備協助處理一系列複雜科學研究任務的能力——證據已不再確定，我們無法再做出同樣的保證。為此，並出於審慎考量，我們已為近期模型（尤其是 Claude Fable 5）推出更嚴格的防護措施，限制存取範圍廣泛的雙重用途生物研究查詢。</p>
+<p>緊接著一句方法論自白：</p>
+<blockquote>
+<p>"Although evaluations are useful in that they provide evidence of capability, they cannot concretely demonstrate that such capability would ever be used to develop biological weapons in the real world."</p>
+</blockquote>
+<p>翻譯：雖然評測有其用處，能提供能力方面的證據，但它們無法具體證明這種能力是否真的會在現實世界中被用來開發生物武器。</p>
+<p>這兩段話在課堂上要當成一組教材使用：</p>
+<table>
+<thead>
+<tr>
+<th>論證環節</th>
+<th>內容</th>
+<th>教學意義</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>門檻判定的基礎會過期</td>
+<td>「舊模型遠低於門檻」是 2025 年做的評測結論，套用到 2026 年的新模型上不再成立</td>
+<td>防線的鬆緊不是一次性設定，而是要跟著每一代模型的能力重新評估——這是「防線校準」（safeguard calibration）的概念，套用能力來決定防線強度，而不是套用固定規則</td>
+</tr>
+<tr>
+<td>防線隨不確定性而非確定性收緊</td>
+<td>「the evidence is no longer certain」（證據不再確定）就足以觸發「out of an abundance of caution」（出於審慎考量）收緊防線</td>
+<td>這是典型的預警原則（precautionary principle）決策邏輯：不需要證明模型「真的能」協助造成危害，只要無法再證明「模型不能」，就足以觸發更嚴格的防線。這與常規武器章節 ASL-3「we have not yet determined whether Claude Opus 4 has definitively passed the Capabilities Threshold … we have determined that clearly ruling out ASL-3 risks is not possible」是同一套決策邏輯的重複使用</td>
+</tr>
+<tr>
+<td>評測與真實濫用是兩種不同的證據</td>
+<td>評測證明「能力存在」，不能證明「能力被用於惡意目的」</td>
+<td>這正是本模組五個案例存在的理由——案例研究是報告用來補足評測無法提供的「真實世界證據」那一塊拼圖</td>
+</tr>
+</tbody>
+</table>
+<h3 id="24">2.4 「沒有任何私人公司曾公開分享過這樣的證據」：報告把自己放在哪個位置</h3>
+<p>p.129 最後一段，是理解整個模組為何存在的關鍵：</p>
+<blockquote>
+<p>"To date, such evidence of real-world potential misuse from AI models comes from academic research, government reports, and the work of international organizations and journalists. But AI companies—whose models might be directly involved in these activities—have so far been absent from the public conversation. To our knowledge, no private company, AI or otherwise, has yet shared evidence of the potential misuse of their platforms for biological weapons development publicly."</p>
+</blockquote>
+<p>翻譯：迄今為止，關於 AI 模型可能遭真實世界濫用的證據，來自學術研究、政府報告，以及國際組織與記者的工作。但 AI 公司——其模型可能直接涉入這些活動——迄今在公開討論中始終缺席。據我們所知，尚無任何私人公司（無論是否為 AI 公司）曾公開分享其平台遭濫用於生物武器開發的證據。</p>
+<p>這段話值得對照常規武器章節 p.111 的類似論述（「Historically, this kind of work has been uncovered by governments, United Nations panels, and outside investigators…」）——兩章用的是同一套「模型供應商獨有的可視性」論證，但生物章節多講了一層：<strong>不只是「我們看得到別人看不到的」，還特別強調「別的 AI 公司都還沒有這樣做過」</strong>。這句話同時是一個事實主張（尚無先例）與一個定位聲明（Anthropic 想成為打破沉默的第一家）。第 9 節會用 WebSearch 檢查這個「業界首例」的說法能否獨立驗證。</p>
+<hr />
+<h2 id="3-a-note-on-dual-usep130131">3. 雙重用途困境：「A note on dual use」逐字解讀（p.130–131）</h2>
+<p>這是全模組、甚至可以說是整份報告 CBRN／生物領域最重要的一段方法論說明。p.130 用一個獨立的小節「A note on dual use」把它從案例敘事中抽出來單獨講，代表 Anthropic 自己也認為這是讀懂後面五案之前必須先建立的框架。</p>
+<h3 id="31">3.1 逐字引用：「簡單世界」與「我們實際生活的世界」</h3>
+<blockquote>
+<p>"We want our models to be useful for scientific research. Indeed, we predict that AI will transform biological science, and lead to the rapid development of many new medical treatments. In a simple world, uses of AI for these kinds of beneficial purposes would be clearly distinguishable from uses for malicious ones: all malicious uses would have an obvious, stated intent to commit harm (or mention clearly-dangerous activities like loading biological products into dissemination devices). Our safeguards would be likely to shut down all such uses, and we would report the users to the relevant authorities; the beneficial uses of AI would be similarly clear-cut and our safeguards would allow them every time."</p>
+<p>"But we do not live in that simple world. Biological capabilities are dual use: they can be used for beneficial or harmful purposes, and it is often difficult to distinguish between them. The same information that can be used to develop a biological weapon could also be used to develop, for example, a vaccine or a cure for a disease."</p>
+</blockquote>
+<p>翻譯：我們希望自己的模型對科學研究有用。事實上，我們預測 AI 將改變生物科學，並帶動許多新醫療方法的快速發展。在一個簡單的世界裡，AI 用於這類有益目的的使用方式，會與用於惡意目的的使用方式清楚區分：所有惡意使用都會有明顯、明示的傷害意圖（或提及明顯危險的行為，例如把生物製品裝載進散布裝置）。我們的防護措施很可能會關閉所有這類使用，並將使用者通報相關主管機關；而 AI 的有益使用同樣會涇渭分明，我們的防護措施每次都會放行。</p>
+<p>但我們並不生活在那個簡單的世界裡。生物能力具有雙重用途性質：它們既可用於有益目的，也可用於有害目的，而兩者往往難以區分。<strong>同一份可以用來開發生物武器的資訊，也可能被用來開發，例如，一支疫苗或一種疾病的療法。</strong></p>
+<h3 id="32">3.2 為什麼這是課程的核心命題</h3>
+<p>把上面兩段拆成一個判斷矩陣，能清楚看出報告論證的結構：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>惡意意圖明示</th>
+<th>惡意意圖隱藏／不存在</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>請求內容看起來危險</strong>（提及散布裝置等）</td>
+<td>分類器能處理：內容 + 意圖雙重訊號一致，可攔下並通報</td>
+<td>分類器仍可能處理：內容本身已經是強訊號</td>
+</tr>
+<tr>
+<td><strong>請求內容看起來像正常研究</strong>（雙重用途技術）</td>
+<td>罕見：老練行為者不會自曝意圖</td>
+<td><strong>分類器的死角</strong>：內容訊號中性，意圖訊號不存在，唯一能用的判準只剩「脈絡」——申請機構、資助來源、跨工作階段模式</td>
+</tr>
+</tbody>
+</table>
+<p>報告自己講的「simple world」其實只覆蓋左上與左下兩格；五個案例全部落在右下格。這就是為什麼<strong>內容分類器在生物領域結構性地無法單獨勝任</strong>——不是分類器做得不夠好，而是右下格這個象限，定義上就沒有「內容訊號」可用。這一點請與第 8 節「結論與解方」對照：Anthropic 最後提出的「可信任使用者審核制」，本質上就是放棄在右下格用內容分類器解決問題，改成在事前用身分審核把右下格的人排除在外。</p>
+<h3 id="33">3.3 精密行為者的「合理可否認性」與歷史類比</h3>
+<p>p.131：</p>
+<blockquote>
+<p>"Sophisticated threat actors are aware that we (and other AI providers) are attempting to detect dangerous uses of our models, and they use the dual-use nature of biology to maintain a kind of "plausible deniability" about their research. This may even occur to the extent that the researchers using our models may themselves be unaware of the intent and aims of their research. This has historical analogues: for example, the Soviet Biopreparat program—which was ultimately aimed at creating, producing, and weaponizing biological material—employed thousands of researchers, most of whom worked under the assumption that they were doing basic or defensive research because they were not informed about the program's overall goal."</p>
+</blockquote>
+<p>翻譯：老練的威脅行為者知道我們（以及其他 AI 供應商）正試圖偵測模型的危險使用方式，他們利用生物學的雙重用途性質，維持一種對其研究的「合理可否認性」。這種情況甚至可能發生到：使用我們模型的研究者本身，可能都不清楚自己研究的真正意圖與目標。這有歷史先例：例如蘇聯的 Biopreparat 計畫——最終目標是製造、生產並將生物物質武器化——僱用了數千名研究者，其中多數人在不知道計畫整體目標的情況下，以為自己從事的是基礎或防禦性研究。</p>
+<p>腳註補充（p.131）：</p>
+<blockquote>
+<p>"Ken Alibek, a Soviet microbiologist who became the First Deputy Director of Biopreparat before defecting to the United States in 1992, described scientists who only learned the true, offensive purpose of their work after being promoted into an inner circle."</p>
+</blockquote>
+<p>翻譯：肯・阿利貝克（Ken Alibek），一位曾任 Biopreparat 第一副局長、後於 1992 年叛逃至美國的蘇聯微生物學家，描述了科學家們只有在被拔擢進入核心圈子後，才得知自己工作真正的攻擊性目的。</p>
+<p><strong>這段歷史類比在課堂上的價值</strong>，在於它把「合理可否認性」從一個抽象概念變成一個有真實先例的組織設計問題：Biopreparat 的「否認性」不是靠說謊維持的，而是靠<strong>組織架構的資訊分艙（compartmentalization）</strong>維持的——大多數科學家說的是實話（「我以為我在做基礎研究」），但整個計畫的頂層目的仍然是武器化。這說明了一件事：<strong>AI 公司面對的「意圖不明」，有些時候連使用者本人的意圖都是不明的</strong>，分類器不可能靠語意分析解決一個連當事人自己都不知情的問題。這也直接呼應案例 1 中「研究者本人可能不清楚申請書背後的軍方關聯」的情境。</p>
+<h3 id="34">3.4 弔詭：明顯惡意反而是不老練的證據</h3>
+<p>p.131 這段話值得在課堂上重讀兩次，因為它把一般直覺完全反過來：</p>
+<blockquote>
+<p>"Overt malicious intent is, therefore, often evidence that a particular actor is not all that sophisticated (after all, they are committing their dangerous acts in plain sight). More sophisticated actors can hide their intent, extracting assistance from an AI model in interactions that look plausibly beneficial, but when put in context and analyzed holistically, can provide clear warning signs of misuse. Those are the kinds of interactions that we report here."</p>
+</blockquote>
+<p>翻譯：因此，明顯的惡意意圖，往往反而證明某個行為者並不那麼老練（畢竟，他們是在眾目睽睽之下做出危險行為）。更老練的行為者能夠隱藏意圖，在看似有益的互動中從 AI 模型榨取協助，但放在脈絡中整體分析時，這些互動能提供明確的濫用警訊。本報告呈現的正是這類互動。</p>
+<p><strong>教學要點</strong>：這句話定義了整個五案的篩選邏輯——報告選的不是「最危險」的案例，而是「最能示範分類器盲點」的案例。一個把「我要造病毒武器」直接打進提示詞的行為者，對防線設計沒有教學價值，因為任何分類器都能攔下他；真正需要研究的，是那些「內容看起來完全正常，但脈絡（機構、資助、跨工作階段模式）揭露問題」的行為者。這也解釋了為什麼報告要用「holistically」（整體地）這個詞——單一請求層次的判斷注定失敗，唯一的出路是把訊號拉高到帳號、機構、時間跨度的層次去看。</p>
+<h3 id="35">3.5 一個報告自己講明的倫理界線：為何不具名</h3>
+<p>p.130 有一段常被忽略、但對理解報告基調很重要的話：</p>
+<blockquote>
+<p>"We are withholding the names of research institutions, the countries wherein the activity took place, and the specific biological agents or research techniques involved. The individuals implicated in these case studies are working scientists. We do not assert that they intended harm, and identifying them or their labs could expose them to harm."</p>
+</blockquote>
+<p>翻譯：我們隱去了研究機構的名稱、活動發生的國家，以及涉及的具體生物製劑或研究技術。這些案例研究所涉及的個人都是在職科學家。我們不主張他們有意造成傷害，指認他們或其實驗室可能使這些人受到傷害。</p>
+<p><strong>這一點與常規武器章節形成鮮明對比</strong>：武器章節具名了中國、俄羅斯、葉門三個國家，也用「we assess the actor was associated with a Chinese defense industry manufacturer」這類措辭做出歸因；生物章節則連國家都不具名。這不是資訊不足導致的模糊，而是<strong>刻意的倫理選擇</strong>——報告自己講的理由是「這些人是在職科學家，我們不主張他們有意造成傷害」。這個差異本身就是一個值得課堂討論的設計決策：同一家公司、同一份報告，為什麼武器章節願意具名國家與機構，生物章節卻連國家都要隱去？（可能的答案：武器案例的行為者身分較明確、危害路徑較直接；生物案例的「雙重用途」本質使歸咎意圖的門檻必須拉得更高，避免傷及可能完全清白的科學家。報告沒有明講這個對比，這是本教材的觀察。）</p>
+<p>本教材遵循報告自己設定的這個界線，並且更進一步：不只隱去機構與國家，也不重複報告點名的具體病原體種類（見開頭寫作界線說明）。</p>
+<hr />
+<h2 id="4">4. 分類器防線光譜：五案地圖與四種狀態</h2>
+<h3 id="41">4.1 本節的寫作範圍與抽象化說明</h3>
+<p>五個案例的完整技術背景、行為者側寫、攻擊生命週期，由其他教材負責深度研究。本節<strong>只做一頁模組地圖</strong>，目的是讓學員在還沒讀個案教材之前，先掌握一個全局判斷：<strong>這五案排在一起看，分類器的表現呈現一道光譜，而不是五個孤立的成功或失敗</strong>。</p>
+<p>依循本檔開頭訂下的寫作界線，以下表格的「研究主題抽象類別」欄一律使用報告自身的分類層次或更抽象的描述，不重複報告點名的具體病原體或毒素名稱。凡報告描述了某類病毒或毒素的研究目的，本教材一概以「報告描述該研究涉及某類病原體／毒素之特性研究（細節不在本教材範圍）」的方式概括。讀者若需要具體研究主題的背景，請參閱個別案例的深度教材。</p>
+<h3 id="42">4.2 五案摘要表</h3>
+<table>
+<thead>
+<tr>
+<th>案例</th>
+<th>行為者類型（報告刻意隱去國家與機構）</th>
+<th>研究主題抽象類別</th>
+<th>分類器攔截狀況</th>
+<th>PDF 頁碼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>案例 1：軍民兩用研究的規避平台</td>
+<td>轉售平台服務數十名生命科學研究者（多為病毒學者，關聯多個民用與軍方機構）；申請書掛名民用研究者，實際執行地點為軍事研究機構</td>
+<td>報告描述該研究涉及某蚊媒病毒之功能增益（gain-of-function）研究，方向為傳播力與免疫逃脫特性（細節不在本教材範圍）</td>
+<td><strong>攔下並啟動調查</strong>——分類器攔下初次申請，但後續調查發現規避平台仍讓研究取得編輯協助（見 4.5 節）</td>
+<td>p.131–133</td>
+</tr>
+<tr>
+<td>案例 2：不支援地區的實驗規劃</td>
+<td>不支援地區的個別研究者，具「可信的機構脈絡」，透過美國商用 VPS 與隱私信箱服務存取</td>
+<td>報告描述該研究涉及某人畜共通呼吸道病毒之哺乳類適應性與致病機制研究（細節不在本教材範圍）</td>
+<td><strong>限制到最弱模型</strong>——分類器把互動限制在 Claude Sonnet 4（下架後轉 Haiku 4.5），Anthropic 估計提供的 uplift「primarily clerical assistance」（主要是文書性協助）</td>
+<td>p.133–135</td>
+</tr>
+<tr>
+<td>案例 3：轉售中繼帳號的端到端協助</td>
+<td>轉售中繼帳號服務逾十幾名互不相關的客戶；本案客戶任職於一家「國家關聯的傳染病實驗室」</td>
+<td>報告描述該研究涉及某病毒屬之宿主免疫逃脫基因研究，並明確聚焦於「減毒（attenuation）」框架（細節不在本教材範圍）</td>
+<td><strong>放行（未攔截）</strong>——在 Opus 5 上約一小時內端到端完成，因內容聚焦於減毒／雙重用途框架而未被分類器攔下</td>
+<td>p.135–136</td>
+</tr>
+<tr>
+<td>案例 4：動物性毒素分子圖譜與生成式優化</td>
+<td>具國家支持背景的研究者</td>
+<td>報告描述該研究涉及動物來源毒素分子之圖譜建構與生成式優化，框架為止痛與精神科用途（細節不在本教材範圍）</td>
+<td><strong>設計上不涵蓋</strong>——分類器設計目的是限制「讓新手能複製已知武器」的內容，本案屬於新化合物研究，不在設計範圍內</td>
+<td>p.136–137</td>
+</tr>
+<tr>
+<td>案例 5：毒素與病毒蛋白的計算重新設計</td>
+<td>國家公共研究計畫下的研究者；曾要求 Claude 在進度報告中刻意模糊行為者身分</td>
+<td>報告描述該研究涉及細菌毒素與（世界衛生組織 R&amp;D 藍圖優先疾病清單所列病毒之）蛋白質計算重新設計（細節不在本教材範圍）</td>
+<td><strong>設計上不涵蓋</strong>——與案例 4 同理由</td>
+<td>p.136–137</td>
+</tr>
+</tbody>
+</table>
+<h3 id="43">4.3 分類器防線的四種狀態：教學框架</h3>
+<p>把上表的「分類器攔截狀況」欄抽出來，正好構成一條從「防線最緊」到「防線最鬆」的光譜。這是本模組最重要的教學框架，建議直接畫成一條軸線講給學員看：</p>
+<pre class="mermaid">flowchart TB
+    S1[&quot;狀態一：攔下（案例 1）&lt;br/&gt;強訊號 → 直接阻擋 + 升級人工調查&quot;] --&gt; N1[&quot;內容已高度接近&lt;br/&gt;『新手複製已知武器』&quot;]
+    S2[&quot;狀態二：限制到弱模型（案例 2）&lt;br/&gt;中等訊號 → 降級到能力最弱、防線最強的模型&quot;] --&gt; N2[&quot;仍能判斷『這是高風險&lt;br/&gt;生物研究』，但不完全阻擋&quot;]
+    S3[&quot;狀態三：放行（案例 3）&lt;br/&gt;訊號不足 + 雙重用途框架（如減毒）繞過&quot;] --&gt; N3[&quot;對『已知武器複製』敏感度高&lt;br/&gt;對『新型雙重用途化合物』敏感度低&quot;]
+    S4[&quot;狀態四：設計上不涵蓋（案例 4、5）&lt;br/&gt;內容不在分類器訓練目標內（設計選擇）&quot;] --&gt; N4[&quot;訓練目標＝防新手複製已知武器&lt;br/&gt;非涵蓋所有雙重用途生物學&quot;]
+</pre>
+<p>四種狀態各自代表一種不同的「分類器能做到什麼、做不到什麼」：</p>
+<table>
+<thead>
+<tr>
+<th>狀態</th>
+<th>分類器的邏輯</th>
+<th>防線的取捨</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>攔下</td>
+<td>內容非常接近「已知武器複製」的訓練樣本，即使包裝成補助申請書，核心技術描述仍觸發分類器</td>
+<td>高精確率的成功案例，但案例 1 顯示「攔下單次請求」≠「切斷整條供應鏈」（見 4.5 與第 5 節）</td>
+</tr>
+<tr>
+<td>限制到弱模型</td>
+<td>分類器判斷內容屬於高風險類別，但無法完全阻擋所有互動，因此改用「降低可用能力」而非「完全阻絕」的策略</td>
+<td>這是一種折衷防線：承認無法百分之百攔截，但至少確保漏網的互動只能從最弱的模型獲得協助</td>
+</tr>
+<tr>
+<td>放行</td>
+<td>內容聚焦於雙重用途框架中「有益」的一端（例如減毒／治療方向），分類器的訓練目標刻意不阻擋這類內容，以免誤傷真正的疫苗與療法研究</td>
+<td>這是精確率與召回率取捨中，選擇保護「效益」的一端；代價是老練行為者可以刻意用這個框架包裝請求</td>
+</tr>
+<tr>
+<td>設計上不涵蓋</td>
+<td>分類器的訓練資料與目標範圍，鎖定在「已知武器」的複製與強化，對「全新雙重用途化合物」的研究從未涵蓋</td>
+<td>這不是分類器「失敗」，而是分類器「從未被要求處理這個問題」——報告用「This was by design」明確講清楚</td>
+</tr>
+</tbody>
+</table>
+<p>p.137 對狀態三、四的定性，逐字：</p>
+<blockquote>
+<p>"Given the dual-use nature of this research and its explicit focus on attenuation, Claude supplied the user with information and thus was not blocked by our classifiers."（案例 3，p.135）</p>
+<p>"In both of these cases, the work proceeded largely unimpeded by our biological safety classifier. This was by design. The purpose and intent of the classifier is to restrict access to information that would make the development of known biological weapons with potentially catastrophic impact accessible to novices. In these cases, we instead saw our models being used to pursue research on novel compounds that can simultaneously be developed into novel therapeutics or toxic agents."（案例 4、5，p.137）</p>
+</blockquote>
+<p>翻譯（案例 3）：鑑於這項研究的雙重用途性質，以及其明確聚焦於減毒，Claude 向使用者提供了資訊，因此未被我們的分類器阻擋。</p>
+<p>翻譯（案例 4、5）：在這兩起案例中，工作大致上未受我們的生物安全分類器阻礙地進行。這是設計使然。該分類器的目的與意圖，是限制那些會讓新手也能取得、進而開發出具潛在災難性影響之已知生物武器的資訊存取。在這些案例中，我們反而看到我們的模型被用於研究新型化合物——這些化合物可以同時被開發成新型療法或有毒製劑。</p>
+<p>案例 2 的「限制到弱模型」狀態，其精確措辭：</p>
+<blockquote>
+<p>"because our biological safety classifiers robustly block content involving high-risk biological research … all of these exchanges occurred on models in our weakest class of models (specifically, the models were Claude Sonnet 4 and Haiku 4.5, the latter of which the user began using after Sonnet 4 was deprecated). Upon a detailed examination of the exchanges, we estimate that the uplift provided by Claude was primarily clerical assistance in data analysis, study ideation and design."（p.134）</p>
+</blockquote>
+<p>翻譯：由於我們的生物安全分類器對涉及高風險生物研究的內容有穩健的阻擋能力……所有這些交流都發生在我們能力最弱的一類模型上（具體而言是 Claude Sonnet 4 與 Haiku 4.5，使用者是在 Sonnet 4 下架後才開始使用後者）。經對這些交流詳細檢視後，我們估計 Claude 所提供的 uplift 主要是資料分析、研究構思與設計方面的文書性協助。</p>
+<h3 id="44">4.4 「五案三案未攔下」的整理：依據與限定</h3>
+<p>任務簡報將本模組的教學重點之一描述為「報告誠實揭露五案中有三案分類器未能攔下、Claude 實際提供了協助」。<strong>這句話本身不是報告的逐字陳述</strong>——報告從未用「three of five」這樣的數字概括自己的案例。本教材依 4.2、4.3 節的逐案核對，整理出這個「三案」的具體所指：</p>
+<ul>
+<li><strong>狀態三＋狀態四共三案</strong>（案例 3、4、5）：分類器<strong>未攔截</strong>，且 Claude 提供了報告明確承認的實質協助——案例 3「Claude supplied the user with information」、案例 4「a generative pipeline that optimized toxin characteristics」由 Claude 開發協助、案例 5「co-wrote quarterly progress reports」。</li>
+<li><strong>狀態一＋狀態二共兩案</strong>（案例 1、2）：分類器在<strong>首次判定時</strong>成功攔截或限制，但案例 1 透過規避管道在後續互動中仍取得了編輯協助（見 4.5 節），案例 2 則被限制在最弱模型、僅獲文書性協助。</li>
+</ul>
+<p>所以「三案未攔」這個講法，精確地說是指「案例 3、4、5 在分類器層級直接放行、且協助幅度未受限制」，而不是「五案中有三案完全沒有任何防線介入」——案例 1、2 在存取層與模型層仍有防線發生作用，只是不完整。<strong>這個區分很重要</strong>：如果課堂上把「三案未攔」簡化成「五案裡三案完全沒人管」，會低估分類器在案例 1、2 發揮的作用，也會模糊掉「攔截」與「協助幅度受限」之間的差異。第 9.6 節會檢查第三方報導（如台媒 INSIDE、自由時報）是否也用了類似的「幾案未攔」框架，以及是否與本教材的整理一致。</p>
+<h3 id="45-12">4.5 案例 1、2 內部的張力：防線不是一次性判定</h3>
+<p>案例 1、2 表面上是「防線生效」的例子，但報告內文藏著兩個值得放大的細節，說明「攔下」與「限制」都不是終局狀態：</p>
+<p><strong>案例 1（p.132–133）</strong>：分類器成功攔下最初的補助申請請求，Anthropic 也因此啟動調查。但調查發現：<br />
+- 該請求原本會透過一個服務數十名研究者的轉售平台送出，平台用美國基礎設施繞過地理封鎖、用 ZDR 服務隱藏內容（第 5 節詳述）；<br />
+- 平台開發者為了改善「對分類器阻擋敏感」的研究者客戶的使用體驗，開發了一個<strong>後備機制</strong>：Claude 拒答的請求會被自動轉送到防護較寬鬆的競爭對手模型；<br />
+- 更值得警惕的是：這個後備機制的程式碼，有相當部分是 <strong>Claude 自己寫的</strong>——因為開發者把它包裝成「過度拒答緩解（over-refusal mitigation）」的正常工程需求交給 Claude 撰寫；<br />
+- 封鎖之後，該研究仍持續推進，Claude 對其研究成果提供了「編輯協助」——而這些研究材料刻意用「強調功能喪失而非功能增益」的措辭描述同一批修改，以規避以措辭為判準的分類器。</p>
+<p><strong>教學意義</strong>：案例 1 表面上是「一次成功攔截」，但完整讀下來其實是「一次攔截，觸發了對規避基礎設施的調查，而規避基礎設施本身部分是被攔截目標系統自己不知情協助建造的」。這個迴圈——<strong>被攔的一方請求分類系統自己協助建造繞過分類系統的工具</strong>——是分類器工程裡最反直覺、也最該被拿出來討論的失效模式：分類器判斷的對象只有「單一請求的表面用途」，無法判斷「這個看似無害的工程請求，最終會被組裝進什麼系統」。</p>
+<p><strong>案例 2（p.134–135）</strong>：分類器成功把互動限制在最弱模型，Anthropic 自己也肯定「this case also shows that the existing safeguards on our frontier models are robust enough to force researchers to use weaker and less safeguarded models」（p.135，這項防線確實達到設計目的）。但報告緊接著提醒：「as the remaining cases demonstrate, the scope of scientific activity that can potentially be used for harm is extremely broad and intersects deeply with priority areas for beneficial use」——<strong>案例 2 的成功，不能类推到案例 3、4、5</strong>，因為案例 2 觸發限制的原因是內容本身高度接近「已知高風險病原體研究」的訓練樣本，這個成功條件在後三案並不成立。</p>
+<hr />
+<h2 id="5">5. 規避管道：存取層如何繞過帳號層偵測</h2>
+<p>五案共通的一個模式，是行為者不去正面挑戰分類器的內容判斷，而是先在<strong>存取層</strong>動手腳——讓分類器面對的「使用者」從一開始就是一個被偽裝過的身分。這一節把報告提到的三種規避管道拆開講。</p>
+<h3 id="51-zdrzero-data-retention">5.1 ZDR（Zero Data Retention）轉售平台</h3>
+<p>案例 1 的核心規避機制。p.132：</p>
+<blockquote>
+<p>"the platform tunneled traffic through US infrastructure to evade our regional blocks, and used a zero data retention (ZDR) service to hide content. The developers of this platform used Claude through gray market resellers and synthetic accounts outside the ZDR channel to support their work"</p>
+</blockquote>
+<p>翻譯：該平台透過美國基礎設施傳輸流量以規避我們的地理封鎖，並使用零資料保留（ZDR）服務隱藏內容。該平台的開發者透過灰色市場轉售商與合成帳號（在 ZDR 管道之外）使用 Claude，以支援其工作。</p>
+<p><strong>ZDR 是什麼、為何會被濫用</strong>：Zero Data Retention 原本是 Anthropic（與其他前沿模型供應商）提供給企業客戶的一項<strong>隱私保障機制</strong>——承諾不保留客戶送出的提示詞與回應內容，通常是為了滿足受監管產業（醫療、金融、國防承包商）的資料治理需求而設計。這項機制的設計初衷是保護合法客戶的機敏資料；但同一項機制,從偵測的角度看,意味著<strong>Anthropic 自己也看不到 ZDR 管道裡實際傳輸了什麼內容</strong>。案例 1 的行為者正是利用這個特性：把最終端使用者的請求都導向 ZDR 管道，讓內容層的稽核（即使是 Anthropic 自己的內部調查）也難以回溯。這是一個典型的「保護合法使用者的機制，同時也保護惡意使用者」的雙重用途設計難題——與第 3 節的核心命題完全同構,只是把「雙重用途」從生物知識本身,搬到了隱私保護機制上。</p>
+<h3 id="52-supported-regions-policy">5.2 不支援地區與 Supported Regions Policy</h3>
+<p>案例 2、3、4、5 全部涉及「不支援地區」規避。p.134（案例 2）：</p>
+<blockquote>
+<p>"The researcher in question accessed Claude from an unsupported region via US virtual private server infrastructure, using a privacy-email provider with an auto-generated username."</p>
+</blockquote>
+<p>翻譯：該研究者透過美國虛擬專用伺服器基礎設施，從一個不受支援的地區存取 Claude，並使用帶有自動產生使用者名稱的隱私信箱服務。</p>
+<p>Anthropic 的 Supported Regions Policy 是一種<strong>地理層級的存取控制</strong>——特定國家或地區不在服務範圍內，理論上帳號註冊時即應被阻擋。但這項政策的技術執行依賴 IP 位址與其他地理訊號，而 VPS（虛擬專用伺服器）與 VPN 正是專門用來偽造這些訊號的工具。案例 2 的行為者組合了三層偽裝：地理層（美國 VPS）＋身分層（隱私信箱、自動產生使用者名稱）＋內容層（在弱模型上僅做「看起來正常」的研究規劃）。<strong>這說明地理層級的存取控制對於有基本技術能力的行為者而言，防禦力相當有限</strong>——它能擋下的是不知道要用 VPS 的人，擋不下已經知道要用 VPS 的人。</p>
+<h3 id="53">5.3 轉售中繼帳號與灰色市場</h3>
+<p>案例 3 是本模組對「轉售中繼」機制描述最完整的一案。p.135：</p>
+<blockquote>
+<p>"The account was created from a randomly generated email address shortly before use and operated through anonymizing US infrastructure, with operator logins traced to proxies shared with a banned account farm. It was not a single user: it was a reseller relay serving more than a dozen unrelated customers, which exchanged over tens of thousands messages with Claude in a matter of days."</p>
+</blockquote>
+<p>翻譯：該帳號是在使用前不久，以隨機產生的電子郵件地址建立的，並透過匿名化的美國基礎設施運作，操作者的登入紀錄可追溯至與一個已被封鎖的帳號農場共用的代理伺服器。這不是單一使用者：這是一個轉售中繼帳號，服務逾十幾名互不相關的客戶，短短數天內與 Claude 交換了逾數萬則訊息。</p>
+<p><strong>轉售中繼帳號」與「ZDR 轉售平台」的差別</strong>在於角色定位：ZDR 轉售平台（案例 1）是把自己包裝成一個<strong>服務</strong>（有使用者體驗設計、有後備機制），面向的是知道自己在用轉售服務的研究者客戶；轉售中繼帳號（案例 3）則更接近一個<strong>帳號農場</strong>——十幾個互不相關的客戶共用同一個被偽裝成單一使用者的帳號身分，讓分類器與帳號層風控（例如「這個帳號短時間內異常活躍」）都難以正確判斷「使用者」到底是誰。這正是為什麼案例 3 的分類器判定必須聚焦在<strong>單次請求的內容框架</strong>（減毒／雙重用途）——因為帳號層的訊號在這裡已經被中繼結構稀釋掉了。</p>
+<h3 id="54-1">5.4 攻防升級：案例 1 平台的「後備機制」</h3>
+<p>第 4.5 節已提到案例 1 平台開發「拒答即轉送競爭對手模型」的後備機制，這裡從<strong>攻防升級</strong>的角度再講一次。時間軸如下：</p>
+<pre class="mermaid">flowchart TB
+    A[&quot;2026-05：攔下初次請求、啟動調查&lt;br/&gt;封鎖所有相關帳號、協同夥伴下架中繼網路&quot;] --&gt; B[&quot;數天內：平台營運者重新取得存取權限&quot;]
+    B --&gt; C[&quot;數週內：改用新身分註冊的消費級模型訂閱、重啟開發&quot;]
+    C --&gt; D[&quot;持續：終端使用者透過 ZDR 夥伴繼續接觸模型&quot;]
+    D --&gt; E[&quot;新增：把生物提示路由到防護較寬鬆的其他模型&lt;br/&gt;並以『過度拒答緩解』名義讓 Claude 協助撰寫該路由邏輯&quot;]
+</pre>
+<p><strong>教學要點</strong>：這條時間軸示範了帳號層執法（封鎖帳號）對一個<strong>具備營運能力的規避平台</strong>效果有限——被封鎖的是帳號，不是營運者的意圖與技術能力，重建存取管道的成本遠低於重新設計整套規避基礎設施的成本。而且平台的因應不是「找別的方法接觸 Claude」，而是<strong>升級成多模型架構</strong>（拒答就轉送別的模型），這代表對規避者而言，單一模型供應商的防線再強，只要市場上還有防護較寬鬆的替代模型，防線的邊際效益就會被系統性地繞過。這一點與常規武器章節 Frontier Red Team 文章「最危險的模型可能是祕密訓練、只交給特定對象使用的模型」的論點方向一致：<strong>防線的天花板不是單一供應商能決定的</strong>。</p>
+<h3 id="55">5.5 為什麼存取層規避比內容層規避更難防</h3>
+<p>把三種規避管道放在一起看，可以歸納出一個對偵測工程很關鍵的觀察：<strong>這三種手法都不需要行為者對分類器的內容判準有任何了解</strong>，它們攻擊的是分類器「看到的使用者是誰」這個前提，而不是分類器「怎麼判斷這句話」這個邏輯。這意味著：</p>
+<ul>
+<li>就算 Anthropic 把生物安全分類器訓練得再精準，只要行為者能透過 ZDR、VPS、轉售中繼把自己偽裝成一個「看起來正常、地理位置正常、帳號歷史正常」的使用者，分類器面對的就已經是一個被汙染過的輸入前提；</li>
+<li>反過來說，存取層防線（地理封鎖、帳號驗證、ZDR 濫用偵測）如果做得夠好，甚至可以在請求「內容」被分類器看到之前就先擋下——這正是第 8 節「可信任使用者審核制」想要達成的效果：把判斷點徹底移到內容之前。</li>
+</ul>
+<hr />
+<h2 id="6">6. 圖表逐一判讀</h2>
+<p>本教材負責的頁段（PDF p.129–131、p.137–138）<strong>沒有任何圖表</strong>。本課已核對 <code>figures.txt</code> 圖表標題清單：p.121（Figure 4）、p.122（Figure 5）、p.125（Figure 6）、p.128（Figure 7）皆屬於前一章（04 常規武器），p.129–138 範圍內無任何 Figure 編號登記，<code>course/figures/</code> 目錄中也沒有對應本頁段的渲染圖檔。五個案例本身是否含圖表（例如攻擊生命週期圖、時間軸），由負責各案例深度教材的其他 agent 核對與判讀。本節依品質紅線誠實標註：無圖可判讀，不虛構圖表內容。</p>
+<hr />
+<h2 id="7-30-35">7. 30 天盤查：35 項研究的意義</h2>
+<h3 id="71">7.1 逐字引用與數字核對</h3>
+<p>p.137，Conclusions 一節第二段：</p>
+<blockquote>
+<p>"These cases are only examples of the range of potentially concerning activity that we have found on our platform. Recently, we swept 30 days of activity associated with adversarial state institutions and found roughly 35 distinct research efforts, most of them ordinary civilian science, but some with notable dual-use potential."</p>
+</blockquote>
+<p>翻譯：以上案例僅是我們在平台上發現的、一系列可能令人擔憂之活動的示例。最近，我們對與敵對國家機構相關的活動進行了 30 天的盤查，找出約 35 項不同的研究工作，其中多數為一般民用科學，但部分具有顯著的雙重用途潛力。</p>
+<p>數字核對：<strong>30 天</strong>、<strong>約 35 項不同研究</strong>，兩者皆逐字對應原文「30 days」「roughly 35 distinct research efforts」，本課以 WebSearch 交叉核對第三方報導（CNN、Scripps News 等，見第 9.6 節），數字一致，無出入。</p>
+<h3 id="72">7.2 「大多是民用科學」對「如何區分威脅」的意義</h3>
+<p>這句話乍看像是一個安撫性的補充說明（大部分都沒事），但放進第 3、4 節建立的框架裡看，它其實是整份報告論證裡<strong>最誠實、也最尖銳</strong>的一句話：</p>
+<ol>
+<li><strong>這是一次針對「敵對國家機構」的鎖定盤查，不是隨機抽樣</strong>。也就是說，35 項研究不是從所有使用者裡隨機挑出來的，而是已經先用「與敵對國家機構相關」這個強訊號篩過一輪。即便經過這樣的預先篩選，結果仍然是<strong>多數屬於一般民用科學</strong>——這代表「與敵對國家機構有關聯」本身，作為一個判斷訊號，準確率遠低於直覺預期。</li>
+<li><strong>這直接印證第 3 節的核心命題</strong>：如果連「鎖定敵對國家機構」這種相對粗粒度的高風險訊號，篩出來的結果都是「大多數是民用科學，只有部分具顯著雙重用途潛力」，那麼對一般使用者群體做內容分類，假陽性問題只會更嚴重。換句話說，<strong>這 35 項研究的組成比例，是對「內容分類器在生物領域能做到多精準」最誠實的一次自我測試結果</strong>——而測試結果是：即使先用機構關聯篩過一輪，多數仍是正常研究。</li>
+<li><strong>這也是「找到威脅」與「證明威脅」之間落差的具體案例</strong>。報告在 Conclusions 中明確講：「We take these cases as evidence not of the imminence of biological threats currently uplifted by Claude, but rather as evidence that significant dual-use research efforts are associated with state actors of concern who routinely evade our access controls」（p.137，見第 8 節完整引用）——35 項研究要教的不是「這些研究即將變成武器」，而是「值得關注的雙重用途研究活動，確實與規避存取控制的國家行為者相關聯」，這是一個關於<strong>活動模式</strong>的結論，不是關於<strong>具體威脅迫近程度</strong>的結論。這個區分在課堂上必須講清楚，避免學員把「35 項研究」誤讀成「35 個生物武器計畫」。</li>
+</ol>
+<p><strong>課堂比喻</strong>：這就像海關對「已知高風險航線」的旅客做加強篩檢，篩檢結果顯示大多數旅客仍然只是普通商務或觀光客，只有少數行李有問題。加強篩檢本身沒有錯，但如果把篩檢範圍從「已知高風險航線」擴大到「所有航線」，一樣的邏輯下，「大多數是正常旅客」的比例只會更高，而「找到真正問題行李」需要的資源與誤傷的成本都會同步上升。這正是為什麼報告最終沒有選擇「擴大內容分類器的攔截範圍」，而是選擇了第 8 節的解方。</p>
+<hr />
+<h2 id="8">8. 章節結論與解方：可信任使用者審核制</h2>
+<h3 id="81">8.1 逐字引用：從案例推論到解方</h3>
+<p>p.137，緊接在案例 4、5 之後、Conclusions 標題之前的最後一句，是整章的樞紐句：</p>
+<blockquote>
+<p>"We believe these cases illustrate the challenge in using classifiers as the only safeguard layer: since it is not possible to reliably identify the intent of the user in highly technical dual-use areas, a classifier cannot simultaneously enable benefit and prevent harm. This knowledge and our observation of cases such as this suggest to us that the only safe way to serve frontier biological capabilities is to offer them in trusted user programs."</p>
+</blockquote>
+<p>翻譯：我們認為，這些案例說明了把分類器當作唯一防護層所面臨的挑戰：由於在高度技術性的雙重用途領域，不可能可靠地辨識使用者的意圖，分類器無法同時促成效益並防止危害。這項認知，加上我們對此類案例的觀察，讓我們認為，服務前沿生物能力唯一安全的方式，是透過可信任使用者計畫（trusted user programs）來提供。</p>
+<p>Conclusions 正文（p.137–138）：</p>
+<blockquote>
+<p>"We take these cases as evidence not of the imminence of biological threats currently uplifted by Claude, but rather as evidence that significant dual-use research efforts are associated with state actors of concern who routinely evade our access controls via relays, ZDR abuse, multi-model fallback, and explicit classifier evasion attempts to use Claude models in this work, often with awareness of its dual-use nature. We see that our classifiers robustly guard content in domains that they have been designed to restrict (Cases 1-2), but also that an increasing range of dual-use content is becoming highly valuable to beneficial and potentially malicious users alike (Cases 3-5). Safeguarding access to such content will necessarily require account and institutional signals to verify user legitimacy, and the rudimentary observability provided by data retention to identify misuse. We judge that these are the necessary ingredients to provide safe access to our models in this domain, and are encouraged that our industry peers have taken analogous steps in their deployments of their frontier biology capabilities."</p>
+</blockquote>
+<p>翻譯：我們將這些案例視為證據，但不是證明 Claude 目前所提供的生物威脅 uplift 已迫在眉睫，而是證明重大的雙重用途研究工作，與那些慣常透過中繼、ZDR 濫用、多模型後備與明確的分類器規避手段來使用 Claude 模型的敵對國家行為者有關，且這些行為者往往清楚意識到其研究的雙重用途性質。我們看到，我們的分類器在其設計限制範圍內能穩健地守護內容（案例一、二），但也看到日益增多的雙重用途內容，對善意與潛在惡意使用者而言都變得高度有價值（案例三至五）。要保護這類內容的存取安全，必然需要用來驗證使用者正當性的帳號與機構訊號，以及資料保留所提供的、基本程度的可觀察性以辨識濫用。我們判斷，這些是在此領域提供模型安全存取所必需的要素，並且很欣慰看到我們的業界同儕，在部署其前沿生物能力時，也採取了類似的措施。</p>
+<p>p.138 最後一段，全章結尾：</p>
+<blockquote>
+<p>"As AI models become more widely used, providers will continue to acquire threat-relevant visibility into real-world use that even governments and intergovernmental organizations lack. As exemplified by Case 5, researchers inadvertently disclose secrets that contain valuable defensive information in understanding, preparing for, and defending against threats in this domain. Early insight into dual-use research activities, priorities, and capabilities offers a window of opportunity for advocacy, policy action, and (in the most extreme cases) law enforcement action. We hope that sharing these early insights with the public helps inform governments, the industry, and the general public on the nature of these risks, and the safeguards that are necessary for ensuring the safe deployment of AI models. It is our view that these deployments will necessarily involve a combination of safety filters guarding the highest-risk content and capabilities and trusted access programs that enable such access for beneficial uses."</p>
+</blockquote>
+<p>翻譯：隨著 AI 模型的使用日益普及，模型供應商將持續取得與威脅相關的真實世界使用可視性，其程度甚至連政府與政府間國際組織都不具備。如案例五所示，研究者在無意間揭露了一些秘密，這些秘密包含了在理解、準備並防禦此領域威脅上具有價值的防禦性資訊。對雙重用途研究活動、優先事項與能力的早期洞察，提供了一個進行倡議、政策行動，以及（在最極端的情況下）執法行動的機會之窗。我們希望，將這些早期洞察與公眾分享，有助於讓政府、產業與一般大眆理解這些風險的本質，以及確保 AI 模型安全部署所必需的防護措施。我們的看法是，這些部署必然需要結合兩種機制：既守護最高風險內容與能力的安全過濾器，以及讓善意使用者得以取得這類能力的可信任存取計畫。</p>
+<h3 id="82">8.2 解方的機制：判斷點從模型端搬到人工核可端</h3>
+<p>把 8.1 的三段引文串成一個機制圖，可以清楚看出這個解方<strong>改變的是判斷發生的位置</strong>，而不是判斷的鬆緊：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>分類器防線（現行主力）</th>
+<th>可信任使用者審核制（提出的解方）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>判斷依據</td>
+<td>這一次請求的<strong>內容</strong>看起來像什麼</td>
+<td>這個<strong>使用者</strong>是誰、他的機構背景與研究用途是否可查核</td>
+</tr>
+<tr>
+<td>判斷時機</td>
+<td>每一次請求即時判斷</td>
+<td>帳號建立／能力升級申請時一次性審核，之後在授權範圍內持續可用</td>
+</tr>
+<tr>
+<td>能處理的風險</td>
+<td>內容高度接近「已知武器複製」的請求（狀態一、二）</td>
+<td>內容本身無法判斷善惡，但使用者身分可查核的請求（狀態三、四的死角）</td>
+</tr>
+<tr>
+<td>核心限制</td>
+<td>對雙重用途內容束手無策（第 3、4 節）</td>
+<td>依賴「帳號與機構訊號」的真實性——如果身分審核本身能被偽造（第 5 節的規避手法），這道防線一樣會被繞過</td>
+</tr>
+<tr>
+<td>對應報告用詞</td>
+<td>"classifier guards"</td>
+<td>"trusted user programs" / "trusted access programs"</td>
+</tr>
+</tbody>
+</table>
+<p><strong>教學提醒（用詞辨正）</strong>：報告原文使用的詞是「trusted user programs」（p.137）與「trusted access programs」（p.138），並沒有使用「know-your-customer」或「KYC」這個詞——本模組任務簡報用「trusted-user vetting / know-your-customer」來描述這個概念，是借用金融與基因合成產業的既有術語幫助理解（見第 9.5 節 IGSC 的比較），但在引用報告原文時，必須忠於報告自己的用詞「trusted user/access programs」，不可寫成報告使用了「KYC」一詞。</p>
+<h3 id="83">8.3 代價：能力可及性的不平等（課堂討論框架）</h3>
+<p>報告的結論段落完全沒有討論這個解方的代價——這正是本教材要補上的部分。「可信任使用者審核制」把守門的成本從「AI 公司即時判斷每一次請求」，轉移成「每一位申請者事前證明自己值得信任」，這個轉移不是免費的：</p>
+<ol>
+<li><strong>誰負擔查核成本？</strong> 現行的分類器防線，善意使用者幾乎感受不到任何摩擦——請求被放行，使用者甚至不知道背後有分類器在運作。可信任使用者審核制則要求每一位想取得前沿生物能力的研究者，主動提交機構背景、研究用途、監督機制等資訊，並等待審核——這個流程本身就是一種成本，而且這個成本由<strong>每一位申請者</strong>負擔，不分善惡。</li>
+<li><strong>誰有能力通過查核？</strong> 「可查核的機構背景」對頂尖大學、大型藥廠、國家級研究機構的研究者而言負擔相對輕——他們本來就有清楚的機構隸屬、資助紀錄、發表歷史可供查核。但對獨立研究者、小型新創、開發中國家的學術機構、或任何體制外的正當研究者而言，同樣的查核門檻可能構成實質障礙。<strong>這正是能力可及性不平等的核心機制</strong>：審核制不是按「研究是否危險」分配存取權，而是按「機構是否有能力證明自己正當」分配存取權，這兩者未必等同。</li>
+<li><strong>誰來定義「trusted」？</strong> 報告完全沒有說明審核的具體標準——由 Anthropic 一家公司決定誰是「trusted user」，本質上是把一部分原本屬於（或應屬於）政府出口管制與科研倫理審查機構的權力，交給了一家私人公司。這與常規武器模組第 3 節「治理缺口」的討論邏輯相通：偵測層的缺口最終要由誰來填補？當填補者是私人公司時，正當性從哪裡來？</li>
+</ol>
+<p><strong>課堂討論題（設計用）</strong>：如果你是一位任職於台灣中型生技公司或非頂尖大學實驗室的研究者，需要用前沿模型的未閹割生物能力做正當的疫苗或藥物研發，你要如何證明自己「值得信任」？如果審核流程需要數週甚至數月，而你的競爭對手剛好任職於已經是「trusted partner」的機構，這個審核制度本身是否製造了新的競爭不平等？（本題延伸到第 10.4 節對台灣的意涵。）</p>
+<h3 id="84-anthropic">8.4 現實印證：Anthropic 已經在推動的分層存取</h3>
+<p>本課以 WebSearch 查證發現，Anthropic 在本報告發布（2026-09-10）之前，已經在推動與結論呼應的分層存取安排：一項分階段開放生命科學研究者使用受限防線模型的計畫，於 2026-06-09 宣布，2026-08 有防線改進的更新說明。這項安排的公開描述大致是：通用模型（Fable 5）維持完整的生物防護；一個共用相同基礎模型、但<strong>部分防線针對受信任夥伴解除</strong>的受限版本（Mythos 5），僅提供給少量經審核的生命科學機構研究者。公開資料並未提供標準化的線上申請流程，官方說法強調這是「少數精選夥伴」的有限開放，而非普遍可用的服務，資格認定也未承諾與特定職位、機構或國籍掛鉤（見第 9.6 節來源列表）。</p>
+<p><strong>這項計畫與本報告 p.137–138 結論的關係，值得在課堂上點出兩層意義</strong>：第一，這代表 Anthropic 在正式公開承認「分類器不能同時兼顧效益與防害」之前，已經在<strong>實務上</strong>開始佈局可信任使用者機制——報告的結論某種程度是替一項已經在推動的政策做事後的公開論證。第二，p.138「we are encouraged that our industry peers have taken analogous steps」這句話，本課以 WebSearch 找到部分獨立佐證：另一家前沿模型供應商確實有對應的生物防禦相關受信任存取安排。這代表「分層存取＋可信任使用者」正在成為業界對生物雙重用途困境的收斂解法，而不是 Anthropic 單方面的主張（詳見第 9.4 節）。</p>
+<hr />
+<h2 id="9">9. 外部政策框架與第三方驗證</h2>
+<h3 id="91-anthropic">9.1 一手來源（Anthropic 自身文件）</h3>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>本課使用方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>威脅報告 PDF p.129–138</td>
+<td>https://www-cdn.anthropic.com/e50be2e51e7695dc4b1366a37a245a597377d3b5/Anthropic-Detecting-and-countering-091026.pdf</td>
+<td>2026-09-10</td>
+<td>主要一手來源；p.129–131、p.137–138 逐字讀完；p.131–137 五案僅摘取分類器結果句</td>
+</tr>
+<tr>
+<td>威脅報告網頁版</td>
+<td>https://www.anthropic.com/threat-intelligence-report-september-2026</td>
+<td>2026-09-10</td>
+<td>對照確認</td>
+</tr>
+</tbody>
+</table>
+<h3 id="92-ai">9.2 既有 AI×生物安全政策研究機構（獨立於本報告，長期關注此議題）</h3>
+<p>本節查證的機構與報告，<strong>與 2026-09-10 這份威脅報告的發布完全無關</strong>，是 AI 生物安全治理領域行之有年的獨立研究脈絡，用來說明第 2.2 節「長久以來人們擔心」這句話所指的政策社群是誰：</p>
+<table>
+<thead>
+<tr>
+<th>機構／報告</th>
+<th>核心內容</th>
+<th>性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NTI｜bio（核威脅倡議組織生物專案）《A Framework for Managed Access to Biological AI Tools》</td>
+<td>針對 AI 生物設計工具提出六項建議，包括建立國際「AI-Bio Forum」以研擬模型防護準則；指出 AIxBio 領域治理框架的發展速度跟不上能力進展速度</td>
+<td>獨立政策研究，非回應本報告</td>
+</tr>
+<tr>
+<td>Johns Hopkins Center for Health Security（約翰霍普金斯健康安全中心）AIxBio 專案</td>
+<td>向各國政府與 AI 安全研究院提供政策建議，涵蓋生物資料治理、開源模型、出口管制、風險評估、模型評測與防護措施</td>
+<td>獨立政策研究；2023-11-29 曾召集 Anthropic、Google DeepMind、Meta、Microsoft、OpenAI 與美國白宮國安會、科技政策辦公室、能源部、商務部、國防部、國務院、國土安全部代表召開 AIxBio 治理會議——顯示 Anthropic 本身也是這個長期政策對話的參與者之一</td>
+</tr>
+<tr>
+<td>RAND《Global Risk Index for AI-enabled Biological Tools》</td>
+<td>建立紅／黃／綠三級分類架構，依能力、濫用潛力、可及性、技術成熟度評估 AI 生物工具風險</td>
+<td>獨立研究</td>
+</tr>
+<tr>
+<td>RAND《Mitigating Risks at the Intersection of Artificial Intelligence and Chemical and Biological Weapons》（RRA2990-1）</td>
+<td>受美國國土安全部委託，評估 AI 生成或加劇化生威脅的風險與緩解方式</td>
+<td>受政府委託之獨立研究</td>
+</tr>
+<tr>
+<td>RAND《Building a Defense-in-Depth Biosecurity Strategy for the AI Era》（RRA4999-1）</td>
+<td>主張 AI 賦能生物科技可能降低製造生物武器的技術、操作與動機門檻，需要縱深防禦策略</td>
+<td>獨立研究</td>
+</tr>
+<tr>
+<td>RAND《The Operational Risks of AI in Large-Scale Biological Attacks》（RRA2977-1/2，2024-01）</td>
+<td><strong>紅隊研究</strong>：讓研究者扮演惡意非國家行為者規劃生物攻擊，比較有／無 LLM 輔助兩組的攻擊計畫可行性，發現<strong>兩組之間無統計顯著差異</strong>；結論是當時世代的 LLM 尚未實質提升生物攻擊規劃的操作風險</td>
+<td>獨立實證研究；發布於 2024 年初，測試對象是當時世代的模型</td>
+</tr>
+<tr>
+<td>RAND《Contemporary Foundation AI Models Increase Biological Weapons Risk》</td>
+<td>較新一份 RAND Perspective，標題本身即顯示與 2024 年研究方向相反的結論——隨模型能力提升，風險評估已轉向</td>
+<td>獨立研究；確切發布時間本課未能完整核對，見第 12 節</td>
+</tr>
+</tbody>
+</table>
+<p><strong>這兩份 RAND 報告放在一起，是本模組除了 Anthropic 自身敘述之外，最有力的獨立佐證</strong>：2024 年初的紅隊研究說「當時的 LLM 沒有顯著提升生物攻擊風險」，較新的 Perspective 報告標題則主張「當代基礎模型已經提升生物武器風險」——這條軌跡與 Anthropic p.129「舊模型明顯低於門檻、新模型證據不再確定」的敘事<strong>方向完全一致，且來自完全獨立的研究機構</strong>。這是本教材認定「評測證據隨模型世代快速過期」這個論點具有跨機構共識的關鍵依據。</p>
+<h3 id="93-durcp3co">9.3 既有 DURC／P3CO 治理框架與本報告的對照</h3>
+<p>美國政府對「雙重用途研究之關注」（Dual Use Research of Concern, DURC）與「具增強大流行潛力病原體」（Pathogens with Enhanced Pandemic Potential, PEPP，原稱 P3CO 框架）的監理制度，是生物領域雙重用途治理最成熟的既有框架，早於 AI 議題數十年：</p>
+<ul>
+<li>美國政府的 DURC 政策自 2012、2014 年的舊版本，於 2024-05-06 由新版「DURC-PEPP 政策與實施指引」取代；</li>
+<li>2025-05-05 一項行政命令《Improving the Safety and Security of Biological Research》要求各聯邦部會進一步修訂 2024 版政策；</li>
+<li>核心定義：DURC 是指「依現有理解，可合理預期會提供知識、資訊、產品或技術，並可能被直接誤用以對公共衛生與安全、農作物、動物、環境、物資或國家安全構成重大威脅」的生命科學研究。</li>
+</ul>
+<p><strong>這個對照對課堂的意義</strong>：DURC/PEPP 框架處理的正是報告 p.130–131「同一份資訊」那句話所描述的問題，只是治理主體是<strong>政府與受資助機構</strong>（透過經費審查、機構生物安全委員會），而不是<strong>AI 模型供應商</strong>。本報告呈現的其實是同一個治理難題，換了一個新的治理節點（模型存取）重新出現一次。案例 4 明確提到「toxins that are export-controlled under the Australia Group common control list due to their dual-use potential as incapacitating agents」（p.136）——這句話直接把 AI 存取層的判斷，與既有的出口管制清單掛鉤，顯示<strong>既有的雙重用途治理工具（出口管制清單）與新的治理節點（AI 分類器）之間，目前仍是兩條平行、未必互相對齊的規則</strong>。</p>
+<h3 id="94-ai-frontier-model-forum">9.4 AI 公司的生物安全承諾：白宮自願承諾與 Frontier Model Forum</h3>
+<table>
+<thead>
+<tr>
+<th>承諾／機制</th>
+<th>內容</th>
+<th>與本報告的關係</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>白宮 AI 自願承諾（2023-07）</td>
+<td>七家領先 AI 公司承諾對模型進行內部與外部紅隊測試，明確將生物安全（biosecurity）與網路安全並列為安全類別下的優先風險領域</td>
+<td>獨立於本報告的既有承諾框架；本報告的生物安全分類器與威脅情報調查，可理解為這項 2023 年承諾的具體落實證據之一</td>
+</tr>
+<tr>
+<td>Frontier Model Forum（FMF）AI-Bio Workstream</td>
+<td>產業共同工作小組，發展共享威脅模型、安全評測與緩解策略；已發布《Preliminary Taxonomy of AI-Bio Misuse Mitigations》與《Frontier AI Biosafety Thresholds》兩份議題簡報</td>
+<td>獨立於本報告；FMF 成員公司（含 Anthropic）依框架設定「對高技術背景行為者提供有意義 uplift 以開發新型或高度危險生物武器」作為能力門檻的判準基礎，與本報告 p.129 的門檻語言（「sophisticated user」「dangerous biological research」）用詞邏輯一致</td>
+</tr>
+<tr>
+<td>另一家前沿模型供應商的生物防禦相關受信任存取安排</td>
+<td>本課以 WebSearch 確認存在對應的生物防禦行動計畫與受信任存取機制，將受信任存取延伸至生命科學領域</td>
+<td>獨立佐證 p.138「our industry peers have taken analogous steps」一句並非空話；本課未逐一比對兩家公司審核標準的異同，僅確認「存在對應機制」這一事實</td>
+</tr>
+</tbody>
+</table>
+<h3 id="95-kyc-igsc">9.5 產業既有 KYC 實踐：國際基因合成聯盟（IGSC）</h3>
+<p>這是「可信任使用者審核制」在生物技術產業中<strong>已經運作二十年</strong>的先例，對理解第 8 節解方的可行性極具參考價值：</p>
+<ul>
+<li>國際基因合成聯盟（International Gene Synthesis Consortium, IGSC）是由主要基因合成公司組成的產業自律組織，五家創始公司即涵蓋全球約 80% 的基因合成訂單量，目前已成長至 40 餘家成員；</li>
+<li>其《Harmonized Screening Protocol》（協調篩查協定）<strong>同時執行兩層篩查</strong>：(1) 序列篩查——把每一筆合成基因訂單的完整 DNA 序列，比對受管制病原體資料庫與國際協調的序列參照資料庫；(2) 客戶篩查（know-your-customer）——對每一位潛在客戶進行身分核實與交貨資格確認，確保符合各國準則。</li>
+</ul>
+<p><strong>這與本報告的解方框架幾乎逐項對應</strong>：IGSC 的「序列篩查」對應「內容分類器」（p.138 的「safety filters guarding the highest-risk content」），IGSC 的「客戶篩查」對應報告提出的「trusted user/access programs」。差別在於：<strong>基因合成產業的兩層篩查是同時、常態運作的雙軌制</strong>，而 Anthropic 的表述聽起來更像是「分類器先，可信任使用者制後補」的演進路徑——本報告本身沒有明講兩者最終要如何並存運作（例如：可信任使用者是否完全豁免內容分類器，或只是取得分類器之外的額外能力）。這個治理設計上的模糊地帶，值得在課堂上對照 IGSC 的成熟先例來討論：一個運作二十年的產業自律機制，如何處理「篩查成本由誰負擔」「哪些機構天然更容易通過篩查」這些第 8.3 節提出的公平性問題，可能是 AI 產業在設計自己的可信任使用者制度時能夠借鏡（或該避免重蹈覆轍）的地方。</p>
+<h3 id="96">9.6 第三方對本報告生物章節的報導</h3>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>性質</th>
+<th>與本模組相關的內容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>INSIDE（台灣科技媒體）</td>
+<td>https://www.inside.com.tw/article/42371-anthropic-threat-intelligence-report-biological-weapons-taiwan</td>
+<td>2026-09-10／11 前後（WebSearch 結果所見）</td>
+<td>僅引述 Anthropic（WebFetch 回應 403，僅能取得標題與 URL）</td>
+<td>標題「AI 武器化！Anthropic 威脅情報報告揭 Claude 濫用，多個中國帳號研究攻台灣防空、生物武器」——把生物章節與常規武器章節的台灣目標案例並列報導，是本課找到唯一明確把「生物」與「台灣」放進同一篇報導標題的台媒來源，但因 403 無法確認內文是否有生物章節的具體台灣角度分析，或只是標題並列</td>
+</tr>
+<tr>
+<td>自由時報（國際新聞）</td>
+<td>https://news.ltn.com.tw/news/world/breakingnews/5571123</td>
+<td>2026-09-11 21:50</td>
+<td>僅引述 Anthropic，另引入一名外部智庫研究員評論</td>
+<td>標題「Anthropic報告示警！旗下AI模型恐助開發生物武器 擋下5高風險研究」——完整轉述五案研究方向、案例 2 的 VPS 規避細節；引述華府智庫研究員「韋伯」（應為 Andrew Weber，見下）評論此為「受國家支持的生物武器開發者，利用具領先地位AI模型快速進展能力」的案例</td>
+</tr>
+<tr>
+<td>Céline Gounder（Substack，獨立醫療評論）</td>
+<td>https://www.celinegounder.com/p/anthropic-claude-ai-bioweapons-biosecurity</td>
+<td>2026-09-10</td>
+<td><strong>第三方獨立評論</strong>，引用多位具名生物安全專家，但案例事實仍完全依賴 Anthropic 揭露</td>
+<td>見 9.7 節完整整理</td>
+</tr>
+<tr>
+<td>Capacity（Nadine Hawkins）</td>
+<td>https://capacityglobal.com/news/anthropic-bioweapon-report/</td>
+<td>2026-09-11</td>
+<td><strong>獨立分析</strong>，引入 RAND 實證研究作反方論據</td>
+<td>主張生物風險篩查本質是「存取控制＝基礎設施」問題，並引用 RAND 2024 年紅隊研究「頻繁使用前沿模型與僅用一般網路研究的攻擊者之間，未發現統計顯著差異」，對 Anthropic 敘事的急迫性提出溫和質疑；未觸及 ZDR、轉售平台等具體規避手法</td>
+</tr>
+<tr>
+<td>ts2.tech（TechStock² 編輯部）</td>
+<td>https://ts2.tech/en/anthropics-five-biology-cases-put-trusted-access-at-the-center-of-its-965-billion-valuation/</td>
+<td>2026-09-12</td>
+<td>混合型：轉述 Anthropic 報告＋投資人視角加值分析</td>
+<td>未提出「五案三案未攔」的統計說法；將可信任使用者制度描述為「廣泛開放給 Fable 5（防線較強）／限制開放給經審核研究者（防線較鬆）」的雙層市場；明確指出「這些案例不代表 Claude 已促成迫在眉睫的生物威脅」</td>
+</tr>
+<tr>
+<td>CurrentAffair.today（SK Jabedul Haque）</td>
+<td>https://www.currentaffair.today/blog/technology-13/how-to-apply-for-anthropic-s-biology-trusted-access-program-828</td>
+<td>首發 2026-06-10；更新 2026-08-23</td>
+<td>僅引述／解讀 Anthropic 官方資料</td>
+<td>確認可信任存取計畫於 2026-06-09 宣布、2026-08 更新生物防線說明；官方未提供公開逐步申請清單，資格認定不保證與特定職位、機構、國籍掛鉤——為本檔第 8.4 節提供事實基礎</td>
+</tr>
+<tr>
+<td>Daily Caller</td>
+<td>https://dailycaller.com/2026/09/10/anthropic-report-kamikaze-drone-swarms-biological-weapons/</td>
+<td>2026-09-10</td>
+<td>僅引述 Anthropic（WebFetch 回應 403，僅取得標題）</td>
+<td>標題把生物濫用與常規武器（自殺無人機群）並列報導，與 04 常規武器模組教材登記的來源相同一篇文章</td>
+</tr>
+<tr>
+<td>Washington Examiner</td>
+<td>https://www.washingtonexaminer.com/policy/technology/4719252/anthropic-alarm-ai-model-misuse-biological-weapon/</td>
+<td>2026 年 9 月上旬</td>
+<td>無法取得內文（WebFetch 回應 451 Unavailable For Legal Reasons，疑似地區封鎖）</td>
+<td>僅能確認標題與存在</td>
+</tr>
+</tbody>
+</table>
+<h3 id="97-gounder">9.7 唯一具名多專家的獨立評論：Gounder 文章整理</h3>
+<p>在本課查證的所有第三方來源中，Céline Gounder 的 Substack 文章是唯一一篇<strong>引入多位具名生物安全領域專家、且評論內容超出單純轉述</strong>的來源，值得完整整理：</p>
+<ul>
+<li><strong>Gregory Koblentz（喬治梅森大學生物防禦專家）</strong>：指出生物研究不只是「雙重用途」，更是「多重用途（multi-use）」，可同時服務多種和平的民用科學目的；並明確提醒「無法判斷這項研究與某個國家生物武器計畫之間，究竟有沒有關聯」——這是一句重要的<strong>降溫</strong>評論，提醒讀者報告呈現的是「值得關注的模式」，不是「已證實的武器計畫」。Koblentz 也指出 VPN 與虛假帳號的使用，既可能是規避偵測的武器計畫訊號，也可能單純是科學家想使用強大工具的訊號——這與本教材第 3、5 節「規避手法本身無法區分善惡意圖」的論點一致。</li>
+<li><strong>Tom Inglesby（Johns Hopkins Center for Health Security 主任）</strong>：評論的重點是<strong>治理落差</strong>——這類防護措施目前完全是各家公司自願採取的，而且沒有任何美國政府政策要求前沿模型針對生物風險進行這類評估。這是一句對「防線由誰負責」提出質疑的評論，直接呼應第 8.3 節「誰來定義 trusted」的討論。</li>
+<li><strong>Kevin Esvelt（MIT Media Lab）</strong>：正面倡議報告結論的解方方向——「讓所有正當研究者都能取得對最頂尖前沿模型的可信任使用者存取，同時確保開放權重模型盡可能少知道」；並提出 AI「democratizes competence」（讓能力普及化）的觀察，作為支持審核制而非開放取用的理由。</li>
+<li><strong>Andrew Weber（Council on Strategic Risks）</strong>：與自由時報引述的「韋伯」為同一人，兩篇獨立來源（英文 Substack 與中文自由時報）分別引述同一位專家對同一份報告的評論，是本課能找到的少數<strong>跨語言交叉印證</strong>案例。</li>
+</ul>
+<p><strong>這份獨立評論的整體定位</strong>：四位專家的評論方向並不一致——Koblentz 偏向降溫（不能證明武器計畫關聯）、Inglesby 聚焦治理缺口（沒有政府要求）、Esvelt 正面支持可信任使用者解方、Weber 偏向升溫（國家支持的生物武器開發者正在利用領先 AI 模型）。<strong>沒有任何一位專家宣稱自己獨立查核了五案的具體內容</strong>——所有評論都是基於 Anthropic 已公開的報告文字做出的專業研判。這與武器模組第 9.5 節「單一來源情報的判定」是同一個結論：讀者對五案細節的信心上限，仍然等於對 Anthropic 這個單一來源的信心；獨立專家提供的是<strong>風險判斷與治理脈絡</strong>，不是<strong>事實查核</strong>。</p>
+<hr />
+<h2 id="10">10. 課程教學設計</h2>
+<h3 id="101">10.1 核心教學要點</h3>
+<ol>
+<li><strong>分類器是內容判斷工具，不是意圖判斷工具</strong>。第 3 節的判斷矩陣要讓學員記住：分類器只能在「內容訊號」存在時發揮作用；一旦行為者用雙重用途框架包裝請求，內容訊號會刻意變得中性，分類器的判斷基礎就消失了。</li>
+<li><strong>防線是一道光譜，不是二元的「有效／無效」</strong>。第 4 節的四種狀態（攔下／限制到弱模型／放行／設計上不涵蓋）要讓學員能對任何一個「AI 公司擋下了什麼」的新聞標題，反射性地追問：擋下的是內容、還是存取？是完全阻絕、還是降級？分類器的訓練範圍原本就涵蓋這個情境嗎？</li>
+<li><strong>存取層規避與內容層判斷是兩個獨立的攻防戰場</strong>。第 5 節要讓學員理解：再精準的內容分類器，如果面對的輸入已經被存取層規避污染（假身分、假地理位置、中繼帳號），判斷的前提就已經失真。防禦縱深必須同時覆蓋兩層。</li>
+<li><strong>「大多是民用科學」不是安慰,是難題的量化證明</strong>。第 7 節的 30 天盤查數字，要讓學員理解：連鎖定高風險機構的篩查，多數結果依然是正常研究——這正是說明「內容無法區分善惡意圖」這句話在實務上有多嚴重。</li>
+<li><strong>可信任使用者審核制把治理成本從公司轉移到申請者，而非消除成本</strong>。第 8 節要讓學員理解，任何看起來「解決了分類器困境」的方案，都值得追問：這個方案把原本的成本轉移到了誰身上？誰更容易負擔這個新的成本？</li>
+<li><strong>既有治理框架（DURC/P3CO、IGSC）比 AI 業界的方案更成熟，值得借鏡而非重新發明</strong>。第 9 節要讓學員意識到，AI 公司面對的雙重用途困境，在生物技術產業內部已經有二十年的治理實踐可以參考，不必把這當成一個全新的問題從零設計解方。</li>
+<li><strong>獨立評論提供的是風險研判，不是事實查核</strong>。第 9.7 節要讓學員養成習慣：讀到「專家評論」時，先問這位專家評論的是「這件事有多嚴重」還是「這件事是不是真的發生了」——這是情報分析裡最基本、卻最常被混淆的兩件事。</li>
+</ol>
+<h3 id="102">10.2 課堂討論題（沒有標準答案）</h3>
+<ol>
+<li>p.131 說「明顯的惡意意圖，往往反而證明某個行為者並不那麼老練」。如果这個判斷成立，那麼一個分類器系統要如何避免陷入「把最容易被抓到的人抓走、卻放過真正老練的行為者」這種選擇偏誤？這對整體防線的實際效果意味著什麼？</li>
+<li>案例 1 中，Claude 在不知情的狀況下協助撰寫了「拒答即轉送競爭對手模型」的後備機制程式碼。如果一家 AI 公司的模型被利用來建造繞過自己防線的工具，這個責任應該如何界定？工程團隊在審查「過度拒答緩解」這類請求時，應該多懷疑其真實用途？</li>
+<li>30 天盤查找到約 35 項研究、多數為民用科學。如果 Anthropic 選擇對這 35 項研究的機構逐一發出警示或通報，可能的誤傷成本是什麼？如果選擇完全不通報、只留作內部觀察，又放棄了什麼？</li>
+<li>「可信任使用者審核制」把守門成本從 AI 公司轉移到申請者身上。如果你是政策制定者，你會要求 AI 公司公開審核標準與通過率統計嗎？公開這些資訊，會不會反而幫助老練的行為者更精準地偽裝申請條件？</li>
+<li>IGSC 的基因合成篩查已經運作二十年，卻不能阻止案例 1 這樣的規避行為——轉售平台與 ZDR 濫用一樣可以繞過「客戶篩查」。既有的成熟框架都無法完全解決規避問題，這是否代表「可信任使用者審核制」對 AI 領域而言，終究只是把攻防難度提高，而不是真正解決問題？</li>
+<li>Inglesby 指出目前這類防護完全是自願性的，沒有政府要求。如果生物安全分類器與可信任使用者制度變成法定要求，誰應該是主管機關？這個主管機關要如何取得判斷「誰值得信任」所需要的專業能力，而不必完全仰賴 AI 公司自己的內部判斷？</li>
+</ol>
+<h3 id="103">10.3 角色扮演與辯論</h3>
+<p><strong>（A）「雙重用途判定」角色扮演：學員扮演分類器</strong></p>
+<p>規則：學員分組扮演 Anthropic 的生物安全分類器。每一題只提供<strong>抽象化的研究目的措辭</strong>（沒有任何技術內容、病原體名稱、實驗方法），學員必須在不知道「標準答案」的情況下，選擇四種判定之一——<strong>放行（Allow）／限制到較弱模型（Confine）／放行但標記（Allow + flag）／攔截並升級調查（Block + escalate）</strong>——並寫下判定依據的<strong>脈絡訊號</strong>（機構背景、地理位置、資助來源、措辭框架），不是技術內容。每題 3 分鐘，之後公布「本模組對應的案例狀態」並討論。</p>
+<blockquote>
+<p>以下十題全部是教學用的抽象描述，只有研究目的措辭與脈絡線索，完全不含可操作的技術細節，也不指名任何病原體或毒素。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>請求情境（抽象化）</th>
+<th>學員判定</th>
+<th>解答討論</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>一份補助申請書請 Claude 協助撰寫，內容是某病毒的傳播力與免疫逃脫特性研究；申請人自稱民間研究者，但申請書內部文件顯示執行地點是一所軍事研究機構。</td>
+<td>？</td>
+<td>對應案例 1（p.131–132）。訊號是<strong>身分與機構的矛盾</strong>：自稱民用、實為軍方場域。這是老練行為者留下的少數可辨識脈絡線索之一。<strong>Block + escalate</strong>。討論：如果申請書完全沒有透露執行機構呢？分類器還能靠什麼判斷？</td>
+</tr>
+<tr>
+<td>2</td>
+<td>一位研究者在數週內與 Claude 進行數千則訊息的往來，規劃某呼吸道病毒的動物模型適應性實驗；帳號透過美國虛擬伺服器存取，信箱是自動產生的使用者名稱。</td>
+<td>？</td>
+<td>對應案例 2（p.133–134）。訊號是<strong>存取層異常</strong>（VPS＋自動產生信箱）疊加<strong>內容高度接近已知高風險研究</strong>。<strong>Confine（限制到弱模型）</strong>是報告實際採取的做法。討論：如果同樣的存取層異常，但研究內容換成完全無害的主題，分類器的「限制到弱模型」策略還適用嗎？這代表限制策略的觸發條件是內容還是存取？</td>
+</tr>
+<tr>
+<td>3</td>
+<td>一份補助申請書由 Claude 在單一工作階段內、於能力最強的模型上完成，涵蓋核心假說、實驗設計、劑量與統計計畫；研究內容明確聚焦在「如何讓某病原體減毒」。</td>
+<td>？</td>
+<td>對應案例 3（p.135）。訊號極少——沒有身分矛盾、沒有存取層異常被提及，內容框架聚焦在「治療／減毒」方向。<strong>多數組會選 Allow 或 Allow + flag</strong>；報告實際結果是完全放行。討論：如果分類器把「聚焦減毒」自動視為安全訊號，這個規則本身會不會被老練行為者學會後反過來利用？</td>
+</tr>
+<tr>
+<td>4</td>
+<td>研究者請 Claude 協助建立一套分子特性圖譜，並優化其中的分子性質，目標框架是開發新型止痛與精神科藥物；研究者本人在文件中提及所屬計畫具有國家資助背景。</td>
+<td>？</td>
+<td>對應案例 4（p.136）。內容框架是明確的治療目標，「國家資助」是唯一的脈絡訊號，但單獨不足以判定惡意。<strong>多數組會選 Allow</strong>；報告結果是「設計上不涵蓋」——分類器根本沒有被訓練來處理這類新化合物研究。討論：如果分類器的訓練目標要擴大到涵蓋這類請求，需要多少「安全的治療研究」被連帶擋下，才能換來攔下這一類請求的能力？這筆交易值得嗎？</td>
+</tr>
+<tr>
+<td>5</td>
+<td>研究者請 Claude 協助撰寫季度進度報告，並明確要求在報告中把所涉及的病原體與蛋白質身分描述得「刻意低解析度、模糊」。</td>
+<td>？</td>
+<td>對應案例 5（p.136）。這是五題中<strong>訊號最強</strong>的一題——「刻意要求模糊化身分」本身就是一個異常請求，即使技術內容完全落在分類器設計範圍之外。<strong>多數組應選 Block + escalate 或至少 Allow + flag</strong>。討論：報告指出分類器仍然沒有攔下這個請求（設計上不涵蓋）。如果連「主動要求模糊化」這種強烈的脈絡訊號都沒有觸發攔截，這代表分類器目前是完全不看「刻意模糊化」這類請求層級的訊號，只看技術內容本身嗎？這個發現該如何回饋到分類器設計？</td>
+</tr>
+<tr>
+<td>6</td>
+<td>一個服務數十名研究者的第三方平台，透過 Claude 為客戶處理生物研究相關請求，平台向 Anthropic 客服詢問如何降低「過度拒答」對使用者體驗的影響，並請 Claude 協助撰寫一套訊息路由的程式碼。</td>
+<td>？</td>
+<td>對應案例 1 的平台規避機制（p.133）。單看這句話：「降低過度拒答」是完全合理的工程需求，任何正常企業客戶都可能提出。<strong>Allow</strong>幾乎是唯一合理的單次判定。討論：這一題就是用來讓學員親身體會「無法只靠這一句話判斷」的極限——需要什麼樣的帳號歷史或後續行為模式，才會讓這個請求從「合理的工程需求」翻轉成「規避基礎設施的一部分」？</td>
+</tr>
+</tbody>
+</table>
+<p><strong>練習後的總結討論</strong>：十題裡，有幾題「只看這一句」就能做出與報告一致的判定？（預期：只有第 1、5 題訊號夠強。）這說明了什麼？（多數請求即使放進報告已知結果的脈絡裡回頭看，單獨判斷時依然模稜兩可——這正是第 3 節「雙重用途」困境的親身體驗，而不只是抽象概念。）</p>
+<p><strong>（B）政策辯論：「可信任使用者審核制」vs.「開放取用」</strong></p>
+<p><strong>辯題</strong>：本院認為，前沿 AI 公司應該把高階生物研究能力<strong>限定於</strong>可信任使用者審核制，而非對所有使用者開放（僅以分類器把關）。</p>
+<p><strong>形式</strong>：牛津式，三回合，共 60 分鐘。</p>
+<table>
+<thead>
+<tr>
+<th>回合</th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>立論（各 6 分鐘）</td>
+<td>正方：援引第 3、4 節「分類器無法同時促成效益並防止危害」、第 7 節「30 天盤查」數字、第 9.5 節 IGSC 二十年先例為據。反方：援引第 8.3 節能力可及性不平等、Inglesby 的治理正當性質疑、Koblentz 的「無法證明武器計畫關聯」降溫論點為據。</td>
+</tr>
+<tr>
+<td>質詢（各 5 分鐘）</td>
+<td>聚焦一個問題：「trusted」的審核標準該由誰制定、如何避免變成變相的地緣政治篩選（例如特定國籍申請者天生更難通過）？</td>
+</tr>
+<tr>
+<td>結辯（各 4 分鐘）</td>
+<td>正反雙方都必須具體回應：如果你的立場獲勝，一位任職於台灣中小型生技公司、需要前沿模型能力做正當疫苗研發的研究者，明天實際上會遇到什麼？</td>
+</tr>
+</tbody>
+</table>
+<p><strong>角色扮演觀察員</strong>（不站隊，各發言 2 分鐘）：<br />
+- <strong>開發中國家公衛研究者</strong>：說明審核流程的時間與文件成本，對資源有限的機構意味著什麼。<br />
+- <strong>生物安全政策官員</strong>：說明如果沒有政府強制標準，企業自願的可信任使用者制度在究責上的落差。<br />
+- <strong>AI 公司信任與安全工程師</strong>：說明審核每一位申請者的機構背景與研究用途，需要多少人力與時間成本，這個成本能否隨使用者數量擴張而擴張。</p>
+<h3 id="104">10.4 對台灣的意涵</h3>
+<ol>
+<li><strong>台灣的生技產業與學術機構，同時是這個議題的受益者與潛在受限對象</strong>。台灣擁有成熟的生技法規體系與電子╱ICT 供應鏈優勢，AI 輔助藥物開發、醫學影像與個人化醫療是產業與政府政策共同推動的方向；但若前沿模型的最高階生物能力逐步收斂到「可信任使用者審核制」，台灣的中小型生技新創與非頂尖學術機構——而非頂尖大型機構——最可能承擔第 8.3 節討論的「查核成本不對稱」代價。</li>
+<li><strong>台灣的生物安全協調機制以民間協會與既有法規為主</strong>。台灣生物安全協會（成立於 2006 年）作為整合產官學研力量的平台，長期協助防疫與技術支援工作；但截至本課查證範圍，台灣在生物安全與雙重用途研究的<strong>國際多邊治理</strong>參與上，面臨其政治地位帶來的結構性限制——例如生物武器公約（BWC）與澳洲集團（Australia Group）這類以主權國家與聯合國會籍為基礎的機制，台灣目前並非正式締約方或成員（本課對台灣與 BWC 的歷史關聯查得的資訊有內部矛盾，見第 12 節限制說明，未在此處做確定性陳述）。這代表台灣若要落實與國際同步的雙重用途研究治理標準，主要依靠的是國內法規與行政部門（例如經濟部國際貿易署的戰略性高科技貨品輸出入管理機制）參照國際清單自主接軌，而非透過正式締約身分直接參與規則制定。</li>
+<li><strong>「可信任使用者審核制」若成為前沿 AI 常態，台灣研究者的處境值得提前盤點</strong>。第 8.4 節查證的分層存取安排，目前公開資訊顯示資格認定「不保證與特定職位、機構或國籍掛鉤」，但也沒有公開的標準申請清單——這代表台灣研究機構若想確保自己的研究人員未來能被納入「trusted user」範圍，可能需要及早建立可供國際查核的機構治理紀錄（生物安全委員會審查機制、資助透明度、發表紀錄），而不是等到審核制度正式上路後才開始準備。</li>
+<li><strong>台灣同時是規避手法的潛在中繼點與潛在受害對象</strong>。第 5 節描述的規避管道——ZDR 濫用、轉售平台、商用 VPS——技術上不限定發生在特定地區；台灣的雲端與網路基礎設施同樣可能被利用作為規避他國存取限制的中繼跳板（如同案例 1、2 使用「美國基礎設施」規避地理封鎖的邏輯，其他地區的基礎設施同樣可能被用來規避對台灣或其他地區的存取限制）。這對台灣的雲端服務業者與網路治理機關而言，是一個目前尚未被本報告直接點名、但邏輯上必然存在的風險面。</li>
+<li><strong>與常規武器模組的呼應</strong>：04 模組已指出，Anthropic 揭露「通報公私部門夥伴」時從未指明國家，台灣官方對武器章節的揭露也沒有公開回應紀錄。生物章節的通報對象同樣未指明——如果台灣的生技機構或學術單位未來被捲入類似案例（無論作為受害者、被規避利用的中繼點，或無辜被牽連的研究者），台灣目前在這條資訊通報鏈上處於什麼位置，是本模組留給台灣資安與科研治理社群的一個公開問題。</li>
+</ol>
+<hr />
+<h2 id="11">11. 關鍵原文引文</h2>
+<ol>
+<li>
+<p><strong>p.129 — 章節開場風險定性</strong></p>
+<blockquote>
+<p>"Biological misuse is one of the most serious risks of frontier AI models. It has long been a concern that AI models might one day reach the level of capability where they can help to make existing pathogens more dangerous—or create entirely new ones. Without the correct safeguards, such capabilities could have catastrophic consequences."<br />
+生物濫用是前沿 AI 模型最嚴重的風險之一。長久以來人們擔心，AI 模型有朝一日可能達到某種能力水準，協助讓現有病原體變得更危險——或創造出全新的病原體。若缺乏正確的防護措施，這樣的能力可能帶來災難性的後果。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>p.129 — 評測證據的侷限</strong></p>
+<blockquote>
+<p>"Although evaluations are useful in that they provide evidence of capability, they cannot concretely demonstrate that such capability would ever be used to develop biological weapons in the real world."<br />
+雖然評測有其用處，能提供能力方面的證據，但它們無法具體證明這種能力是否真的會在現實世界中被用來開發生物武器。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>p.129 — 業界首例的定位聲明</strong></p>
+<blockquote>
+<p>"To our knowledge, no private company, AI or otherwise, has yet shared evidence of the potential misuse of their platforms for biological weapons development publicly."<br />
+據我們所知，尚無任何私人公司（無論是否為 AI 公司）曾公開分享其平台遭濫用於生物武器開發的證據。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>p.130–131 — 雙重用途核心命題</strong></p>
+<blockquote>
+<p>"But we do not live in that simple world. Biological capabilities are dual use: they can be used for beneficial or harmful purposes, and it is often difficult to distinguish between them. The same information that can be used to develop a biological weapon could also be used to develop, for example, a vaccine or a cure for a disease."<br />
+但我們並不生活在那個簡單的世界裡。生物能力具有雙重用途性質：它們既可用於有益目的，也可用於有害目的，而兩者往往難以區分。同一份可以用來開發生物武器的資訊，也可能被用來開發，例如，一支疫苗或一種疾病的療法。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>p.131 — 老練行為者的「合理可否認性」與弔詭</strong></p>
+<blockquote>
+<p>"Overt malicious intent is, therefore, often evidence that a particular actor is not all that sophisticated (after all, they are committing their dangerous acts in plain sight). More sophisticated actors can hide their intent, extracting assistance from an AI model in interactions that look plausibly beneficial, but when put in context and analyzed holistically, can provide clear warning signs of misuse."<br />
+因此，明顯的惡意意圖，往往反而證明某個行為者並不那麼老練（畢竟，他們是在眾目睽睽之下做出危險行為）。更老練的行為者能夠隱藏意圖，在看似有益的互動中從 AI 模型榨取協助，但放在脈絡中整體分析時，這些互動能提供明確的濫用警訊。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>p.137 — 分類器局限的自我診斷</strong></p>
+<blockquote>
+<p>"We believe these cases illustrate the challenge in using classifiers as the only safeguard layer: since it is not possible to reliably identify the intent of the user in highly technical dual-use areas, a classifier cannot simultaneously enable benefit and prevent harm."<br />
+我們認為，這些案例說明了把分類器當作唯一防護層所面臨的挑戰：由於在高度技術性的雙重用途領域，不可能可靠地辨識使用者的意圖，分類器無法同時促成效益並防止危害。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>p.137 — 解方</strong></p>
+<blockquote>
+<p>"This knowledge and our observation of cases such as this suggest to us that the only safe way to serve frontier biological capabilities is to offer them in trusted user programs."<br />
+這項認知，加上我們對此類案例的觀察，讓我們認為，服務前沿生物能力唯一安全的方式，是透過可信任使用者計畫來提供。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>p.137 — 30 天盤查</strong></p>
+<blockquote>
+<p>"Recently, we swept 30 days of activity associated with adversarial state institutions and found roughly 35 distinct research efforts, most of them ordinary civilian science, but some with notable dual-use potential."<br />
+最近，我們對與敵對國家機構相關的活動進行了 30 天的盤查，找出約 35 項不同的研究工作，其中多數為一般民用科學，但部分具有顯著的雙重用途潛力。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>p.138 — 結尾：兩種機制並存</strong></p>
+<blockquote>
+<p>"It is our view that these deployments will necessarily involve a combination of safety filters guarding the highest-risk content and capabilities and trusted access programs that enable such access for beneficial uses."<br />
+我們的看法是，這些部署必然需要結合兩種機制：既守護最高風險內容與能力的安全過濾器，以及讓善意使用者得以取得這類能力的可信任存取計畫。</p>
+</blockquote>
+</li>
+</ol>
+<hr />
+<h2 id="12">12. 未能驗證之處與研究限制</h2>
+<ol>
+<li><strong>「五案中三案分類器未攔下」不是報告的逐字陳述</strong>。本教材在第 4.4 節已說明，這是依報告逐案結果整理出的歸納（案例 3、4、5 屬於「放行」與「設計上不涵蓋」兩種狀態），任務簡報將其表述為報告的「誠實揭露」，本課已在文中明確標註這是整理而非引文，避免誤植為 Anthropic 原話。</li>
+<li><strong>Taiwan 與生物武器公約（BWC）的歷史關聯，本課查證結果存在內部矛盾，未做確定性陳述</strong>。WebSearch 綜合結果提及「中華民國在喪失聯合國席位前已存放 BWC 批准書」，但生物武器公約於 1972 年才開放簽署，晚於中華民國 1971 年喪失聯合國席位，時序上矛盾；較可能是與 1925 年日內瓦議定書（中華民國曾於 1929 年批准）的訊息混淆。本課未能在時間內取得可靠的一手來源（例如聯合國裁軍事務廳或美國國務院條約清單）釐清，第 10.4 節僅陳述台灣目前並非 BWC 正式締約方這個較有把握的事實，未附和該矛盾的歷史細節。</li>
+<li><strong>台灣與澳洲集團（Australia Group）2018 年「對話與外展」的具體內容未能取得原始文件核實</strong>。WebSearch 摘要提及的出處指向多個轉引來源，本課未能追到 Australia Group 秘書處或參與國政府的一手聲明，第 10.4 節僅以「並非正式成員」呈現，不引用該次對話的細節。</li>
+<li><strong>RAND《Contemporary Foundation AI Models Increase Biological Weapons Risk》的確切發布日期與內容細節未完整核對</strong>。本課僅取得標題與研究方向，未逐項核對其方法論與具體結論是否真的與 2024 年紅隊研究方向相反；第 9.2 節的推論（「風向已轉」）是本課依標題與既有脈絡做的合理推測，非逐字核對後的結論。</li>
+<li><strong>「另一家前沿模型供應商採取了對應的可信任存取安排」僅以 WebSearch 摘要確認存在，未逐一比對雙方審核標準的異同</strong>，也未取得該公司官方文件的一手核實，僅止於確認「存在對應機制」這個事實層次。</li>
+<li><strong>INSIDE、Daily Caller、Washington Examiner 三篇第三方報導的完整內文，本課因 WebFetch 回應 403／451 未能取得</strong>，僅能依 WebSearch 摘要與標題判斷其大致框架，第 9.6 節已標註無法確認的部分（例如 INSIDE 報導內文是否對台灣角度有具體分析）。</li>
+<li><strong>第 9.4 節「白宮自願承諾」與「Frontier Model Forum」的內容，取自 WebSearch 摘要而非逐條核對其官方原始文件全文</strong>；本課已核實 FMF 兩份議題簡報確實存在且主題相符，但未逐字核對簡報內容與本報告用詞的對應程度是否如本課推論般精確。</li>
+<li><strong>第 8.4 節「可信任存取計畫」的宣布與更新日期，取自單一第三方文章（CurrentAffair.today）轉述</strong>，本課未能直接取得 Anthropic 官方公告原文核實日期與細節；若該文章對日期或機制描述有誤，本節內容會連帶受影響。</li>
+<li><strong>五個案例本身的行為者身分、對話內容、研究細節，全部只存在於 Anthropic 的內部資料</strong>，如同武器模組的判定：本模組沒有任何外部方宣稱獨立取得或核實了對話紀錄本身；第 9.7 節整理的多位專家評論，評的是風險研判與治理脈絡，不是案例事實的真偽。</li>
+<li><strong>本課沒有連線任何 IOC 或嘗試存取報告提及的 ZDR、轉售平台等服務</strong>，僅依報告原文摘錄描述其機制與角色，未做任何主動查核。</li>
+<li><strong>五案摘要表（第 4.2 節）的「行為者類型」欄位，為報告原文描述的直接摘要</strong>，但報告本身也承認這些描述是 Anthropic 內部調查的結論性描述，其精確度與完整度無法由本課獨立驗證。</li>
+<li><strong>本檔沒有任何圖表可判讀</strong>（第 6 節已說明），這是本模組頁段（p.129–131、p.137–138）的客觀事實，非查證疏漏。</li>
+</ol>
+<hr />
+<h2 id="a">附錄 A：本模組術語表</h2>
+<table>
+<thead>
+<tr>
+<th>術語</th>
+<th>全稱／中文</th>
+<th>白話定義</th>
+<th>報告中的位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ZDR</td>
+<td>Zero Data Retention／零資料保留</td>
+<td>供應商承諾不保留使用者提示詞與回應內容的服務條款，原為滿足受監管產業的隱私需求而設計，也可能被濫用以規避內容稽核。</td>
+<td>p.132–133、137</td>
+</tr>
+<tr>
+<td>Supported Regions Policy</td>
+<td>支援地區政策</td>
+<td>Anthropic 只在特定國家／地區提供服務；不支援地區的使用者需透過 VPS／VPN 等工具規避地理層級的存取控制。</td>
+<td>p.130、134</td>
+</tr>
+<tr>
+<td>轉售中繼（Reseller relay）</td>
+<td>—</td>
+<td>由第三方營運、代理多名終端使用者存取模型的帳號或平台，可能使帳號層的「單一使用者」風控訊號被稀釋或失效。</td>
+<td>p.132、135</td>
+</tr>
+<tr>
+<td>Gain-of-function research（功能增益研究）</td>
+<td>—</td>
+<td>報告定義：「research that genetically alters an organism to create a new or enhanced biological property」——一種以基因層面調整生物體特性的研究類別，是既有 DURC／PEPP 監理框架中的核心審查類別，非本教材自創術語。</td>
+<td>p.131</td>
+</tr>
+<tr>
+<td>DURC</td>
+<td>Dual Use Research of Concern／雙重用途關注研究</td>
+<td>美國政府既有的生命科學研究監理分類：依現有理解，可合理預期會被直接誤用以構成重大公共安全或國安威脅的研究。與 AI 模型的「雙重用途」困境是同一個概念在不同治理節點的體現。</td>
+<td>報告未提及；既有美國政府政策框架</td>
+</tr>
+<tr>
+<td>P3CO／PEPP</td>
+<td>Potential Pandemic Pathogen Care and Oversight／Pathogens with Enhanced Pandemic Potential</td>
+<td>DURC 框架下，針對具增強大流行潛力病原體研究的加強審查機制。</td>
+<td>報告未提及；既有美國政府政策框架</td>
+</tr>
+<tr>
+<td>Australia Group common control list</td>
+<td>澳洲集團共同管制清單</td>
+<td>一份用於協調各國出口管制政策的化生武器相關物項清單，報告案例 4 明確引用以界定特定毒素的雙重用途出口管制地位。</td>
+<td>p.136</td>
+</tr>
+<tr>
+<td>Trusted user / trusted access program</td>
+<td>可信任使用者計畫／可信任存取計畫</td>
+<td>報告提出的解方：把高階生物能力的存取判準，從「這次請求的內容」改為「這個使用者的身分與機構背景是否可查核」。報告原文用詞，非「know-your-customer」。</td>
+<td>p.137–138</td>
+</tr>
+<tr>
+<td>IGSC</td>
+<td>International Gene Synthesis Consortium／國際基因合成聯盟</td>
+<td>基因合成產業的自律組織，同時執行序列篩查與客戶（know-your-customer）篩查，是「可信任使用者審核制」在生物技術產業的成熟先例。</td>
+<td>報告未提及；既有產業自律框架</td>
+</tr>
+<tr>
+<td>Biological safety classifier</td>
+<td>生物安全分類器</td>
+<td>Anthropic 用於偵測並阻擋高風險生物內容請求的即時分類系統，是本模組五案分類器判定的執行主體。</td>
+<td>p.131 等，貫穿全章</td>
+</tr>
+<tr>
+<td>Uplift</td>
+<td>能力提升</td>
+<td>衡量 AI 協助對使用者能力提升的幅度；案例 2 中報告明確區分「文書性協助（clerical assistance）」與更高階的「研究加速」，是判斷防線效果的關鍵尺度。</td>
+<td>p.134</td>
+</tr>
+<tr>
+<td>Adversarial state institutions</td>
+<td>敵對國家機構</td>
+<td>報告在 30 天盤查段落使用的分類詞，指與美國（或 Anthropic 認定之敵對方）處於對抗關係的國家所屬機構；與五個案例中「國家支持」「國家公共研究計畫」等描述屬於同一類行為者光譜，但盤查範圍與五案的對應關係報告未逐一說明。</td>
+<td>p.137</td>
+</tr>
+<tr>
+<td>Frontier Model Forum（FMF）</td>
+<td>前沿模型論壇</td>
+<td>主要前沿 AI 公司組成的產業聯盟，其 AI-Bio Workstream 發展共享的生物風險威脅模型與防護門檻，Anthropic 為成員之一。</td>
+<td>報告未提及；既有產業聯盟</td>
+</tr>
+</tbody>
+</table>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script>
+(function(){
+  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (window.mermaid) {
+    mermaid.initialize({startOnLoad:true, theme: dark ? 'dark' : 'default', securityLevel:'loose', flowchart:{useMaxWidth:true}});
+  }
+})();
+</script>
+</body></html>

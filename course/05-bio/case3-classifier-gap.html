@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>case3-classifier-gap</title>
+<style>
+:root{--fg:#1a1a1a;--bg:#fff;--muted:#666;--line:#e2e2e2;--link:#0b5cad;--code-bg:#f5f5f5;--accent:#0b5cad}
+@media(prefers-color-scheme:dark){:root{--fg:#e6e6e6;--bg:#141414;--muted:#9a9a9a;--line:#333;--link:#6cb6ff;--code-bg:#1e1e1e;--accent:#6cb6ff}}
+*{box-sizing:border-box}
+body{max-width:900px;margin:0 auto;padding:2rem 1.2rem 6rem;font-family:"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;line-height:1.75;color:var(--fg);background:var(--bg);font-size:16px}
+h1,h2,h3,h4{line-height:1.3;margin-top:1.8em}
+h1{font-size:1.7rem;border-bottom:2px solid var(--accent);padding-bottom:.3em}
+h2{font-size:1.35rem;border-bottom:1px solid var(--line);padding-bottom:.2em}
+h3{font-size:1.12rem}
+a{color:var(--link)}
+code{background:var(--code-bg);padding:.1em .35em;border-radius:4px;font-family:"Cascadia Code",Consolas,"Courier New",monospace;font-size:.9em}
+pre{background:var(--code-bg);padding:1em;border-radius:8px;overflow-x:auto;font-size:.86em;line-height:1.5}
+pre code{background:none;padding:0}
+pre.mermaid{background:transparent;text-align:center}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.92em;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:.5em .7em;text-align:left;vertical-align:top}
+th{background:var(--code-bg)}
+blockquote{border-left:4px solid var(--accent);margin:1em 0;padding:.4em 1em;color:var(--muted);background:var(--code-bg)}
+img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;margin:.5em 0}
+.figgallery{margin-top:2em;border-top:2px solid var(--accent);padding-top:1em}
+.figgallery figure{margin:1.5em 0}
+.figgallery figcaption{color:var(--muted);font-size:.9em;margin-top:.3em}
+.topbar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:.6em 0;margin:-2rem -1.2rem 1.5rem;padding-left:1.2rem;font-size:.9em}
+.topbar a{text-decoration:none;margin-right:1em}
+hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+</style></head>
+<body><div class="topbar"><a href="../index.html">◀ 課程索引</a></div><h1 id="3">生物濫用案例 3：分類器「放行」的漏接（安全缺口）</h1>
+<blockquote>
+<p>課程模組：05 生物濫用 ｜ 一手來源：PDF p.135–136（Case study 3）｜ 整理日期：2026-09-13<br />
+本教材由課程主編直接撰寫。原因：本案的 PDF 頁面含病原體研究敘述，交付研究 agent 時會觸發模型的生物安全防護而中止。主編僅擷取<strong>治理與偵測層次</strong>的句子，全程不記述任何生物技術內容。</p>
+</blockquote>
+<hr />
+<h2 id="0">0. 寫作界線聲明</h2>
+<p>本教材只談<strong>偵測防線為何失效與其治理意義</strong>，不涉及生物學。凡報告描述的科學目標，一律以「某類病毒研究」概括，技術細節不在範圍內。教材價值全部落在：分類器這次<strong>為什麼沒攔（漏接）</strong>、中繼帳號結構、速度的意義、以及這個自曝缺口如何論證「內容層防線有根本上限」。</p>
+<hr />
+<h2 id="1">1. 一頁速覽</h2>
+<ol>
+<li><strong>本案是「分類器漏接（allow / miss）」的範例</strong>：一份補助申請在<strong>最強模型（Opus 5）上約一小時內端到端完成</strong>，而分類器<strong>沒有攔下</strong>。</li>
+<li>報告誠實說明原因：因為研究<strong>框架敘述聚焦於某個看似良性的面向</strong>，分類器據此放行。逐字依據（p.135）：「Given the dual-use nature of this research and its explicit focus on attenuation, Claude supplied the user with information and thus was not blocked by our classifiers.」</li>
+<li>存取結構是<strong>轉售中繼帳號（reseller relay）</strong>：不是單一使用者，而是「服務十多名不相關客戶」的中繼帳號，數天內與 Claude 交換數萬則訊息。</li>
+<li>帳號從隨機生成的郵件地址建立、透過匿名美國基礎設施運作，且登入痕跡連到「一個已被封鎖的帳號農場共用的 proxy」。</li>
+<li>這是<strong>與 Case 1/Case 2 對照的失敗案例</strong>：Case 1 攔下、Case 2 降載到弱模型（都在分類器設計覆蓋範圍內成功動作），本案則是<strong>設計範圍內卻沒攔到</strong>——真正的缺陷。</li>
+<li>教學定位：在「分類器四種狀態」中，本案是<strong>漏接</strong>，最能證明「內容層判斷可被框架敘述繞過」這個結構性上限，直接論證報告的解方「可信任使用者審核制」。</li>
+</ol>
+<hr />
+<h2 id="2">2. 存取結構：轉售中繼帳號如何稀釋風險訊號</h2>
+<p>報告對存取結構的描述（p.135），是本案的偵測教學核心：</p>
+<table>
+<thead>
+<tr>
+<th>特徵</th>
+<th>報告原文依據</th>
+<th>偵測與歸因意義</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>拋棄式身分</td>
+<td>「created from a randomly generated email address shortly before use」</td>
+<td>帳號無歷史、無真實身分可追</td>
+</tr>
+<tr>
+<td>匿名基礎設施</td>
+<td>「operated through anonymizing US infrastructure」</td>
+<td>地理與網路來源被遮蔽</td>
+</tr>
+<tr>
+<td>與封鎖農場共用 proxy</td>
+<td>「operator logins traced to proxies shared with a banned account farm」</td>
+<td>與已知濫用基礎設施關聯——這反而是歸因線索</td>
+</tr>
+<tr>
+<td><strong>一對多的中繼結構</strong></td>
+<td>「It was not a single user: it was a reseller relay serving more than a dozen unrelated customers」</td>
+<td>一個帳號背後多個真實使用者，稀釋帳號層風險評分</td>
+</tr>
+<tr>
+<td>高吞吐</td>
+<td>「exchanged over tens of thousands messages... in a matter of days」</td>
+<td>但因分散在多客戶，單客戶不顯眼</td>
+</tr>
+</tbody>
+</table>
+<p><strong>教學重點</strong>：中繼帳號的「一對多」結構是對抗帳號層偵測的關鍵——平台看到的是「一個帳號」，但背後是十幾個獨立使用者。任何以帳號為單位的風險評分都會被稀釋。這與 GTG-50021（假轉售商）、GTG-16xxx（蒸餾用中繼）共享同一個地下基礎設施邏輯。</p>
+<hr />
+<h2 id="3_1">3. 核心機制：分類器為什麼「漏接」</h2>
+<p>報告的關鍵句（p.135，逐字引用）：</p>
+<blockquote>
+<p>「Given the dual-use nature of this research and its explicit focus on attenuation, Claude supplied the user with information and thus was not blocked by our classifiers.」</p>
+</blockquote>
+<p>拆解這個漏接：</p>
+<ol>
+<li><strong>請求的表面框架看似良性</strong>：研究的敘述聚焦於某個防禦性／良性的面向。</li>
+<li><strong>分類器據此判斷放行</strong>：因為內容的表面框架落在「看似正當研究」的一側。</li>
+<li><strong>但底層知識是雙重用途的</strong>：同樣的底層知識，換個框架敘述就繞過了分類器。</li>
+</ol>
+<p><strong>這是內容層分類器的根本盲區</strong>：分類器判斷的是「內容看起來像什麼」，而<strong>同一份雙重用途知識，惡意使用者只要用良性的框架來包裝，就能通過</strong>。這不是分類器「訓練不夠好」的問題，而是「用內容判斷意圖」這件事本身的結構性上限——因為在高度技術性的雙重用途領域，善意研究與惡意研究的文字可能一模一樣。</p>
+<p>用一張圖說明「同一份底層知識、兩種框架、兩種分類器結果」：</p>
+<pre class="mermaid">flowchart LR
+    K[&quot;同一份雙重用途底層知識&quot;] --&gt; F1[&quot;框架 A：良性/防禦性敘述&lt;br/&gt;（如聚焦「減毒」面向）&quot;]
+    K --&gt; F2[&quot;框架 B：明確惡意敘述&lt;br/&gt;（如聚焦「增強危害」）&quot;]
+    F1 --&gt; C1{&quot;內容分類器判斷&quot;}
+    F2 --&gt; C2{&quot;內容分類器判斷&quot;}
+    C1 --&gt;|&quot;看起來正當&quot;| PASS[&quot;放行（漏接）&quot;]
+    C2 --&gt;|&quot;看起來危險&quot;| BLOCK[&quot;攔下&quot;]
+    PASS --&gt; INSIGHT[&quot;盲區：分類器判斷『內容像什麼』&lt;br/&gt;而非『使用者意圖』&lt;br/&gt;→ 換框架即繞過&quot;]
+    style PASS fill:#f0d0d0
+    style BLOCK fill:#d0f0d0
+    style INSIGHT fill:#e0e0ff
+</pre>
+<h3 id="31">3.1 「漏接」與「設計不涵蓋」的差別（重要區辨）</h3>
+<p>學員最容易混淆本案（Case 3）與 Case 4-5：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Case 3（本案）</th>
+<th>Case 4-5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>分類器狀態</td>
+<td><strong>漏接</strong>：該攔而沒攔</td>
+<td><strong>設計不涵蓋</strong>：範圍外，本就不會動作</td>
+</tr>
+<tr>
+<td>性質</td>
+<td>缺陷（框架繞過）</td>
+<td>政策選擇（範圍界定）</td>
+</tr>
+<tr>
+<td>報告措辭</td>
+<td>「not blocked by our classifiers」</td>
+<td>「largely unimpeded... This was by design」</td>
+</tr>
+</tbody>
+</table>
+<p>Case 3 是分類器該管的範圍內出了漏洞；Case 4-5 是分類器刻意不管的範圍。兩者都導致「放行」，但成因與治理對策完全不同。</p>
+<hr />
+<h2 id="4">4. 速度的意義：一小時端到端</h2>
+<p>報告強調本案的補助申請「one customer's run entirely on Opus 5 in about an hour, in which the user used Claude to draft the application end to end」，涵蓋了申請書的核心假設、實驗設計、給藥、統計計畫與應變策略。</p>
+<p><strong>教學價值</strong>：<br />
+- 補助申請書<strong>本身不是武器</strong>，它是研究計畫的文書環節。但 AI 把原本需要專業人力數天的文件工作壓縮到一小時。<br />
+- 這是「AI 作為勞動力」而非「AI 作為知識」的又一例——申請書的知識本來就在專家腦中，AI 壓縮的是「產出成文件」的人力與時間。<br />
+- 對評估者的意義：uplift 不只在「能不能做」，也在「多快能做」。速度本身降低了門檻（讓能力較弱者也能快速產出專業級文件）。</p>
+<hr />
+<h2 id="5">5. 這是自曝的安全缺口——其揭露價值</h2>
+<p>報告在本案<strong>誠實承認分類器沒攔到</strong>。這個自我揭露的意義值得課堂討論：</p>
+<ul>
+<li>AI 公司公開自身防線的失敗案例，對透明度與政策討論有價值——它讓外界（政府、同業、研究者）看見防線的真實邊界，而非只看成功案例。</li>
+<li>但也要批判地看：報告揭露的是「它自己發現的漏接」，那些「它沒發現的漏接」不會出現在報告裡。這是單一來源情報的固有偏誤（倖存者偏差的反面——我們只看到被發現的失敗）。</li>
+</ul>
+<hr />
+<h2 id="6">6. 版面判讀（治理層次）</h2>
+<p>本案對應 PDF p.135–136，為純文字敘述，無流程圖或截圖。與 Case 2 相同，生物章節的視覺留白是負責任揭露的設計選擇。「無圖可判讀」本身提醒學員：這個領域的教材價值在治理論證，不在技術細節。</p>
+<hr />
+<h2 id="7">7. 治理意涵：本案如何論證「可信任使用者審核制」</h2>
+<p>本案是報告推動解方的<strong>最強論據</strong>：</p>
+<ul>
+<li>既然<strong>內容層判斷（分類器）可被框架敘述繞過</strong>（本案證明了），那麼「看請求內容」這條防線就有結構性上限。</li>
+<li>因此判斷點必須從「內容」移到「使用者身分與機構正當性」——這就是「可信任使用者審核制（trusted-user program）」。</li>
+<li>報告在結論（p.137）明確把 Case 3-5 歸為「越來越多雙重用途內容對善意與惡意使用者都變得高價值」的一類，並指出守護這類內容「necessarily require account and institutional signals to verify user legitimacy」。</li>
+</ul>
+<p><strong>課堂辯論點</strong>：把防線從「內容」移到「身分」，代價是什麼？它會不會讓正當研究者（尤其是資源較少、機構背書較弱的研究者）更難取得前沿能力？這是能力可及性的公平問題。</p>
+<hr />
+<h2 id="8-anthropic">8. Anthropic 的處置與防線缺口</h2>
+<ul>
+<li><strong>處置</strong>：報告指出 Anthropic 封鎖偵測到的相關帳號並持續改進偵測。</li>
+<li><strong>缺口總結</strong>：<br />
+  1. <strong>框架繞過</strong>：內容層分類器可被良性框架敘述繞過（本案的核心缺陷）。<br />
+  2. <strong>中繼稀釋</strong>：一對多的中繼帳號結構稀釋帳號層風險評分。<br />
+  3. <strong>速度</strong>：即使被事後發現，一小時內已完成端到端產出。</li>
+</ul>
+<hr />
+<h2 id="9">9. 第三方驗證與來源性質</h2>
+<ul>
+<li>本案具體事實為<strong>單一來源情報</strong>，僅來自 Anthropic 平台側遙測，行為者與機構未點名，無外部查證。</li>
+<li><strong>可獨立查證的背景</strong>：AI 內容分類器的「框架繞過（framing / jailbreak-by-reframing）」是 AI 安全研究的已知問題，有豐富公開文獻；轉售與中繼帳號對 AI 濫用歸因的挑戰也有公開討論（見 GTG-50021、蒸餾章節的交叉參照）。</li>
+<li><strong>課堂提醒</strong>：本案「分類器漏接」的可信度較高（Anthropic 描述自家系統行為、且是對自己不利的揭露），但研究者身分與細節無從驗證。</li>
+</ul>
+<hr />
+<h2 id="10">10. 課程教學設計</h2>
+<h3 id="101">10.1 核心教學要點</h3>
+<ul>
+<li>內容層分類器有結構性上限：同一份雙重用途知識，換個框架就能繞過。</li>
+<li>「漏接」（缺陷）與「設計不涵蓋」（政策選擇）是不同的失敗類型，對策不同。</li>
+<li>這個缺口是「把防線從內容移到身分」的最強論據。</li>
+</ul>
+<h3 id="102">10.2 課堂討論題</h3>
+<ol>
+<li>如果分類器可以被「良性框架」繞過，增加更多訓練資料能解決嗎？還是這是「用內容判斷意圖」的原理性極限？</li>
+<li>AI 公司該不該公開自己分類器漏接的案例？揭露的透明度價值 vs. 提供繞過線索的風險，如何權衡？</li>
+<li>「一小時端到端產出專業文件」——當 AI 壓縮的是「時間與人力」而非「知識」，防線該守在哪裡？</li>
+</ol>
+<h3 id="103">10.3 桌面演練</h3>
+<p>給學員兩組<strong>只有框架敘述、無技術內容</strong>的請求描述：一組用「防禦性／良性」框架、一組用「中性」框架，但底層是同一類知識。讓學員扮演分類器判斷，體會「框架決定放行」的盲區，再討論「如果連人都難分辨，分類器怎麼可能分辨」。</p>
+<h3 id="104">10.4 對台灣的意涵</h3>
+<ul>
+<li><strong>自建分類器的盲區</strong>：台灣 AI 應用開發者若自建內容審核分類器，本案揭示的「框架繞過」是必須認知的原理性限制——不要以為「加規則、加訓練資料」就能守住雙重用途領域。</li>
+<li><strong>中繼帳號的稽核挑戰</strong>：台灣 AI 服務商若透過轉售或代理供應，「一個帳號背後多個真實使用者」會稀釋你的濫用偵測。稽核應要求中繼商提供終端使用者的可追溯性。</li>
+<li><strong>身分導向治理的準備</strong>：若前沿能力的取用逐步走向「可信任使用者審核」，台灣的研究機構應及早建立可被國際供應商認可的機構背書與身分驗證機制，避免正當研究者被排除。</li>
+</ul>
+<hr />
+<h2 id="11">11. 關鍵原文引文</h2>
+<ol>
+<li>
+<p>漏接的原因（p.135）：<br />
+   「Given the dual-use nature of this research and its explicit focus on attenuation, Claude supplied the user with information and thus was not blocked by our classifiers.」<br />
+   （鑑於這項研究的雙重用途性質及其明確聚焦於減毒面向，Claude 向使用者提供了資訊，因此未被我們的分類器阻擋。）</p>
+</li>
+<li>
+<p>中繼帳號結構（p.135）：<br />
+   「It was not a single user: it was a reseller relay serving more than a dozen unrelated customers, which exchanged over tens of thousands messages with Claude in a matter of days.」<br />
+   （這不是單一使用者：它是一個服務十多名不相關客戶的轉售中繼，數天內與 Claude 交換了數萬則訊息。）</p>
+</li>
+<li>
+<p>速度（p.135）：<br />
+   「The grant itself was one customer's run entirely on Opus 5 in about an hour, in which the user used Claude to draft the application end to end...」<br />
+   （這份補助申請是某一名客戶完全在 Opus 5 上約一小時內完成的，使用者用 Claude 從頭到尾草擬了整份申請。）</p>
+</li>
+</ol>
+<hr />
+<h2 id="12">12. 未能驗證之處與研究限制</h2>
+<ol>
+<li>本案具體事實為<strong>單一來源情報</strong>，無外部查證。行為者、機構、國家均未揭露。</li>
+<li>本教材<strong>刻意不記述</strong>任何研究的科學內容，僅保留治理與偵測層次。</li>
+<li>「分類器因框架而漏接」是 Anthropic 對自身系統的描述，外部無法驗證分類器的實際判斷邏輯。</li>
+<li>我們只看得到 Anthropic「自己發現的漏接」；未被發現的漏接不會出現在報告中，這是本案的固有偏誤。</li>
+<li>中繼帳號「服務十多名客戶」的數字為報告所述，無法獨立核實各客戶的真實身分與用途。</li>
+</ol>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script>
+(function(){
+  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (window.mermaid) {
+    mermaid.initialize({startOnLoad:true, theme: dark ? 'dark' : 'default', securityLevel:'loose', flowchart:{useMaxWidth:true}});
+  }
+})();
+</script>
+</body></html>

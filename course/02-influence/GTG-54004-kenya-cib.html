@@ -1,0 +1,2427 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GTG-54004-kenya-cib</title>
+<style>
+:root{--fg:#1a1a1a;--bg:#fff;--muted:#666;--line:#e2e2e2;--link:#0b5cad;--code-bg:#f5f5f5;--accent:#0b5cad}
+@media(prefers-color-scheme:dark){:root{--fg:#e6e6e6;--bg:#141414;--muted:#9a9a9a;--line:#333;--link:#6cb6ff;--code-bg:#1e1e1e;--accent:#6cb6ff}}
+*{box-sizing:border-box}
+body{max-width:900px;margin:0 auto;padding:2rem 1.2rem 6rem;font-family:"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;line-height:1.75;color:var(--fg);background:var(--bg);font-size:16px}
+h1,h2,h3,h4{line-height:1.3;margin-top:1.8em}
+h1{font-size:1.7rem;border-bottom:2px solid var(--accent);padding-bottom:.3em}
+h2{font-size:1.35rem;border-bottom:1px solid var(--line);padding-bottom:.2em}
+h3{font-size:1.12rem}
+a{color:var(--link)}
+code{background:var(--code-bg);padding:.1em .35em;border-radius:4px;font-family:"Cascadia Code",Consolas,"Courier New",monospace;font-size:.9em}
+pre{background:var(--code-bg);padding:1em;border-radius:8px;overflow-x:auto;font-size:.86em;line-height:1.5}
+pre code{background:none;padding:0}
+pre.mermaid{background:transparent;text-align:center}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.92em;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:.5em .7em;text-align:left;vertical-align:top}
+th{background:var(--code-bg)}
+blockquote{border-left:4px solid var(--accent);margin:1em 0;padding:.4em 1em;color:var(--muted);background:var(--code-bg)}
+img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;margin:.5em 0}
+.figgallery{margin-top:2em;border-top:2px solid var(--accent);padding-top:1em}
+.figgallery figure{margin:1.5em 0}
+.figgallery figcaption{color:var(--muted);font-size:.9em;margin-top:.3em}
+.topbar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:.6em 0;margin:-2rem -1.2rem 1.5rem;padding-left:1.2rem;font-size:.9em}
+.topbar a{text-decoration:none;margin-right:1em}
+hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+</style></head>
+<body><div class="topbar"><a href="../index.html">◀ 課程索引</a></div><h1 id="gtg-54004-2027-ai">GTG-54004：肯亞國內協同不實行為行動——為 2027 年大選預備的 AI 假草根工廠</h1>
+<blockquote>
+<p>課程模組：02 影響力行動（Influence operations） ｜ 一手來源：PDF p.75（下半）–p.78（上半），並延伸引用 p.41–p.43（章節導論、Breakout Scale、趨勢） ｜ 整理日期：2026-09-13</p>
+<p>本檔一手依據為 Anthropic《Detecting and countering misuse of AI: September 2026》威脅情報報告。Figure 17 由研究員以 Read 工具開啟原始 PNG、並從 PDF 抽出 1990×1620 原生解析度嵌入圖逐格判讀後撰寫，非轉抄圖說。第三方查證與台灣意涵見第 9、10 節。全文以三種標記區分證據等級：<strong>【報告原文】</strong>（Anthropic 報告明講）、<strong>【獨立查證】</strong>（研究員自外部來源核實）、<strong>【研究員推論】</strong>（本檔作者的分析判斷，報告未講）。</p>
+</blockquote>
+<hr />
+<h2 id="0">0. 頁段邊界與兩個必須先講清楚的事實</h2>
+<ul>
+<li><strong>本案正文</strong>：從 p.75 下半的標題 <code>GTG-54004: Disrupting a domestic coordinated inauthentic behavior campaign in Kenya</code> 開始，經 p.76 全頁（Key findings、Attack lifecycle and AI usage）、p.77 全頁（Figure 17、Disruption and mitigations），到 p.77 底結束。<strong>p.78 整頁是下一個案例 GTG-84002（阿聯酋指揮、針對穆斯林兄弟會的行動）</strong>，不屬本案。</li>
+</ul>
+<p><img alt="報告原圖 · 第 77 頁（一手 PDF）" src="../figures/page-077.png" /></p>
+<ul>
+<li><strong>p.75 上半那張 IOC 表不是本案的。</strong> 那張表（<code>@tehranchekhabar19</code>、<code>@faryade_mamnoo</code>、<code>t[.]me/FWR_ir</code>、<code>#OurChoiceMaryamRajavi</code>、<code>SKILL.md / LEARNINGS.md memory</code> 等）是前一個案例 <strong>GTG-84006（MEK/NCRI 傾向、以共用 AI 代理「Viktor」在伊朗境內冒充真人與吸收人員的分散式行動）</strong> 的 IOC 表尾。判讀時把它算進肯亞案是常見錯誤，本檔特別標出。</li>
+<li><strong>本案在報告中沒有任何 IOC 表</strong>。研究員另外比對了 Anthropic 隨報告發布的官方 IOC 清單（<code>anthropic_iocs.csv</code>，208 條指標、涵蓋 11 個 GTG 群組），<code>GTG-54004</code> 的列數是 <strong>0</strong>。影響力行動類別裡有 IOC 的是 GTG-54002（28 條）、GTG-84005（21 條）、GTG-84006（10 條）、GTG-24015（1 條）——肯亞案完全沒有。這不是疏漏，第 7 節會解釋為什麼「沒有 IOC」本身就是教材。</li>
+<li><strong>Figure 17 不是節點連線圖。</strong> 圖說寫的是「showing coordinated clusters」，但圖片實際上是四張 X（Twitter）貼文截圖排成 2×2 的格子；「叢集」是靠<strong>兩兩共享同一則被引用的來源內容</strong>呈現的，不是用網路圖畫出來的。第 6 節會完整說明圖上看到什麼、以及一張「真正的」協同叢集圖應該怎麼做出來。這件事本身也是教學點：<strong>分析師講「叢集」時，讀者要問「你的邊（edge）是怎麼定義的」</strong>。</li>
+</ul>
+<blockquote>
+<p>教學提示：課堂開場可以用「p.75 上面那張表是肯亞案的 IOC 嗎？」當暖身題。答案是「不是，而且肯亞案根本沒有 IOC」。這訓練學員一個核心習慣——<strong>指標一定要對回它所屬的案例與段落</strong>。</p>
+</blockquote>
+<hr />
+<h2 id="1-tldr">1. 一頁速覽（TL;DR）</h2>
+<ol>
+<li><strong>這是什麼</strong>：一個<strong>單一操作者</strong>用一個 Claude 帳號，跨數個工作階段（several sessions），<strong>每批精確產出 50 則推文（batches of exactly 50 tweets）</strong>，並明確要求模型「讓貼文看起來像自發的草根評論，而不是協同行動」。行動的目的是替肯亞 2027 年 8 月大選預先製造假民意。（p.75）【報告原文】</li>
+<li><strong>內容主軸</strong>：大量推文讚揚能源部內閣秘書（Cabinet Secretary, CS）<strong>Opiyo Wandayi</strong> 擋下 Kenya Power 的電價調漲，掛上 <code>#PowerReliefKE</code> 與 <code>#PoweringTheNewKenya</code>；另一條線散布「聯合反對黨（United Opposition）在 2027 大選前正在瓦解」的故事，<strong>直接鎖定前副總統 Rigathi Gachagua 與前總統 Uhuru Kenyatta</strong>。（p.75–76）【報告原文】</li>
+<li><strong>政商兩用同一套模板</strong>：同一操作者以行銷人格「SHANKI」／「Elkins Marketer」跑<strong>一模一樣的 AI 工作流</strong>替肯亞零售品牌做行銷——把一則促銷廣播改寫成「有機」推文、<strong>每第五則插入連結</strong>。報告把這對應到肯亞「公關公司付錢請本地網紅帶風向」的既有產業模式。（p.76）【報告原文】</li>
+<li><strong>AI 的角色</strong>：核心意識形態訊息<strong>完全由人先決定</strong>；Claude 的價值是「量」與「看起來真」——把預先擬好的主題與推文「人性化並精修（humanize and refine）」成 50 則有主題、算好字數、可跨平台發布的貼文，<strong>在數個工作階段裡還被包裝成「可直接部署的互動式 copy-all 小工具」</strong>。（p.76–77）【報告原文】</li>
+<li><strong>影響力評級</strong>：Breakout Scale <strong>Category One</strong>——內容完全侷限在假帳號與本地網紅組成的網路內、單一平台，「未能觸及或影響任何真實的人」。（p.76）【報告原文】</li>
+<li><strong>歸因</strong>：Anthropic「不知道幕後人物的真實身分」，「相信」這是本地的肯亞政治假草根行動；「親執政當局的語調與特定 hashtag」讓它「看似（plausibly）與執政聯盟一致」，但「未辨識出負責的確切組織」；「沒有發現政府涉入的證據」。（p.76）【報告原文】</li>
+<li><strong>怎麼被抓到的</strong>：<strong>OpenAI 分享的線報</strong>——這名行為者在 OpenAI 平台上是「累犯（recidivist）」——觸發 Anthropic 內部調查，才找到這個行動。Anthropic 移除了帳號與其背後的組織，並「圍繞其行為簽章建立偵測」。（p.77）【報告原文】</li>
+<li><strong>這個案例在課程裡要教什麼</strong>：教「<strong>協同性偵測方法論</strong>」——為什麼偵測假草根不能靠內容真假，而要靠<strong>行為的共現結構</strong>（共同引用、共同 hashtag、相同時間窗、同一改寫骨架）；並教「<strong>AI 把散播門檻壓到多低</strong>」（從 2021 年 Mozilla 記錄的 WhatsApp 群組＋M-Pesa 付款，進化到 2026 年「一個人＋一個 AI 訂閱＋copy-all 小工具」）；最後教「<strong>選前一年多就在養內容與帳號</strong>，選前才查核已經太晚」——這對台灣 2026 地方選舉與 2028 大選有直接啟示。</li>
+</ol>
+<hr />
+<h2 id="2">2. 行為者側寫與歸因</h2>
+<h3 id="21">2.1 報告給的身分線索（全部【報告原文】）</h3>
+<table>
+<thead>
+<tr>
+<th>面向</th>
+<th>報告內容</th>
+<th>頁碼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>規模</td>
+<td>「一個帳號」（an account）、「單一行為者」（a single actor）</td>
+<td>p.75</td>
+</tr>
+<tr>
+<td>使用型態</td>
+<td>「跨數個工作階段」用 Claude 產出「每批精確 50 則推文」</td>
+<td>p.75</td>
+</tr>
+<tr>
+<td>意圖（明示）</td>
+<td>「明確指示模型讓貼文看起來像自發的草根評論，而不是協同行動」</td>
+<td>p.75</td>
+</tr>
+<tr>
+<td>商業人格</td>
+<td>「SHANKI」／「Elkins Marketer」——替肯亞零售品牌做行銷時用的 persona，用的是「一模一樣的 AI 工作流」</td>
+<td>p.76</td>
+</tr>
+<tr>
+<td>地理</td>
+<td>「看起來與一個完全國內的肯亞行動一致（consistent with an entirely domestic Kenyan operation）」</td>
+<td>p.76</td>
+</tr>
+<tr>
+<td>政府關聯</td>
+<td>「我們沒有發現政府涉入的證據」</td>
+<td>p.76</td>
+</tr>
+<tr>
+<td>政治傾向</td>
+<td>「網路的親執政當局語調與特定 hashtag 顯示它看似與執政聯盟一致」</td>
+<td>p.76</td>
+</tr>
+<tr>
+<td>真實身分</td>
+<td>「我們不知道這個行動背後人物的確切真實身分」</td>
+<td>p.76</td>
+</tr>
+<tr>
+<td>組織</td>
+<td>「我們移除了該帳號<strong>與其背後的組織</strong>」（the account and the organization behind it）——但「未辨識出負責的確切組織」</td>
+<td>p.77 / p.76</td>
+</tr>
+<tr>
+<td>前科</td>
+<td>OpenAI 分享「其平台上累犯活動（recidivist activity）」的線報</td>
+<td>p.77</td>
+</tr>
+</tbody>
+</table>
+<p>兩個看似矛盾、其實不矛盾的句子值得學員停下來想：p.76 說「未辨識出負責的確切組織」，p.77 卻說「移除了帳號與其背後的組織」。【研究員推論】合理的讀法是：Anthropic 在<strong>自家平台上</strong>能辨識出這個帳號隸屬的組織實體（例如同一付款方式、同一網域信箱、同一 API 組織），並把整個組織的存取一併移除；但它<strong>不能</strong>把這個平台上的組織實體對應到現實世界中「是誰付錢委託這場政治行動」。這正是 AI 供應商做威脅情報的結構性限制：看得到「誰在用工具」，看不到「誰在買結果」。</p>
+<h3 id="22">2.2 歸因措辭的情報學意義</h3>
+<p>報告在本案用了一整組刻意保留餘地的措辭，值得逐一拆解：</p>
+<table>
+<thead>
+<tr>
+<th>報告用語</th>
+<th>情報學上的意思</th>
+<th>本案套用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>no evidence of</strong>（沒有…的證據）</td>
+<td>「找不到證據」≠「證明沒有」。這是 absence of evidence，不是 evidence of absence。</td>
+<td>「沒有政府涉入的證據」——不排除政府涉入，只表示在 Anthropic 的可視範圍內看不到。</td>
+</tr>
+<tr>
+<td><strong>consistent with</strong>（與…一致）</td>
+<td>觀察到的資料不與該假設矛盾；但通常也不與其他假設矛盾。是最弱的一種歸因語言。</td>
+<td>「與完全國內的肯亞行動一致」——推文語言、議題、時區、商業客戶都是肯亞的，但這也與「外國公司雇用肯亞承包商」一致。</td>
+</tr>
+<tr>
+<td><strong>we believe</strong>（我們相信）</td>
+<td>分析判斷（analytic judgment），基於證據的加權推論，不是事實陳述。</td>
+<td>「我們相信這是本地的肯亞政治假草根行動」。</td>
+</tr>
+<tr>
+<td><strong>plausibly aligned with</strong>（看似與…一致）</td>
+<td>比 consistent with 稍強一點的傾向判斷，但明確不是歸因。「aligned with」講的是<strong>利益方向</strong>，不是<strong>指揮關係</strong>。</td>
+<td>「看似與執政聯盟一致」——講的是「內容對誰有利」，不是「誰下的令」。</td>
+</tr>
+<tr>
+<td><strong>have not identified</strong>（未辨識出）</td>
+<td>明確的知識缺口宣告。</td>
+<td>「未辨識出負責的確切組織」。</td>
+</tr>
+</tbody>
+</table>
+<p>對照報告其他案例可以看到措辭的階梯：GTG-84002（阿聯酋）用的是「<strong>linked it with high confidence to UAE government officials</strong>」（p.78）——那是最高等級；GTG-54006（孟加拉）是「found no proof that the party itself was involved」（p.68）；本案則是「consistent with / plausibly aligned / no evidence」，屬於<strong>低信度、僅利益方向的歸因</strong>。美國情報體系 ICD 203 的慣例是把信度分成 high / moderate / low，並要求分析師把「來源可靠度」與「推論強度」分開講；Anthropic 的措辭大致沿用這個傳統。課堂上可以要求學員把本案每句歸因句子標上信度等級。</p>
+<h3 id="23">2.3 肯亞政治脈絡（【獨立查證】，本案理解的必要背景）</h3>
+<p>要看懂「為什麼讚揚 Wandayi、為什麼打 Gachagua 與 Kenyatta」，得先把 2022–2026 年的肯亞政局排成一條線。以下事實由研究員自英文維基百科與肯亞媒體標題核實（來源見第 9 節）：</p>
+<table>
+<thead>
+<tr>
+<th>時間</th>
+<th>事件</th>
+<th>對本案的意義</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2022-08-09</td>
+<td>William Ruto（UDA／Kenya Kwanza 聯盟）以 50.49% 擊敗 Raila Odinga（48.85%），副手為 Rigathi Gachagua。</td>
+<td>執政聯盟的起點。</td>
+</tr>
+<tr>
+<td>2024-06</td>
+<td>《財政法案》引發 Gen Z 大規模抗議，至少 22 人死亡；Ruto 撤回法案，7 月 11 日解散大部分內閣。</td>
+<td>政府正當性危機，之後拉攏反對黨組「broad-based government」。</td>
+</tr>
+<tr>
+<td>2024-08-08</td>
+<td>ODM（Raila Odinga 的黨）多名要員入閣；<strong>Opiyo Wandayi</strong>（ODM、Ugunja 選區、前國會少數黨領袖）出任<strong>能源與石油部內閣秘書</strong>。</td>
+<td>本案讚揚對象是「反對黨出身、現在替 Ruto 政府做事」的部長——所以「親 Wandayi」在肯亞政治裡等於「親 broad-based government」。</td>
+</tr>
+<tr>
+<td>2024-10-08 / 10-17</td>
+<td>國民議會以 281:44 通過彈劾副總統 Gachagua（11 項指控）；參議院維持其中 5 項（煽動族群對立、違反誓言、公開攻擊 NIS 等），Gachagua 成為 2010 憲法下第一位被彈劾罷免的國家官員，由 Kithure Kindiki 接任。</td>
+<td>本案負面鎖定的第一個人物；他從此成為 Ruto 在 Mt. Kenya 地區最大的政治威脅。</td>
+</tr>
+<tr>
+<td>2025-03-07</td>
+<td>UDA 與 ODM 簽署十點合作備忘錄。</td>
+<td>執政聯盟擴大。</td>
+</tr>
+<tr>
+<td>2025-05-15</td>
+<td>Gachagua 成立 Democracy for Citizens Party（DCP）。</td>
+<td></td>
+</tr>
+<tr>
+<td>2025-09-13</td>
+<td>Gachagua 宣布將於 2027 年挑戰 Ruto。</td>
+<td></td>
+</tr>
+<tr>
+<td>2025-09</td>
+<td>Uhuru Kenyatta 在 Jubilee 黨代表大會公開批評繼任者政府。</td>
+<td>本案負面鎖定的第二個人物；2018 年「握手」後與 Ruto 決裂的前總統重新活躍。</td>
+</tr>
+<tr>
+<td>2025-10-15</td>
+<td>Raila Odinga 在印度病逝；Oburu Odinga 代理 ODM 黨魁（2026-03-27 正式當選）。</td>
+<td>ODM 內部因「是否繼續與 Ruto 合作」而分裂。</td>
+</tr>
+<tr>
+<td>2026-02-11</td>
+<td>ODM 秘書長 Edwin Sifuna 因批評政府經濟政策、被視為「反叛派」領袖而遭黨內撤職程序，法律戰延續到 3 月。Techweez 報導有人「在沒有確認證據的情況下」指控 Kenyatta 資助 Sifuna 領導的 Linda Mwananchi 派系。</td>
+<td>執政陣營對 Kenyatta 的敵意背景。</td>
+</tr>
+<tr>
+<td>2026-01 → 2026-08</td>
+<td>聯合反對黨（United Opposition：Gachagua、Kalonzo Musyoka、Martha Karua、Eugene Wamalwa、Justin Muturi、Fred Matiang'i 等）不斷傳出裂痕：1 月 Gachagua 與 Kalonzo 對「何時提名」互相矛盾；5 月「旗手人選期限跳票」；6 月「Matiang'i 揭露 Gachagua 陣營權力鬥爭」；7–8 月「旗手人選新裂痕」、「權力分享談判已分裂」。</td>
+<td><strong>本案「反對黨正在瓦解」的敘事有真實的種子</strong>——這是假草根行動的典型手法：不是純造謠，而是把真實裂痕放大、加速。</td>
+</tr>
+<tr>
+<td>2026-05</td>
+<td>Nandi 郡參議員 Samson Cherargei 提案剝奪 Kenyatta 的退休待遇；肯亞媒體以「Ruto 陣營對 Uhuru 政治再起感到緊張」為題大量報導；Wamalwa 說「聯合反對黨終將尋求 Uhuru 支持」。</td>
+<td>執政陣營打 Kenyatta 的動機在 2026 年 5 月達到高峰——與本案的 6 月活動時間重疊。</td>
+</tr>
+<tr>
+<td>2026-06-03</td>
+<td>能源部撤回 Kenya Power 的零售電價審查申請（Kenya Power 於 3 月向能源監管機構 EPRA 提交，肯亞財經媒體報導擬調漲 14%–31%）；6 月 5 日 EPRA 中止公聽會。</td>
+<td><strong>本案 Figure 17 四則貼文的日期是 6 月 4 日</strong>——行動在真實新聞發生的 24 小時內啟動。</td>
+</tr>
+<tr>
+<td>2027-08-10</td>
+<td>肯亞大選預定日。</td>
+<td>本案活動距投票日約 14 個月。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="24">2.4 政治歸屬推論：這個行動看起來服務誰？</h3>
+<p>先講報告明講的（【報告原文】）：「單一劇本同時放大親政府與反反對黨敘事。以這種方式拉抬現任政府、同時削弱反對黨的可行性，<strong>與單一、協同的選舉傳播工作一致</strong>（consistent with a single, coordinated electoral communications effort）」（p.76）。</p>
+<p>接著是研究員的推論（【研究員推論】，報告未講）。把「誰受益」與「誰有能力」分開看，至少有四個假設，而報告的證據無法在它們之間做決定：</p>
+<table>
+<thead>
+<tr>
+<th>假設</th>
+<th>支持的證據</th>
+<th>反對／削弱的證據</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>H1：執政聯盟（UDA 或其盟友）的傳播團隊或其承包商</strong></td>
+<td>親政府語調；同時打 Gachagua 與 Kenyatta（正好是 2026 年 5–6 月 Ruto 陣營最忌憚的兩個人）；hashtag <code>#PoweringTheNewKenya</code> 呼應執政口號式語言。</td>
+<td>報告明說「沒有政府涉入的證據」、「未辨識出組織」。</td>
+</tr>
+<tr>
+<td><strong>H2：ODM 內「合作派」或 Wandayi 個人的公關團隊</strong></td>
+<td>讚揚的具體對象是 Wandayi 個人而非 Ruto；ODM 內部正在分裂，「合作派」有動機證明入閣有政績。</td>
+<td>打 Kenyatta 與 Gachagua 對 ODM 內部鬥爭幫助不大；報告沒有提到任何 ODM 內部議題。</td>
+</tr>
+<tr>
+<td><strong>H3：商業公關／行銷承包商，替付費客戶服務（influence-as-a-service）</strong></td>
+<td>同一人同時用「SHANKI／Elkins Marketer」替零售品牌做一模一樣的工作；報告自己把它連到「公關公司付錢請本地網紅帶風向」的產業模式（p.76）；報告章節導論說「有兩個案例是正在營業的廣告或行銷公司在做日常商業工作之餘跑這些行動」（p.42）——本案很可能是其中之一。</td>
+<td>承包商模式不排除 H1／H2，只是把「誰下單」再往後推一層。</td>
+</tr>
+<tr>
+<td><strong>H4：自發的個人支持者</strong></td>
+<td>單一帳號、規模小。</td>
+<td>「每批 50 則、明示要看起來不協同、包成部署工具、有本地網紅網路」——這是<strong>生產線</strong>，不是粉絲行為。</td>
+</tr>
+</tbody>
+</table>
+<p>研究員的整體判斷：<strong>H3（商業承包商）是行為層面最有證據的，H1（執政聯盟受益）是利益層面最有證據的，兩者疊加是最合理的圖像</strong>——「一個承包商，接了執政陣營或其周邊的單」。但這只是推論；報告刻意不走到這一步，課堂上應該把「為什麼 Anthropic 不走到這一步」當成討論題（見第 10.2 節）。</p>
+<p>還要提醒一個容易被忽略的細節：Wandayi 本人在報告發布後的回應（【獨立查證】，Nairobi Leo 2026-09-12 引述其書面聲明；Techweez、Daily Nation、People Daily、Eastleigh Voice 均有報導）——「報告本身並未證明內閣秘書或本部授權、指揮或以其他方式參與了所稱的活動」、「我們仍專注於透過可信管道傳達本部的工作，不會被匿名網路活動的臆測分散注意力」。這段回應在邏輯上是對的：<strong>受益者不等於委託者</strong>。假草根行動的一個副作用，正是讓被讚揚的人「被迫自證清白」——這也是行動設計者不在乎、但被讚揚者要付出的代價。</p>
+<h3 id="25">2.5 與同一份報告其他案例的對照</h3>
+<table>
+<thead>
+<tr>
+<th>案例</th>
+<th>行為者類型</th>
+<th>自動化程度</th>
+<th>帳號數</th>
+<th>Breakout Scale</th>
+<th>歸因信度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GTG-54004 肯亞（本案）</strong></td>
+<td>國內單一操作者／疑似商業承包商</td>
+<td>對話式、人在迴圈、每批 50 則</td>
+<td>1 個 Claude 帳號</td>
+<td><strong>Category One</strong></td>
+<td>低（consistent with / plausibly）</td>
+</tr>
+<tr>
+<td>GTG-54006 孟加拉（p.67–70）</td>
+<td>國內單一操作者，親 Awami League</td>
+<td>自製程式 <code>fake_news_3.py</code> 直連 API、固定批次 15 標題／3 故事／15 圖像提示、YouTube 排程上傳</td>
+<td>輪替 29 個 Claude 帳號</td>
+<td>Category Three</td>
+<td>低（no proof party involved）</td>
+</tr>
+<tr>
+<td>GTG-84002 阿聯酋（p.78–）</td>
+<td>國家行為者</td>
+<td>自架平台上的持久 AI 人格「Deadshot」＋主教義檔，數百工作階段</td>
+<td>約 300 個假網紅帳號</td>
+<td>（見該案）</td>
+<td><strong>高</strong>（high confidence to UAE officials）</td>
+</tr>
+<tr>
+<td>GTG-54002 商業 IaaS（p.47–）</td>
+<td>私人公司賣影響力</td>
+<td>自動改寫真實新聞、8,913 篇文章、約 20 種語言</td>
+<td>多網站＋配套帳號</td>
+<td>Category Two</td>
+<td>中（客戶未確認）</td>
+</tr>
+</tbody>
+</table>
+<p>【研究員推論】本案是整份報告影響力行動章節裡<strong>技術上最「低科技」</strong>的一個——沒有 API 自動化、沒有多帳號輪替、沒有教義檔、沒有代理。但它可能也是<strong>最貼近「一般政治操盤手會怎麼用 AI」</strong>的一個：打開聊天視窗、貼上談話要點、要 50 則、複製、發。這正是它的教學價值——威脅不在於技術複雜度，而在於<strong>門檻消失</strong>。</p>
+<hr />
+<h2 id="3">3. 受害者與目標清單</h2>
+<h3 id="31">3.1 目標一覽</h3>
+<p>本案的「受害者」要分三層看：被負面鎖定的人物、被冒用可信度的機構、以及被欺騙的閱聽人。</p>
+<table>
+<thead>
+<tr>
+<th>類別</th>
+<th>對象</th>
+<th>國別</th>
+<th>報告描述</th>
+<th>頁碼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>負面鎖定—政治人物</td>
+<td><strong>Rigathi Gachagua</strong>（前副總統，DCP 黨魁，2027 挑戰者）</td>
+<td>肯亞</td>
+<td>「直接鎖定」（directly targeting）；敘事為「聯合反對黨正在瓦解」</td>
+<td>p.76</td>
+</tr>
+<tr>
+<td>負面鎖定—政治人物</td>
+<td><strong>Uhuru Kenyatta</strong>（前總統，Jubilee 黨）</td>
+<td>肯亞</td>
+<td>同上</td>
+<td>p.76</td>
+</tr>
+<tr>
+<td>負面鎖定—政治組織</td>
+<td><strong>United Opposition</strong> 聯盟</td>
+<td>肯亞</td>
+<td>「推送聲稱聯合反對黨在 2027 大選前正在瓦解的故事」</td>
+<td>p.75–76</td>
+</tr>
+<tr>
+<td>正面放大—政治人物</td>
+<td><strong>Opiyo Wandayi</strong>（能源與石油部 CS，ODM）</td>
+<td>肯亞</td>
+<td>「大量 AI 生成推文讚揚」其擋下 Kenya Power 電價調漲</td>
+<td>p.75</td>
+</tr>
+<tr>
+<td>正面放大—政治陣營</td>
+<td>執政聯盟／現任政府</td>
+<td>肯亞</td>
+<td>「拉抬現任政府」</td>
+<td>p.76</td>
+</tr>
+<tr>
+<td>被冒用可信度的機構（Figure 17）</td>
+<td><strong>Citizen TV Kenya</strong>（主流媒體，藍勾認證）、<strong>Berur News / Berur FM</strong>（地方媒體圖卡）</td>
+<td>肯亞</td>
+<td>假帳號以引用推文（quote tweet）方式借用真實新聞的可信度</td>
+<td>p.77 圖</td>
+</tr>
+<tr>
+<td>被欺騙的閱聽人</td>
+<td>肯亞 X 平台使用者</td>
+<td>肯亞</td>
+<td>報告評估「未能觸及或影響任何真實的人」</td>
+<td>p.76</td>
+</tr>
+<tr>
+<td>商業線的受害者</td>
+<td>肯亞零售品牌的消費者</td>
+<td>肯亞</td>
+<td>促銷廣播被「重新包裝成有機推文，每第五則插入連結」——這是消費者保護意義上的欺騙性行銷</td>
+<td>p.76</td>
+</tr>
+<tr>
+<td>平台</td>
+<td><strong>X（Twitter）</strong>，「單一平台」</td>
+<td>—</td>
+<td>「完全侷限在假帳號與本地網紅的網路內、單一平台」</td>
+<td>p.76</td>
+</tr>
+</tbody>
+</table>
+<p><strong>具體受害數字</strong>：報告<strong>沒有</strong>給出假帳號數、推文總數、工作階段數、或觸及人數。唯一的量化線索是（1）「每批精確 50 則」（p.75）、（2）Figure 17 四則貼文的互動數（瀏覽 28／85／59／59；轉推 4／11／4／10；回覆 未顯示／20／未顯示／1；讚 未顯示／3／3／1——研究員自放大截圖逐格判讀，左欄兩則的回覆與部分讚數在截圖上只有圖示、沒有數字）。這些數字本身就是 Category One 的最好註解：<strong>一個「為大選預備」的行動，在 6 月的實際觸及是幾十次瀏覽</strong>。</p>
+<h3 id="32-breakout-scale">3.2 Breakout Scale 評級與理由</h3>
+<p>報告用的是 Brookings 學會 Ben Nimmo 於 2020 年 9 月提出的 <strong>Breakout Scale</strong>（p.42 明講「六類、業界廣泛接受的框架，依<strong>跨平台遷移</strong>與<strong>觸及</strong>分類影響」；p.48 另稱之為「Brookings Institution's Breakout Scale」）。六級的完整定義（【獨立查證】Brookings 原文）與本案的定位如下：</p>
+<table>
+<thead>
+<tr>
+<th>級別</th>
+<th>定義</th>
+<th>本案是否達到</th>
+<th>判準</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Category 1</strong></td>
+<td>行動<strong>侷限在單一平台的單一社群</strong>內</td>
+<td><strong>是——本案評級</strong></td>
+<td>「完全侷限在假帳號與本地網紅的網路內、單一平台上」（p.76）</td>
+</tr>
+<tr>
+<td>Category 2</td>
+<td>同一社群跨多個平台，<strong>或</strong>單一平台上跨多個社群</td>
+<td>否</td>
+<td>內容雖已「為跨平台發布格式化」（p.77），但未觀察到實際跨平台；也未進入肯亞真實政治社群</td>
+</tr>
+<tr>
+<td>Category 3</td>
+<td><strong>跨多平台且跨多社群</strong></td>
+<td>否</td>
+<td>對照：同報告孟加拉案 GTG-54006 因影片出現在 Facebook／YouTube／TikTok 多個頻道而評為 Cat.3（p.68）</td>
+</tr>
+<tr>
+<td>Category 4</td>
+<td>突破社群媒體，<strong>被主流媒體放大</strong></td>
+<td>否（但見下方註）</td>
+<td>未有肯亞主流媒體引用該網路內容</td>
+</tr>
+<tr>
+<td>Category 5</td>
+<td>被<strong>名人或政治人物</strong>放大</td>
+<td>否</td>
+<td>Figure 17 中有兩則 @OpiyoWandayi，但沒有證據顯示他或任何政治人物轉發過</td>
+</tr>
+<tr>
+<td>Category 6</td>
+<td>引發<strong>具體政策回應或政府行動</strong>，或包含<strong>暴力號召</strong></td>
+<td>否</td>
+<td>無</td>
+</tr>
+</tbody>
+</table>
+<p><strong>評為 Category One 的三個支柱</strong>（p.76 原文拆解）：<br />
+1. <strong>單一平台</strong>——「on a single platform」；<br />
+2. <strong>封閉於行動自身的資產</strong>——「completely isolated within the network of fake accounts and local influences」；<br />
+3. <strong>無真實觸及</strong>——「failing to reach or influence any real people」。</p>
+<p><strong>Category One 的教學重點（【研究員推論】）：</strong></p>
+<ul>
+<li><strong>它是「被打斷那一刻的快照」，不是「行動的天花板」。</strong> 本案的設計目的是 2027 年 8 月的大選；Anthropic 在 2026 年夏天切斷它。低觸及有兩種解讀——「行動無能」或「行動還在暖機」——報告的證據無法分辨，而第二種解讀才是課程要學員警惕的。Breakout Scale 衡量的是<strong>已發生的擴散</strong>，它在設計上就不預測「若不干預會走到哪一級」。</li>
+<li><strong>這個評級有一個弔詭的自我否定</strong>：Anthropic 公開報告本案之後，本案的內容與敘事<strong>被至少 21 家肯亞媒體與 OECD AI 事件資料庫報導</strong>。從嚴格的字面看，「該行動的存在」確實進入了主流媒體——但被報導的是「它是假的」，不是它的敘事。課堂上值得問：<strong>揭露行為本身會不會把 Category 1 推上 Category 4？</strong> 這是所有威脅情報公開者都要面對的兩難（見 10.2 討論題 4）。</li>
+<li><strong>「local influences」若讀作「local influencers」（付費真人網紅），第三個支柱就有裂縫</strong>：真人網紅有真實追隨者，「未觸及任何真實的人」就難以成立。報告沒有澄清這一點，本檔在第 12 節列為未驗證事項。</li>
+<li><strong>與同報告其他案例的級距對照</strong>（可製成課堂投影片，頁碼均經研究員核對原文）：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>案例</th>
+<th>級別</th>
+<th>報告給的理由（節錄）</th>
+<th>頁碼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GTG-54004 肯亞（本案）</strong></td>
+<td><strong>Cat.1</strong></td>
+<td>「完全侷限在假帳號與本地網紅的網路內、單一平台上，未能觸及或影響任何真實的人」</td>
+<td>p.76</td>
+</tr>
+<tr>
+<td>GTG-54002 商業影響力即服務</td>
+<td>Cat.2</td>
+<td>「內容散布於該網路自有的網站與配套社群帳號，沒有跳出其自身活動的證據」——<strong>即使產出 8,913 篇文章、約 20 種語言</strong></td>
+<td>p.48</td>
+</tr>
+<tr>
+<td>GTG-84006 MEK/NCRI 分散式行動</td>
+<td>Cat.2</td>
+<td>「多平台，透過該網路自有的 NCRI 媒體資產與放大帳號散布」</td>
+<td>p.71</td>
+</tr>
+<tr>
+<td>GTG-54006 孟加拉 Awami League</td>
+<td>Cat.3</td>
+<td>「多平台，影片出現在多個孟加拉焦點頻道與帳號」</td>
+<td>p.68</td>
+</tr>
+<tr>
+<td>GTG-84002 阿聯酋／穆斯林兄弟會</td>
+<td>Cat.3</td>
+<td>「活動橫跨數個社群平台。更高的級別需要廣泛公眾注意或政策影響的證據，我們無法確認」</td>
+<td>p.79</td>
+</tr>
+<tr>
+<td>GTG-04001 俄羅斯／中非共和國</td>
+<td>Cat.4</td>
+<td>「內容每日透過 Radio Lengo Songo 98.9 FM 播出，經 Telegram 頻道放大，並被中非當地新聞機構採用」</td>
+<td>p.45</td>
+</tr>
+</tbody>
+</table>
+<p><strong>「文章數多」不等於「級別高」</strong>——8,913 篇只得 Cat.2，因為<strong>擴散結構</strong>（是否跳出自有資產）才是尺規；反過來，中非案只要每天在一個真實電台播出、被當地媒體轉載，就是 Cat.4。這是學員最容易誤解的地方，也是 Breakout Scale 與「聲量分析」的根本差異。</p>
+<hr />
+<h2 id="4-ai">4. AI 濫用的攻擊生命週期（逐階段拆解）</h2>
+<p>報告的 Attack lifecycle and AI usage 段落只有兩句話（p.76–77），但結合 Key findings、Figure 17 與章節導論，可以重建成完整的生產線。以下每個階段標示「人類做什麼／Claude 做什麼／自主程度」。</p>
+<h3 id="41">4.1 總覽表</h3>
+<table>
+<thead>
+<tr>
+<th>階段</th>
+<th>人類做什麼</th>
+<th>Claude 做什麼</th>
+<th>自主程度</th>
+<th>證據</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0. 前史</td>
+<td>在 OpenAI 平台上已有被處置紀錄，之後再犯（recidivist）</td>
+<td>—</td>
+<td>—</td>
+<td>p.77</td>
+</tr>
+<tr>
+<td>1. 戰略與敘事</td>
+<td><strong>完全由人決定</strong>核心意識形態訊息：讚 Wandayi、打反對黨、打 Gachagua 與 Kenyatta</td>
+<td>無</td>
+<td>人</td>
+<td>p.76</td>
+</tr>
+<tr>
+<td>2. 素材準備</td>
+<td>供應「主題、談話要點、hashtag」；有時已「預先擬好（pre-drafted）」主題與推文</td>
+<td>無</td>
+<td>人</td>
+<td>p.76</td>
+</tr>
+<tr>
+<td>3. 生成</td>
+<td>下指令：每批 50 則、要看起來像自發草根而非協同</td>
+<td>「轉換成 50 則有主題、算好字數、可跨平台發布與散播的貼文」；「人性化並精修」預擬的主題與推文</td>
+<td><strong>對話式協助</strong>（人在每個迴圈）</td>
+<td>p.75–77</td>
+</tr>
+<tr>
+<td>4. 包裝</td>
+<td>要求輸出成可用的介面</td>
+<td>「在數個工作階段中，這些被包裝成<strong>可直接部署的互動式 copy-all 小工具</strong>」</td>
+<td>對話式協助</td>
+<td>p.77</td>
+</tr>
+<tr>
+<td>5. 散播</td>
+<td>由假帳號與本地網紅在 X 上發布；引用真實新聞（Citizen TV、Berur News）；掛 hashtag、@Wandayi</td>
+<td>無（Claude 不碰平台）</td>
+<td>人</td>
+<td>p.76、Figure 17</td>
+</tr>
+<tr>
+<td>6. 商業平行線</td>
+<td>以「SHANKI／Elkins Marketer」人格替零售品牌跑同一流程；每第五則插連結</td>
+<td>同第 3–4 階段</td>
+<td>對話式協助</td>
+<td>p.76</td>
+</tr>
+<tr>
+<td>7. 成效評估</td>
+<td>報告未描述</td>
+<td>未描述</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="42">4.2 逐階段說明</h3>
+<p><strong>階段 0：前史（累犯）。</strong> 報告說「基於 OpenAI 分享的、關於其平台上累犯活動的線報」（p.77）。「累犯」在平台信任與安全（Trust &amp; Safety）語境裡的意思是：這名行為者之前已經在 OpenAI 被停權，之後又用新帳號回來。【研究員推論】這透露兩件事：（1）行為者對「被 AI 供應商封鎖」這件事<strong>沒有嚇阻感</strong>——換個帳號、換個供應商就繼續；（2）跨供應商的線報分享在本案是<strong>決定性</strong>的——Anthropic 的敘述沒有說自己的分類器先抓到，而是「基於線報」才「進行內部調查」。這是第 8 節的核心討論。</p>
+<p><strong>階段 1–2：戰略與素材由人決定。</strong> 報告用了非常強的措辭：「核心意識形態訊息<strong>完全</strong>由行為者在使用 Claude 之前決定」（p.76）；「行為者供應主題、談話要點與 hashtag」（p.76）。這對「AI 有沒有在做政治判斷」的公共討論很重要：本案的 AI <strong>沒有</strong>決定要打誰、要護誰；它做的是把人類的政治決定<strong>工業化</strong>。</p>
+<p><strong>階段 3：生成——「50」這個數字的意義。</strong> 「每批精確 50 則」出現了三次（p.75 「batches of exactly 50 tweets」、p.76 「batches of 50 pre-drafted topics and tweets」、p.76 「convert them into 50 themed, character-counted posts」）。【研究員推論】為什麼是 50？三個可能：（a）對應本地網紅網路的規模（50 個帳號各發一則，或 10 個帳號各發 5 則）；（b）對應一天的發文配額；（c）單純是模型一次輸出的舒適上限——超過 50 則品質會掉、也容易被截斷。不管哪一種，<strong>「固定批次大小」是最好的行為簽章之一</strong>：正常使用者不會每次都剛好要 50 則推文。孟加拉案（GTG-54006）的固定批次是 15 標題／3 故事／15 圖像提示；報告趨勢段落也提到「自製軟體以固定批次呼叫 Claude」（p.43）。<strong>固定批次＝生產線的節拍</strong>，這個概念在偵測工程上可以直接轉成規則（見第 8 節）。</p>
+<p>「character-counted」（算好字數）——X 的單則上限是 280 字元；「算好字數」意味著操作者要求每則都在上限內、可直接貼上不用再修。「formatted for cross-platform publishing」——雖然報告說行動實際上只在單一平台，但生成時已預留跨平台格式，這是「還在暖機」的另一個佐證。</p>
+<p>「humanize and refine」——這兩個動詞是本案的靈魂。「人性化」在 AI 濫用語境裡指的是<strong>去除 AI 文本的統計指紋</strong>（過於工整的句構、重複的連接詞、缺乏個人語氣），報告趨勢段落也指出「行為者要求模型去除自動文本的痕跡、聽起來有機」（p.43）。Figure 17 的四則貼文正是這種產物：每則都是 1–2 句、語氣像關心民生的一般公民、但骨架完全一樣（「撤回電價審查」＋「對某群體的好處」＋兩個 hashtag＋可選的 @Wandayi）。</p>
+<p><strong>階段 4：包裝成 copy-all 小工具</strong>（詳見 4.3）。</p>
+<p><strong>階段 5：散播——時間與槓桿。</strong> Figure 17 的四則貼文都是 6 月 4 日，而政府撤回電價審查的新聞是 6 月 3 日（【獨立查證】Business Daily、Citizen Digital、The Star、Standard、Nation 等均於 6 月 3–4 日報導）。截圖中 Citizen TV 被引用的貼文顯示「20h」，表示截圖時該則新聞貼文發出約 20 小時。【研究員推論】這說明兩件事：（1）行動具備<strong>新聞反應速度</strong>——真實事件發生後一天內就有整批貼文上線，這需要素材預備、生成、分發三段都很順；（2）行動採用「<strong>借可信度</strong>」策略——不是自己造新聞，而是引用主流媒體（Citizen TV 有藍勾）與地方媒體（Berur News 圖卡）的真實報導，再在上面加一層「感恩部長」的評論。這種「真新聞＋假評論」的組合對事實查核極不友善：<strong>查核員找不到可以判「假」的事實主張</strong>。</p>
+<p><strong>階段 6：商業平行線。</strong> 「同一模板一字不差（verbatim）也用於零售品牌行銷，包括把一則促銷廣播重新包裝成有機推文、每第五則插入連結」（p.76）。【研究員推論】「每第五則插連結」是行銷業的「4:1 法則」（四則軟內容配一則硬廣）——這個細節強烈暗示操作者有數位行銷的職業背景，而政治行動只是把同一套 SOP 換了客戶。這也是為什麼報告把它連到肯亞「公關公司付錢請網紅」的產業（p.76 的超連結指向 WIRED 2021 年 9 月 Odanga Madung 的評論〈In Kenya, Influencers Are Hired to Spread Disinformation〉——研究員從 PDF 抽出了該超連結目標，但 WIRED 網站無法抓取；其研究內容見第 9 節的 Mozilla 條目）。</p>
+<h3 id="43-copy-all">4.3 深挖：「互動式 copy-all 小工具」代表什麼</h3>
+<p>報告原文只有一句（p.77）：</p>
+<blockquote>
+<p>"In several sessions, these were packaged as an interactive copy-all widget ready for deployment."<br />
+（在數個工作階段中，這些被包裝成可直接部署的互動式 copy-all 小工具。）</p>
+</blockquote>
+<p>報告沒有進一步描述這個小工具長什麼樣。以下是研究員的解讀（【研究員推論】，基於 Claude 產品功能與肯亞既有的散播模式）：</p>
+<p><strong>它可能是什麼。</strong> Claude 可以在對話中生成可互動的 HTML／React 頁面（Anthropic 稱為 artifact）。「copy-all widget」最合理的形態是：一個網頁，列出 50 則推文，每則旁邊一個「Copy」按鈕，頂端一個「Copy All」按鈕，可能還有字數計數、hashtag 已嵌入、甚至「已發布」勾選框。使用者不需要任何技術能力——打開頁面、按一下、貼到 X。</p>
+<p><strong>它為什麼重要——三層意義。</strong></p>
+<ol>
+<li>
+<p><strong>AI 不只生成內容，還生成「散播的操作介面」。</strong> 傳統的假草根流程（Mozilla 2021 年在肯亞記錄到的模式，見第 9 節）是：協調者把 hashtag 與預寫推文丟進 WhatsApp 群組，網紅們複製貼上，事後以 M-Pesa 收款。那個流程的摩擦點在「內容整理與分發」——Google Doc 亂、訊息被洗掉、複製時漏掉 hashtag。copy-all 小工具把這個摩擦點<strong>歸零</strong>：一個連結發到群組，每個人打開就能一鍵複製。AI 在這裡扮演的不是「寫手」，而是<strong>「工具鏈工程師」</strong>——它把內容和分發工具一起交付。</p>
+</li>
+<li>
+<p><strong>「ready for deployment」是報告的用詞——這是軍事／工程語言。</strong> 報告的作者選擇用「部署」而不是「發布」，暗示 Anthropic 分析師看到的成品<strong>已經不需要人再加工</strong>。這與章節導論的趨勢一致：「AI 幫忙建立的是整個機器（apparatus），不只是內容」（p.42–43）。</p>
+</li>
+<li>
+<p><strong>它降低的是「協調成本」，而不是「寫作成本」。</strong> 寫 50 則推文對一個有經驗的公關人員來說不難；難的是讓 30 個網紅在同一小時內發出 50 則彼此不同、但方向一致的貼文。copy-all 小工具把「品質一致性」與「散播同步性」打包給了不需要理解策略的執行者。這正是報告在趨勢段落講的「中央化的設定讓產出內容的人不需要互相協調、甚至不需要認識彼此」（p.43）。</p>
+</li>
+</ol>
+<p><strong>偵測意義（【研究員推論】）。</strong></p>
+<ul>
+<li><strong>AI 供應商端</strong>：「把政治貼文包成可複製的 UI」是一個可以偵測的<strong>請求型態</strong>——正常的內容創作者很少要求「50 則＋copy-all 按鈕」；結合「要看起來不協同」的指令，就是高信度的 CIB 訊號。報告說「圍繞其行為簽章建立偵測」（p.77），這類請求型態很可能是簽章的一部分。</li>
+<li><strong>平台端</strong>：copy-paste 散播會留下<strong>格式指紋</strong>——相同的 hashtag 順序（Figure 17 四則全是 <code>#PoweringTheNewKenya #PowerReliefKE</code>，順序一致）、相同的標點習慣、相同的 @ 提及位置、發文時間集中。這些是 Pacheco 等人（2021）「共享特徵投影」方法能直接抓的訊號（見第 5.1 節）。</li>
+<li><strong>對事實查核與公民社會</strong>：copy-all 意味著<strong>同一批文字會在多個帳號上以近乎一字不差或「同骨架換皮」的形式出現</strong>——這讓「近重複偵測（near-duplicate detection）」與「語意叢集」成為比「內容查核」更有效的第一道篩子。</li>
+</ul>
+<h3 id="44">4.4 自主程度判定</h3>
+<p>依課程的三級尺度（對話式協助／人類逐步指揮／AI 編排多代理自主執行），本案明確屬於<strong>對話式協助</strong>，理由：</p>
+<ul>
+<li>每個工作階段都是人開啟、人餵素材、人下指令、人拿走成品；</li>
+<li>沒有 API 自動化、沒有排程、沒有自製程式（對照孟加拉案的 <code>fake_news_3.py</code> 與 YouTube 排程上傳腳本）；</li>
+<li>Claude 不接觸社群平台，散播完全靠人；</li>
+<li>報告明說模型的「主要價值是量與真實感的外觀」（p.76）。</li>
+</ul>
+<p>【研究員推論】這個判定有一個教學上的反直覺點：<strong>自主程度最低的案例，可能是最難靠「AI 濫用偵測」抓到的</strong>。孟加拉案用 29 個帳號輪替、固定批次直連 API——這種模式有明顯的技術異常；本案只是一個人在聊天視窗裡要 50 則推文，與「行銷人員用 AI 寫社群貼文」在<strong>技術訊號上幾乎無法區分</strong>，差別只在「是否被要求隱藏協同性」這一句指令。這正是為什麼本案要靠外部線報才被發現。</p>
+<h3 id="45">4.5 長期佈局時間軸：「選前一年多」意味著什麼</h3>
+<p>報告在章節導論把本案定位為「一名親政府操作者在肯亞 2027 年大選前預備假草根社群貼文」（p.41），案例正文說行動「為 2027 年大選」推送反對黨瓦解敘事（p.75–76）。從證據上看：</p>
+<ul>
+<li>報告涵蓋期間：2025 年 12 月至 2026 年 8 月；</li>
+<li>Figure 17 可見活動：2026 年 6 月 4 日；</li>
+<li>大選日：2027 年 8 月 10 日（【獨立查證】）；</li>
+<li>因此可見活動距投票日<strong>約 14 個月</strong>（報告沒有說「兩年」，本檔也不這麼寫）。</li>
+</ul>
+<p>【研究員推論】影響力行動為什麼要提前一年以上開始？因為<strong>可信度是時間的函數</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>帳號生命週期階段</th>
+<th>做什麼</th>
+<th>目的</th>
+<th>對偵測的意義</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>孵化（選前 18–24 個月）</td>
+<td>批量註冊、設頭像與簡介、發非政治內容（足球、宗教、食譜、勵志語錄）</td>
+<td>讓帳號「有歷史」，通過平台的新帳號風險模型</td>
+<td>此時內容無害，<strong>內容查核完全無用</strong>；只有「同批註冊、同時活躍、互相追蹤」的結構訊號能抓</td>
+</tr>
+<tr>
+<td>建立可信度（選前 12–18 個月）</td>
+<td>引用主流媒體、評論民生議題（如電價）、@ 官員、偶爾被真人互動</td>
+<td>累積追隨者、進入本地議題社群、讓演算法認為它是「正常肯亞用戶」</td>
+<td><strong>本案被抓時正處於這個階段</strong>——讚揚電價政策是「民生」而非「選舉」議題，正好是暖機的理想素材</td>
+</tr>
+<tr>
+<td>敘事鋪陳（選前 6–12 個月）</td>
+<td>開始帶入政治框架：反對黨分裂、執政有政績</td>
+<td>讓框架在真實選戰開打前已經「存在」</td>
+<td>事實查核開始有著力點，但敘事已經被多次重複</td>
+</tr>
+<tr>
+<td>爆發（選前 0–6 個月）</td>
+<td>高頻、高情緒、針對候選人</td>
+<td>影響投票</td>
+<td>平台與查核機構的資源集中在此，但<strong>帳號已有一年歷史、已有真實追隨者，移除的政治成本變高</strong></td>
+</tr>
+</tbody>
+</table>
+<p>所以「選前才開始查核」為什麼太晚？因為到了爆發期，（1）帳號已通過所有「新帳號」啟發式規則；（2）它們的追隨者裡已經混有真人，移除會被指控「審查」；（3）敘事已經被重複到「聽起來熟悉」——認知心理學的「真實性錯覺（illusory truth effect）」在這時候已經生效。<strong>偵測必須發生在孵化與暖機期，而那時唯一可用的訊號是協同結構，不是內容。</strong> 這是本案對台灣最直接的啟示（第 10.4 節）。</p>
+<h3 id="46-2021-2026">4.6 從 2021 到 2026：肯亞帶風向產業的成本曲線</h3>
+<p>報告 p.76 特別把本案接回肯亞既有的產業模式——「這符合肯亞常見的模式：公關公司付錢請本地網紅操縱敘事」，並在該句加了指向 WIRED 2021 年 9 月 Odanga Madung 評論的超連結。把這條線拉開，是理解「AI 到底改變了什麼」最好的對照組。</p>
+<p><strong>2021 年的肯亞模式（【獨立查證】，依 Mozilla Foundation 研究，數字轉引自 Tech-ish 與 Stimson Center，原始頁面回傳 403）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>2021 年做法</th>
+<th>數字</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>協調</td>
+<td>WhatsApp 群組：協調者把 hashtag 與預寫推文丟進群組</td>
+<td>—</td>
+</tr>
+<tr>
+<td>人力</td>
+<td>付費「網紅」（多為一般年輕人）手動複製貼上</td>
+<td>逾 3,700 個帳號參與</td>
+</tr>
+<tr>
+<td>規模</td>
+<td>以「行動」為單位</td>
+<td>11 個協同行動、逾 23,000 則推文</td>
+</tr>
+<tr>
+<td>成本</td>
+<td>以 M-Pesa（行動支付）日結</td>
+<td>每人每日約 10–15 美元</td>
+</tr>
+<tr>
+<td>內容</td>
+<td>由協調者或文案手預寫，變體有限</td>
+<td>—</td>
+</tr>
+<tr>
+<td>目標</td>
+<td>司法機構、社運人士、憲政改革（BBI）等</td>
+<td>—</td>
+</tr>
+<tr>
+<td>意願基礎</td>
+<td>Stimson 引 Mozilla：「<strong>七成肯亞 Twitter 使用者願意為錢分享可能不實或誤導的資訊</strong>」</td>
+<td>70%</td>
+</tr>
+<tr>
+<td>外國介入</td>
+<td>西班牙組織 CitizenGO 付費肯亞網紅散布生育健康誤導內容</td>
+<td>—</td>
+</tr>
+<tr>
+<td>平台回應</td>
+<td>Twitter 停權數百個帳號</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>2026 年的本案（【報告原文】＋【研究員推論】）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>本案做法</th>
+<th>相對 2021 的變化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>協調</td>
+<td><strong>AI 產出的 copy-all 小工具</strong>——一個連結取代 WhatsApp 的貼文整理</td>
+<td>協調摩擦 → 趨近零</td>
+</tr>
+<tr>
+<td>人力</td>
+<td>仍有「本地網紅」，但<strong>內容生產完全不需要人</strong></td>
+<td>文案人力 → 0</td>
+</tr>
+<tr>
+<td>規模</td>
+<td>每批 50 則，每則皆為獨立變體</td>
+<td>變體成本 → 趨近零</td>
+</tr>
+<tr>
+<td>成本</td>
+<td>一個 AI 訂閱（Tech-ish 的評論：「2021 年要幾千個帳號與人力協調，2026 年只要一個人加一個 AI 訂閱」）</td>
+<td>邊際成本 → 大幅下降</td>
+</tr>
+<tr>
+<td>內容品質</td>
+<td>「人性化並精修」、算好字數、跨平台格式</td>
+<td>品質 → 上升（且更難用字面比對抓）</td>
+</tr>
+<tr>
+<td>偵測難度</td>
+<td>字面去重失效；需要語意叢集</td>
+<td>上升</td>
+</tr>
+<tr>
+<td>平台回應</td>
+<td>本案未見任何平台處置的公開紀錄</td>
+<td>下降？（至少不可見）</td>
+</tr>
+</tbody>
+</table>
+<p>【研究員推論】<strong>這條成本曲線才是本案真正的教材。</strong> 傳統上，假草根行動的成本結構是「人力密集」——要協調者、文案、幾千個執行者；成本隨規模線性上升，而且參與人數越多、內部越容易洩漏（Mozilla 2021 的研究之所以做得出來，正是因為有參與者願意受訪）。AI 把這個結構改成「<strong>固定成本 + 近零邊際成本</strong>」，並且把參與人數壓到最低——<strong>知道全貌的只剩一個人</strong>。</p>
+<p>這帶來三個後果，值得在課堂上逐一討論：<br />
+1. <strong>可調查性下降</strong>：沒有 WhatsApp 群組、沒有幾千個收錢的人，就沒有可以受訪的內部人、沒有可追的金流。本案之所以曝光，靠的不是調查記者，而是 AI 供應商的後台紀錄——<strong>調查的入口從「社會」移到了「平台」</strong>。<br />
+2. <strong>嚇阻手段失效</strong>：停權一個帳號的成本，遠低於招募幾千個網紅的成本。<br />
+3. <strong>品質—規模的取捨消失</strong>：2021 年要嘛發 23,000 則一模一樣的推文（容易被抓），要嘛請文案寫變體（貴）。2026 年兩者兼得。這正是報告說的「模型對該網路的主要價值是<strong>產量</strong>與<strong>真實感的外觀</strong>」（p.76）——這兩個詞在過去是互斥的。</p>
+<hr />
+<h2 id="5-ttp-mitre-attck">5. TTP 與 MITRE ATT&amp;CK 對應</h2>
+<h3 id="51-astroturfingcib">5.1 術語基礎：astroturfing、CIB、平台判定標準</h3>
+<p>在對應框架之前，先把本案用到的三個術語講清楚——因為它們在法律、平台政策與學術上的定義並不相同。</p>
+<p><strong>Astroturfing（假草根／偽造草根民意）。</strong><br />
+- 詞源：AstroTurf 是人造草皮品牌。1985 年美國參議員 Lloyd Bentsen 收到保險業製造的大量「選民來信」時說：「德州人分得出草根（grass roots）和人造草皮（AstroTurf）」。（【獨立查證】英文維基百科）<br />
+- 一般定義：把有贊助者精心策劃的訊息，偽裝成不請自來的自發群眾運動；核心是<strong>隱藏贊助者</strong>，製造「公眾共識」的假象。<br />
+- 學術定義（【獨立查證】Schoch, Keller, Stier &amp; Yang 2022，《Scientific Reports》）：「<strong>中央協調的不實資訊行動，參與者假裝是獨立行動的一般公民</strong>（centrally coordinated disinformation campaigns in which participants pretend to be ordinary citizens who act independently）」。這個定義有兩個關鍵：（1）<strong>不要求使用機器人</strong>——參與者可以是拿錢的真人；（2）<strong>不要求內容是假的</strong>——讚揚一項真實政策也可以是假草根。本案兩點都符合：報告說網路由「假帳號與本地網紅」組成（p.76），而讚揚電價撤回的內容本身是真實事件。<br />
+- Keller 等人 2020 年在《Political Communication》的前作以南韓國家情報院 2012 年大選干預的法院證據資料集，證明假草根帳號的可辨識特徵不是「像不像機器人」，而是<strong>協同的時間結構</strong>（本次未能抓取原文，依研究者所知描述，見第 12 節）。</p>
+<p><strong>Coordinated Inauthentic Behavior（CIB，協同不實行為）。</strong><br />
+- 這是 Meta（Facebook）2018 年起使用的執法術語。Meta 現行社群守則（【獨立查證】transparency.meta.com）的定義層次：<br />
+  - <strong>Inauthentic Behavior</strong>：「由同一人或同一群人控制的不實資產網路所執行的多種複雜欺騙形式，目的是欺騙 Meta 或我們的社群、或規避執法」；<br />
+  - <strong>Coordinated Inauthentic Behavior</strong>：「特別複雜的不實行為形式，<strong>假身分是行動的核心</strong>，且操作者使用對抗性方法規避偵測或顯得真實」；<br />
+  - <strong>Foreign Interference</strong>：操作者鎖定自己國家以外閱聽人的 CIB；Meta 的執法報告長期把「國內 CIB」與「外國或政府干預（Foreign or Government Interference, FGI）」分開統計——<strong>本案在 Meta 的分類裡會是「國內 CIB」，不是 FGI</strong>，這正是報告標題用「domestic」的原因。<br />
+- Meta 執法報告慣用的一句話定義（依研究者所知，出自 Meta 歷年 CIB 報告的固定措辭）：「協同努力操縱公共辯論以達成戰略目標，且假帳號是行動的核心」。<br />
+- <strong>CIB 的判定看行為、不看內容。</strong> Meta 2018 年 12 月由 Nathaniel Gleicher 說明時強調：處置的是「網路」（帳號、粉專、社團的整體），不是個別貼文的真假（【獨立查證】about.fb.com）。這是本案最重要的方法論前提：<strong>Figure 17 四則貼文沒有一則包含可查核的假事實，但它們作為一個網路是不實的。</strong></p>
+<p><strong>X（Twitter）的對應政策。</strong> X 的「平台操縱與垃圾內容（Platform manipulation and spam）」政策禁止「透過多個帳號、假帳號、自動化或腳本，協同地人為影響對話」，並另設「協同有害活動」條款。（本次 X 政策頁面回傳 403 無法抓取；此為研究者依既有公開政策措辭的描述，請於授課前以現行頁面核對。）</p>
+<p><strong>Anthropic 的對應政策（【獨立查證】Usage Policy，2025-09-15 生效）。</strong> 「請勿破壞民主程序」一節明文禁止：「<strong>創造人工或欺騙性的政治運動，其來源、規模或性質遭到不實呈現</strong>（Create artificial or deceptive political movements in which the source, scale or nature of the campaign or activities is misrepresented）」；以及「產生大規模、隱藏其人工來源的對公職人員或選民的自動化通訊」。本案「明確指示模型讓貼文看起來像自發草根而非協同行動」（p.75），就是對「來源、規模或性質不實呈現」的直接違反。<strong>注意：違反的不是「寫政治推文」，而是「要求隱藏協同性」。</strong> 這個區分是 AI 供應商執法的法理基礎，也是課堂討論的爭點（第 10.2 節）。</p>
+<h3 id="52-mitre-attck">5.2 MITRE ATT&amp;CK 對應（含框架缺口標示）</h3>
+<p>ATT&amp;CK 是為網路入侵設計的，對影響力行動的覆蓋極為有限。以下只列出<strong>確實存在對應 ID</strong>的行為，其餘明確標示為框架缺口，並在 5.3 節以 DISARM 補足。</p>
+<table>
+<thead>
+<tr>
+<th>戰術</th>
+<th>技術 ID</th>
+<th>本案的具體作法</th>
+<th>偵測構想</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Resource Development</td>
+<td><strong>T1585.001</strong> Establish Accounts: Social Media Accounts</td>
+<td>建立／維運假的 X 帳號網路（「network of fake accounts」，p.76）</td>
+<td>同批註冊、頭像反搜、簡介模板化、早期追蹤圖譜</td>
+<td>ATT&amp;CK 有 ID，但其設計語境是「入侵前的社交工程」，不是輿論操作</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td><strong>T1588.007</strong> Obtain Capabilities: Artificial Intelligence</td>
+<td>取得 Claude（及先前的 OpenAI）帳號作為內容生產能力</td>
+<td>AI 供應商端：請求型態（固定批次、去 AI 化指令、copy-all UI）；跨供應商線報</td>
+<td>v16 起新增之子技術（請以現行 ATT&amp;CK 版本核對）</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td><strong>T1583</strong> Acquire Infrastructure（弱對應）</td>
+<td>本地網紅網路（付費真人）作為散播基礎設施</td>
+<td>付款軌跡（肯亞慣例為 M-Pesa）、WhatsApp 協調群組</td>
+<td>ATT&amp;CK 沒有「雇用真人作為放大器」的概念——<strong>框架缺口</strong></td>
+</tr>
+<tr>
+<td>Reconnaissance</td>
+<td><strong>T1593.001</strong> Search Open Websites/Domains: Social Media（弱對應）</td>
+<td>監看真實新聞（Citizen TV、Berur News）以決定引用對象與時機</td>
+<td>引用來源與發文時間的相關性</td>
+<td>勉強對應</td>
+</tr>
+<tr>
+<td>—</td>
+<td><strong>無對應</strong></td>
+<td>「每批精確 50 則、人性化並精修、算好字數、跨平台格式」——內容工業化</td>
+<td>見第 8 節行為簽章</td>
+<td><strong>框架缺口</strong>：ATT&amp;CK 沒有「內容生產」戰術</td>
+</tr>
+<tr>
+<td>—</td>
+<td><strong>無對應</strong></td>
+<td>「interactive copy-all widget ready for deployment」——散播工具鏈生成</td>
+<td>見 4.3</td>
+<td><strong>框架缺口</strong></td>
+</tr>
+<tr>
+<td>—</td>
+<td><strong>無對應</strong></td>
+<td>借用可信來源（quote tweet 主流媒體）、hashtag 放大、@ 官員</td>
+<td>共同引用圖譜</td>
+<td><strong>框架缺口</strong></td>
+</tr>
+<tr>
+<td>—</td>
+<td><strong>無對應</strong></td>
+<td>商業／政治雙軌同模板</td>
+<td>跨客戶格式指紋</td>
+<td><strong>框架缺口</strong></td>
+</tr>
+<tr>
+<td>Defense Evasion（類比）</td>
+<td><strong>無精確對應</strong></td>
+<td>「明確指示模型讓貼文看起來像自發草根而非協同行動」——這在概念上是「規避偵測」，但 ATT&amp;CK 的 Defense Evasion 全是針對端點與網路的技術</td>
+<td>AI 供應商端的意圖分類器</td>
+<td><strong>框架缺口</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>結論</strong>：ATT&amp;CK 對本案的覆蓋率極低，僅 Resource Development 有實質對應。這不是 ATT&amp;CK 的錯——它的範圍就是網路入侵——但課堂要教學員：<strong>拿錯框架會系統性地漏掉整類威脅</strong>。影響力行動的標準框架是 DISARM。</p>
+<h3 id="53-disarm-red-framework">5.3 DISARM Red Framework 對應</h3>
+<p>DISARM（前身 AMITT）是影響力行動的開放 TTP 框架，結構模仿 ATT&amp;CK。以下技術 ID 依研究者所知的 DISARM Red 版本，<strong>授課前請以 disarm.foundation 現行版本核對</strong>（技術編號在版本間偶有調整）。</p>
+<table>
+<thead>
+<tr>
+<th>DISARM 階段</th>
+<th>技術</th>
+<th>本案具體作法</th>
+<th>證據頁碼</th>
+<th>偵測構想</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plan Strategy</td>
+<td>T0074 Determine Strategic Ends；T0079 Divide；T0066 Degrade Adversary</td>
+<td>拉抬現任、削弱反對黨可行性、放大聯合反對黨裂痕</td>
+<td>p.76</td>
+<td>敘事層：追蹤「反對黨分裂」框架的來源帳號集合</td>
+</tr>
+<tr>
+<td>Plan Objectives</td>
+<td>T0059 Play the Long Game</td>
+<td>為 14 個月後的大選預備</td>
+<td>p.41、p.75</td>
+<td>帳號生命週期分析</td>
+</tr>
+<tr>
+<td>Target Audience Analysis</td>
+<td>T0073 Determine Target Audiences</td>
+<td>肯亞 X 用戶、民生議題關注者</td>
+<td>推論</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Develop Narratives</td>
+<td>T0082 Develop New Narratives；T0068 Respond to Breaking News Event</td>
+<td>「感恩部長擋電價」＋「反對黨瓦解」；在撤回新聞 24 小時內反應</td>
+<td>p.75、Figure 17</td>
+<td>新聞事件後的貼文突發（burst）偵測</td>
+</tr>
+<tr>
+<td>Develop Content</td>
+<td><strong>T0085.001 Develop AI-Generated Text</strong>；T0084 Reuse Existing Content</td>
+<td>每批 50 則 AI 生成推文；引用真實新聞</td>
+<td>p.75–77</td>
+<td>AI 供應商端請求簽章；平台端同骨架改寫叢集</td>
+</tr>
+<tr>
+<td>Establish Assets</td>
+<td>T0090.004 Create Sockpuppet Accounts；T0097 Create Personas；T0091.001 Recruit Contractors</td>
+<td>假帳號網路；「SHANKI／Elkins Marketer」人格；本地網紅</td>
+<td>p.76</td>
+<td>帳號註冊批次、付款軌跡</td>
+</tr>
+<tr>
+<td>Establish Legitimacy</td>
+<td>T0100 Co-opt Trusted Sources</td>
+<td>引用 Citizen TV（藍勾）與 Berur News 圖卡</td>
+<td>Figure 17</td>
+<td>共同引用（co-quote）圖譜</td>
+</tr>
+<tr>
+<td>Microtarget</td>
+<td>（未見）</td>
+<td>報告未描述</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Select Channels</td>
+<td>T0104 Social Networks</td>
+<td>X 單一平台（但內容已「跨平台格式化」）</td>
+<td>p.76–77</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Conduct Pump Priming</td>
+<td>T0020 Trial Content</td>
+<td>商業線與政治線同模板——可視為互為試驗</td>
+<td>p.76</td>
+<td>跨客戶指紋</td>
+</tr>
+<tr>
+<td>Deliver Content</td>
+<td>T0115 Post Content；T0116 Comment or Reply；T0119.002 Post across Platform</td>
+<td>假帳號發文、quote tweet、@Wandayi</td>
+<td>Figure 17</td>
+<td>時間窗共現</td>
+</tr>
+<tr>
+<td>Maximize Exposure</td>
+<td><strong>T0049 Flooding the Information Space</strong>；T0015 Create Hashtags；T0118 Amplify Existing Narrative</td>
+<td><code>#PowerReliefKE</code>、<code>#PoweringTheNewKenya</code>；批量貼文</td>
+<td>p.75</td>
+<td>hashtag 首發帳號集合、hashtag 共用序列</td>
+</tr>
+<tr>
+<td>Conceal</td>
+<td>T0128 Conceal People；T0130.001 Conceal Sponsorship；T0129 Conceal Operational Activity</td>
+<td>「看起來像自發草根」；不揭露委託者；人格化名</td>
+<td>p.75–76</td>
+<td>「去 AI 化」請求本身是 AI 端訊號</td>
+</tr>
+<tr>
+<td>Measure Effectiveness</td>
+<td>T0132 Measure Performance</td>
+<td>報告未描述</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>【研究員推論】用 DISARM 排出來會發現本案在 <strong>Develop Content → Establish Legitimacy → Deliver → Maximize Exposure</strong> 這一段非常完整，而在 <strong>Microtarget、Measure Effectiveness</strong> 是空的。空的部分有兩種解釋：報告沒寫、或行動還沒做到。若是後者，再次印證「還在暖機」。</p>
+<h3 id="54">5.4 框架缺口總結（課堂要點）</h3>
+<ol>
+<li><strong>ATT&amp;CK 沒有「內容生產」與「散播工具鏈」的概念</strong>——而這正是 AI 改變最大的兩段。</li>
+<li><strong>DISARM 有 T0085.001（AI 生成文字），但沒有「AI 生成散播介面」</strong>（copy-all widget）的技術——【研究員推論】這是一個值得向 DISARM 社群提案的新子技術：「Develop Distribution Tooling with AI」。</li>
+<li><strong>兩個框架都沒有「AI 供應商端偵測」的防守面對應</strong>——DISARM Blue 有對抗技術，但假設防守方是平台或政府，不是模型供應商。本案的偵測發生在「內容離開 AI、進入平台之前」，是一個新的防守位置。</li>
+</ol>
+<hr />
+<h2 id="6">6. 圖表逐一判讀</h2>
+<p>本案頁段內只有一張圖：Figure 17（p.77）。p.75、p.76、p.78 為純文字頁（p.75 上半的 IOC 表屬 GTG-84006，見第 0 節）。以下先完整判讀 Figure 17，再補充文字頁的版面觀察。</p>
+<h3 id="figure-17p77inauthentic-commenting-accounts-amplifying-cabinet-secretary-cs-opiyo-wandayi-content-showing-coordinated-clusters-within-the-operations-inauthentic-accounts">Figure 17（p.77）：Inauthentic commenting accounts amplifying Cabinet Secretary (CS) Opiyo Wandayi content, showing coordinated clusters within the operation's inauthentic accounts</h3>
+<p>圖檔**：（課程用 160 DPI 版本）；研究員另從 PDF 抽出原生嵌入圖（1990×1620 像素）分四象限放大判讀。</p>
+<p><strong>圖片類型</strong>：<strong>截圖拼貼</strong>——四張 X（前 Twitter）網頁版淺色模式的貼文卡片，排成 2×2 網格，置於米色圓角底框上。<strong>不是</strong>節點連線圖、不是長條圖、不是流程圖。介面語言為英文，貼文語言為英文。</p>
+<p><strong>四則貼文逐格判讀</strong>（帳號顯示名稱、handle 與頭像均已被 Anthropic 模糊處理；以下文字為研究員自放大圖逐字判讀）：</p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>日期</th>
+<th>貼文正文（逐字）</th>
+<th>引用／附加的內容</th>
+<th>互動數（回覆／轉推／讚／瀏覽）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>左上</td>
+<td>Jun 4</td>
+<td>"The withdrawal of the proposed tariff review sends a positive signal to consumers who depend on stable and predictable electricity costs every month. #PoweringTheNewKenya #PowerReliefKE"</td>
+<td><strong>引用推文（quote tweet）</strong>：Citizen TV Kenya（藍勾認證，顯示「20h」）："Energy Ministry withdraws proposal that could have increased electricity costs"，附 CITIZEN.DIGITAL 連結卡片，摘要開頭 "Energy Cabinet Secretary Opiyo Wandayi has annou…"，圖為 Wandayi 西裝坐姿記者會照</td>
+<td>未顯示／4／未顯示／28</td>
+</tr>
+<tr>
+<td>右上</td>
+<td>Jun 4</td>
+<td>"The decision to halt the proposed tariff review reflects understanding of the challenges many households and businesses continue to face in today's economic environment. #PoweringTheNewKenya #PowerReliefKE @OpiyoWandayi"</td>
+<td><strong>同一則</strong> Citizen TV Kenya 引用推文</td>
+<td>20／11／3／85</td>
+</tr>
+<tr>
+<td>左下</td>
+<td>Jun 4</td>
+<td>"The withdrawal of the proposed electricity tariff increase provides immediate relief to households already grappling with rising living costs, easing monthly financial pressure for many families. #PoweringTheNewKenya #PowerReliefKE @OpiyoWandayi"</td>
+<td><strong>附圖</strong>：Berur News 圖卡（右上角 Berur FM 商標；Wandayi 穿紫色襯衫、舉手持麥克風的演講照；橘色標籤 "BERUR NEWS"；標題 "Government withdraws retail power tariff proposal submitted by Kenya Power in March, in bid to shield Kenyans from higher electricity costs, Energy CS Wandayi says."；底部綠色橫條含 "BERUR FM KE" 與 "BERUR FM" 社群帳號）</td>
+<td>未顯示／4／3／59</td>
+</tr>
+<tr>
+<td>右下</td>
+<td>Jun 4</td>
+<td>"Manufacturers small micro enterprises and households have one less heavy burden to worry about today. The retail electricity tariff review application by Kenya Power has been officially withdrawn to shield them from high costs. #PoweringTheNewKenya #PowerReliefKE."</td>
+<td><strong>同一張</strong> Berur News 圖卡；圖片下方顯示替代文字／說明 "Opiyo Wandayi"</td>
+<td>1／10／1／59</td>
+</tr>
+</tbody>
+</table>
+<p>其他可見的介面元素：每則卡片右上角有 X 的「Grok 分析」圖示與「…」選單；底部工具列為回覆、轉推、讚、瀏覽數、書籤、分享。左上帳號的頭像為灰色預設樣式（模糊後仍可辨其為淺色圓形），右下帳號的顯示名稱中含有表情符號（模糊後仍可辨色塊）。</p>
+<p><strong>「叢集」在圖上是怎麼呈現的。</strong> 圖說寫「showing coordinated clusters」，但圖片沒有畫任何節點或連線。叢集是靠<strong>排版</strong>暗示的：<br />
+- <strong>叢集 A（上排）</strong>：兩個不同帳號，在同一天，引用<strong>同一則</strong> Citizen TV 貼文，各自加上一句「感恩」評論，掛<strong>同一組 hashtag、同一順序</strong>。<br />
+- <strong>叢集 B（下排）</strong>：兩個不同帳號，在同一天，上傳<strong>同一張</strong> Berur News 圖卡（不是引用、是各自上傳同一個媒體檔），各自加一句評論，掛同一組 hashtag。<br />
+- <strong>跨叢集共同特徵</strong>：四則全在 6 月 4 日；四則的 hashtag 都是 <code>#PoweringTheNewKenya #PowerReliefKE</code>（順序一致，注意報告正文列的順序相反，這是圖上的實際順序）；四則都是 1–2 句、第三人稱、政策評論語氣、無個人經驗、無錯字、無口語；三則提到 "tariff review"、兩則提到 "withdrawal"、兩則提到 "households"；兩則 @OpiyoWandayi。</p>
+<p><strong>這就是「同骨架換皮」的教科書樣本。</strong> 把四則貼文抽象化，骨架都是：<br />
+<code>[撤回電價審查這件事] + [對某個群體（consumers / households and businesses / families / manufacturers and SMEs）的好處] + [兩個 hashtag] + [可選 @Wandayi]</code>。<br />
+每則換一個受益群體、換幾個同義詞（withdrawal / decision to halt / officially withdrawn；relief / positive signal / one less burden）。這正是「把一個談話要點人性化成 50 個變體」會產出的東西——<strong>文字不重複（exact-match 去重抓不到），但語意與結構重複（embedding 叢集抓得到）</strong>。</p>
+<p><strong>互動數怎麼讀。</strong> 瀏覽 28 到 85、轉推 4 到 11、讚 0 到 3。這些數字有三個含意：（1）直接支持報告的 Category One 評級——幾十次瀏覽在肯亞 X 生態裡等於沒人看到；（2）<strong>轉推數相對於讚數偏高</strong>（右下 10 轉推對 1 讚；右上 11 轉推對 3 讚）——真實用戶通常「讚」多於「轉」，「轉多讚少」是網路內互相轉推的典型痕跡；（3）右上那則有 20 則回覆，相對於 85 次瀏覽是異常高的回覆率（23.5%），【研究員推論】最可能是網路內帳號互相回覆以製造討論熱度，而非真實爭論。這三點都是可以直接教的「互動比例異常」啟發式。</p>
+<p><strong>Citizen TV 引用推文上的「20h」。</strong> 這個相對時間戳表示截圖當下，Citizen TV 的原貼發出約 20 小時。結合 Citizen Digital 於 6 月 3 日發布該報導（【獨立查證】），可推得截圖大約在 6 月 4 日當天完成——即 Anthropic（或其合作方）在貼文上線的<strong>一天內</strong>就在監看這個網路。【研究員推論】這與「基於 OpenAI 線報進行內部調查」的時序吻合：調查很可能在 6 月初已經進行中。</p>
+<p><strong>這張圖傳達的核心訊息。</strong><br />
+1. <strong>假草根的內容可以百分之百「真」</strong>：四則貼文引用的是真新聞、講的是真政策、讚的是真部長；沒有任何一句可以被事實查核判「假」。不實的是<strong>帳號的身分</strong>與<strong>行動的協同性</strong>。<br />
+2. <strong>協同性的證據在「共現」</strong>：共同引用、共同媒體檔、共同 hashtag 序列、共同日期、共同句法骨架。<br />
+3. <strong>AI 的貢獻是「不重複的重複」</strong>：讓 50 則講同一件事的貼文看起來像 50 個不同的人。</p>
+<p><strong>一張「真正的」協同叢集圖應該怎麼做（教學延伸，【研究員推論】依 Pacheco 等 2021、Schoch 等 2022 方法）。</strong> 圖說用了「clusters」這個詞，課堂上應該補上分析師實際會畫的圖：<br />
+- <strong>第一步：定義「特徵」</strong>。可選的共享特徵有——引用的同一則貼文（co-quote）、轉推的同一則貼文（co-retweet）、上傳的同一媒體雜湊（co-media）、相同的 hashtag 序列（hashtag sequence）、在 N 分鐘內發出近重複文字（co-tweet within window）、共用的短網址、共用的頭像。<br />
+- <strong>第二步：建二分圖（bipartite graph）</strong>。一邊是帳號節點，另一邊是特徵節點；帳號用了某特徵就連一條邊。以 Figure 17 為例：四個帳號節點；特徵節點有「Citizen TV 貼文 X」、「Berur 圖卡 Y」、「hashtag 序列 H」、「日期 6/4」。<br />
+- <strong>第三步：投影成帳號—帳號圖</strong>。兩個帳號共享越多特徵、邊越粗。Figure 17 投影後：左上—右上因共同引用同一則貼文而強連；左下—右下因共同媒體而強連；四者因 hashtag 序列與日期而全連。<br />
+- <strong>第四步：加時間權重</strong>。Schoch 等人（2022）的關鍵發現是：以<strong>一分鐘</strong>為共現時間窗建 co-tweet／co-retweet 網路，在 Twitter 官方公開的 33 個國家級行動資料集上，平均可辨識 74% 的假草根帳號，最佳設定下超過 80%、誤判約 1%；而且假草根帳號的發文集中在<strong>上班時間</strong>而非一般用戶活躍的晚間。<br />
+- <strong>第五步：社群偵測與人工驗證</strong>。跑 Louvain 或類似演算法切出叢集，再由分析師逐一看帳號的註冊日、頭像、歷史內容，決定是否為同一行動。</p>
+<p>課堂上可以把 Figure 17 的四則貼文當作「最小資料集」，讓學員手畫這五步（見第 10.3 節）。</p>
+<p><strong>在課程中怎麼用這張圖。</strong><br />
+- 「找不同」練習：先給四則正文、遮住 hashtag 與日期，問學員「這是四個人還是一個人」；再逐步揭露 hashtag、日期、引用來源，讓學員感受訊號如何累積。<br />
+- 「你能查核什麼」練習：要求學員指出任何一句可判假的事實主張——答案是沒有，藉此帶出「行為 vs 內容」的方法論分野。<br />
+- 「互動比例」練習：從四組數字算轉推／讚比與回覆／瀏覽比，討論何謂異常。</p>
+<h3 id="p75p76p78">文字頁的版面觀察（p.75、p.76、p.78）</h3>
+<ul>
+<li><strong>p.75</strong>：上半為 GTG-84006 的 IOC 表（Indicator / Type / Note 三欄，最後一列是「Fingerprints — Cross-actor signatures」，內容為 ZWNJ 與點／空格規避、強制口號、<code>SKILL.md / LEARNINGS.md memory</code>）。下半起為本案標題與前兩段。<strong>沒有任何屬於本案的表格或圖。</strong></li>
+<li><strong>p.76</strong>：純文字。「manipulate narratives」四個字有底線——是 PDF 內嵌超連結，研究員以 PyMuPDF 抽出目標為 <code>https://www.wired.com/story/opinion-in-kenya-influencers-are-hired-to-spread-disinformation/</code>（WIRED 2021-09 Odanga Madung 評論）。這是報告在本案唯一引用的外部來源，也是 Anthropic 把本案接到肯亞「網紅帶風向產業」既有研究的橋。</li>
+<li><strong>p.78</strong>：整頁為 GTG-84002，與本案無關；但可注意兩案並列的<strong>對比設計</strong>——報告把「最低信度、國內、單人、Category One」的肯亞案，緊接著放在「最高信度、國家、五條線、約 300 帳號」的阿聯酋案之前。【研究員推論】這種排列讓讀者自然比較「同樣是假草根，規模與歸因可以差多遠」。</li>
+</ul>
+<hr />
+<h2 id="7-ioc">7. IOC 與技術指標</h2>
+<h3 id="71-ioc">7.1 報告與官方 IOC 清單的實況</h3>
+<ul>
+<li><strong>報告正文：本案沒有 IOC 表。</strong> p.75–77 沒有任何網域、IP、帳號 handle、雜湊或 Telegram 頻道。</li>
+<li><strong>官方 IOC CSV：<code>GTG-54004</code> 為 0 列</strong>（研究員逐一比對 208 條指標、11 個群組；同章節的 GTG-54002 有 28 條、GTG-84005 有 21 條、GTG-84006 有 10 條、GTG-24015 有 1 條）。</li>
+<li><strong>Figure 17 的帳號名稱與 handle 被模糊處理</strong>，Anthropic 選擇不公開這些 X 帳號。</li>
+</ul>
+<p>【研究員推論】為什麼 Anthropic 不公開？三個可能的理由，每一個都值得討論：（1）<strong>真人網紅問題</strong>——網路由「假帳號與本地網紅」組成，部分帳號可能是拿錢的真實肯亞公民，公開等於點名真人；（2）<strong>歸因信度不足</strong>——在「未辨識出組織」的情況下公布帳號，可能誤傷；（3）<strong>國內政治敏感</strong>——這是一個主權國家的國內選舉議題，AI 公司公布哪些帳號是「政府側網軍」有干預之嫌。對照之下，GTG-54002（商業 IaaS）與 GTG-84006（伊朗）公開了帳號——那些案例的帳號是假媒體或假人格，不涉及真人。<strong>「公不公開 IOC」本身就是一個歸因信度與傷害權衡的決策</strong>，這是課堂的好題目。</p>
+<h3 id="72">7.2 可從報告與圖中抽出的「行為指標」</h3>
+<p>雖然沒有傳統 IOC，報告與 Figure 17 提供了一組<strong>行為與內容層指標</strong>。以下每一條標註偵測價值與壽命。</p>
+<table>
+<thead>
+<tr>
+<th>指標</th>
+<th>類型</th>
+<th>來源</th>
+<th>偵測價值</th>
+<th>壽命</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#PowerReliefKE</code></td>
+<td>hashtag</td>
+<td>p.75、Figure 17</td>
+<td>高（行動專用、非通用詞）——可回溯首發帳號集合與早期放大者</td>
+<td>短：事件型 hashtag，6 月電價事件過後即失效；但<strong>歷史回溯價值長</strong></td>
+</tr>
+<tr>
+<td><code>#PoweringTheNewKenya</code></td>
+<td>hashtag</td>
+<td>p.75、Figure 17</td>
+<td>中——口號式、可能被真實支持者沿用；適合當叢集特徵之一而非單獨指標</td>
+<td>中：可能延用到選戰</td>
+</tr>
+<tr>
+<td>hashtag 固定順序 <code>#PoweringTheNewKenya #PowerReliefKE</code></td>
+<td>格式指紋</td>
+<td>Figure 17（四則一致）</td>
+<td>高——copy-paste 散播的痕跡</td>
+<td>短</td>
+</tr>
+<tr>
+<td>「每批精確 50 則」</td>
+<td>AI 端請求簽章</td>
+<td>p.75–76</td>
+<td><strong>高</strong>——固定批次是生產線節拍</td>
+<td>長：與議題無關</td>
+</tr>
+<tr>
+<td>「讓貼文看起來像自發草根、不像協同行動」之指令</td>
+<td>AI 端意圖簽章</td>
+<td>p.75</td>
+<td><strong>極高</strong>——這是 Usage Policy 違規的直接證據</td>
+<td>長</td>
+</tr>
+<tr>
+<td>「包裝成互動式 copy-all 小工具」之請求</td>
+<td>AI 端請求簽章</td>
+<td>p.77</td>
+<td>高——結合政治內容時為強訊號</td>
+<td>長</td>
+</tr>
+<tr>
+<td>「每第五則插入連結」</td>
+<td>內容結構指紋</td>
+<td>p.76</td>
+<td>中——商業線指紋，可用於連結政治線與商業線</td>
+<td>中</td>
+</tr>
+<tr>
+<td>人格名「SHANKI」／「Elkins Marketer」</td>
+<td>化名</td>
+<td>p.76</td>
+<td>低——僅供跨平台關聯；不知是否公開使用</td>
+<td>未知</td>
+</tr>
+<tr>
+<td>引用 Citizen TV Kenya 同一貼文、上傳 Berur News 同一圖卡</td>
+<td>共同引用／共同媒體</td>
+<td>Figure 17</td>
+<td>高——叢集邊的定義</td>
+<td>短（事件型）</td>
+</tr>
+<tr>
+<td>發文日期 2026-06-04、事件後 24 小時內</td>
+<td>時間指紋</td>
+<td>Figure 17 + 獨立查證</td>
+<td>中——新聞反應型行動的節奏</td>
+<td>—</td>
+</tr>
+<tr>
+<td>轉推／讚比偏高、回覆／瀏覽比異常</td>
+<td>互動比例</td>
+<td>Figure 17 數字</td>
+<td>中——啟發式，需與基線比較</td>
+<td>長</td>
+</tr>
+<tr>
+<td>「在 OpenAI 平台為累犯」</td>
+<td>跨供應商情報</td>
+<td>p.77</td>
+<td>高——但只有供應商間才能用</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="73">7.3 給防守方的提醒</h3>
+<ul>
+<li><strong>不要用 hashtag 當封鎖依據。</strong> <code>#PowerReliefKE</code> 一旦被真實用戶沿用，封鎖 hashtag 就是誤殺言論。hashtag 的正確用法是<strong>回溯</strong>：找出首發者與前 N 小時的放大者集合。</li>
+<li><strong>AI 端簽章與平台端簽章是兩個世界。</strong> 前四條「AI 端」指標只有 Anthropic 這類供應商看得到；平台與研究者能用的是後半段的共現與格式指標。課堂要讓學員清楚自己站在哪一端。</li>
+<li><strong>壽命最長的是「與議題無關」的指標</strong>：批次大小、去 AI 化指令、copy-all 請求、互動比例。事件型 hashtag 一週就沒用了。</li>
+</ul>
+<hr />
+<h2 id="8-anthropic">8. Anthropic 的偵測、處置與防線缺口</h2>
+<h3 id="81-p77">8.1 報告說做了什麼（【報告原文】，p.77）</h3>
+<ol>
+<li><strong>發現途徑</strong>：「基於 OpenAI 分享的、關於其平台上累犯活動的線報，我們對肯亞疑似協同不實行為進行內部調查，並辨識出這個行動。」</li>
+<li><strong>處置</strong>：「我們移除了該帳號與其背後的組織。」</li>
+<li><strong>回饋偵測</strong>：「並圍繞其行為簽章建立偵測（built detections around its behavioral signature）。」</li>
+<li><strong>影響評估</strong>：以 Breakout Scale 評為 Category One（p.76）。</li>
+</ol>
+<p>章節導論補充了通用方法（p.42）：「社群平台通常在內容已經流通後才看到行動，我們則可能在行動還在建構時就在 Claude 上看到」；「一旦上線，我們的可視性就結束了。為了驗證發現、了解內容離開平台後發生什麼，我們仰賴開源研究、跨平台產業資料與公開報導」。</p>
+<h3 id="82">8.2 哪裡失效或有缺口（【研究員推論】，逐條對照原文）</h3>
+<p><strong>缺口一：不是自己先抓到的。</strong> 報告的敘述順序很誠實——「基於 OpenAI 分享的線報」在前，「內部調查」在後。這意味著：這名行為者在 Claude 上跨「數個工作階段」、每次要 50 則政治推文、明示要隱藏協同性、還要求包裝成部署工具，<strong>這些都沒有在事前觸發足以停權的內部偵測</strong>（或者觸發了但沒有升級到調查——報告沒說）。對照報告在其他案例自述的能力（p.42 「這類任務會產生我們的系統被訓練來偵測的訊號，常讓我們能在行動起飛前就打斷」），本案是一個<strong>負面案例</strong>：訊號存在，但沒有被連成案。</p>
+<p><strong>缺口二：「累犯」暴露了封鎖的低嚇阻力。</strong> 行為者在 OpenAI 被處置後回到 OpenAI（累犯），同時或之後也在 Claude 上運作。單一供應商的停權對這種行為者只是換帳號的成本。<strong>真正有效的是跨供應商情報共享</strong>——而這在本案是靠 OpenAI 主動分享，不是制度化的機制。課堂可以討論：這種分享目前是善意合作還是有協議？出現利益衝突（競爭對手）時還會分享嗎？</p>
+<p><strong>缺口三：可視性在內容離開平台後歸零。</strong> Anthropic 能移除 Claude 帳號，<strong>不能</strong>移除 X 上的假帳號。報告沒有提到 X 是否採取行動，也沒有提到肯亞任何機構的後續。Figure 17 的帳號在報告發布時是否仍在活動——不知道。這是 AI 供應商執法的結構性天花板：<strong>它切斷的是生產工具，不是散播網路。</strong> 行為者換一個 AI（或用開源模型）就能繼續，而網路原封不動。</p>
+<p><strong>缺口四：Category One 的評估基礎薄弱。</strong> 「完全侷限在假帳號與本地網紅的網路內…未能觸及或影響任何真實的人」（p.76）——這個判斷依賴 Anthropic 的開源觀察。但（1）「本地網紅」若是真人，他們的追隨者就是「真實的人」；（2）報告沒有說觀察了多少帳號、多長時間；（3）Figure 17 右上那則的 20 則回覆是否全是網路內帳號——沒有說明。研究員不是要推翻評級，而是要學員看到：<strong>Breakout Scale 的輸入是分析師的觀察範圍，範圍越窄、越容易得到 Category One。</strong></p>
+<p><strong>缺口五：雙用途內容的政策難題。</strong> 同一操作者、同一模板、同一 AI 工作流，替零售品牌做的那部分——違反了什麼？「把促銷廣播改寫成有機推文、每第五則插連結」是<strong>欺騙性行銷</strong>，但 Anthropic 的 Usage Policy 主要針對政治與民主程序。報告說移除了「帳號與組織」，等於商業線也一併切斷。這引出一個問題：<strong>如果這名操作者只做商業線，會被處置嗎？</strong> 大概不會——而商業線正是他練出這套 SOP 的地方。「政治假草根是商業假草根的溢出」這個觀察，對監管設計很重要。</p>
+<p><strong>缺口六：報告的「行為簽章」沒有公開。</strong> 「built detections around its behavioral signature」——但簽章是什麼，報告不說。這是合理的（公開等於教對手規避），但也意味著其他供應商與平台無法直接受益。與 GTG-84006 公開了「跨行為者簽章（Cross-actor signatures）」（ZWNJ 規避、強制口號、記憶檔）相比，本案的簽章保密。【研究員推論】可能是因為本案簽章太「軟」（固定批次＋去 AI 化指令＋UI 包裝），公開後極易規避（改成 47 則就沒了）。</p>
+<h3 id="83">8.3 什麼是有效的（也要公平地說）</h3>
+<ul>
+<li><strong>跨供應商線報有效</strong>：這是本案被發現的唯一原因，證明「AI 供應商之間的威脅情報共享」是這個生態裡真正的新防線。</li>
+<li><strong>「在建構階段就看到」的優勢是真的</strong>：本案被切斷時，行動的觸及只有幾十次瀏覽，離 2027 年還有 14 個月。若等到平台在選戰期間才處理，網路已成熟。</li>
+<li><strong>整組織移除而非單帳號</strong>：避免了「換帳號再來」的最低成本規避——至少在 Anthropic 平台上。</li>
+</ul>
+<h3 id="84">8.4 偵測工程：把本案轉成可實作的規則構想</h3>
+<p>本節是課程「教怎麼想」的核心。以下把第 7 節的行為指標轉成三個不同防守位置的規則草案。<strong>全部為研究員推論（報告未提供規則內容）</strong>，且刻意寫成「構想」而非可直接部署的產品規則——目的是讓學員理解推理過程，不是給對手一份規避清單。</p>
+<p><strong>位置 A：AI 供應商端（只有 Anthropic／OpenAI 這類角色能做）</strong></p>
+<table>
+<thead>
+<tr>
+<th>訊號</th>
+<th>規則構想</th>
+<th>誤判風險與緩解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>固定批次</td>
+<td>同一帳號在 N 個工作階段中，重複要求「產生剛好 K 則（K≥20）同主題短文」，且 K 在各階段一致</td>
+<td>行銷與教育用途也會批量產文 → <strong>不單獨成案</strong>，必須與下列訊號合併</td>
+</tr>
+<tr>
+<td>隱藏協同性的指令</td>
+<td>請求中同時出現「政治人物／政黨／選舉」實體 <strong>與</strong> 「看起來像自發／不要像協同／不要像 AI 寫的／去除 AI 痕跡」語意</td>
+<td>低誤判——這組合幾乎沒有正當用途；但可被改寫規避（「寫得自然一點」） → 需語意分類器而非關鍵字</td>
+</tr>
+<tr>
+<td>散播介面生成</td>
+<td>請求把批量政治內容「包成可複製的 UI／清單／widget／一鍵複製」</td>
+<td>中——內容管理工具開發是正當需求 → 以「政治實體 + 批量 + 複製介面」三重條件收斂</td>
+</tr>
+<tr>
+<td>政商同模板</td>
+<td>同一帳號在相近時間內用<strong>同一輸出格式</strong>分別產出商業促銷與政治讚揚內容</td>
+<td>低——這是本案獨特指紋；但需跨工作階段的關聯分析能力</td>
+</tr>
+<tr>
+<td>跨供應商線報</td>
+<td>接受友商的「累犯」情報並主動在自家平台做同行為者搜尋</td>
+<td>需處理正當程序：被指認者的申訴管道</td>
+</tr>
+</tbody>
+</table>
+<p><strong>位置 B：社群平台端</strong></p>
+<table>
+<thead>
+<tr>
+<th>訊號</th>
+<th>規則構想</th>
+<th>誤判風險與緩解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>共同引用（co-quote）</td>
+<td>在 T 分鐘內引用／轉推<strong>同一則</strong>貼文的帳號集合；對集合做投影圖與社群偵測</td>
+<td>熱門新聞會讓大量真人同時引用 → 以「該集合的<strong>重複共現次數</strong>」（跨多個事件仍在一起）而非單次共現判定</td>
+</tr>
+<tr>
+<td>共同媒體（co-media）</td>
+<td>上傳<strong>相同感知雜湊（pHash）</strong> 圖片的帳號集合</td>
+<td>迷因圖會被大量真人共用 → 同上，看重複性</td>
+</tr>
+<tr>
+<td>hashtag 序列指紋</td>
+<td>相同 hashtag <strong>且順序一致</strong> 的貼文集合</td>
+<td>中——官方推薦順序會造成一致 → 與其他訊號合併</td>
+</tr>
+<tr>
+<td>同骨架改寫</td>
+<td>句向量餘弦相似度高但字面相似度低的貼文叢集（「語意近、字面遠」）</td>
+<td><strong>這是專打 AI 人性化的核心規則</strong>；真人對同一新聞的反應也會語意相近 → 加上「同時間窗 + 同帳號群」</td>
+</tr>
+<tr>
+<td>互動比例異常</td>
+<td>轉推/讚比、回覆/瀏覽比偏離該語言與主題的基線</td>
+<td>需建立基線；小樣本不穩定</td>
+</tr>
+<tr>
+<td>帳號 cohort</td>
+<td>註冊日期、簡介模板、頭像來源、首批追蹤對象的相似度</td>
+<td>這是<strong>孵化期唯一可用</strong>的訊號</td>
+</tr>
+</tbody>
+</table>
+<p><strong>位置 C：查核組織／公民社會端（資源最少，但可做最有價值的事）</strong></p>
+<ol>
+<li><strong>建立「敘事骨架庫」而非「假訊息庫」。</strong> 本案沒有可判假的內容，傳統查核資料庫收不進去。改為記錄「骨架」：<code>[事件] + [對群體 X 的好處] + [hashtag 組合]</code>，並追蹤同一骨架的變體何時、由哪些帳號出現。</li>
+<li><strong>對通報訊息做近重複與語意叢集</strong>（Cofacts 這類平台的資料最適合）——目標不是判真假，而是回答「這段話今天有多少個變體在流傳」。</li>
+<li><strong>監測「暖機內容」</strong>：把民生議題（電價、健保、物價）的社群討論納入常態監測，而不是只在選戰期間監測政治討論。</li>
+<li><strong>公開的是方法，不是名單</strong>：點名帳號有誤傷真人的風險（見 7.1）；公布「本週偵測到 N 個同骨架叢集、涉及 M 個帳號」的統計，既有嚇阻效果又避免個案誤判。</li>
+</ol>
+<p><strong>三個位置的接力關係（教學重點）</strong>：AI 端能在<strong>內容出生前</strong>看到意圖，但看不到散播；平台端能看到散播結構，但看不到生產意圖；公民社會端兩者都看不到，卻是唯一能對<strong>閱聽人</strong>做事的。<strong>本案之所以被抓，是因為 A 位置的兩家公司互通訊息——這是三個位置裡目前唯一實際運作的接力。</strong> B 與 C 在本案中完全沒有出場，這本身就是缺口。</p>
+<hr />
+<h2 id="9">9. 第三方驗證與外部來源</h2>
+<p>研究方法說明：本次工作階段的 WebSearch 配額已耗盡，研究員改以 WebFetch 直接抓取已知 URL、Google News RSS 檢索、以及維基百科等來源完成查證；多個肯亞新聞網站（Nation、Standard、People Daily、Kenyans.co.ke、Eastleigh Voice、Kenya Times、Uzalendo、TechCabal）回傳 403，僅能取得標題與日期。每條來源標示「獨立查證」（可獨立於 Anthropic 確認某事實）或「僅引述 Anthropic」（內容來自報告轉述）。</p>
+<h3 id="91">9.1 對本案行動本身的報導</h3>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL／出處</th>
+<th>日期</th>
+<th>性質</th>
+<th>摘要與價值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Techweez〈Claude Used to Push Pro-Government Propaganda in Kenya〉</td>
+<td>techweez.com/2026/09/11/kenya-ai-claude-political-propaganda/</td>
+<td>2026-09-11/12</td>
+<td>主體僅引述 Anthropic；<strong>附加獨立政治脈絡</strong></td>
+<td>轉述報告全部要點（50 則、hashtag、Gachagua／Kenyatta、SHANKI、Category One、OpenAI 線報）；補充 2026 年 5–6 月 Cherargei 提案剝奪 Kenyatta 退休待遇、Kenyatta 被指（無確證）資助 Sifuna 的 Linda Mwananchi 派系；報導 Wandayi 回應稱報告未證明其涉入、稱報告「未經驗證」。明確指出報導<strong>未</strong>新增報告以外的行動細節（帳號數、X 是否處置）。</td>
+</tr>
+<tr>
+<td>Tech-ish（Dickson Otieno）〈Anthropic caught a Kenyan bot farm using Claude to praise Energy Cabinet Secretary〉</td>
+<td>tech-ish.com/2026/09/11/anthropic-caught-a-kenyan-bot-farm-using-claude-to-praise-energy-cabinet-secretary/</td>
+<td>2026-09-11</td>
+<td>主體僅引述 Anthropic；<strong>附加獨立歷史脈絡</strong></td>
+<td>引述 Mozilla 2021 研究（11 個協同行動、逾 23,000 則推文、3,700 個帳號、參與者日薪約 10–15 美元經 M-Pesa 支付）；CitizenGO（西班牙）付費肯亞網紅散布生育健康誤導內容；Citizen Lab 2026 年 2 月關於肯亞刑事調查局以 Cellebrite 解鎖社運人士手機的調查；作者評論「2021 年要幾千個帳號與人力協調，2026 年只要一個人加一個 AI 訂閱」。將「accidivist」解讀為「先在 ChatGPT 被抓、再轉到 Claude」——此為該作者推論，報告未明說順序。</td>
+</tr>
+<tr>
+<td>Nairobi Leo〈CS Wandayi Breaks Silence Over AI-Automated Campaign…〉</td>
+<td>nairobileo.co.ke/news/article/30119/…</td>
+<td>2026-09-12</td>
+<td><strong>獨立查證（Wandayi 回應）</strong></td>
+<td>引述 Wandayi 書面聲明："The report itself does not establish that either the Cabinet Secretary or the Ministry authorised, directed, or otherwise participated in the alleged activity." / "We remain focused on communicating the Ministry's work through credible channels and will not be distracted by speculation around anonymous online activities."（該頁標示聲明日期為 9 月 9 日，早於報告發布日 9 月 10 日，疑為網站日期欄位錯誤，見第 12 節）</td>
+</tr>
+<tr>
+<td>Nairobi Leo〈AI Company Anthropic Exposes How Claude Was Used…〉</td>
+<td>nairobileo.co.ke/news/article/30100/…</td>
+<td>2026-09-11</td>
+<td>僅引述 Anthropic</td>
+<td>轉述；hashtag 誤植為 <code>#PowerReliefE</code>（缺 K），以 PDF 為準。</td>
+</tr>
+<tr>
+<td>Citizen Digital、NTV Kenya、Daily Nation、The Standard、People Daily、The Eastleigh Voice、Kenyans.co.ke、The Kenya Times、Pulse Kenya、Mwakilishi、TechTrendsKE、streamlinefeed、TechCabal</td>
+<td>Google News RSS（en-KE）標題檢索</td>
+<td>2026-09-11 至 09-12</td>
+<td>僅引述 Anthropic（標題層級）</td>
+<td>至少 21 則肯亞媒體報導；其中 Daily Nation〈Wasn't me: CS Wandayi denies involvement…〉、People Daily〈Show me evidence: Opiyo Wandayi rejects Anthropic's AI campaign claims〉、Eastleigh Voice〈Energy CS Wandayi denies link…〉、Kenyans.co.ke〈Wandayi Responds to Viral AI-Generated Campaign Praising Him〉均報導 Wandayi 否認涉入。<strong>沒有任何標題顯示 Gachagua、DCP、Kenyatta、Jubilee 或聯合反對黨對此案發表回應。</strong></td>
+</tr>
+<tr>
+<td>OECD AI Policy Observatory（AI Incidents Monitor）〈AI-Generated Political Propaganda Campaign Uncovered in Kenya〉</td>
+<td>標題自 Google News RSS</td>
+<td>2026-09-11</td>
+<td>僅引述 Anthropic</td>
+<td>收錄為 AI 事件。</td>
+</tr>
+<tr>
+<td>國際媒體（Reuters、Anadolu、Security Affairs、The Decoder、Newslaundry、WION 等）</td>
+<td>Google News RSS（en-US）標題檢索</td>
+<td>2026-09-11 至 09-13</td>
+<td>僅引述 Anthropic</td>
+<td>對整份報告的報導集中在生武、俄羅斯無人機、中國蒸餾、伊朗海軍目標等；<strong>未見任何國際媒體標題單獨提及肯亞案</strong>。</td>
+</tr>
+<tr>
+<td>台灣媒體（鏈新聞 ABMedia、DW 中文、Grenade 手榴彈、禁聞網）</td>
+<td>Google News RSS（zh-TW）標題檢索</td>
+<td>2026-09-11 至 09-13</td>
+<td>僅引述 Anthropic</td>
+<td>台媒關注中共監控台灣宗教與政治人物、愛國者／天弓／空軍基地目標、Kimi 蒸餾等；<strong>未見台媒報導肯亞案</strong>。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>單一來源判定</strong>：本案關於「行動本身」（誰、怎麼用 Claude、50 則、copy-all、OpenAI 線報、Category One）的所有資訊<strong>都只有 Anthropic 一個來源</strong>；所有肯亞與國際媒體報導均為轉述。研究員找不到任何獨立於 Anthropic 的第三方（平台、學術機構、肯亞查核組織）對這個網路的分析。<strong>這是單一來源情報。</strong></p>
+<h3 id="92">9.2 對本案「背景事實」的獨立查證</h3>
+<table>
+<thead>
+<tr>
+<th>事實</th>
+<th>來源</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>能源部於 2026-06-03 撤回 Kenya Power 電價審查申請；Kenya Power 於 3 月提交、擬調漲 14%–31%；EPRA 於 6 月 5 日中止公聽會</td>
+<td>Business Daily〈State freezes electricity price review…〉(06-03)、Citizen Digital〈Energy Ministry withdraws proposal…〉(06-03)、The Star (06-03/04)、Standard〈Electricity prices to remain unchanged, says Wandayi〉(06-03)、Daily Nation (06-04)、Eastleigh Voice〈EPRA halts public hearings…〉(06-05)、Kenyan Wall Street（14%–31% 標題）；均自 Google News RSS 取得</td>
+<td><strong>獨立查證</strong>：Figure 17 引用的 Citizen TV 標題與 Berur News 圖卡內容與真實事件一致；貼文日期 6 月 4 日與事件相符</td>
+</tr>
+<tr>
+<td>Opiyo Wandayi：ODM、Ugunja 選區、前國會少數黨領袖、2024-08-08 出任能源與石油部 CS；2026-04 其部門涉石油進口醜聞</td>
+<td>en.wikipedia.org/wiki/Opiyo_Wandayi</td>
+<td>獨立查證</td>
+</tr>
+<tr>
+<td>Gachagua 彈劾：2024-10-08 國民議會 281:44:1、11 項指控；10-17 參議院維持 5 項；Kindiki 接任；DCP 2025-05-15 成立；2025-09-13 宣布參選</td>
+<td>en.wikipedia.org/wiki/Rigathi_Gachagua</td>
+<td>獨立查證</td>
+</tr>
+<tr>
+<td>Ruto 2022 年得票 50.49%；2024-06 財政法案抗議至少 22 死；07-11 解散內閣</td>
+<td>en.wikipedia.org/wiki/William_Ruto</td>
+<td>獨立查證</td>
+</tr>
+<tr>
+<td>Kenyatta：2018-03-09 與 Odinga「握手」、BBI；2025-09 公開批評 Ruto 政府</td>
+<td>en.wikipedia.org/wiki/Uhuru_Kenyatta</td>
+<td>獨立查證</td>
+</tr>
+<tr>
+<td>Raila Odinga 2025-10-15 逝於印度；Oburu Odinga 代理並於 2026-03-27 當選；UDA–ODM 2025-03-07 十點備忘錄；Sifuna 2026-02-11 撤職程序；ODM 2026-03-01 通知退出 Azimio</td>
+<td>en.wikipedia.org/wiki/Raila_Odinga、…/Orange_Democratic_Movement</td>
+<td>獨立查證</td>
+</tr>
+<tr>
+<td>2027 大選日 2027-08-10；Ruto 尋求連任</td>
+<td>en.wikipedia.org/wiki/2027_Kenyan_general_election</td>
+<td>獨立查證</td>
+</tr>
+<tr>
+<td>聯合反對黨 2026 年裂痕（1 月 Gachagua／Kalonzo 矛盾；5 月旗手期限跳票；6 月 Matiang'i 揭權力鬥爭；7–8 月權力分享分裂；9 月 Gachagua 表態支持旗手）</td>
+<td>Google News RSS（en-KE）標題檢索</td>
+<td>獨立查證（標題層級）</td>
+</tr>
+<tr>
+<td>Cherargei 提案剝奪 Kenyatta 退休待遇（2026-05）；參議院 06-09 駁回相關請願；「Ruto 陣營對 Uhuru 再起緊張」（The Africa Report 05-20、The Star 05-24）；Wamalwa 稱反對黨終將尋求 Uhuru 支持（05-16）</td>
+<td>Google News RSS（en-KE）標題檢索</td>
+<td>獨立查證（標題層級）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="93">9.3 方法論與定義的來源</h3>
+<table>
+<thead>
+<tr>
+<th>主題</th>
+<th>來源</th>
+<th>判定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Breakout Scale 六級定義</td>
+<td>Ben Nimmo, Brookings, 2020-09〈The Breakout Scale: measuring the impact of influence operations〉brookings.edu/articles/the-breakout-scale-measuring-the-impact-of-influence-operations/</td>
+<td>獨立查證：Cat.1 單平台單社群；Cat.2 單社群多平台或單平台多社群；Cat.3 多平台多社群；Cat.4 主流媒體放大；Cat.5 名人／政治人物放大；Cat.6 政策回應或暴力號召</td>
+</tr>
+<tr>
+<td>Meta 不實行為／CIB 定義</td>
+<td>transparency.meta.com/policies/community-standards/inauthentic-behavior/</td>
+<td>獨立查證（逐字引用見 5.1）</td>
+</tr>
+<tr>
+<td>Meta CIB「看行為不看內容」</td>
+<td>about.fb.com/news/2018/12/inside-feed-coordinated-inauthentic-behavior/（Gleicher，2018-12-06）</td>
+<td>獨立查證</td>
+</tr>
+<tr>
+<td>Anthropic Usage Policy 民主程序條款</td>
+<td>anthropic.com/legal/aup（2025-09-15 生效）</td>
+<td>獨立查證</td>
+</tr>
+<tr>
+<td>Astroturfing 定義與詞源</td>
+<td>en.wikipedia.org/wiki/Astroturfing</td>
+<td>獨立查證</td>
+</tr>
+<tr>
+<td>協同偵測方法：co-tweet／co-retweet 網路、一分鐘窗、74%／80%／1%</td>
+<td>Schoch, Keller, Stier, Yang (2022) Scientific Reports 12:4572, nature.com/articles/s41598-022-08404-9</td>
+<td>獨立查證</td>
+</tr>
+<tr>
+<td>協同偵測方法：共享特徵二分圖投影</td>
+<td>Pacheco et al. (2021) ICWSM, arxiv.org/abs/2001.05658</td>
+<td>獨立查證</td>
+</tr>
+<tr>
+<td>肯亞網紅帶風向產業（Mozilla 2021）</td>
+<td>Rest of World〈"Disinformation influencers" for hire, only $15 a day〉(2021-09-02)；Stimson Center, Gillian McKay〈Disinformation and Democratic Transition: A Kenyan Case Study〉(2022-06)；Africa Check (2022-02-22)；WIRED Madung 評論 (2021-09-08，即報告 p.76 超連結)；Guardian Madung 評論 (2022-04-07、2023-08-09)。<strong>Mozilla 原始頁面回傳 403，數字（11 行動／23,000 推文／3,700 帳號／日薪 10–15 美元）轉引自 Tech-ish 與 Stimson</strong>；Stimson 另引 Mozilla「七成肯亞 Twitter 用戶願意為錢分享可能不實的資訊」與「Twitter 停權數百帳號」</td>
+<td>獨立查證（部分為二手轉引）</td>
+</tr>
+<tr>
+<td>台灣脈絡</td>
+<td>Doublethink Lab 首頁（2026-04 報告：中國關聯「Borderless Group」549 個假 Threads 帳號鎖定台灣與日本；2026-04 GoLaxy 外洩文件 AI 影響力行動調查）；台灣事實查核中心首頁（與 LINE、Meta 合作；2026 年 AI 假醫師、政治深偽查核）；《反滲透法》維基（2019-12-31 三讀、2020-01-17 生效、2022–2024 執法案例）；自由時報標題：2024-09-04〈Threads 遭網軍大舉入侵 協同洗版發文「支持兩岸統一」〉、2026-04-20〈台灣「近億人」愛用 Threads？數據揭密網軍亂象〉、2025-11-24〈新功能專打假帳號！大量 X 用戶被揭底「IP 來自中國、香港」〉</td>
+<td>獨立查證（標題層級）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="10">10. 課程教學設計</h2>
+<h3 id="101">10.1 核心教學要點</h3>
+<ol>
+<li><strong>假草根的內容可以全是真的。</strong> 本案沒有一句可查核的假事實；不實的是身分與協同。教學員把「misinformation（內容假）」與「inauthentic behavior（行為假）」拆開，並理解為什麼 Meta、X、Anthropic 的執法邏輯都建立在後者。</li>
+<li><strong>協同性的證據是「共現結構」。</strong> 共同引用、共同媒體、共同 hashtag 序列、共同時間窗、共同句法骨架。用 Figure 17 的四則貼文教二分圖投影與時間窗，並引 Schoch 等（2022）的 74%／80%／1% 數字說明這套方法的成熟度。</li>
+<li><strong>AI 的貢獻是「不重複的重複」與「散播工具鏈」。</strong> 「人性化並精修」讓 exact-match 去重失效；copy-all 小工具讓協調成本歸零。偵測必須從「文字比對」升級到「語意叢集」，從「內容」升級到「請求型態」。</li>
+<li><strong>固定批次是生產線的節拍。</strong> 「每批精確 50 則」是本案最乾淨的簽章；對照孟加拉案的 15／3／15。教學員在 AI 供應商端、平台端各自能看到什麼節拍訊號。</li>
+<li><strong>歸因語言有階梯。</strong> no evidence → consistent with → we believe → plausibly aligned → high confidence。本案全在低階；教學員讀報告時把每句歸因標上信度，並理解「受益者 ≠ 委託者」（Wandayi 的回應在邏輯上是對的）。</li>
+<li><strong>AI 供應商是新的防守位置，也有硬天花板。</strong> 它能在內容離開平台前看到、能切斷生產工具、能跨供應商分享線報；但它看不到散播、切不斷網路、也不是自己先抓到的。</li>
+<li><strong>長期佈局意味著偵測窗口在選前 12–18 個月。</strong> 本案被抓時在「建立可信度」期，內容是民生議題而非選舉；到了選戰期，帳號已有歷史與真人追隨者。<strong>選前才查核已經太晚</strong>——這句話要成為學員的肌肉記憶。</li>
+<li><strong>政治假草根是商業假草根的溢出。</strong> 同一 SOP、同一模板、每第五則插連結。監管與偵測若只看政治，會漏掉練兵場。</li>
+</ol>
+<h3 id="102">10.2 課堂討論題（沒有標準答案）</h3>
+<ol>
+<li><strong>「寫 50 則讚美部長的推文」本身違規嗎？</strong> Anthropic 處置的法理是「要求隱藏協同性」而非「政治內容」。如果操作者只說「幫我寫 50 則不同風格的推文支持這項政策」、沒說「要看起來不協同」——該不該停權？AI 供應商應該推定「50 則同主題」就是協同嗎？這條線畫在哪裡才不會變成政治言論審查？</li>
+<li><strong>Anthropic 為什麼停在「plausibly aligned with the ruling coalition」？</strong> 它有商業誘因避免指控一個主權國家的執政黨嗎？如果本案的受益者是反對黨，措辭會一樣謹慎嗎？對照同報告 GTG-84002 對阿聯酋的「high confidence」——差別是證據品質，還是政治成本？</li>
+<li><strong>不公開 IOC 是對的嗎？</strong> 公開 Figure 17 的帳號可能點名拿錢的真人網紅；不公開則肯亞的平台、查核者、研究者無法接手。若你是 Anthropic 的威脅情報主管，你的決策框架是什麼？有沒有「只給肯亞查核組織、不公開」的中間路線？它的風險是什麼？</li>
+<li><strong>Category One 的行動值得一整節報告篇幅嗎？</strong> 一個幾十次瀏覽的網路，與同章節 8,913 篇文章的商業 IaaS 並列。Anthropic 選擇報導它的理由是什麼——「選舉」的敏感性？「國內行為者」的代表性？「copy-all」的新穎性？報告的選案標準會不會塑造大眾對 AI 威脅的印象？</li>
+<li><strong>跨供應商線報應該制度化嗎？</strong> 本案完全靠 OpenAI 的善意分享。若制度化：由誰營運？資料格式？被分享的使用者有沒有申訴權？會不會變成跨公司的「黑名單」而缺乏正當程序？在台灣，這種分享要不要經過個資主管機關？</li>
+<li><strong>「受益者不等於委託者」——那誰該負責？</strong> Wandayi 說報告未證明其涉入；報告也沒有這樣主張。在一個「承包商接單、客戶不留痕」的產業裡，法律責任落在誰身上？肯亞（或台灣）現行法律能處理「國內」假草根嗎？還是只能處理「境外勢力」？</li>
+</ol>
+<h3 id="103">10.3 實作／桌面演練建議（可在教室安全執行，不教攻擊操作）</h3>
+<p><strong>演練 A：手畫協同叢集圖（30 分鐘，不需電腦）。</strong><br />
+- 材料：Figure 17 四則貼文的正文、hashtag、日期、引用來源、互動數（本檔第 6 節表格）。<br />
+- 步驟：（1）列出可作為「特徵節點」的項目；（2）畫帳號—特徵二分圖；（3）投影成帳號—帳號圖並標邊權；（4）加入「若第五個帳號在 6 月 4 日引用同一 Citizen TV 貼文但沒掛 hashtag」會怎樣；（5）討論哪些特徵是強證據、哪些是弱證據（例如「同一天」很弱、「同一媒體檔＋同 hashtag 序列」很強）。<br />
+- 目標：讓學員親身體會「邊是怎麼定義的」決定了叢集長什麼樣。</p>
+<p><strong>演練 B：同骨架改寫叢集的語意偵測（60 分鐘，實驗環境）。</strong><br />
+- 材料：由講師事先以<strong>非政治主題</strong>（例如「某虛構市政府宣布公車票價不漲」）產生 50 則同骨架改寫貼文，混入 200 則真實風格的無關貼文（可用公開語料或講師自寫）。<strong>不使用任何真實政治人物或真實 hashtag。</strong><br />
+- 步驟：（1）先用 exact-match 與 n-gram Jaccard 去重，觀察抓到幾則；（2）改用句向量（任何開源 embedding 模型）＋餘弦相似度＋階層式分群，觀察叢集；（3）加入「hashtag 序列」與「發文時間」作為額外特徵，比較純文字 vs 多特徵的叢集純度。<br />
+- 目標：理解「人性化」為什麼打敗文字比對、打不敗語意叢集；也理解語意叢集的誤判（真實民眾對同一新聞的反應也會相似）——所以必須疊加行為特徵。</p>
+<p><strong>演練 C：桌面推演——「AI 供應商收到線報」（45 分鐘，角色扮演）。</strong><br />
+- 角色：AI 供應商威脅情報組、信任與安全政策組、法務、對外關係、被檢舉帳號的「行銷公司」代表、被讚揚的部長辦公室、平台（X）信任與安全、本地查核組織。<br />
+- 注入：（1）友商線報「某帳號在我們平台被停權兩次，最近似乎轉到你們」；（2）內部查到該帳號每批要 50 則政治推文並要求看起來不協同；（3）同一帳號也替零售品牌做一樣的事；（4）媒體詢問；（5）部長辦公室來函要求澄清。<br />
+- 決策點：停權範圍（帳號／組織）？公不公開？給誰？措辭用「consistent with」還是「attributed to」？要不要通知平台？要不要通知該國選委會？<br />
+- 目標：體會第 8 節的每個缺口在真實決策中的重量。</p>
+<p><strong>演練 D：桌面推演——「台灣 2028 選前 16 個月」（60 分鐘，見 10.4 節情境）。</strong></p>
+<p><strong>安全提醒</strong>：所有演練不得使用真實政治人物、真實 hashtag、真實帳號；不得在真實平台發文；不得對任何真實帳號進行「偵測」練習（那是未經同意的資料蒐集）。</p>
+<h3 id="104-2028">10.4 對台灣的意涵：2028 大選的長期佈局風險</h3>
+<p>本案是「國內」行動——這對台灣的啟示比「境外」案例更尖銳，因為台灣的法律與公共討論長期把認知作戰框定為「境外敵對勢力」問題（《反滲透法》的構成要件就是「受滲透來源指示、委託或資助」），而<strong>本案這種「本地承包商、本地客戶、本地議題」的假草根，在法律上幾乎沒有對應工具</strong>。以下分四點展開。</p>
+<p><strong>（1）時間軸：現在就是「孵化期」。</strong><br />
+台灣 2026 年 11 月 28 日有地方九合一選舉，2028 年 1 月有總統與立委選舉。套用 4.5 節的生命週期表：以 2028 年 1 月倒推，「孵化期」是 2026 年上半到年中，「建立可信度期」是 2026 年下半到 2027 年初——<strong>也就是現在</strong>。而 2026 年 11 月的地方選舉正好是「試車」的絕佳場合：規模小、關注度分散、可以測試哪些帳號活得下來、哪些敘事有反應。【研究員推論】若有行為者在用本案的模式，2026 年 9 月此刻它們正在發「民生」內容——電價、健保、房價、颱風假——而不是「選舉」內容。</p>
+<p><strong>（2）如何偵測「現在正在養的帳號」——訊號在結構，不在內容。</strong></p>
+<table>
+<thead>
+<tr>
+<th>訊號類型</th>
+<th>具體做法</th>
+<th>台灣可用性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>註冊同批（cohort）</td>
+<td>同一週建立、同一模板簡介、頭像為 AI 生成或盜圖</td>
+<td>Facebook 粉專有「粉絲專頁資訊透明度」（建立日期、管理員所在國）；Threads／IG 帳號可看加入日期；X 自 2025-11 起的「關於此帳號」顯示所在區域與加入日（自由時報 2025-11-24 報導大量帳號被揭 IP 來自中國、香港）；PTT 帳號有註冊日與登入次數</td>
+</tr>
+<tr>
+<td>早期追蹤圖譜</td>
+<td>新帳號互相追蹤、追蹤同一批「種子」帳號（follow train）</td>
+<td>Threads 與 IG 的追蹤名單部分可見；PTT 無追蹤機制但有「推文共現」</td>
+</tr>
+<tr>
+<td>非政治暖機內容的<strong>同骨架</strong></td>
+<td>20 個帳號在同一天用不同措辭讚同一則民生新聞</td>
+<td>語意叢集（演練 B）；Cofacts／查核中心的通報資料可做近重複分析</td>
+</tr>
+<tr>
+<td>發文時間分布</td>
+<td>集中在上班時間、週一到週五（Schoch 等 2022 的跨國發現）</td>
+<td>對台灣的「公關公司接案」模式特別適用——與「拿錢發文」的工時一致</td>
+</tr>
+<tr>
+<td>互動比例異常</td>
+<td>轉多讚少、回覆率異常高但回覆者集中</td>
+<td>各平台皆可觀察；PTT 推噓文的帳號集中度尤其可算</td>
+</tr>
+<tr>
+<td>跨平台同文</td>
+<td>同一段文字同日出現在 Threads、Facebook 社團、PTT、YouTube 留言</td>
+<td>需要跨平台蒐集；目前台灣的 Doublethink Lab、IORG、台灣事實查核中心有部分能力</td>
+</tr>
+</tbody>
+</table>
+<p><strong>（3）協同叢集分析在台灣各平台的適用性與困難。</strong></p>
+<table>
+<thead>
+<tr>
+<th>平台</th>
+<th>資料可得性</th>
+<th>叢集分析可行性</th>
+<th>主要困難</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Facebook</strong></td>
+<td>粉專與公開社團可爬（受 Meta 條款限制）；個人動態不可</td>
+<td>中——粉專層級的共同分享（co-share）圖譜可做（CooRnet 類方法）</td>
+<td>大量政治討論在<strong>封閉社團</strong>；Meta 對台灣的 CIB 執法公開度有限</td>
+</tr>
+<tr>
+<td><strong>Threads</strong></td>
+<td>公開貼文可見、API 有限</td>
+<td>中高——2024 年 9 月「支持兩岸統一」協同洗版、2026 年 4 月 Doublethink Lab 揭露 549 個中國關聯假帳號，證明 Threads 是當前主要戰場且<strong>可以被叢集分析抓到</strong></td>
+<td>演算法推薦讓「觸及」與「追蹤」脫鉤，Breakout Scale 的「社群」概念在 Threads 上難定義</td>
+</tr>
+<tr>
+<td><strong>X</strong></td>
+<td>API 收費、資料難取</td>
+<td>低中——但「關於此帳號」功能提供了新的結構訊號</td>
+<td>台灣使用者比例低，但精英與媒體討論集中，「Category 4 主流媒體放大」的風險反而高</td>
+</tr>
+<tr>
+<td><strong>PTT</strong></td>
+<td>完全公開、可爬、有帳號註冊日與登入次數、有 IP 前綴</td>
+<td><strong>高</strong>——台灣最適合做協同分析的平台；「推文共現」「同 IP 段」「同時段上線」都是成熟指標</td>
+<td>帳號買賣與「借帳號」讓「一人多帳」難以從結構證明；PTT 板主與站方的處置權責分散</td>
+</tr>
+<tr>
+<td><strong>YouTube</strong></td>
+<td>留言可爬、頻道公開</td>
+<td>中——留言區的同骨架灌水可用語意叢集抓</td>
+<td>影片本體的敘事分析成本高；留言區在台灣政治影響力被低估</td>
+</tr>
+<tr>
+<td><strong>LINE</strong></td>
+<td><strong>幾乎為零</strong>——封閉群組、無公開 API、端到端加密（部分）</td>
+<td><strong>極低</strong>——只能靠使用者主動轉傳給查核機器人（Cofacts、LINE 訊息查證、MyGoPen、台灣事實查核中心）</td>
+<td>見（4）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>（4）「copy-all 小工具」在 LINE 群組生態中的特殊威脅。</strong></p>
+<p>本案的 copy-all 小工具在 X 上的作用是「讓 30 個網紅一鍵複製 50 則推文」。把同一個工具放進台灣的 LINE 生態，威脅型態會<strong>質變</strong>，理由如下：</p>
+<ul>
+<li><strong>LINE 的散播單位是「群組長」，不是「帳號」。</strong> 台灣的政治訊息在 LINE 上的傳播鏈是：內容源 → 少數「群組長」（管理數十到數百個社區、宗親、宮廟、家長、退休社群）→ 每個群組幾十到幾百人。這條鏈<strong>不需要假帳號</strong>——群組長是真人、群組成員是真人。假草根在 LINE 上的形態不是「假身分」，而是「<strong>真人被工具化</strong>」。</li>
+<li><strong>copy-all 小工具正好對準這條鏈的瓶頸。</strong> 群組長的瓶頸從來不是「相不相信」，而是「有沒有現成、格式好看、可以直接轉的內容」。一個 LINE 友善格式（短句、表情符號、一張圖、一個連結、附「請幫忙轉發」）的 50 則變體，配上 copy-all 介面，讓群組長每天早上花五分鐘就能對 100 個群組發出「看起來各不相同」的訊息。<strong>這個場景不需要任何違反 LINE 條款的行為</strong>——沒有假帳號、沒有機器人、沒有自動化。</li>
+<li><strong>偵測面：所有結構訊號都消失了。</strong> 沒有註冊批次（群組長帳號是老帳號）、沒有追蹤圖譜（LINE 沒有）、沒有公開時間戳、沒有互動數。唯一剩下的訊號是<strong>內容的近重複</strong>——而這正是 AI「人性化改寫」最擅長打敗的。Cofacts 這類群眾協作查核機制的資料庫，是目前台灣唯一能對 LINE 內容做「近重複／同骨架叢集」分析的地方；但它只看得到使用者主動轉傳的那一小部分。</li>
+<li><strong>法律面：完全是空白。</strong> 《反滲透法》要有「滲透來源」；《選罷法》針對的是「不實」內容與深偽；一個本地公關公司替本地候選人做 LINE 群組的「真實政策讚美文」批量分發，<strong>不違反任何現行法律</strong>，但它的效果與本案的假草根完全相同：讓「很多人都這麼說」的印象在封閉社群裡自我強化。</li>
+</ul>
+<p><strong>（5）對台灣防守方的具體建議（【研究員推論】）。</strong></p>
+<ol>
+<li><strong>把偵測資源前移到「孵化期」</strong>：2026 年地方選舉應被當作 2028 年的「網路普查」機會——不是查誰在講選舉，而是<strong>記錄哪些帳號群在同一時間出現、講同樣的民生議題、用同樣的骨架</strong>，建立基線，2027 年再看它們變成什麼。</li>
+<li><strong>優先在 PTT 與 Threads 建立協同叢集監測</strong>：這兩個平台資料可得性最高、且已有實證（Threads 2024/2026 的協同事件）。方法就是 Schoch／Pacheco 的公開方法，不需要新技術。</li>
+<li><strong>LINE 生態的防線只能是「人」</strong>：投資群組長的識讀（「你收到的 50 則不同版本其實是同一個來源」）、擴大 Cofacts 類機制的覆蓋、要求 LINE 台灣提供「訊息首次出現時間與轉傳次數」的匿名統計給查核機構。</li>
+<li><strong>把「AI 供應商線報」納入台灣的機制</strong>：本案是 OpenAI → Anthropic 的線報起的頭。台灣的中選會、國安單位、查核組織與 AI 供應商之間<strong>目前沒有</strong>這種通道。建議在 2026 年地方選舉前，至少建立「AI 供應商發現針對台灣選舉的協同內容生產時，通知台灣查核組織」的非正式管道，並在 2028 前討論制度化與個資保護。</li>
+<li><strong>法律討論不要只盯「境外」</strong>：本案證明「國內、商業、承包」模式已經可以獨立運作。台灣需要討論的不是「要不要禁 AI 寫政治文」（那會是言論審查），而是<strong>「隱藏來源、規模或性質的協同政治傳播」是否應有揭露義務</strong>——例如要求政治廣告（含「有機」形式的付費貼文）揭露付費方，把 Anthropic Usage Policy 那句「misrepresent the source, scale or nature」轉成公法上的透明義務。</li>
+<li><strong>一個本土參照</strong>：台灣自己就有「本地承包商、本地客戶、PTT 帶風向」的司法案例（2019 年起訴、一審有罪的 PTT 網軍案，涉及駐大阪辦事處事件後的協同貼文；細節請授課前以判決書核對）。用它對照本案，學員會發現「AI 只是把那個案子的人力成本除以十」。</li>
+</ol>
+<p><strong>演練 D 情境（承 10.3）</strong>：「2026 年 9 月，某查核組織發現 40 個 Threads 帳號在同一週用不同措辭讚揚某市電費補助政策，帳號皆於 2026 年 3–4 月建立、頭像疑為 AI 生成、發文集中在平日上午、互相轉發。沒有任何一則內容不實。」角色：查核組織、Meta 台灣、中選會、國安單位、被讚揚的市政府、一家自稱做「品牌行銷」的公關公司、媒體。決策點：這算什麼？誰有權處理？要不要公開？公開會不會反而幫它「Breakout」到 Category 4？如果同一批文字下週出現在 LINE 群組，你還能做什麼？</p>
+<hr />
+<h2 id="11">11. 關鍵原文引文</h2>
+<ol>
+<li>
+<p><strong>p.75</strong></p>
+<blockquote>
+<p>"The actor used Claude across several sessions to generate batches of exactly 50 tweets, explicitly instructing the model to make posts look like spontaneous grassroots commentary rather than a coordinated campaign."<br />
+行為者跨數個工作階段使用 Claude 產出每批精確 50 則的推文，並明確指示模型讓貼文看起來像自發的草根評論，而不是協同行動。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>p.75</strong></p>
+<blockquote>
+<p>"A large portion of the AI-generated tweets praised Energy Cabinet Secretary Opiyo Wandayi for stopping a scheduled Kenya Power electricity tariff hike, using the hashtags #PowerReliefKE and #PoweringTheNewKenya to boost visibility."<br />
+大量 AI 生成的推文讚揚能源部內閣秘書 Opiyo Wandayi 擋下預定的 Kenya Power 電價調漲，並使用 #PowerReliefKE 與 #PoweringTheNewKenya 兩個 hashtag 提高能見度。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>p.75–76</strong></p>
+<blockquote>
+<p>"Additionally, the network pushed stories claiming that Kenya's United Opposition coalition was breaking apart before the 2027 general election, directly targeting politicians Rigathi Gachagua and former president Uhuru Kenyatta."<br />
+此外，該網路推送聲稱肯亞聯合反對黨聯盟在 2027 年大選前正在瓦解的故事，直接鎖定政治人物 Rigathi Gachagua 與前總統 Uhuru Kenyatta。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>p.76</strong></p>
+<blockquote>
+<p>"We evaluated the impact of the network using the Breakout Scale and classified it as Category One. The activity was completely isolated within the network of fake accounts and local influences on a single platform, failing to reach or influence any real people."<br />
+我們以 Breakout Scale 評估該網路的影響並將其歸為第一級。活動完全侷限在假帳號與本地網紅（原文為 "local influences"）組成的網路內、單一平台上，未能觸及或影響任何真實的人。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>p.76</strong></p>
+<blockquote>
+<p>"The network's pro-administration tone and specific hashtags suggest it was plausibly aligned with the ruling coalition, though we have not identified the exact organization responsible."<br />
+該網路親執政當局的語調與特定 hashtag 顯示它看似與執政聯盟一致，但我們尚未辨識出負責的確切組織。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>p.76</strong></p>
+<blockquote>
+<p>"The operation frequently used Claude to humanize and refine batches of 50 pre-drafted topics and tweets, showing that the model's main value to the network was volume and the appearance of authenticity. The core ideological messages were completely decided by the actors before Claude was used."<br />
+該行動經常使用 Claude 將每批 50 則預先擬好的主題與推文人性化並精修，顯示模型對該網路的主要價值是產量與真實感的外觀。核心意識形態訊息完全由行為者在使用 Claude 之前決定。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>p.76–77</strong></p>
+<blockquote>
+<p>"The actor supplied the topic, talking points, and hashtags, and used Claude to convert them into 50 themed, character-counted posts formatted for cross-platform publishing and dissemination. In several sessions, these were packaged as an interactive copy-all widget ready for deployment."<br />
+行為者供應主題、談話要點與 hashtag，並使用 Claude 將其轉換為 50 則有主題、算好字數、為跨平台發布與散播格式化的貼文。在數個工作階段中，這些被包裝成可直接部署的互動式 copy-all 小工具。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>p.77</strong></p>
+<blockquote>
+<p>"Based on a tip shared by OpenAI about recidivist activity on their platform, we conducted an internal investigation into suspected coordinated inauthentic behavior in Kenya and identified this operation. We removed the account and the organization behind it, and built detections around its behavioral signature."<br />
+基於 OpenAI 分享的、關於其平台上累犯活動的線報，我們對肯亞疑似協同不實行為進行內部調查並辨識出此行動。我們移除了該帳號與其背後的組織，並圍繞其行為簽章建立偵測。</p>
+</blockquote>
+</li>
+</ol>
+<hr />
+<h2 id="12">12. 未能驗證之處與研究限制</h2>
+<p><strong>關於行動本身（單一來源）</strong><br />
+- 行動的所有核心事實（單一操作者、50 則批次、copy-all 小工具、SHANKI／Elkins Marketer、OpenAI 線報、Category One）<strong>只有 Anthropic 一個來源</strong>；所有媒體報導均為轉述。無平台（X）、無肯亞查核組織、無學術機構對這個網路提出獨立分析。<br />
+- 報告<strong>沒有</strong>給出：假帳號數量、推文總數、工作階段數量、活動起訖日期（只能從 Figure 17 推得 2026-06-04 有活動）、本地網紅人數、是否有付款證據、X 是否處置、「背後的組織」是什麼性質。<br />
+- 「built detections around its behavioral signature」的簽章內容未公開。<br />
+- 「recidivist activity on their platform」的具體內容（在 OpenAI 做了什麼、被處置幾次、與 Claude 上的活動是否同時）未說明；Tech-ish「先在 ChatGPT 被抓再轉到 Claude」是該作者推論。<br />
+- 報告 p.76 「local influences」疑為「local influencers」之誤植；本檔引文保留原文並註記。</p>
+<p><strong>關於 Figure 17</strong><br />
+- 圖片不是節點連線圖；本檔第 6 節關於「真正的叢集圖怎麼做」是研究員依公開方法補充的教學延伸，<strong>不是報告內容</strong>。<br />
+- 帳號名稱與 handle 被模糊處理，無法核實這四個帳號是否仍存在、是否為假帳號或付費真人、是否被 X 處置。<br />
+- 互動數為研究員自放大截圖判讀；左上與左下貼文的回覆數與讚數在截圖上未顯示數字（僅圖示），本檔記為「未顯示」而非 0。<br />
+- 「Berur News／Berur FM」為肯亞地方媒體，研究員未能核實其所在地與語言，僅依圖卡描述。</p>
+<p><strong>關於政治脈絡</strong><br />
+- 肯亞政局的多項 2026 年事實（聯合反對黨裂痕、Cherargei 提案、Ruto 陣營對 Kenyatta 的態度）僅以 Google News RSS 的<strong>標題與日期</strong>核實，未能讀取全文；細節請授課前補查。<br />
+- 第 2.4 節的四個政治歸屬假設（H1–H4）與「承包商＋執政陣營客戶」的整體判斷是研究員推論，報告未講；<strong>授課時務必標示為推論</strong>。<br />
+- Wandayi 回應的逐字引文來自 Nairobi Leo（二手）；該頁標示的聲明日期（9 月 9 日）早於報告發布（9 月 10 日），疑為網站欄位錯誤，未能以原始聲明核實。<br />
+- 「Kenya Power 擬調漲 14%–31%」來自 Kenyan Wall Street 的標題，未讀全文。</p>
+<p><strong>關於方法論來源</strong><br />
+- Mozilla Foundation 2021 年肯亞研究的原始頁面回傳 403；數字（11 行動、23,000+ 推文、3,700 帳號、日薪 10–15 美元）轉引自 Tech-ish 與 Stimson Center。<br />
+- Keller 等（2020）《Political Communication》論文回傳 403；南韓 NIS 案的描述依研究者所知。<br />
+- X 的平台操縱政策頁回傳 403；措辭依研究者對公開政策的既有認識。<br />
+- Meta 執法報告的「coordinated efforts to manipulate public debate for a strategic goal where fake accounts are central」一句依研究者所知，非本次抓取。<br />
+- DISARM 技術編號依研究者所知的版本；MITRE ATT&amp;CK T1588.007 為 v16 新增子技術——<strong>兩者授課前均請以官方現行版本核對</strong>。</p>
+<p><strong>關於台灣脈絡</strong><br />
+- Cofacts 與 Doublethink Lab 的維基頁面回傳 404；Doublethink Lab 資訊來自其官網首頁摘要（549 個 Threads 假帳號、GoLaxy 調查），未讀報告全文。<br />
+- 自由時報等台媒報導僅以標題核實。<br />
+- 台灣 PTT 網軍司法案例的細節（起訴日期、判決結果）依研究者記憶，<strong>授課前請以判決書核對</strong>。<br />
+- 第 10.4 節的所有建議均為研究員推論。</p>
+<p><strong>工具限制</strong><br />
+- 本次工作階段 WebSearch 配額已耗盡（200/200），查證改以 WebFetch 直接抓取已知 URL、Google News RSS 與維基百科完成；多數肯亞新聞網站（Nation、Standard、People Daily、Kenyans.co.ke、Eastleigh Voice、Kenya Times、Uzalendo、TechCabal）與 WIRED、Guardian、Mozilla 回傳 403 或無法抓取。</p>
+<hr />
+<h1 id="a-pass2026-09-14">附錄 A：技術深化 pass（2026-09-14 增補）</h1>
+<blockquote>
+<p>本附錄為第二階段技術深化，聽眾為技術高手。<strong>上面第 0–12 節完全保留、未刪改</strong>；本附錄只做「增補」——把第 6 節（協同叢集）、第 4.3 節（copy-all 小工具）、第 4.5 節（長期養帳號）、第 10.4(4) 節（LINE）四處的觀念，補到「技術高手能據以理解與親手防禦」的深度：形式化定義、演算法、實證數字、可直接部署的偵測規則（YARA / KQL / 虛擬碼），以及新增 4 張 Mermaid 圖。所有超出報告的技術主張一律標【研究員推論】；所有實證數字均附一手來源，見 A.0。<strong>本附錄用的是新工作階段的 WebSearch 配額</strong>（第 9 節「配額已耗盡」指的是第一階段）。</p>
+</blockquote>
+<h2 id="a0">A.0 本次新增查證來源（補齊第一階段缺口）</h2>
+<p>第一階段第 9 節多條方法論來源是「依研究者所知描述」或「二手轉引」（因 WebSearch 配額用罄、原始頁 403）。本次以新配額直接取得下列一手來源，逐一補實：</p>
+<table>
+<thead>
+<tr>
+<th>主題</th>
+<th>一手來源（URL）</th>
+<th>本次查證性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>協同偵測實證：co-tweet/co-retweet、74%</td>
+<td>Schoch, Keller, Stier, Yang (2022)《Coordination patterns reveal online political astroturfing across the world》, <em>Scientific Reports</em> 12:4572, <code>nature.com/articles/s41598-022-08404-9</code>（DOI 10.1038/s41598-022-08404-9）</td>
+<td><strong>獨立查證</strong>：確認「平均 74% 帳號涉入 co-tweet/co-retweet」、資料為 Twitter 最大公開 astroturfing 資料庫、以委託－代理（principal-agent）問題推導可偵測型態</td>
+</tr>
+<tr>
+<td>協同偵測方法四步</td>
+<td>Pacheco, Hui, Torres-Lugo, Truong, Flammini, Menczer (2021)《Uncovering Coordinated Networks on Social Media》, ICWSM 15:455–466, <code>arxiv.org/abs/2001.05658</code>（DOI 10.1609/icwsm.v15i1.18075）</td>
+<td><strong>獨立查證</strong>：確認四步法（行為軌跡擷取→二分圖→投影→分群）、五個案例（美國大選、香港、敘利亞、加密貨幣）</td>
+</tr>
+<tr>
+<td>骨幹萃取（統計顯著邊）</td>
+<td><code>backbone</code> R 套件, PLOS One 10.1371/journal.pone.0269137；FDSM/SDSM 比較 arxiv 2105.13396</td>
+<td><strong>獨立查證</strong>：確認 Disparity Filter、FDSM、SDSM 等統計邊過濾法</td>
+</tr>
+<tr>
+<td>開源工具鏈</td>
+<td>CooRnet <code>github.com/fabiogiglietto/CooRnet</code>（CrowdTangle 於 2024-08-14 停用，後繼 CooRTweet / coordination-network-toolkit）；Coordination Network Toolkit <code>github.com/QUT-Digital-Observatory/coordination-network-toolkit</code>（Graham, Hames, Alpert 2024, <em>J. Computational Social Science</em>）</td>
+<td><strong>獨立查證</strong>：確認工具存在、可 pip/CRAN 安裝、時間原生（temporal-native）加權有向多重圖</td>
+</tr>
+<tr>
+<td>Mozilla 2021 肯亞（精確數字，修正第一階段二手值）</td>
+<td>Madung &amp; Obilo, Mozilla Foundation <code>foundation.mozilla.org/en/blog/fellow-research-inside-the-shadowy-world-of-disinformation-for-hire-in-kenya/</code>；Rest of World <code>restofworld.org/2021/kenya-disinformation-bbi-judiciary/</code>；Africa Check <code>africacheck.org/fact-checks/blog/new-evidence-thriving-disinformation-industry-twitter-worrying-kenya-gears</code></td>
+<td><strong>獨立查證＋數字修正</strong>：<strong>3,742 個帳號、逾 20,000 則推文/轉推、11 個 hashtag</strong>（2021 年 5–6 月）；代表性 hashtag <code>#AnarchistJudges</code>、<code>#Justice4Sale</code>（親 BBI，攻擊高等法院法官）；部分認證帳號參與（含 3 名肯亞合唱團歌手）；<strong>Twitter 處置逾 100 個帳號</strong>。第一階段寫「23,000 則、數百帳號」係二手轉引，以此為準</td>
+</tr>
+<tr>
+<td>Meta CIB 偵測方法（近況）</td>
+<td>Meta 對抗性威脅報告 <code>transparency.meta.com/metasecurity/threat-reporting/</code>（Q1 2025、Q2 2024）</td>
+<td><strong>獨立查證</strong>：確認 Meta 近年採「非監督式圖方法（unsupervised graph-based）」偵測 CIB；Q1 2025 報告點名俄羅斯利用<strong>非自願（unwitting）的自由接案社群小編</strong>在非洲代發——與本案「承包商模式」呼應</td>
+</tr>
+<tr>
+<td>AI 改寫規避偵測（量化「humanize」）</td>
+<td>Krishna, Song, Karpinska, Wieting, Iyyer (2023)《Paraphrasing evades detectors of AI-generated text, but retrieval is an effective defense》, <code>arxiv.org/abs/2303.13408</code></td>
+<td><strong>獨立查證</strong>：DIPPER 改寫使 DetectGPT 準確率由 70.3% 崩到 4.6%；檢索式防禦可抓 80–97% 改寫、僅 1% 誤判真人</td>
+</tr>
+<tr>
+<td>Cofacts 資料模型</td>
+<td><code>en.cofacts.tw/about</code>；資料集 <code>huggingface.co/datasets/Cofacts/line-msg-fact-check-tw</code></td>
+<td><strong>獨立查證</strong>：確認 g0v 2016 起、LINE 轉傳→近重複去重→群眾查核→公開資料庫（可下載）</td>
+</tr>
+<tr>
+<td>肯亞 2027 大選現況</td>
+<td><code>en.wikipedia.org/wiki/2027_Kenyan_general_election</code>；RANE Worldview；Daily Nation</td>
+<td><strong>獨立查證</strong>：投票日 2027-08-10；Ruto 尋求連任、民調約 24%；反對黨仍分裂為 United Opposition 與 Kenya Moja Alliance 兩股，2027-03 前難定局</td>
+</tr>
+<tr>
+<td>沉睡/養號偵測</td>
+<td>Krishnan et al.《Dormant Bots…2018 U.S. Senate》IEEE；《Behavior Change as a Signal…》arxiv 2603.03128</td>
+<td><strong>獨立查證</strong>：確認「行為變化（change-as-signal）」與「多個沉睡帳號同窗甦醒＝網路訊號」的方法論</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="a1-6">A.1 協同叢集分析的完整技術（深化第 6 節）</h2>
+<p>第 6 節已用文字講了「一張真正的叢集圖該怎麼做」的五步直覺。本節把它補成<strong>可實作的完整管線</strong>：形式化定義、每一步的演算法與陷阱、Schoch(2022) 的實證數字、用 Figure 17 四則貼文跑一次的完整算例，以及開源工具鏈。核心方法依 Pacheco 等(2021) 與 Schoch 等(2022)，兩者均為本次獨立查證的一手來源。</p>
+<h3 id="a10">A.1.0 管線總圖</h3>
+<pre class="mermaid">flowchart LR
+    A[&quot;原始資料&lt;br/&gt;貼文 / 轉推 / 引用 / 媒體 / hashtag / URL&quot;] --&gt; B[&quot;1 行為軌跡擷取&lt;br/&gt;co-quote、co-media pHash、hashtag 序列&lt;br/&gt;co-tweet Δ 窗、co-URL、co-avatar&quot;]
+    B --&gt; C[&quot;2 建二分圖 B 帳號U × 軌跡T&lt;br/&gt;biadjacency 矩陣 M，以 TF-IDF 加權&quot;]
+    C --&gt; D[&quot;3 投影成帳號圖&lt;br/&gt;A = M·W·Mᵀ 或帳號向量餘弦相似度&quot;]
+    D --&gt; E[&quot;4 骨幹萃取 / 統計顯著性&lt;br/&gt;Disparity Filter 或 FDSM/SDSM 對抗虛無模型&lt;br/&gt;α=0.05 + 多重檢定校正&quot;]
+    E --&gt; F[&quot;5 社群偵測&lt;br/&gt;Louvain / Leiden 最大化模組度 Q&quot;]
+    F --&gt; G[&quot;6 人工驗證&lt;br/&gt;註冊日 / 頭像反搜 / 歷史內容&quot;]
+    G --&gt; H[&quot;協同叢集判定&lt;br/&gt;疊加時間指紋:上班時間集中&quot;]
+</pre>
+<h3 id="a11-trace">A.1.1 第一步：定義「行為軌跡」（trace）——邊的定義決定一切</h3>
+<p>第 6 節說「分析師講叢集，讀者要問你的邊怎麼定義」。技術上，一條<strong>軌跡</strong>是「兩個以上帳號共享的一個可觀測行為原子」。常用軌跡與其強度（【研究員推論】依 Pacheco 2021 的特徵族與本案適用性）：</p>
+<table>
+<thead>
+<tr>
+<th>軌跡類型</th>
+<th>定義</th>
+<th>對 AI 假草根的強度</th>
+<th>本案是否可用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>co-retweet</strong></td>
+<td>在 Δ 時間內轉推同一則 tweet</td>
+<td>高（Schoch 主力特徵）</td>
+<td>Figure 17 未見轉推，但網路內互轉痕跡（轉多讚少）暗示存在</td>
+</tr>
+<tr>
+<td><strong>co-tweet（近重複文字）</strong></td>
+<td>在 Δ 內發出 Jaccard/餘弦高相似的文字</td>
+<td>中（會被「人性化」削弱，見 A.5）</td>
+<td><strong>本案關鍵</strong>——同骨架換皮正是打這條</td>
+</tr>
+<tr>
+<td><strong>co-quote</strong></td>
+<td>引用同一則貼文</td>
+<td>高</td>
+<td><strong>本案叢集 A</strong>（上排兩帳號引用同一 Citizen TV 貼文）</td>
+</tr>
+<tr>
+<td><strong>co-media（pHash）</strong></td>
+<td>上傳感知雜湊相同的圖</td>
+<td>高（迷因除外）</td>
+<td><strong>本案叢集 B</strong>（下排兩帳號上傳同一 Berur 圖卡）</td>
+</tr>
+<tr>
+<td><strong>hashtag 序列</strong></td>
+<td>相同 hashtag 且<strong>順序一致</strong></td>
+<td>中（順序是 copy-paste 指紋）</td>
+<td>四則皆 <code>#PoweringTheNewKenya #PowerReliefKE</code> 同序</td>
+</tr>
+<tr>
+<td><strong>co-URL / 短網址</strong></td>
+<td>共用同一連結（尤其展開後同一 landing）</td>
+<td>高</td>
+<td>商業線「每第五則插連結」</td>
+</tr>
+<tr>
+<td><strong>co-avatar / 帳號指紋</strong></td>
+<td>相同頭像 pHash、相同 bio 模板</td>
+<td>高（孵化期唯一可用）</td>
+<td>帳號被模糊，無法核</td>
+</tr>
+</tbody>
+</table>
+<p><strong>關鍵工程陷阱：熱門軌跡沒有鑑別力。</strong> 一則爆紅新聞會讓上萬真人同時 co-quote；一個官方推薦 hashtag 會讓所有人同序。所以軌跡要<strong>加權</strong>，把「大家都做的」壓低。Pacheco 用 <strong>TF-IDF</strong>：對帳號 $u$、軌跡 $t$，<br />
+$$w_{u,t} = \mathrm{tf}(u,t)\cdot \log\frac{N}{\mathrm{df}(t)}$$<br />
+其中 $\mathrm{df}(t)$ 是「用了軌跡 $t$ 的帳號數」，$N$ 是帳號總數。df 越大（越多人用）、idf 越小、該軌跡越不算數。這一步就是把「同一天發文」這種弱軌跡自動降權的機制。</p>
+<h3 id="a12-biadjacency">A.1.2 第二步：二分圖與 biadjacency 矩陣</h3>
+<p>令帳號集合 $U={u_1,\dots,u_n}$、軌跡集合 $T={t_1,\dots,t_m}$，建<strong>二分圖</strong> $B=(U,T,E)$：若帳號 $u_i$ 表現出軌跡 $t_j$ 則連邊。以矩陣表示為 <strong>biadjacency 矩陣</strong> $M\in\mathbb{R}^{n\times m}$，$M_{ij}=w_{u_i,t_j}$（未加權時為 0/1）。</p>
+<p>二分圖的好處：它把「帳號」與「證據」分開，不預設任何帳號—帳號關係——關係是<strong>推導</strong>出來的，不是假設的。這正是「一張真正的叢集圖」與 Figure 17 那張拼貼的根本差別：拼貼用版面<strong>暗示</strong>關係，二分圖用資料<strong>證明</strong>關係。</p>
+<h3 id="a13">A.1.3 第三步：投影成帳號—帳號圖</h3>
+<p>把二分圖投影到帳號那一側，得到帳號相似度矩陣：<br />
+$$A = M\,W\,M^{\mathsf T}, \qquad W=\mathrm{diag}(\text{軌跡權重})$$<br />
+$A_{ij}$ 是帳號 $i,j$ 共享軌跡的加權數。等價地，可把每個帳號表示成一個軌跡向量 $\vec{m}_i$，用<strong>餘弦相似度</strong> $\cos(\vec m_i,\vec m_j)$ 當邊權（Pacheco 的預設）——餘弦會自動吸收帳號活躍度差異（高活躍帳號向量長，餘弦已正規化）。</p>
+<p><strong>陷阱：原始投影又密又偏。</strong> 直接投影會得到一張近乎全連通、且被高活躍帳號主宰的圖——什麼都連在一起，等於什麼都沒說。所以<strong>絕不能</strong>直接對原始投影跑社群偵測；必須先做第四步。</p>
+<h3 id="a14-backbone">A.1.4 第四步：骨幹萃取（backbone / 統計顯著性）——最常被跳過、卻最關鍵的一步</h3>
+<p>問題：$A_{ij}=2$（共享兩條軌跡）到底算不算「協同」？答案取決於<strong>在隨機情況下，兩個活躍度相同的帳號本來就會共享幾條</strong>。這要對每條邊做<strong>假設檢定</strong>，虛無假設是「兩帳號獨立行動」。三類方法（本次獨立查證）：</p>
+<ul>
+<li><strong>Disparity Filter（Serrano 等 2009）</strong>：只看投影圖本身，對每個節點把邊權正規化成比例，保留在 $\alpha$（如 0.05）下顯著偏離「均勻分配」的邊。快，但<strong>不用二分圖底層資訊</strong>，對社群結構保留較差。</li>
+<li><strong>Fixed Degree Sequence Model（FDSM）</strong>：產生大量隨機二分圖，<strong>同時固定帳號度數與軌跡度數</strong>（即每個帳號的軌跡數、每條軌跡的帳號數都不變），對每對帳號算「共享軌跡數」的虛無分布，保留觀測值超過虛無分布 $\alpha$ 分位的邊。<strong>最能保留真實社群</strong>，但慢（要跑 permutation）。</li>
+<li><strong>Stochastic Degree Sequence Model（SDSM）</strong>：FDSM 的解析近似，用機率生成、速度快很多，實務首選。R 的 <code>backbone</code> 套件把三者都實作了（<code>sdsm()</code>, <code>fdsm()</code>, <code>disparity()</code>），輸出可直接餵給社群偵測。</li>
+</ul>
+<p><strong>多重檢定校正</strong>：帳號兩兩配對有 $\binom{n}{2}$ 條候選邊，$\alpha=0.05$ 會產生大量偽陽性，必須做 Bonferroni 或 FDR（Benjamini-Hochberg）校正。這步做不做，決定你的叢集是真的還是雜訊。</p>
+<blockquote>
+<p>教學點：<strong>「有邊」不是「共享過一次」，而是「共享得比隨機顯著地多」。</strong> 這句話是本節與第 6 節五步直覺之間最大的技術落差，也是把「拼貼式叢集」升級成「可辯護的叢集」的關鍵。</p>
+</blockquote>
+<h3 id="a15">A.1.5 第五步：社群偵測</h3>
+<p>在<strong>骨幹圖</strong>（已過濾的稀疏圖）上跑社群偵測：</p>
+<ul>
+<li><strong>Louvain</strong>：貪婪最大化模組度 $Q=\frac{1}{2m}\sum_{ij}\big(A_{ij}-\frac{k_ik_j}{2m}\big)\delta(c_i,c_j)$，快、常用；缺點是可能產生內部不連通的社群。</li>
+<li><strong>Leiden（Traag 等 2019）</strong>：修正 Louvain 的不連通缺陷、保證社群連通、通常更穩，<strong>現為首選</strong>。</li>
+<li><strong>解析度參數 $\gamma$</strong>：調高切出更多小群、調低併成大群；影響力行動分析常需掃描 $\gamma$ 看叢集穩定性。</li>
+</ul>
+<h3 id="a16-schoch2022">A.1.6 第六步：時間權重與 Schoch(2022) 的實證數字</h3>
+<p>Schoch 等(2022) 的核心貢獻是把<strong>時間</strong>放進軌跡定義，並在 Twitter 官方公開的跨國 astroturfing 資料庫上量化了效果（本次獨立查證確認）：</p>
+<ul>
+<li>以 <strong>co-tweet / co-retweet</strong> 這種最簡單的協同，<strong>平均每個行動有 74% 的帳號</strong>落入可偵測的共現結構；</li>
+<li>共現時間窗越緊越準——第一階段記錄的最佳設定（<strong>約 1 分鐘窗、召回 &gt;80%、誤判約 1%</strong>）與此一致；</li>
+<li>理論根據是<strong>委託－代理問題</strong>：付錢的老闆要控制拿錢的代理人有沒有真的發文，於是要求「同一時間一起發」，這個管理需求<strong>必然</strong>在時間上留下同步痕跡；</li>
+<li>附帶的時間指紋：假草根帳號發文<strong>集中在上班時間、週一至週五</strong>（因為是有給職工作），而真實用戶多在晚間活躍——這條「工時指紋」對台灣的「公關公司接案」模式特別適用（見 A.4.6）。</li>
+</ul>
+<p>【研究員推論】把這串數字翻成一句課堂結論：<strong>即使操作者把文字改到面目全非（打敗 co-tweet），只要老闆還要管控「一起發」，co-retweet 與時間同步就抓得到七成以上。</strong> 這是為什麼「行為結構」比「內容比對」耐打（A.5 會量化這件事）。</p>
+<h3 id="a17-figure-17">A.1.7 完整算例：把 Figure 17 四則貼文跑一次</h3>
+<p>把第 6 節四則貼文形式化。帳號 $U={a_1$ 左上, $a_2$ 右上, $a_3$ 左下, $a_4$ 右下$}$；軌跡 $T={t_1$=引用 Citizen TV 貼文X, $t_2$=上傳 Berur 圖卡pHash Y, $t_3$=hashtag 序列 <code>#PoweringTheNewKenya #PowerReliefKE</code>, $t_4$=日期桶 2026-06-04, $t_5$=@OpiyoWandayi$}$。</p>
+<p><strong>biadjacency 矩陣 $M$（未加權 0/1）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>帳號 \ 軌跡</th>
+<th>$t_1$ 引用CTV</th>
+<th>$t_2$ Berur圖</th>
+<th>$t_3$ hashtag序</th>
+<th>$t_4$ 6/4</th>
+<th>$t_5$ @Wandayi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$a_1$ 左上</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>$a_2$ 右上</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>$a_3$ 左下</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>$a_4$ 右下</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>軌跡的 df（用了它的帳號數）</strong>：$t_1$=2、$t_2$=2、$t_3$=4、$t_4$=4、$t_5$=2。$t_3,t_4$ 被<strong>全部</strong>帳號共享 → idf=0 → <strong>完全不算數</strong>（大家都掛同樣 hashtag、都在同一天，沒有鑑別力）。真正有鑑別力的是 $t_1,t_2,t_5$。</p>
+<p><strong>未加權投影（共享軌跡數）</strong>：$a_1a_2=3,\ a_3a_4=3,\ a_2a_3=3$（含 $t_5$），其餘對 =2。看起來四個帳號幾乎全連——<strong>這就是「原始投影又密又偏」的實例</strong>。</p>
+<p><strong>TF-IDF 加權後</strong>（把 $t_3,t_4$ 歸零）：只剩 $a_1$–$a_2$ 因 $t_1$ 強連、$a_3$–$a_4$ 因 $t_2$ 強連、$a_2$–$a_3$ 因 $t_5$ 弱連。社群偵測切出<strong>兩個叢集 ${a_1,a_2}$（co-quote）與 ${a_3,a_4}$（co-media）</strong>，靠 $t_5$ 這條弱橋鬆散相連。</p>
+<p><strong>這正好重建了 Figure 17 拼貼「暗示」的東西</strong>：上排一組、下排一組。差別是——拼貼靠排版讓你<strong>相信</strong>，二分圖投影＋TF-IDF 讓你<strong>證明</strong>，而且明確告訴你「同 hashtag、同一天」是<strong>沒有</strong>證據力的部分。這個算例可以直接當第 10.3 節演練 A 的解答。</p>
+<blockquote>
+<p>課堂延伸：把 $t_4$ 從「日期桶 6/4」改成「在 6/4 的同一 3 分鐘內發文」，$t_4$ 的 df 可能就從 4 掉到 2，重新變得有鑑別力——<strong>時間解析度是你能調的旋鈕</strong>，這就是 Schoch「緊窗高準」的直覺。</p>
+</blockquote>
+<h3 id="a18">A.1.8 開源工具鏈（可直接部署）</h3>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>語言</th>
+<th>做什麼</th>
+<th>資料來源現況</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>coordination-network-toolkit</strong>（QUT Digital Observatory, Graham 2024）</td>
+<td>Python（pip）</td>
+<td>時間原生、加權有向多重圖；一行指令對多種 co-* 行為建協同網路</td>
+<td>CrowdTangle 停用後 Python 端首選</td>
+</tr>
+<tr>
+<td><strong>CooRnet</strong>（Giglietto 2020）</td>
+<td>R</td>
+<td>專攻 Coordinated Link Sharing Behaviour（CLSB）：短時間內重複分享同一 URL 的粉專/群組</td>
+<td>原依賴 CrowdTangle（<strong>2024-08-14 停用</strong>）；後繼用 <strong>CooRTweet</strong></td>
+</tr>
+<tr>
+<td><strong>backbone</strong>（Neal 等）</td>
+<td>R（CRAN）</td>
+<td>骨幹萃取：<code>sdsm()</code> / <code>fdsm()</code> / <code>disparity()</code>，把第四步變成一行</td>
+<td>獨立</td>
+</tr>
+<tr>
+<td><strong>igraph / networkx + Leiden</strong></td>
+<td>R/Python</td>
+<td>社群偵測、模組度</td>
+<td>獨立</td>
+</tr>
+</tbody>
+</table>
+<p><strong>示意管線（虛擬碼，非可直接執行、僅供理解流程；真實部署須處理 API 條款與個資）：</strong></p>
+<pre><code class="language-python"># 1) 行為軌跡：把每則貼文攤成 (account, trace) 對
+traces = extract_traces(posts,
+    kinds=[&quot;co_retweet&quot;, &quot;co_media_phash&quot;, &quot;hashtag_seq&quot;,
+           &quot;cotweet_shingle@window=60s&quot;, &quot;co_url&quot;])
+
+# 2) 二分圖 → biadjacency（TF-IDF 加權，壓低熱門軌跡）
+M = build_biadjacency(traces, weight=&quot;tfidf&quot;)
+
+# 3) 投影（餘弦），得帳號相似度圖
+A = cosine_projection(M)
+
+# 4) 骨幹萃取：對抗保留雙邊度序列的虛無模型（SDSM），α=0.05 + FDR
+A_bb = backbone_sdsm(A, alpha=0.05, mtc=&quot;fdr&quot;)
+
+# 5) 社群偵測（Leiden），掃描解析度看穩定性
+clusters = leiden(A_bb, resolution=[0.5, 1.0, 1.5])
+
+# 6) 交人工驗證：註冊日 cohort、頭像 pHash、歷史內容、工時指紋
+review(clusters, checks=[&quot;reg_cohort&quot;, &quot;avatar_phash&quot;,
+                         &quot;history&quot;, &quot;worktime_fingerprint&quot;])
+</code></pre>
+<p><strong>給防守方的三句話總結</strong>：（1）<strong>邊要對抗虛無模型才算數</strong>，否則你畫的是雜訊；（2）<strong>軌跡要 TF-IDF 加權</strong>，否則熱門 hashtag 會把所有人連在一起；（3）<strong>時間窗是你最強的旋鈕</strong>，緊窗換來高準（Schoch 74%→&gt;80%）。這三點就是把第 6 節「五步直覺」變成「可辯護結論」的技術差距。</p>
+<hr />
+<h2 id="a2-copy-all-widget-43">A.2 「copy-all 互動式 widget」的技術剖析與偵測（深化第 4.3 節）</h2>
+<p>第 4.3 節解釋了 copy-all 小工具「降的是協調成本、不是寫作成本」的意義。本節補<strong>它在技術上到底是什麼、分析師會在哪裡看到它、以及三個位置各自的可部署偵測規則</strong>。</p>
+<h3 id="a21">A.2.1 這個產物在技術上是什麼</h3>
+<p>報告原句「packaged as an interactive copy-all widget ready for deployment」（p.77）。結合 Claude 產品能力（可在對話中產生可互動的 HTML/JS artifact），【研究員推論】它最可能的技術形態是<strong>一個單檔、純前端、零後端的 HTML</strong>：</p>
+<ul>
+<li>一個 JavaScript 字串陣列 <code>posts = [ "...50 則..." ]</code>；</li>
+<li>逐則渲染成清單，每則旁一個「Copy」鈕，呼叫 <strong><code>navigator.clipboard.writeText(posts[i])</code></strong>（現代瀏覽器的剪貼簿 API）；</li>
+<li>頂端一個「Copy All / 複製全部」鈕；可能附字數計數、hashtag 已內嵌、已發布勾選框；</li>
+<li><strong>完全在瀏覽器端執行，不連任何伺服器</strong>。</li>
+</ul>
+<p>這個「零後端」特性有一個重要的偵測後果：<strong>它不產生任何網路 IOC</strong>——沒有 C2、沒有網域、沒有 API 回呼。這正好呼應第 7 節「本案沒有 IOC」的主題：偵測<strong>只能</strong>發生在「產物的位元組」或「生成的請求」上，不能靠流量。</p>
+<h3 id="a22">A.2.2 分析師會看到的產物骨架（去識別化、非政治佔位內容）</h3>
+<p>以下是<strong>防禦參考用</strong>的最小骨架，內容刻意用中性佔位（產品公告），<strong>不含任何真實政治人物、hashtag 或帳號</strong>，目的是讓你知道 YARA 規則要 key 在哪些位元組上：</p>
+<pre><code class="language-html">&lt;!doctype html&gt;&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;script&gt;
+const posts = [
+  &quot;Placeholder announcement #1 ... #DemoTag1 #DemoTag2&quot;,
+  &quot;Placeholder announcement #2 ... #DemoTag1 #DemoTag2&quot;
+  /* ... up to N items ... */
+];
+function copy(i){ navigator.clipboard.writeText(posts[i]); }
+function copyAll(){ navigator.clipboard.writeText(posts.join(&quot;\n\n&quot;)); }
+&lt;/script&gt;
+&lt;button onclick=&quot;copyAll()&quot;&gt;Copy All&lt;/button&gt;
+&lt;div id=&quot;list&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+posts.forEach((t,i)=&gt;{ /* render row + per-item Copy button */ });
+&lt;/script&gt;
+</code></pre>
+<p>三個結構指紋：（1）一個<strong>同構短字串陣列</strong>（每則長度相近、都在單則字元上限內）；（2）<strong>剪貼簿寫入迴圈</strong>（<code>clipboard.writeText</code> 出現在 per-item 與 all 兩處）；（3）一個<strong>「Copy All」類鈕</strong>。單獨每一個都無害（很多正當工具也複製文字），三者<strong>同時出現且陣列元素帶社群貼文特徵（hashtag、@、字數貼上限）</strong>才是訊號。</p>
+<h3 id="a23-aai-anthropicopenai">A.2.3 偵測 A：AI 供應商端「請求簽章」（只有 Anthropic/OpenAI 能做）</h3>
+<p>這是本案唯一真正抓得到「意圖」的位置。<strong>不要用關鍵字</strong>（易規避），要用<strong>多條件加權評分</strong>（【研究員推論】，示意）：</p>
+<pre><code>score =  w1 * batch_size_ge(20)                     # 要求批量產同主題短文，K≥20
+       + w2 * has_political_entity(text)            # 出現政黨/候選人/選舉/官員實體
+       + w3 * anti_coordination_intent(text)        # 「看起來自發」「不要像協同」「去掉 AI 痕跡」「每則不同」
+       + w4 * requests_copy_ui(text)                # 「包成可一鍵複製 / widget / 清單 / copy all」
+       + w5 * cross_client_template_reuse(session)  # 同帳號近期用同格式產「商業促銷」+「政治讚美」
+IF score &gt;= θ  → 升級人工審查 + 跨供應商情報比對
+</code></pre>
+<ul>
+<li>$w_2 \wedge w_3$（政治實體 <strong>且</strong> 去協同意圖）幾乎沒有正當用途，是最高權重；但可被改寫（「寫自然一點」）規避，故 $w_3$ 要用<strong>語意分類器</strong>而非字面。</li>
+<li>$w_5$（政商同模板）是本案的獨特指紋——需要<strong>跨工作階段關聯</strong>能力，這也是為什麼報告說「built detections around its behavioral signature」（p.77）。</li>
+<li>這組簽章「軟」（改成 47 則、換句話說就掉），所以報告選擇<strong>不公開</strong>（第 8.2 缺口六）——公開等於發規避手冊。</li>
+</ul>
+<h3 id="a24-b-yara">A.2.4 偵測 B：產物端 YARA 規則（平台/事件回應/取證可用）</h3>
+<p>當這個 HTML 出現在雲端硬碟、附件、Pastebin、或被上傳到 VirusTotal 時，可用 YARA 抓它的<strong>結構</strong>。以下規則為防禦用途、刻意寬鬆以示意（真實部署須調閾值降誤判）：</p>
+<pre><code class="language-yara">rule ai_astroturf_copyall_widget_heuristic
+{
+  meta:
+    description = &quot;Heuristic: single-file HTML that mass-copies social posts (copy-all astroturf widget). Defensive detection reference.&quot;
+    author = &quot;course/02-influence GTG-54004 appendix&quot;
+    reference = &quot;Anthropic Sept 2026 report p.77 'interactive copy-all widget'&quot;
+  strings:
+    $clip      = &quot;clipboard.writeText&quot; ascii nocase
+    $all1      = &quot;Copy All&quot; ascii nocase
+    $all2      = &quot;複製全部&quot; ascii wide
+    $arr       = /const\s+\w+\s*=\s*\[/ ascii            // 字串陣列宣告
+    $tag       = /#[A-Za-z0-9_]{3,}/ ascii               // 內嵌 hashtag
+    $at        = /@[A-Za-z0-9_]{3,}/ ascii               // 內嵌 @提及
+    $html      = &quot;&lt;script&quot; ascii nocase
+  condition:
+    $html and $clip and $arr and ($all1 or $all2)
+    and #tag &gt;= 5                                        // 至少 5 個 hashtag（批量貼文特徵）
+    and ($at or #tag &gt;= 10)                              // @提及 或 更多 hashtag
+    and filesize &lt; 2MB
+}
+</code></pre>
+<p>規則邏輯：<strong>單檔 HTML ∧ 剪貼簿寫入 ∧ 字串陣列 ∧ Copy-All 鈕 ∧ 多個 hashtag</strong>。這抓的是「大量社群貼文＋一鍵複製介面」的通用結構，不綁任何特定行動——所以對「換 47 則」也有效。誤判來源：正當的社群排程工具、迷因產生器；緩解：把 <code>#tag&gt;=5</code> 提高、要求陣列元素<strong>彼此語意近但字面異</strong>（同骨架，接 A.1 的近重複叢集）。</p>
+<h3 id="a25-c">A.2.5 偵測 C：散播端格式指紋（研究者/查核者可用）</h3>
+<p>copy-paste 散播會在平台上留下第 A.1.1 節的軌跡：<strong>相同 hashtag 順序、相同標點與 emoji 位置、零寬字元（ZWNJ/ZWSP）殘留、@ 提及位置一致、發文時間集中</strong>。其中零寬字元特別值得一提——同報告 GTG-84006 的跨行為者簽章就含「ZWNJ 與點/空格規避」（p.75），這類不可見字元是 copy-paste 的高信度指紋，用一條正規表達式 <code>[​-‏‪-‮﻿]</code> 就能掃出。</p>
+<h3 id="a26">A.2.6 產物流與三個偵測位置（圖）</h3>
+<pre class="mermaid">flowchart LR
+    H[&quot;人類供應&lt;br/&gt;主題 / 談話要點 / hashtag&quot;] --&gt; G[&quot;Claude 生成&lt;br/&gt;50 則 + 去 AI 痕跡&quot;]
+    G --&gt; P[&quot;Claude 包裝&lt;br/&gt;copy-all HTML widget&quot;]
+    P --&gt; R[&quot;群組長 / 網紅一鍵複製&quot;]
+    R --&gt; X[&quot;發佈到 X / FB / LINE&quot;]
+    G -. &quot;偵測A 請求簽章:批次+政治實體+去協同意圖&quot; .-&gt; DA[&quot;AI 供應商端&quot;]
+    P -. &quot;偵測B artifact YARA:clipboard+陣列+CopyAll&quot; .-&gt; DA
+    X -. &quot;偵測C 格式指紋:hashtag序/零寬字元/發文同步&quot; .-&gt; DB[&quot;平台/查核端&quot;]
+</pre>
+<hr />
+<h2 id="a3-45">A.3 選前長期養帳號的偵測：抓「正在養、還沒啟動」的帳號（深化第 4.5 節）</h2>
+<p>第 4.5 節的生命週期表指出「偵測必須發生在孵化與暖機期」。難點在於：<strong>這時候帳號還沒犯任何內容錯誤</strong>——它發的是足球、食譜、電價感想，內容查核完全無用。本節補「當內容無害時，還剩哪些技術訊號、怎麼量化」。三類可觀測訊號：<strong>（1）追隨者增長模式、（2）內容潛伏、（3）突然轉向</strong>。核心方法是<strong>變點偵測（change-point detection）</strong>與 <strong>cohort 分析</strong>。</p>
+<h3 id="a31">A.3.1 訊號一：追隨者增長模式（成長曲線的形狀）</h3>
+<p>真人帳號的追隨者是<strong>有機累積</strong>——近似 logistic/次線性、每日增量平滑、來源多元。養出來的帳號常有以下異常（【研究員推論】＋依 A.0「行為變化」文獻）：</p>
+<table>
+<thead>
+<tr>
+<th>異常</th>
+<th>量化指標</th>
+<th>為什麼是訊號</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>階梯式跳增</td>
+<td>每日追隨者增量 $\Delta f_t$ 的<strong>變點</strong>（見 A.3.3）；一夜 +N</td>
+<td>買粉或 cohort 互追</td>
+</tr>
+<tr>
+<td>高互追密度</td>
+<td>疑似 cohort 內部<strong>互相追隨比例</strong>（mutual-follow density）遠高於隨機</td>
+<td>「follow train」——養號互相墊追隨數</td>
+</tr>
+<tr>
+<td>追隨/被追隨比異常</td>
+<td>following/followers 比值長期 &gt;&gt;1 或貼近 1 且雙方都在 cohort 內</td>
+<td>正常用戶比值分布有厚尾，養號集中</td>
+</tr>
+<tr>
+<td>追隨者「也是養號」</td>
+<td>追隨者中落在<strong>同一註冊 cohort</strong> 的比例</td>
+<td>自我指涉的封閉網路（呼應報告「isolated within the network」）</td>
+</tr>
+</tbody>
+</table>
+<p>實作上，把「疑似 cohort」當子圖，算其<strong>內部邊密度</strong>與<strong>對外邊密度</strong>之比；封閉養號網路的內外比會異常高。</p>
+<h3 id="a32">A.3.2 訊號二與三：內容潛伏與突然轉向——變點偵測</h3>
+<p>「潛伏（發無害內容）→ 突然轉向（帶入政治）」是養號的核心時間結構。把每個帳號表示成三條時間序列，對每條做<strong>變點偵測</strong>：</p>
+<ol>
+<li><strong>發文速率</strong> $r_t$（每日/每週貼文數）——抓「沉睡後爆量」；</li>
+<li><strong>內容主題</strong>：每日貼文的<strong>平均句向量</strong> $\bar e_t$（任何開源 embedding），量測相鄰時間窗的<strong>餘弦距離</strong> $1-\cos(\bar e_{t},\bar e_{t-1})$——抓「主題突然轉向」；</li>
+<li><strong>hashtag/議題熵</strong>：從「雜食」（高熵，足球+食譜+勵志）突然收斂到「政治」（低熵）——抓「聚焦」。</li>
+</ol>
+<p><strong>演算法（本次獨立查證的成熟方法）</strong>：</p>
+<ul>
+<li><strong>CUSUM</strong>（累積和）：對序列偏離基線的累積量設閾值，輕量、適合串流即時偵測；</li>
+<li><strong>PELT</strong>（Pruned Exact Linear Time, Killick 2012）：線性時間找<strong>多個</strong>變點，適合離線批次掃全站歷史；</li>
+<li><strong>Bayesian Online Changepoint Detection（BOCPD, Adams &amp; MacKay 2007）</strong>：輸出「此刻是變點的機率」，適合即時預警。</li>
+<li>Python 的 <code>ruptures</code> 套件實作 PELT/BinSeg/Window，可直接對上述三條序列跑。</li>
+</ul>
+<p><strong>關鍵組合訊號＝「三條序列的變點對齊」</strong>：一個帳號若在<strong>同一週</strong>同時出現（發文速率跳增）＋（主題餘弦距離飆高）＋（議題熵驟降），這就是「沉睡養號被啟動」的高信度指紋——單看任一條都可能是真人換了興趣，三條對齊幾乎不可能是巧合。</p>
+<h3 id="a33-cohort">A.3.3 cohort（同批孵化）偵測——孵化期唯一可用的訊號</h3>
+<p>當帳號還在潛伏、內容全無害時，<strong>只有帳號元資料</strong>能用：</p>
+<ul>
+<li><strong>註冊時間戳分桶</strong>：對 <code>created_at</code> 做直方圖，找<strong>異常尖峰</strong>（同週/同日大量註冊）；</li>
+<li><strong>bio 近重複</strong>：對簡介做 <strong>MinHash + LSH</strong>，把「同模板換幾個字」的 bio 分到同桶；</li>
+<li><strong>頭像來源</strong>：對頭像做 <strong>pHash</strong> 找重複；若為 <strong>GAN 生成臉</strong>（thispersondoesnotexist 類），有可辨識指紋——<strong>雙眼位置固定規則、飾品/牙齒左右不對稱、背景糊化、頻域有規律偽影</strong>，且<strong>反向圖搜查無</strong>（真人盜圖反搜得到，GAN 臉搜不到，這個「搜不到」本身是訊號）；</li>
+<li><strong>首批追蹤重疊</strong>：新帳號註冊後<strong>最初追蹤的 K 個對象</strong>的 Jaccard 重疊——同一操作者建的號常追同一批「種子」。</li>
+</ul>
+<h3 id="a34">A.3.4 「沉睡帳號同步甦醒」的統計檢定</h3>
+<p>多個沉睡帳號<strong>在同一窗甦醒</strong>是網路訊號，不是巧合（A.0 文獻明述）。形式化：設 $N$ 個帳號各自沉睡（過去 $T$ 天貼文數 ≤1），在獨立假設下，任一帳號在某窗 $W$ 內甦醒的機率為 $p$。則 $k$ 個同窗甦醒的機率服從二項/Poisson 尾機率：<br />
+$$P(X\ge k)\approx \sum_{j\ge k}\binom{N}{j}p^{j}(1-p)^{N-j}$$<br />
+當 $k$ 個老帳號在同一小時甦醒且發語意近似內容，這個尾機率小到可以直接當警報——這是把「同步性」變成「p 值」的做法。</p>
+<h3 id="a35-kql">A.3.5 可部署偵測查詢（KQL 風格，示意）</h3>
+<pre><code class="language-kql">// (1) 同批孵化 cohort：同週註冊 + 近重複 bio ≥ 10 帳號
+Accounts
+| where created between (huntStart .. huntEnd)
+| extend regWeek = bin(created, 7d), bioBucket = minhash(bio, 128)
+| summarize n=count(), members=make_set(id) by regWeek, bioBucket
+| where n &gt;= 10                              // 同週、同 bio 模板叢集
+</code></pre>
+<pre><code class="language-kql">// (2) 沉睡後突然啟動 + 主題轉向（三序列變點對齊的近似）
+PostWeekly
+| summarize posts=count(), meanEmb=avg_vec(embedding) by id, wk=bin(ts,7d)
+| sort by id asc, wk asc
+| extend prevPosts = prev(posts,1), prevEmb = prev(meanEmb,1)
+| where prevPosts &lt;= 1 and posts &gt;= 20                      // 速率變點:沉睡→爆量
+| extend topicShift = 1 - cosine(meanEmb, prevEmb)
+| where topicShift &gt;= 0.4                                   // 主題變點:突然轉向
+// → 再與 (1) 的 cohort 交集：同批註冊 + 同時甦醒 = 最高信度
+</code></pre>
+<h3 id="a36">A.3.6 偵測窗口與生命週期對齊（圖）——為何「選前才查太晚」</h3>
+<pre class="mermaid">flowchart LR
+    P1[&quot;孵化&lt;br/&gt;選前 18-24 月&lt;br/&gt;批量註冊 / 非政治內容&quot;] --&gt; P2[&quot;建立可信度&lt;br/&gt;選前 12-18 月&lt;br/&gt;民生議題 / @官員&quot;]
+    P2 --&gt; P3[&quot;敘事鋪陳&lt;br/&gt;選前 6-12 月&lt;br/&gt;帶入政治框架&quot;]
+    P3 --&gt; P4[&quot;爆發&lt;br/&gt;選前 0-6 月&lt;br/&gt;高頻針對候選人&quot;]
+    P1 -.-&gt;|&quot;僅 cohort/結構訊號&quot;| S1[&quot;註冊批次 / bio MinHash / 頭像 pHash / 追蹤重疊&quot;]
+    P2 -.-&gt;|&quot;肯亞案在此被抓&quot;| S2[&quot;三序列變點對齊 + 沉睡甦醒同步檢定&quot;]
+    P3 -.-&gt;|&quot;敘事已重複多次&quot;| S3[&quot;框架來源帳號集合 + 語意叢集(A.1)&quot;]
+    P4 -.-&gt;|&quot;移除政治成本最高&quot;| S4[&quot;已太晚:帳號有歷史、混入真人追隨者&quot;]
+</pre>
+<p><strong>對台灣 2028 的時間換算（【研究員推論】，承第 10.4 節）</strong>：以 2028-01 投票倒推，孵化期＝2026 上半、建立可信度期＝2026 下半至 2027 初——<strong>也就是現在</strong>。所以此刻要做的<strong>不是</strong>查誰在講選舉，而是<strong>對 2026 年 11 月地方選舉做一次「網路普查」</strong>：記錄哪些帳號群同批出現、講同樣民生議題（電價、健保、颱風假）、用同骨架，建立基線；2027 年再回看它們變成什麼。<strong>本案被 Anthropic 抓到時，正處在「建立可信度」期發民生內容——這就是台灣現在該複製的偵測時點。</strong></p>
+<hr />
+<h2 id="a4-line-1044">A.4 LINE 生態的協同偵測困難：為何結構訊號歸零（深化第 10.4(4) 節）</h2>
+<p>第 10.4(4) 節指出 copy-all 小工具放進 LINE 會「質變」。本節補<strong>技術上為什麼 LINE 讓 A.1–A.3 的所有結構訊號歸零</strong>，以及台灣還剩什麼可做。</p>
+<h3 id="a41-vs-line">A.4.1 結構訊號對照表：公開平台 vs LINE</h3>
+<p>A.1–A.3 的每一種訊號，到了 LINE 幾乎全部消失：</p>
+<table>
+<thead>
+<tr>
+<th>結構訊號（前述章節）</th>
+<th>X / Threads / PTT</th>
+<th><strong>LINE</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>帳號註冊批次 cohort（A.3.3）</td>
+<td>可（加入日/IP 前綴）</td>
+<td><strong>不可</strong>——散播單位是「群組長」，是真人老帳號</td>
+</tr>
+<tr>
+<td>追蹤/好友社交圖（A.3.1）</td>
+<td>部分可</td>
+<td><strong>無公開社交圖</strong></td>
+</tr>
+<tr>
+<td>co-quote / co-retweet 圖譜（A.1.1）</td>
+<td>可</td>
+<td><strong>無</strong>——轉傳不留公開痕跡、無引用結構</td>
+</tr>
+<tr>
+<td>公開時間戳（A.1.6 時間窗）</td>
+<td>可</td>
+<td><strong>無</strong>——第三方看不到誰何時發</td>
+</tr>
+<tr>
+<td>互動數（讚/轉/回，第 6 節互動比例）</td>
+<td>可</td>
+<td><strong>無</strong></td>
+</tr>
+<tr>
+<td>頭像 pHash / bio 模板（A.3.3）</td>
+<td>可</td>
+<td>不適用（群組長是真人）</td>
+</tr>
+<tr>
+<td><strong>內容近重複</strong></td>
+<td>可</td>
+<td><strong>僅</strong>當使用者主動轉傳給查證機器人才可見</td>
+</tr>
+</tbody>
+</table>
+<p>結論一句話：<strong>LINE 上除了「內容近重複」，A.1–A.3 的訊號全部歸零；而「內容近重複」正是 AI「humanize」最擅長打敗的（A.5 量化）。</strong> 這是台灣最嚴峻的技術缺口。</p>
+<h3 id="a42-line">A.4.2 LINE 架構的技術現實</h3>
+<ul>
+<li><strong>三種容器</strong>：1:1 聊天、群組（上限 500 人）、<strong>OpenChat 公開聊天室</strong>（上限 5,000、匿名暱稱——<strong>唯一稍可觀測</strong>的角落）。政治動員主力在<strong>一般群組</strong>（社區、宗親、宮廟、家長、退休、同鄉），這些<strong>沒有任何公開介面</strong>。</li>
+<li><strong>無公開內容 API</strong>：不像 X/Threads 有（受限的）公開讀取，LINE 群組內容第三方<strong>完全拿不到</strong>。</li>
+<li><strong>圖片會被重新編碼</strong>：LINE 傳送時會壓縮/轉檔，<strong>破壞精確雜湊（MD5/SHA）</strong>——所以偵測轉傳圖只能靠<strong>感知雜湊 pHash</strong>（抗壓縮），這點很關鍵。</li>
+<li><strong>轉傳無痕、無公開計數</strong>：一則訊息被轉了幾次、首次何時出現，<strong>第三方一律看不到</strong>——這正好抹掉 A.1.6 賴以為生的時間訊號。</li>
+<li><strong>部分端到端加密</strong>（Letter Sealing）：使可攔截性再降一層。</li>
+</ul>
+<h3 id="a43-ai">A.4.3 唯一剩下的訊號，正好被 AI 剋制</h3>
+<p>LINE 上唯一可用的是<strong>內容近重複</strong>：同一段話（或同骨架變體）出現在多個群組。但——</p>
+<ul>
+<li>copy-all 小工具產的是 <strong>50 則「同骨架換皮」變體</strong>（第 6 節），精確去重（exact hash）<strong>抓不到</strong>；</li>
+<li>而近重複的語意偵測，正是 A.5 要講的「被改寫規避」重災區（DIPPER 使 AI 偵測從 70.3% 崩到 4.6%）；</li>
+<li>加上 LINE 沒有時間戳、沒有帳號結構可以疊加（A.1.7 靠 $t_1,t_2,t_5$ 這些<strong>結構</strong>軌跡才切出叢集，LINE 全沒有）——<strong>只剩純文字一條腿</strong>。</li>
+</ul>
+<h3 id="a44-cofactsline">A.4.4 Cofacts：台灣唯一的「LINE 望遠鏡」及其資料模型</h3>
+<p>Cofacts（g0v，2016 起；本次獨立查證）是目前<strong>唯一</strong>能對 LINE 內容做近重複/叢集分析的機制。資料流：</p>
+<pre class="mermaid">flowchart TD
+    SRC[&quot;內容源:AI copy-all widget 產出的 50 則變體&quot;] --&gt; GL[&quot;群組長:真人老帳號&lt;br/&gt;管理數十至數百群組&quot;]
+    GL --&gt; M1[&quot;社區 / 宗親 / 宮廟 / 家長群&quot;]
+    GL --&gt; M2[&quot;退休 / 同鄉群&quot;]
+    M1 --&gt; R1[&quot;成員(真人)閱讀並再轉傳&quot;]
+    M2 --&gt; R2[&quot;成員(真人)閱讀並再轉傳&quot;]
+    R1 -. &quot;唯一外洩點:使用者主動轉傳查證&quot; .-&gt; CF[&quot;Cofacts 機器人&quot;]
+    CF --&gt; DBX[&quot;公開資料庫:近重複去重 + 群眾查核&lt;br/&gt;(HuggingFace 可下載)&quot;]
+    GL -. &quot;無公開社交圖 → 結構訊號=0&quot; .-&gt; ZERO[&quot;第三方可觀測性 ≈ 0&quot;]
+    M1 -. &quot;無公開時間戳 / 互動數&quot; .-&gt; ZERO
+</pre>
+<p><strong>Cofacts 的近重複機制</strong>：使用者把可疑訊息轉給機器人 → 正規化並比對資料庫既有訊息 → 命中就回既有查核、未命中就進志工佇列 → 全部公開（含可下載資料集）。<strong>它天生就在做「near-duplicate 去重」</strong>，所以是現成的近重複語料來源。</p>
+<p><strong>但有致命的取樣偏差</strong>：（1）<strong>只看得到使用者「願意轉傳查證」的那一小片</strong>——養號的民生暖機內容（讚電價）<strong>沒人會覺得可疑去轉</strong>，於是完全落在 Cofacts 視野外；（2）看得到的多是「已經很可疑」的成熟假訊息，<strong>抓不到孵化期</strong>。這與 A.3「要在孵化期抓」的需求正好錯開——<strong>Cofacts 是選戰期的救火隊，不是選前的雷達。</strong></p>
+<h3 id="a45">A.4.5 技術對策（【研究員推論】）</h3>
+<p>在結構訊號歸零的前提下，台灣能做的是把「內容近重複」這條腿盡量做強、並想辦法把「時間」這條腿要回來：</p>
+<ol>
+<li><strong>圖片：pHash / SimHash 而非精確雜湊</strong>——抗 LINE 的重新編碼；先 OCR 圖中文字再做文字近重複，雙管齊下。</li>
+<li><strong>文字：MinHash + LSH 做規模化近重複</strong>，再上 <strong>embedding + 近似最近鄰（FAISS）</strong> 做「同骨架語意叢集」——這是唯一能抓「換皮變體」的技術（接 A.1 的語意叢集，只是少了結構軌跡）。</li>
+<li><strong>把 Cofacts 語料當「同骨架庫」</strong>：不是判真假，而是回答「這個骨架今天有幾個變體在流傳、成長多快」——把第 8.4 節「敘事骨架庫」落地在 Cofacts 資料集上。</li>
+<li><strong>向 LINE 台灣要「匿名遙測」</strong>：要求提供<strong>去識別化的「訊息首次出現時間 + 轉傳次數」</strong>統計（可用差分隱私保護個資）。這一條若拿得到，就把 A.1.6 的<strong>時間訊號</strong>部分要回來——是所有對策裡投報率最高的。</li>
+<li><strong>人是最後防線</strong>：投資群組長識讀（「你收到的 50 個不同版本其實是同一個來源」），因為 LINE 上<strong>沒有假帳號可停權</strong>——被工具化的是真人，技術處置無從施力。</li>
+</ol>
+<h3 id="a46">A.4.6 台灣跨平台的技術落差總結</h3>
+<p>把 A.1–A.3 的方法對台灣各平台的可行性排序（【研究員推論】，承第 10.4(3)）：</p>
+<ul>
+<li><strong>PTT</strong>：可觀測性最高——有註冊日、登入次數、IP 前綴、推噓文共現、時間戳，A.1 的 co-<em> 與 A.3 的 cohort </em><em>幾乎全部可用</em><em>，且 Schoch 的「工時指紋」對「公關公司接案」模式特別有效。</em><em>台灣做協同叢集分析的首選練兵場。</em>*</li>
+<li><strong>Threads</strong>：中高——已有 2024/2026 實證協同事件，公開貼文可做 A.1 投影；難點是演算法推薦讓「觸及」與「追蹤」脫鉤。</li>
+<li><strong>X</strong>：中——API 貴、台灣用戶少，但精英/媒體集中，「Category 4 主流媒體放大」風險反而高；2025-11 起「關於此帳號」提供了新的區域/加入日結構訊號。</li>
+<li><strong>LINE</strong>：<strong>趨近零</strong>——如本節所述，結構訊號全滅，只剩經 Cofacts 取樣的內容近重複。<strong>這就是為什麼台灣的認知作戰防線在 LINE 上最脆弱，而 LINE 恰恰是台灣政治訊息傳播量最大的平台。</strong></li>
+</ul>
+<hr />
+<h2 id="a5-humanize-and-refinevs">A.5 技術總結：「humanize and refine」vs 偵測的軍備競賽</h2>
+<p>本案的靈魂動詞是「humanize and refine」（p.76）。前面四節分散講了它如何打敗各種偵測；本節用一手文獻<strong>量化</strong>它，並把 A.1–A.4 收束成一張「哪一層抓得到」的作戰圖——這是整個技術深化 pass 的收斂點。</p>
+<h3 id="a51">A.5.1 「人性化」到底多有效——量化證據</h3>
+<p>Krishna 等(2023，本次獨立查證) 直接量測了「AI 生成→改寫」對偵測的破壞力：</p>
+<ul>
+<li>用 DIPPER 改寫器改寫後，<strong>DetectGPT 的偵測準確率由 70.3% 崩到 4.6%</strong>——這解釋了為什麼本案的推文「無 AI 痕跡」；</li>
+<li>LLM 改寫過的文字，在餘弦空間中<strong>與人類原文的距離比與原始 LLM 文字近 3.15 倍</strong>——它被推進了「像人」的語意區；</li>
+<li><strong>單次改寫不夠</strong>，需約 <strong>5 輪</strong>遞迴改寫才能真正移動作者性指標——這與本案「humanize <strong>and refine</strong>」（不只一次、還要精修）的措辭吻合；</li>
+<li>但同一篇論文給了解藥：<strong>檢索式防禦</strong>（把待測文字拿去比對「已知生成內容的資料庫」）能抓 <strong>80–97%</strong> 的改寫、僅 <strong>1%</strong> 誤判真人。<strong>關鍵是——只有生成方（AI 供應商）握有那個「已知生成資料庫」。</strong></li>
+</ul>
+<h3 id="a52">A.5.2 哪一層抓得到？（作戰圖）</h3>
+<p>把前述所有偵測手段對「humanize 換皮」與「協同」的有效性、以及「誰能用」排成一張表（○可、◎強、✗無效）：</p>
+<table>
+<thead>
+<tr>
+<th>偵測層</th>
+<th>抓 humanize 換皮</th>
+<th>抓協同</th>
+<th>誰能用</th>
+<th>依據</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>exact-match / MD5 去重</td>
+<td>✗</td>
+<td>✗</td>
+<td>所有人</td>
+<td>改寫即失效</td>
+</tr>
+<tr>
+<td>n-gram / Jaccard 近重複</td>
+<td>部分</td>
+<td>✗</td>
+<td>所有人</td>
+<td>輕改寫可、重改寫失效</td>
+</tr>
+<tr>
+<td>AI 生成文字分類器</td>
+<td>✗</td>
+<td>✗</td>
+<td>所有人</td>
+<td>DIPPER 70.3→4.6%（A.5.1）</td>
+</tr>
+<tr>
+<td><strong>embedding 語意叢集</strong></td>
+<td>○</td>
+<td>需疊加行為</td>
+<td>平台 / 研究者</td>
+<td>同骨架語意仍相近（A.1、A.4.5）</td>
+</tr>
+<tr>
+<td><strong>檢索式比對（對已知生成庫）</strong></td>
+<td>◎ 80–97%/1%FP</td>
+<td>✗</td>
+<td><strong>僅 AI 供應商</strong></td>
+<td>需自家生成紀錄（A.5.1）</td>
+</tr>
+<tr>
+<td><strong>協同結構（co-*, 時間窗）</strong></td>
+<td>不靠文字→不受改寫影響</td>
+<td>◎ 平均 74%</td>
+<td>平台 / 研究者</td>
+<td>Schoch 2022（A.1.6）</td>
+</tr>
+<tr>
+<td><strong>AI 端請求簽章</strong></td>
+<td>抓意圖非文字</td>
+<td>◎</td>
+<td><strong>僅 AI 供應商</strong></td>
+<td>A.2.3；報告 p.77</td>
+</tr>
+</tbody>
+</table>
+<h3 id="a53">A.5.3 三個收斂結論（課堂帶走）</h3>
+<ol>
+<li><strong>內容偵測這條路，被 AI 改寫技術性地走死了。</strong> exact-match、n-gram、甚至 AI 生成分類器，對「humanize and refine」全部失效或大幅退化。<strong>只教學員「查內容真假」等於教一套過時技能。</strong></li>
+<li><strong>兩條路耐打：一條靠結構、一條靠來源紀錄。</strong>（a）<strong>協同結構</strong>（A.1 的 co-<em>、Schoch 的 74%）不靠文字，改寫再多也動不了「老闆要一起發」的同步痕跡；（b）</em><em>檢索式比對</em><em>與 </em><em>AI 端請求簽章</em><em>很強，但</em><em>只有 AI 供應商能用</em>*——因為只有它握有「自家生成的內容」與「生成時的意圖」。</li>
+<li><strong>這在戰略上解釋了本案為何非得在 A 位置（AI 供應商）被抓不可</strong>：平台與公民社會拿到的是<strong>已經被改寫、已經離開生成脈絡</strong>的成品——它們手上只剩「協同結構」一條腿（而在 LINE 上連這條腿都被打斷，A.4）。<strong>AI 供應商是唯一同時握有「意圖」與「生成庫」兩把鑰匙的位置</strong>——這既是本案唯一被偵測到的原因（第 8.3 節），也是把偵測責任過度集中在少數幾家公司的隱憂（第 10.2 討論題 5）。</li>
+</ol>
+<hr />
+<h2 id="a6-pass">A.6 本次技術深化 pass 的查證補遺與限制</h2>
+<p><strong>本 pass 用新 WebSearch 配額補實/修正的項目</strong>（詳見 A.0 來源表）：</p>
+<ol>
+<li><strong>修正 Mozilla 2021 數字</strong>：第一階段的「23,000 則、數百帳號」為二手轉引；一手來源（Mozilla / Rest of World / Africa Check）為 <strong>3,742 帳號、逾 20,000 則推文/轉推、11 個 hashtag、Twitter 處置逾 100 帳號</strong>，代表性行動為 <code>#AnarchistJudges</code> / <code>#Justice4Sale</code>（親 BBI、攻擊高等法院法官）。</li>
+<li><strong>確認方法論一手來源</strong>：Schoch 等(2022) 的 74% 與委託-代理推導、Pacheco 等(2021) 的四步法與五案例，均由 Nature/arXiv 原文確認（第一階段僅「依研究者所知」）。</li>
+<li><strong>新增可部署工具鏈</strong>：coordination-network-toolkit（Python）、CooRnet/CooRTweet（R）、<code>backbone</code>（R, SDSM/FDSM/Disparity）——第一階段未涵蓋。</li>
+<li><strong>新增「humanize」的量化文獻</strong>：Krishna 等(2023) 的 70.3→4.6%、3.15×、80–97%/1%——把本案核心動詞從「觀察」升級為「有數字」。</li>
+<li><strong>新增 Meta 近況</strong>：Meta 現採非監督式圖方法偵測 CIB；Q1 2025 報告點名俄羅斯利用<strong>非自願自由接案小編</strong>在非洲代發——與本案承包商模式互為佐證。</li>
+<li><strong>確認肯亞 2027 現況</strong>：投票日 2027-08-10、Ruto 民調約 24%、反對黨分裂為 United Opposition 與 Kenya Moja Alliance 兩股、2027-03 前難定局——支持第 4.5 節「本案距投票約 14 個月、仍在暖機」的判斷。</li>
+<li><strong>確認 Cofacts 資料模型</strong>：LINE 轉傳→近重複去重→群眾查核→公開可下載資料集（HuggingFace）——支撐 A.4.4 的技術對策。</li>
+</ol>
+<p><strong>本 pass 的殘留限制</strong>：</p>
+<ul>
+<li>A.2.1「copy-all widget 是單檔前端 HTML」為<strong>依 Claude 產品能力的合理推論</strong>，報告未描述其實作；A.2.4 的 YARA、A.2.3/A.3.5 的偵測規則均為<strong>防禦參考構想</strong>，非產品規則，部署前須以真實語料調閾值與誤判。</li>
+<li>Schoch「1 分鐘窗、&gt;80%、約 1% 誤判」與「工時指紋」中，74% 與方法框架已由原文確認，<strong>最佳設定的精確數值</strong>沿用第一階段記錄，授課前建議再對原文表格核一次。</li>
+<li>A.5.1 的改寫規避數字來自 Krishna 等(2023) 對<strong>特定偵測器（DetectGPT）與改寫器（DIPPER）</strong>的實驗，屬該設定下的結果，非普適常數。</li>
+<li>DISARM/ATT&amp;CK 技術編號、Anthropic Usage Policy 條款、各平台政策仍以第 5、9 節與各官方現行版本為準；本附錄未重複查證。</li>
+<li>所有台灣平台可觀測性評估（A.4.6）與偵測時點建議（A.3.6）為<strong>研究員推論</strong>，非實測 benchmark。</li>
+</ul>
+<blockquote>
+<p>本附錄新增 <strong>4 張 Mermaid 圖</strong>（A.1.0 叢集分析管線、A.2.6 widget 產物流與三偵測位置、A.3.6 生命週期偵測窗口、A.4.4 LINE 傳播鏈與可觀測性）、<strong>1 條 YARA 規則</strong>、<strong>3 段偵測虛擬碼（評分/KQL×2）</strong>、<strong>1 個 Figure 17 的 biadjacency 完整算例</strong>，並以新配額補實 10 組一手技術來源。與第 0–12 節合讀，構成「觀念（正文）＋可實作（附錄）」的完整教材。</p>
+</blockquote>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script>
+(function(){
+  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (window.mermaid) {
+    mermaid.initialize({startOnLoad:true, theme: dark ? 'dark' : 'default', securityLevel:'loose', flowchart:{useMaxWidth:true}});
+  }
+})();
+</script>
+</body></html>

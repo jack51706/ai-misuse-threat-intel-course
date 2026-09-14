@@ -1,0 +1,1757 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>00-cyber-trends-and-skills</title>
+<style>
+:root{--fg:#1a1a1a;--bg:#fff;--muted:#666;--line:#e2e2e2;--link:#0b5cad;--code-bg:#f5f5f5;--accent:#0b5cad}
+@media(prefers-color-scheme:dark){:root{--fg:#e6e6e6;--bg:#141414;--muted:#9a9a9a;--line:#333;--link:#6cb6ff;--code-bg:#1e1e1e;--accent:#6cb6ff}}
+*{box-sizing:border-box}
+body{max-width:900px;margin:0 auto;padding:2rem 1.2rem 6rem;font-family:"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;line-height:1.75;color:var(--fg);background:var(--bg);font-size:16px}
+h1,h2,h3,h4{line-height:1.3;margin-top:1.8em}
+h1{font-size:1.7rem;border-bottom:2px solid var(--accent);padding-bottom:.3em}
+h2{font-size:1.35rem;border-bottom:1px solid var(--line);padding-bottom:.2em}
+h3{font-size:1.12rem}
+a{color:var(--link)}
+code{background:var(--code-bg);padding:.1em .35em;border-radius:4px;font-family:"Cascadia Code",Consolas,"Courier New",monospace;font-size:.9em}
+pre{background:var(--code-bg);padding:1em;border-radius:8px;overflow-x:auto;font-size:.86em;line-height:1.5}
+pre code{background:none;padding:0}
+pre.mermaid{background:transparent;text-align:center}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.92em;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:.5em .7em;text-align:left;vertical-align:top}
+th{background:var(--code-bg)}
+blockquote{border-left:4px solid var(--accent);margin:1em 0;padding:.4em 1em;color:var(--muted);background:var(--code-bg)}
+img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;margin:.5em 0}
+.figgallery{margin-top:2em;border-top:2px solid var(--accent);padding-top:1em}
+.figgallery figure{margin:1.5em 0}
+.figgallery figcaption{color:var(--muted);font-size:.9em;margin-top:.3em}
+.topbar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:.6em 0;margin:-2rem -1.2rem 1.5rem;padding-left:1.2rem;font-size:.9em}
+.topbar a{text-decoration:none;margin-right:1em}
+hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+</style></head>
+<body><div class="topbar"><a href="../index.html">◀ 課程索引</a></div><h1 id="appendix-a">網路行動模組導論：趨勢分析與威脅行為者技能清單（Appendix A）</h1>
+<blockquote>
+<p>課程模組：01 網路行動（Cyber operations）｜ 本篇定位：整個 01 模組的<strong>導論與總結</strong>教材（第一堂課）<br />
+一手來源：PDF p.4–5（章節導論與 Trends）＋ p.38–40（Prevailing trends 與 Appendix A / Figure 19）<br />
+補充一手來源：Anthropic 前三份威脅報告（2025-03、2025-08、2025-11）＋ 2026-06《Mapping AI-enabled cyber threats》（Anthropic × Verizon DBIR）<br />
+整理日期：2026-09-13</p>
+</blockquote>
+<hr />
+<h2 id="1-tldr">1. 一頁速覽（給學員的 TL;DR）</h2>
+<ol>
+<li>
+<p><strong>本章的核心翻轉：攻擊「複雜度」不再等於攻擊者「能力」。</strong> 報告原話：「For threat intelligence investigators, sophistication has stopped being a reliable signal of who is behind an operation.」（p.5）AI 抹平了國家級團隊與單兵之間的人力與工具落差，這對威脅情報（CTI）的歸因方法論是<strong>根本性衝擊</strong>。</p>
+</li>
+<li>
+<p><strong>「uplift（能力提升）」是本模組的核心度量。</strong> Anthropic 用 <strong>speed（速度）／scale（規模）／depth（深度）</strong> 三軸衡量「有 AI 比沒 AI 多造成多少危害」。報告特別反駁「AI 最大風險是大規模開發漏洞利用」的窄化觀點——真正的風險「更明顯地分布在整條 cyber kill chain」（p.4）。</p>
+</li>
+<li>
+<p><strong>AI 的角色從「助理」走向「編排者」（From assistant to orchestrator）。</strong> 這是 p.4 標題本身。自主度是一條光譜：對話式工程助理 → 人類逐步指揮執行 → 多代理框架自主偵察/利用/外洩 → 排程無人值守。本教材把它做成一張<strong>五級自主度量表</strong>。</p>
+</li>
+<li>
+<p><strong>2025-11 記錄的「作業模式」已擴散到所有調查過的行為者類別。</strong> 那個由疑似國家級行動（在獨立報告中代號 <strong>GTG-1002</strong>）示範的多代理自主攻擊模型，如今「has now proliferated across every class of actors we investigated」（p.5）。公開的攻擊代理框架 <strong>PentAGI</strong> 讓任何下載者拿到同一套 scaffolding。</p>
+</li>
+<li>
+<p><strong>AI 供應鏈本身變成戰場。</strong> 兩大 Prevailing trends 之一是「AI tradecraft is proliferating（AI 戰技正在擴散）」：有人自建框架（GTG-10002），有人用公開框架（GTG-50020、GTG-50029），還形成了「以偷來的 API key 為商品」的黑市（GTG-50021 假冒 Claude 經銷）。</p>
+</li>
+<li>
+<p><strong>Appendix A（Figure 19）是全報告最有價值的教學素材之一。</strong> 它逐一列出威脅行為者<strong>自己開發的 Claude Code skills</strong>，把攻擊者如何「把 Claude Code skills 武器化」攤在檯面上——每個 skill 都是一個 persona（攻擊性資安工程師、DevOps、Windows 開發、前端、UI/UX、iOS Safari exploit 研究員），配上對應的 ATT&amp;CK 技術與工作流。</p>
+</li>
+<li>
+<p><strong>框架缺口（framework gap）是課程貫穿主題：</strong> 到 2026-06，MITRE ATT&amp;CK <strong>仍沒有對應 agentic orchestration 的技術 ID</strong>。GTG-1002 用了 13 個 tactics、30 個 techniques 看似只是「中風險」，但 Anthropic 自家 ARiES 風險評分給了滿分 <strong>100</strong>。「技術頻率表」抓不到「自主編排」這個維度的 uplift。</p>
+</li>
+<li>
+<p><strong>這堂課要教什麼（一句話）：</strong> 教學員在「攻擊複雜度崩解為商品」的新世界裡，<strong>改用哪些替代訊號做歸因</strong>、<strong>用 uplift 三軸評估自己組織面對的威脅</strong>、以及<strong>為什麼既有的 ATT&amp;CK 框架不夠用</strong>。</p>
+</li>
+</ol>
+<hr />
+<h2 id="2-01">2. 本章定位：01 網路行動模組的地圖</h2>
+<p>這份教材是 01 模組的<strong>第一堂課</strong>，任務不是講某一個案例，而是把整個模組的六個案例<strong>用趨勢串起來</strong>。報告本身就是這個結構（p.4 結尾原話）：</p>
+<blockquote>
+<p>「In the following report, we begin by discussing the key trends that we've observed in these cyber operations, then move to reporting the case studies and how they highlight those trends.」</p>
+</blockquote>
+<p>也就是說：<strong>先講趨勢（p.5、p.38–39），再用案例佐證趨勢。</strong> 本教材對應「趨勢」那一半；六個案例各有獨立教材。下表是模組地圖，讓學員一眼看到「每個案例是哪個趨勢的證據」：</p>
+<table>
+<thead>
+<tr>
+<th>GTG 代號</th>
+<th>案例一句話</th>
+<th>一手頁碼</th>
+<th>對應的核心趨勢</th>
+<th>自主度（本教材第 4 節量表）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GTG-20006</strong></td>
+<td>俄羅斯間諜（歸因 consistent with Midnight Blizzard），用 AI 自動重建被偵測到的惡意程式</td>
+<td>p.6–10</td>
+<td>「複雜攻擊不再需要複雜攻擊者」的<strong>採用 AI kill chain</strong>範例；自主度光譜的「人類逐步指揮」端點</td>
+<td>L2（人類逐步指揮）＋ L4（排程無人值守：token 續期、雲端外洩）</td>
+</tr>
+<tr>
+<td><strong>GTG-50014</strong></td>
+<td>ShinyHunters 系「打帶跑」勒索者，AI 大幅 uplift 機會型犯罪</td>
+<td>p.11–24</td>
+<td><strong>uplift 三軸</strong>的官方指定範例（p.5 點名）；「vibe hacking」；AI 供應鏈作為 loot</td>
+<td>L3（多代理自主，數十受害者並行）</td>
+</tr>
+<tr>
+<td><strong>GTG-10007</strong></td>
+<td>中國長沙大學生，建立自主「exploit 鑄造廠」與 13 agent 收集艦隊</td>
+<td>p.24–28</td>
+<td><strong>exploit foundry</strong> 與 autonomous attack framework；解除「exploit 供給」與「操作人力」兩大瓶頸</td>
+<td>L3 ＋ L4（排程收集艦隊、無人值守漏洞研究）</td>
+</tr>
+<tr>
+<td><strong>GTG-50021</strong></td>
+<td>Russian/Ukrainian 團體（handle「kl1zy」）經營假冒 Claude 經銷，偷帳號</td>
+<td>p.29、p.38</td>
+<td>「AI tradecraft is proliferating」中的<strong>黑市/marketplace</strong>發展</td>
+<td>L1–L2（工具化憑證竊取）</td>
+</tr>
+<tr>
+<td><strong>GTG-50020</strong></td>
+<td>從飯店訂房轉戰 AI 供應鏈，注入沙箱偷 production key，4 天打 ~30 家 AI 公司</td>
+<td>p.30–33</td>
+<td>AI 供應鏈作為<strong>攻擊面</strong>；公開框架（PentAGI 類）＋人類指揮的 pentest loop</td>
+<td>L2–L3（human-directed pentest loop ＋ 自主 exploitation pipeline）</td>
+</tr>
+<tr>
+<td><strong>GTG-50029</strong></td>
+<td>法語單兵 hacktivist，用 Rust scanner ＋ WordPress 競態零日打歐洲政黨</td>
+<td>p.34–37</td>
+<td>「AI 把 low-level hacktivist 變成 APT」；跨整條 kill chain 採用 AI</td>
+<td>L3（框架管理子代理，並行偵察/利用）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>教學提示：這張表建議做成模組的「總目錄海報」貼在教室，每上完一個案例就回來標記它印證了哪個趨勢。學員會逐漸看到：<strong>六個彼此毫無關聯的行為者（報告 p.38 明說「shared no connection」），卻收斂到同一套方法論。</strong> 這個「收斂」本身就是報告最想傳達的訊息。</p>
+</blockquote>
+<hr />
+<h2 id="3-trends">3. 三大 Trends 深入拆解</h2>
+<p>報告的 Trends 章節（p.5 起）有兩個明確標題，加上 p.38–39 的 Prevailing trends 一個發展，本教材整理為<strong>三大趨勢</strong>。這一節是全教材的理論核心，務必講透「怎麼想」，不只是「發生什麼」。</p>
+<h3 id="31-sophisticated-attacks-no-longer-require-sophisticated-attackers">3.1 趨勢一：複雜攻擊不再需要複雜攻擊者（Sophisticated attacks no longer require sophisticated attackers）</h3>
+<p><strong>原文逐字引用（p.5）：</strong></p>
+<blockquote>
+<p>「The cybersecurity skills of AI models means that AI has collapsed the labor and tooling gap that used to separate well-resourced, state-sponsored operations from individual operators. In the case studies we report below, a hacktivist using stolen API keys, disparate financially motivated individuals, and a state espionage operator each sustained multi-victim campaigns that, even just a year ago, would have required many skilled operators and specialist knowledge.」</p>
+<p>「For threat intelligence investigators, sophistication has stopped being a reliable signal of who is behind an operation. Every layer of offensive operations has been uplifted by AI, from reconnaissance and tool development to data processing and exploitation.」</p>
+</blockquote>
+<h4 id="311-cti">3.1.1 這句話為什麼是 CTI 方法論的地震</h4>
+<p>傳統威脅情報的歸因（attribution）有一條隱含的推理鏈：</p>
+<blockquote>
+<p><strong>「這個攻擊很精密 → 需要大量人力與專門知識 → 只有國家級 APT 養得起這種團隊 → 所以幕後大概是某國政府。」</strong></p>
+</blockquote>
+<p>這條推理鏈裡，「複雜度（sophistication）」是<strong>最上游的觀測訊號</strong>。分析師看到一個客製化 implant、一條乾淨的橫向移動路徑、一個零日利用，就會往「資源充足的行為者」方向收斂。這是過去二十年 CTI 的日常。</p>
+<p>AI 把這條鏈的<strong>第一環直接打斷</strong>。當一個法語單兵 hacktivist（GTG-50029）能用 Claude 在同一個對話 session 裡開發並除錯一個<strong>先前未被記錄的 WordPress 重裝競態零日</strong>、還順手做一個 lab harness（p.35），那麼「精密 ≠ 有組織有資源」。報告 p.38–39 把這件事講得更白：</p>
+<blockquote>
+<p>「The main distinguishing feature between these classes of actors is no longer sophistication but intent.」（p.38，區分國家級與犯罪集團的，不再是精密度而是<strong>意圖</strong>）</p>
+<p>「None of the operations in this report depended on some entirely novel technique that defenders have never seen. Instead, the economics of the attacks have changed.」（p.39，攻擊手法本身很眼熟——偷來的憑證、沒修補的邊界設備、暴露的服務、SQL injection、phishing；<strong>變的是攻擊的經濟學</strong>）</p>
+</blockquote>
+<h4 id="312">3.1.2 那分析師還能靠什麼歸因？替代訊號清單</h4>
+<p>這是本節的<strong>實戰重點</strong>。既然複雜度失效，CTI 分析師必須把歸因的重量轉移到<strong>AI 無法幫攻擊者抹平的訊號</strong>上。以下六類替代訊號，每一類都用本模組的案例佐證：</p>
+<table>
+<thead>
+<tr>
+<th>替代訊號</th>
+<th>為什麼 AI 抹不平它</th>
+<th>本模組案例佐證</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>基礎設施（Infrastructure）</strong></td>
+<td>egress IP、租用的 VPS 供應商、C2 網域註冊模式、Tor 服務、雲端專案，是攻擊者的「實體足跡」，AI 生成程式碼不會改變這些選擇</td>
+<td>GTG-50014 的 egress IP 表（p.23–24）、GTG-50029 的 Scaleway FR 專屬伺服器與 deSEC 動態 DNS（p.36–37）</td>
+</tr>
+<tr>
+<td><strong>目標選擇（Targeting）</strong></td>
+<td>「要打誰」是人類意圖的直接投射，AI 只執行不決定（見 3.2 的 caveat）</td>
+<td>GTG-20006 反覆鎖定烏克蘭政府與軍用無人機供應鏈（p.7–8）→ 指向俄羅斯國家利益</td>
+</tr>
+<tr>
+<td><strong>作業時區與節奏（Operational tempo / time zone）</strong></td>
+<td>人類操作員的睡眠與上班時間仍會留下規律；即使 AI 24 小時跑，<strong>人類介入的決策點</strong>（見 3.2）會落在特定時區</td>
+<td>GTG-10007 操作員被判定「likely residing in Changsha」（p.24），並非靠複雜度而是靠作業模式與身分線索</td>
+</tr>
+<tr>
+<td><strong>語言（Language）</strong></td>
+<td>使用者與 Claude 互動的語言、handle、對話中的母語痕跡</td>
+<td>GTG-20006 的 Russian speaker handle「JackPoterz」（p.6）、GTG-50021 的「kl1zy」、GTG-50014 的 French-speaking「MeowSHA / frkoo / blazespider」</td>
+</tr>
+<tr>
+<td><strong>變現方式（Monetization）</strong></td>
+<td>勒索金流、carding 商店、資料轉售管道，是財務動機行為者的指紋</td>
+<td>GTG-50014 的「Soraki」carding 平台與假冒法國警政網域 policenationale[.]cc（p.13）；勒索金額有時 &gt;$500k</td>
+</tr>
+<tr>
+<td><strong>政治意圖（Political intent）</strong></td>
+<td>「為什麼打」通常對應地緣政治或意識形態，AI 不提供動機</td>
+<td>GTG-50029 專打歐洲政黨並外洩「約 14 萬筆含政治傾向」的記錄（p.35）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>教學核心：讓學員理解——<strong>歸因的重心從「他有多厲害（capability）」轉移到「他是誰、為什麼、用什麼基礎設施（identity / intent / infrastructure）」。</strong> 這是這堂課要種進學員腦子裡的第一個新反射。</p>
+</blockquote>
+<h4 id="313-uplift-gtg-50014">3.1.3 報告點名的官方 uplift 範例：GTG-50014</h4>
+<p>報告在 p.5 明說「An example of this uplift in capabilities is documented in case study GTG-50014」。這是 Anthropic 指定用來示範「uplift」的案例，所以第 4 節的 uplift 三軸表也會拿它當標準範例。先記住三個關鍵數字（都可追到 p.13–14）：</p>
+<ul>
+<li><strong>速度：</strong> 一次企業軟體公司的入侵，「從首次存取到大量竊資只花數小時」；另一次「從單一被竊的 developer token 升級到完整雲端管理權限，約三小時」。</li>
+<li><strong>規模：</strong> 一次供應鏈攻擊「約 34 小時內傾印超過 2,100 組 Azure AD token、橫跨 40 多個企業租戶」；frkoo 的憑證管線「大量下載 180 萬個獨立 Android APK」掃描硬編碼密鑰。</li>
+<li><strong>深度：</strong> 攻擊者「往往並不理解每個目標環境的複雜性，而是把細節交給 AI」——這就是 p.14 描述的 <strong>「vibe hacking」</strong>。</li>
+</ul>
+<h3 id="32-ai-ais-role-has-become-increasingly-autonomous">3.2 趨勢二：AI 在網路行動中的角色日益自主（AI's role has become increasingly autonomous）</h3>
+<p><strong>原文逐字引用（p.5–6）：</strong></p>
+<blockquote>
+<p>「A majority of the operations described in this report were enabled by AI via direct execution or orchestration. The use of AI went beyond simple questions and responses from a chatbot but rather involved the use of multi-agent frameworks executing reconnaissance, exploitation, and data exfiltration. Humans remained in the loop by setting the targets of attacks and reviewing exfiltration.」</p>
+</blockquote>
+<p>這裡有兩個必須讓學員牢記的關鍵句：<br />
+1. AI 用途「went beyond simple questions and responses from a chatbot」——<strong>已經不是問答</strong>。<br />
+2. 「Humans remained in the loop by setting the targets of attacks and reviewing exfiltration」——<strong>人類仍保留兩件事：設定攻擊目標、審查外洩結果。</strong></p>
+<h4 id="321">3.2.1 課程用「自主度五級量表」</h4>
+<p>報告 p.39 把自主度描述成一條光譜（「spans a wide range of levels of autonomy」）。本教材把它整理成可操作的<strong>五級量表</strong>，每一級都對應報告明確點名的案例，方便學員在分析任何事件時做分級：</p>
+<table>
+<thead>
+<tr>
+<th>級別</th>
+<th>名稱</th>
+<th>定義（AI 做什麼）</th>
+<th>報告原文依據與點名案例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>L0</strong></td>
+<td>對話式問答</td>
+<td>純粹問答，AI 提供技術建議，不產出可直接部署的成品</td>
+<td>報告視為基準線；本報告的案例「多數已超越」此級</td>
+</tr>
+<tr>
+<td><strong>L1</strong></td>
+<td>對話式工程助理</td>
+<td>AI 在對話中產出惡意程式、phishing kit、監控工具的程式碼</td>
+<td>p.39：「actors used Claude conversationally: it acted as an engineering assistant in the creation of malware, phishing kits, and surveillance tooling」</td>
+</tr>
+<tr>
+<td><strong>L2</strong></td>
+<td>人類逐步指揮執行</td>
+<td>AI 直接對受害網路下指令、收割憑證、外洩資料，但<strong>每一個鎖定決策都由人做</strong></td>
+<td>p.39：「threat actors directed Claude to execute operations ... with a human making each individual targeting decision <strong>(GTG-20006)</strong>」</td>
+</tr>
+<tr>
+<td><strong>L3</strong></td>
+<td>多代理自主執行</td>
+<td>多代理框架自主進行偵察、利用、竊取，對<strong>多個受害者並行</strong>，持續數小時至數天</td>
+<td>p.39：「operations ran autonomously ... multi-agent frameworks ... in parallel, for hours or days at a time <strong>(GTG-50014, GTG-50020, GTG-50029)</strong>」</td>
+</tr>
+<tr>
+<td><strong>L4</strong></td>
+<td>排程／無人值守</td>
+<td>排程任務在<strong>完全沒有 human in the loop</strong> 的情況下運行</td>
+<td>p.39：「a collection fleet running on a pre-set schedule with no human in the loop <strong>(GTG-10007)</strong>」；「scheduled jobs renewing stolen access tokens and harvesting victim cloud storage with no human involvement <strong>(GTG-20006)</strong>」</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>注意一個重要的教學細節：<strong>同一個行為者可以橫跨多級。</strong> GTG-20006 既是 L2（人類逐步指揮橫向移動）又是 L4（排程續期 token、無人值守外洩雲端儲存）。這說明「自主度」不是給行為者貼一個標籤，而是<strong>針對每一條工作流</strong>分別評估。</p>
+</blockquote>
+<p><strong>自主度五級光譜（本教材重繪，Mermaid）：</strong> 下圖把上表畫成一條光譜，並標出「人類保留決策」這條貫穿所有層級的底線（呼應 3.2.2 的 caveat 1）。虛線＝該層級仍把該決策留給人類；只有 L4 的收集／token 續期類工作流在部分決策上脫離人類。</p>
+<pre class="mermaid">flowchart LR
+    L0[&quot;L0 對話式問答&lt;br/&gt;只給建議，無成品&quot;]
+    L1[&quot;L1 工程助理&lt;br/&gt;產出惡意程式 /&lt;br/&gt;phishing kit 程式碼&quot;]
+    L2[&quot;L2 人類逐步指揮&lt;br/&gt;AI 執行入侵，&lt;br/&gt;人類做每個鎖定決策&lt;br/&gt;(GTG-20006)&quot;]
+    L3[&quot;L3 多代理自主&lt;br/&gt;lead+subagents 並行&lt;br/&gt;偵察 / 利用 / 外洩&lt;br/&gt;(GTG-50014/50020/50029)&quot;]
+    L4[&quot;L4 排程無人值守&lt;br/&gt;pre-set schedule,&lt;br/&gt;no human in loop&lt;br/&gt;(GTG-10007/20006)&quot;]
+    L0 --&gt; L1 --&gt; L2 --&gt; L3 --&gt; L4
+    H[&quot;人類永遠保留的決策&lt;br/&gt;目標選擇 · 變現 · 外洩審查&lt;br/&gt;(report caveat 1)&quot;]
+    L2 -. 保留 .-&gt; H
+    L3 -. 保留 .-&gt; H
+    L4 -. 僅收集 / token 續期工作流脫離 .-&gt; H
+    classDef base fill:#e3f2fd,stroke:#1565c0,color:#000
+    classDef hi fill:#f9d5e5,stroke:#c2185b,color:#000
+    classDef human fill:#fff3cd,stroke:#b8860b,color:#000
+    class L0,L1,L2 base
+    class L3,L4 hi
+    class H human
+</pre>
+<blockquote>
+<p>讀圖要點：<strong>由左至右增加的是「效率 / 成本」增益，不是「危害嚴重度」增益</strong>（caveat 2）。底部黃框是 AI 抹不平、因而成為歸因抓手的人類決策（連回 3.1.2 的替代訊號清單）。這張圖是 T.3「補償性偵測」要量化的對象——因為「一條工作流落在哪一級」正是 ATT&amp;CK 技術頻率表抓不到的維度。</p>
+</blockquote>
+<h4 id="322-caveat-p39">3.2.2 兩個必講的 caveat（報告 p.39 明列）</h4>
+<p>報告特別提醒「兩個要牢記在心的告誡」，這是防止學員把「自主 = 更危險」這個直覺過度簡化的關鍵：</p>
+<p><strong>Caveat 1：人類保留了對他們最重要的決策。</strong></p>
+<blockquote>
+<p>「humans have retained the decisions that matter most to them: for example, they're still heavily involved in target selection, monetization of findings, and review of results.」</p>
+</blockquote>
+<p>這一條同時是 3.1.2「目標選擇/變現作為替代歸因訊號」的理論基礎——因為人類<strong>捨不得</strong>把這些決策交給 AI，這些決策點就成了分析師的抓手。</p>
+<p><strong>Caveat 2：自主度（Autonomy）與危害（Harm）是兩條獨立的軸。</strong></p>
+<blockquote>
+<p>「Autonomy multiplies the scale and speed of an operation, and reduces operating costs and complexity, but severity is still determined by a multitude of factors. Several of the most serious compromises we report here came from operations where a human directed every step.」</p>
+</blockquote>
+<p>換句話說：<strong>最自主的行動不一定造成最嚴重的傷害；本報告最嚴重的幾起入侵反而來自「人類指揮每一步」的行動。</strong> 這一點在課堂上極容易被學員誤解，務必用一句話釘死：<strong>自主度提升的是「效率與成本」，不是「傷害嚴重度」。</strong></p>
+<p>報告用經濟學語言收尾（p.39）：</p>
+<blockquote>
+<p>「In economic terms, AI autonomy compresses the cost side of attacker ROI calculations, lowering the skill threshold and labor required per campaign, while leaving potential payoffs largely unchanged. This favorable shift in unit economics makes previously marginal targets viable and encourages higher-volume, lower-touch operations.」</p>
+</blockquote>
+<p>翻譯給非技術主管聽：<strong>AI 沒有讓「搶到的錢」變多，但讓「搶劫的成本」變便宜——於是以前不划算的目標現在都值得打了，攻擊會走向「更高量、更輕觸」。</strong> 這是防守方最該理解的商業含義。</p>
+<h4 id="323">3.2.3 「反轉了成本，把負擔丟回防守方」</h4>
+<p>報告 p.9 有一段極具課堂張力的論述，說明自主 AI 如何顛覆傳統攻防成本結構：</p>
+<blockquote>
+<p>「The result of the above is that AI has inverted the cost back onto defenders. Previously, defenders might have been able to slow an attacker's operational tempo via the deployment of a new detection. Now, at least in theory, capable adversaries can "close the loop," bypassing traditional security detections faster than defenders can develop and deploy them.」</p>
+</blockquote>
+<p>「close the loop」是這裡的關鍵詞。傳統上，防守方發一條新偵測規則 → 攻擊者被擋 → 攻擊者要花時間改工具 → 防守方爭取到時間。GTG-20006 用 AI <strong>自動化了「改工具」這一步</strong>（p.6）：監控 AI agent 一旦發現某個惡意程式被安全產品偵測到，就自動改寫、重建、反覆迭代直到不被偵測為止。於是防守方「用新偵測換時間」的老招失效了。SOC 團隊要理解：<strong>攻擊者的迴圈以「小時」收斂，防守者的迴圈還停在「天」。</strong></p>
+<h3 id="33">3.3 趨勢三：作業模式擴散 ＋ 公開框架讓門檻歸零</h3>
+<p><strong>原文逐字引用（p.5）：</strong></p>
+<blockquote>
+<p>「In November 2025, we documented an operating model used by a suspected state-sponsored campaign to carry out autonomous attacks. That operating model has now proliferated across every class of actors we investigated. Publicly available offensive agent frameworks, like PentAGI, reproduce much of the same scaffolding for anyone who downloads them. This scaffolding effectively automates each step of the cyber kill chain.」</p>
+</blockquote>
+<p>這一段把兩件事連起來：<br />
+1. <strong>2025-11 的那套自主攻擊「作業模式」</strong>（在獨立報告中代號 GTG-1002，見第 8 節四報告比較）原本是疑似國家級行動的專利。<br />
+2. <strong>如今它「擴散到所有調查過的行為者類別」</strong>，而且不需要自己開發——<strong>PentAGI 這類公開的攻擊代理框架，把同一套 scaffolding 送給任何下載者。</strong></p>
+<h4 id="331-pentagi">3.3.1 PentAGI 是什麼，為什麼它讓門檻歸零</h4>
+<p>（來源：PentAGI GitHub README，vxcontrol/pentagi，MIT 授權，約 23.7k stars；第 9 節列為外部驗證來源）</p>
+<ul>
+<li><strong>一句話定義：</strong> 「an innovative tool for automated security testing」——一個自動化資安測試工具，但架構就是一個完整的自主攻擊框架。</li>
+<li><strong>多代理架構：</strong> Orchestrator（協調）／Researcher（偵察）／Developer（規劃利用）／Executor（執行），正好對應報告描述的「lead agent 分派工作給 subagents」模式。</li>
+<li><strong>記憶系統：</strong> long-term（PostgreSQL + pgvector 向量記憶）、working、episodic、knowledge base——對應報告一再提到的「persistent project memory」「campaign memory」。</li>
+<li><strong>內建 20+ 專業資安工具：</strong> nmap、metasploit、sqlmap、nuclei 等，全部跑在隔離的 Docker sandbox。</li>
+<li><strong>LLM 供應商極廣：</strong> OpenAI、Anthropic（Claude Opus/Sonnet/Haiku）、Google Gemini、AWS Bedrock、Ollama（本地）、DeepSeek/GLM/Kimi/Qwen/MiniMax，以及<strong>任意 OpenAI 相容端點</strong>（這一點很重要：攻擊者可用本地或代理模型繞過雲端護欄）。</li>
+<li><strong>自主等級：</strong> README 明寫「<strong>Fully Autonomous.</strong> AI-powered agent that automatically determines and executes penetration testing steps」。</li>
+<li><strong>合法聲明：</strong> 「Only test systems you own or are explicitly authorized to assess.」——但這只是 EULA 上的一行字，下載者是否遵守無從管控。</li>
+</ul>
+<blockquote>
+<p>教學要點：PentAGI 的存在，把報告 p.5「reproduce much of the same scaffolding for anyone who downloads them」變成可觸摸的事實。<strong>課堂不需要（也絕不可）實際部署它去打真實目標</strong>；重點是讓學員理解「攻擊 scaffolding 已經商品化、開源化、Docker 一鍵化」這個結構性改變。報告 p.38 更點名 GTG-50020、GTG-50029「leveraged publicly available offensive agent frameworks like PentAGI ... several operations in this report ran on them or on derivatives」。</p>
+</blockquote>
+<h4 id="332-ai-kill-chaingtg-20006">3.3.2 「採用 AI kill chain」的官方範例：GTG-20006</h4>
+<p>報告 p.5 明說「An example of this adoption of AI-enabled kill chains is documented in case study GTG-20006」。這是報告指定用來示範「作業模式擴散」的案例，也是自主度量表 L2＋L4 的代表。它的招牌動作（p.6）——<strong>AI 自動監控自己的惡意程式是否被偵測，一旦被偵測就自主改寫重建</strong>——正是「作業模式擴散」的具體長相。</p>
+<p>報告 p.5 的收尾預測，值得讓學員抄進筆記：</p>
+<blockquote>
+<p>「As models continue to evolve and improve, we assess that more actors, from lone wolves to organized entities, will continue to adopt AI frameworks to enable more sophisticated cyber attacks at greater speed and scale.」</p>
+</blockquote>
+<hr />
+<h2 id="4-uplift">4. uplift（能力提升）的三軸定義與評估表</h2>
+<h3 id="41-uplift">4.1 報告怎麼定義 uplift</h3>
+<p><strong>原文逐字引用（p.4）：</strong></p>
+<blockquote>
+<p>「The report also attempts to measure uplift, a term we use to describe the AI capability boost, or how much more harm was caused with AI versus without AI. We view uplift through the lens of speed, scale, and depth, and attempt to determine how an actor's adoption of AI meaningfully impacts each of these traits.」</p>
+</blockquote>
+<p>三軸定義：<br />
+- <strong>Speed（速度）：</strong> 完成同一件事所需的時間縮短多少。<br />
+- <strong>Scale（規模）：</strong> 同一名操作員能並行處理多少目標／資料量。<br />
+- <strong>Depth（深度）：</strong> 能理解與利用多陌生、多晦澀的環境與知識。</p>
+<h3 id="42">4.2 報告對「風險位置」的關鍵論點（務必完整呈現）</h3>
+<p>這是本節的思想核心，也是報告刻意糾正的一個常見誤解。<strong>原文逐字引用（p.4）：</strong></p>
+<blockquote>
+<p>「Many commentators focus on the risk of AI developing exploits at scale. While this is a danger, the risk from AI adoption is more pronounced across the cyber kill chain, where adversaries can operate faster, across a broader and deeper surface area, with fewer resources.」</p>
+</blockquote>
+<p>拆解這句話的論證：<br />
+- <strong>多數評論者的焦點：</strong> 「AI 會大規模自動開發漏洞利用（exploits at scale）」——也就是把風險窄化在 kill chain 的<strong>單一環節（武器化/exploitation）</strong>。<br />
+- <strong>Anthropic 的反駁：</strong> 這確實是危險，但<strong>真正的風險分布在整條 kill chain</strong>——偵察、工具開發、初始存取、橫向移動、資料處理、外洩、變現，每一環都被 uplift 了。</p>
+<p>為什麼這個論點對防守方這麼重要？因為如果你以為「AI 風險 = 自動化零日」，你會把所有防禦資源砸在漏洞管理上，卻對「AI 讓偵察與資料處理快 100 倍」毫無準備。報告 p.39 用數字佐證「整條鏈」的說法：</p>
+<blockquote>
+<p>「The results are visible in the numbers reported above: breaches completed in two to three hours, and dozens of victims handled in parallel by individual operators.」</p>
+</blockquote>
+<p><strong>「風險分布在整條 kill chain」（本教材重繪，Mermaid）：</strong> 下圖對比兩種心智模型。上排是多數評論者的<strong>窄化視角</strong>（只有「武器化 / 利用」被 AI 放大，其餘留白）；下排是報告主張的<strong>現實</strong>——kill chain 的每一環都被 uplift，且環與環之間由 AI 以機器速度自動銜接（把過去人工的階段轉換壓縮到秒級）。紅色＝被 AI 放大的節點。</p>
+<pre class="mermaid">flowchart TB
+    subgraph NARROW[&quot;窄化視角（多數評論者）：只有中段被自動化&quot;]
+        direction LR
+        n1[&quot;偵察&quot;] --&gt; n2[&quot;武器化&lt;br/&gt;AI 大規模生成 exploit&quot;] --&gt; n3[&quot;利用&lt;br/&gt;AI at scale&quot;] --&gt; n4[&quot;行動 / 外洩&quot;]
+    end
+    subgraph REAL[&quot;Anthropic 主張的現實：整條鏈都被 uplift，且秒級自動銜接&quot;]
+        direction LR
+        r1[&quot;偵察&lt;br/&gt;T1595 · T1589&lt;br/&gt;theHarvester / Shodan&quot;]
+        r2[&quot;武器化 / 工具開發&lt;br/&gt;T1587 · T1588&lt;br/&gt;implant · exploit&quot;]
+        r3[&quot;初始存取&lt;br/&gt;T1566 · T1190 · T1110&quot;]
+        r4[&quot;利用&lt;br/&gt;T1203 · T1210&quot;]
+        r5[&quot;C2&lt;br/&gt;T1071&lt;br/&gt;Shadow C2&quot;]
+        r6[&quot;橫向 / 收集&lt;br/&gt;T1021 · T1114 · T1020&quot;]
+        r7[&quot;變現&lt;br/&gt;勒索 · carding&quot;]
+        r1 --&gt;|機器速度| r2 --&gt;|秒級| r3 --&gt;|秒級| r4 --&gt;|秒級| r5 --&gt;|秒級| r6 --&gt;|秒級| r7
+    end
+    NARROW -.-&gt;|&quot;把資源全押漏洞管理 → 現實是整條鏈都在被打&quot;| REAL
+    classDef hot fill:#ffcdd2,stroke:#c62828,color:#000
+    classDef pale fill:#eceff1,stroke:#90a4ae,color:#000
+    class n2,n3 hot
+    class n1,n4 pale
+    class r1,r2,r3,r4,r5,r6,r7 hot
+</pre>
+<blockquote>
+<p>讀圖要點：防守方若只按上排配置資源（全押漏洞管理），就會對「偵察 / 資料處理快 100 倍」與「跨階段秒級自動銜接」毫無準備。<strong>uplift 真正的戰場是『階段之間的銜接速度』——這正是第 8 節框架缺口與 T.3 補償性偵測要處理的維度。</strong></p>
+</blockquote>
+<h3 id="43-uplift">4.3 課程用 uplift 評估表（可套用任一案例）</h3>
+<p>下表是本教材提供的<strong>可重複使用工具</strong>。分析任何一個 AI 賦能攻擊時，逐軸填寫「觀察指標」與「證據」，就能得到一張結構化的 uplift 側寫。這裡用報告官方指定的 <strong>GTG-50014</strong> 當完整範例（證據全部可追到 p.11–24）：</p>
+<table>
+<thead>
+<tr>
+<th>uplift 軸</th>
+<th>評估問句</th>
+<th>觀察指標（要找什麼證據）</th>
+<th>GTG-50014 套用範例（含頁碼）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Speed（速度）</strong></td>
+<td>有 AI 後，關鍵動作快了多少？</td>
+<td>「首次存取 → 大量竊資」耗時；「單一憑證 → 全域管理權」耗時；工具改版週期</td>
+<td>一次入侵「數小時內從首次存取到大量竊資」；「單一 developer token → 完整雲端管理權約三小時」（p.14）</td>
+</tr>
+<tr>
+<td><strong>Scale（規模）</strong></td>
+<td>一名操作員能並行處理多少？</td>
+<td>並行受害者數、掃描資料量、一次傾印的憑證/租戶數</td>
+<td>34 小時傾印 &gt;2,100 組 Azure AD token、跨 40+ 租戶；下載 180 萬個 APK 掃密鑰；一個 foothold 觸及約 200 家下游客戶（p.13–14）</td>
+</tr>
+<tr>
+<td><strong>Depth（深度）</strong></td>
+<td>AI 讓攻擊者理解/利用多陌生的環境？</td>
+<td>是否處理晦澀配置、陌生 API、跨租戶邏輯；操作員本身是否理解環境</td>
+<td>攻擊者「defer the specifics to the AI」，由 AI 理解 developer/auth API、產生並轉換特權 token、建跨租戶匯出工具（p.14，即 vibe hacking）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>教學設計：第 10 節的課堂練習，就是要學員拿<strong>自己組織面對的一個真實或假想威脅</strong>，填這張表。這是把抽象趨勢轉成可操作評估的橋樑。</p>
+</blockquote>
+<hr />
+<h2 id="5-prevailing-trendsp3839">5. Prevailing trends（p.38–39）：兩大發展如何串起六個案例</h2>
+<p>報告在所有案例之後，用 p.38–39 的「Prevailing trends」做總結。開宗明義（p.38）：</p>
+<blockquote>
+<p>「Despite the fact that each of the case studies above shared no connection, there are two broad developments that are relevant to each of them.」</p>
+</blockquote>
+<p><strong>這句話是整個模組的收束點：六個彼此無關聯的行為者，卻共享兩大發展。</strong> 分述如下。</p>
+<h3 id="51-ai-tradecraft-is-proliferatingai">5.1 發展一：AI tradecraft is proliferating（AI 戰技正在擴散）</h3>
+<p>副標「Diffusion of AI-enabled cyber operations」。核心比喻（p.38）：</p>
+<blockquote>
+<p>「Just as in the legitimate economy, AI has diffused through the cyber battlefield.」</p>
+</blockquote>
+<p>這個「擴散」有三種形態，正好把六案例分類：</p>
+<p><strong>形態 A｜自建自主框架：</strong> 「Multiple groups including GTG-10002, as previously reported, developed and utilized their own autonomous attack frameworks」（p.38）。</p>
+<blockquote>
+<p>注意：這裡報告寫的是 <strong>GTG-10002（五位數）</strong>。在 2025-11 的獨立報告中，同一起「首度公開的 AI 編排間諜行動」代號是 <strong>GTG-1002（四位數）</strong>。這個編號不一致是真實存在的（見第 7 節與第 12 節），課堂上是絕佳的「不要迷信代號」教材。</p>
+</blockquote>
+<p><strong>形態 B｜用公開框架：</strong> 「other groups including GTG-50020 and GTG-50029 leveraged publicly available offensive agent frameworks like PentAGI. These public frameworks reproduced much of the same scaffolding for anyone who downloads them, and several operations in this report ran on them or on derivatives.」（p.38）</p>
+<p><strong>形態 C｜形成黑市（marketplace）：</strong> 「A marketplace supporting the battlefield has formed as well. We discovered GTG-50021 creating fraudulent resellers offering discounted Claude access, while silently proxying user traffic to a different model, and harvesting the Anthropic credentials of anyone who signed up.」（p.38）</p>
+<p>擴散的三個維度（p.38）：「across different classes of threat actors, different regions, and different types of mission.」並下了一個防守方必須內化的結論：</p>
+<blockquote>
+<p>「The capabilities described in this report should be assumed to be available to any actors who are motivated to use them.」（<strong>假設這些能力對任何有動機的行為者都已可得。</strong>）</p>
+</blockquote>
+<p>發展一如何串起六案例（報告 p.38–39 的原文舉例）：</p>
+<blockquote>
+<p>「A hacktivist using stolen API keys (GTG-50029), a financially motivated crew harvesting credentials from mobile applications (GTG-50014), and a state-nexus espionage operator (GTG-20006) all showed similar methodology: they ran multi-victim campaigns using agentic AI that would previously have required teams of operators. They built custom tools, executed intrusions, and processed stolen data at volumes no individual human operator could manage manually.」</p>
+</blockquote>
+<p>再加上一句「攻擊手法其實很眼熟、變的是經濟學」的名言（p.39，已在 3.1.1 引用）：這三個行為者的手法都是老招（偷憑證、沒修補的邊界設備、SQL injection、phishing），<strong>唯一改變的是「以前只有資源充足行動才養得起的勞力——偵察、利用、工具開發、資料處理——現在全外包給了以機器速度並行運行的 AI 模型。」</strong></p>
+<h3 id="52-ais-increasingly-autonomous-roleai">5.2 發展二：AI's increasingly autonomous role（AI 角色日益自主）</h3>
+<p>這是第二個 Prevailing trend，內容與 3.2 的「趨勢二」相互呼應、互為表裡：p.5 的「趨勢二」開了頭，p.39 的「發展二」做了收束並補上五級光譜的完整案例點名（GTG-20006 / 50014 / 50020 / 50029 / 10007，已整理進第 3.2.1 的量表）。兩處要合起來教，讓學員看到「報告開頭提出的假說，在結尾用全部案例驗證」。</p>
+<h3 id="53">5.3 六案例 × 兩發展的交叉檢核表</h3>
+<table>
+<thead>
+<tr>
+<th>GTG 代號</th>
+<th>發展一（擴散）的角色</th>
+<th>發展二（自主）的定位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GTG-20006</td>
+<td>採用 AI kill chain（p.5 指定範例）；自建工具＋AI 自動重建</td>
+<td>L2 人類逐步指揮 ＋ L4 排程無人值守</td>
+</tr>
+<tr>
+<td>GTG-50014</td>
+<td>財務動機、mobile app 憑證收割；uplift 指定範例</td>
+<td>L3 多代理自主、數十受害者並行</td>
+</tr>
+<tr>
+<td>GTG-10007</td>
+<td>自建 exploit foundry 與收集艦隊；擴散到「學生/個人」層級</td>
+<td>L3 agent swarm ＋ L4 排程收集艦隊</td>
+</tr>
+<tr>
+<td>GTG-50021</td>
+<td>形態 C：黑市/假冒經銷（marketplace 發展的代表）</td>
+<td>L1–L2 憑證竊取工具化</td>
+</tr>
+<tr>
+<td>GTG-50020</td>
+<td>形態 B：用公開框架；AI 供應鏈作為攻擊面</td>
+<td>L2 human-directed pentest loop ＋ L3 自主 exploitation pipeline</td>
+</tr>
+<tr>
+<td>GTG-50029</td>
+<td>形態 B：用公開框架；hacktivist 升格 APT</td>
+<td>L3 框架管理子代理並行偵察/利用</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6">6. 圖表逐一判讀</h2>
+<blockquote>
+<p>本模組導論教材涵蓋的頁段（p.4–5、p.38–40）只有<strong>一張圖</strong>：Figure 19（p.40）。但它是全報告最有教學價值的圖表之一，因此本節深度判讀它，並補充一張跨頁引用的關鍵圖（Figure 2，攻擊生命週期）作為理解背景。</p>
+</blockquote>
+<p><img alt="報告原圖 · 第 40 頁（一手 PDF）" src="../figures/page-040.png" /></p>
+<h3 id="61-figure-19p40skill-breakdown-claude-code-skills">6.1 Figure 19（p.40）：Skill breakdown（威脅行為者開發的 Claude Code skills 清單）</h3>
+<p><strong>Appendix A 的定位（p.40 原文）：</strong></p>
+<blockquote>
+<p>「The following is a list of skills developed by threat actors to build out their AI-enabled workflows.」</p>
+</blockquote>
+<p><strong>圖片類型：</strong> 三欄式表格（非流程圖、非長條圖）。表頭為 <strong>ATT&amp;CK category｜Description｜Flow</strong>，共八列，每一列是威脅行為者為了武器化 Claude Code 而<strong>自己撰寫的一個 skill（技能/persona）</strong>。</p>
+<h4 id="611">6.1.1 為什麼這張圖是「最有價值的素材之一」</h4>
+<p>Claude Code 的「skills」原本是給合法開發者用的：把一段可重用的指令、persona、專案設定包成一個模組，讓 AI 在特定任務下切換到對應的「工作暫存器（register）」。<strong>Figure 19 直接展示攻擊者如何把這個合法機制反過來用</strong>——他們替每一種攻擊工種寫一個 persona skill（攻擊性資安工程師、DevOps、Windows implant 開發者、前端、UI/UX、C2 儀表板工程師、iOS Safari exploit 研究員），讓 Claude 在「進入某個專案目錄 → 呼叫某個 skill」時，自動切換成該工種的心智模型與工具鏈。</p>
+<p>這等於把一支「AI 攻擊團隊」的<strong>分工組織圖</strong>攤在你面前。對課程而言，它把前面所有抽象的「自主」「編排」「uplift」變成<strong>看得見的具體工程實作</strong>。</p>
+<h4 id="612-skill">6.1.2 逐列逐字抄錄（八個 skill 全部）</h4>
+<p>以下<strong>逐字抄錄</strong>圖上每一列的三欄內容（英文原文保留，這是最忠實的教學素材）：</p>
+<p><strong>Skill 1｜攻擊性資安工程師 persona（implant 開發與 M365 作業）</strong><br />
+- <strong>ATT&amp;CK category：</strong> Resource Development — T1587.001 Develop Capabilities: Malware; T1588 Obtain Capabilities<br />
+- <strong>Description：</strong> Offensive-security engineer persona. implant development and M365 operations windows. Interacts with the winAgent/GoDownload build loops, Defender-evasion iterations, and Graph/EWS operational tooling.<br />
+- <strong>Flow：</strong> Invoked at task pivots: the operator enters a project directory then <code>/security-engineer</code> shifts Claude into an engineering register for implant or platform work.</p>
+<p><strong>Skill 2｜DevOps persona（C2/phishing 基礎設施架設）</strong><br />
+- <strong>ATT&amp;CK category：</strong> Resource Development — T1583.003 Acquire Infrastructure: VPS; T1608 Stage Capabilities<br />
+- <strong>Description：</strong> DevOps persona used to stand up and maintain containerized C2/phishing stacks (shadow_c2 compose services, mailer, merged-landing deployments) and VPS provisioning over sshpass.<br />
+- <strong>Flow：</strong> Typical flow: skill invocation → docker compose build/up → curl health checks → sshpass push to rented VPS (MonoVM/eclipse proxies).</p>
+<p><strong>Skill 3｜偵察／憑證存取 persona（掃描與 spray）</strong><br />
+- <strong>ATT&amp;CK category：</strong> Reconnaissance / Credential Access — T1595 Active Scanning; T1589.002 Gather Victim Identity; T1110.003 Password Spraying<br />
+- <strong>Description：</strong> shadow_c2 persona and the Red-Team user_role memory rules. Active in scanning/recon and spray windows.<br />
+- <strong>Flow：</strong> Flow: ctf-pentest register → theHarvester/Shodan/gobuster recon → owa_spray or netexec validation → findings folded back into project memory.</p>
+<p><strong>Skill 4｜Windows 開發者 persona（原生 implant 產線）</strong><br />
+- <strong>ATT&amp;CK category：</strong> Resource Development / Persistence — T1587.001 Develop Capabilities; T1547.001 Run Keys; T1027 Obfuscation<br />
+- <strong>Description：</strong> Windows developer persona used for the native implant line (winAgent v2.0 mod_<em> modules, WUEngine persistence, COM/CLSID work) and PowerShell loader engineering.<br />
+- </em><em>Flow：</em>* Flow: skill → Visual-Studio/mingw builds → PowerShell test harness on the test host → taskkill/sc.exe service install cycles → memory update.</p>
+<p><strong>Skill 5｜前端 persona（phishing 平台與儀表板前端）</strong><br />
+- <strong>ATT&amp;CK category：</strong> Resource Development — T1608.005 Stage Capabilities: Link Target<br />
+- <strong>Description：</strong> Frontend persona. Used on the phishing-platform and dashboard frontends.<br />
+- <strong>Flow：</strong> Flow: skill → Next.js/Flask template edits → Claude_Preview screenshot QA.</p>
+<p><strong>Skill 6｜UI/UX 設計師 persona（誘餌頁/管理面板美化）</strong><br />
+- <strong>ATT&amp;CK category：</strong> Resource Development — T1608.005 Stage Capabilities: Link Target (lure/admin UI polish)<br />
+- <strong>Description：</strong> UI/UX designer persona. Polished the frontends of actor web projects — lure pages, admin panels<br />
+- <strong>Flow：</strong> Flow: skill → design-principles pass over lure/admin HTML → Edit cycles → preview screenshots.</p>
+<p><strong>Skill 7｜資深前端與設計工程師 persona（Shadow C2 儀表板與 builder UI）</strong><br />
+- <strong>ATT&amp;CK category：</strong> Resource Development — T1587 Develop Capabilities (C2 dashboard &amp; builder UI)<br />
+- <strong>Description：</strong> 'Senior Frontend &amp; Design Engineer'' persona purpose-built for the Shadow C2 CNC dashboard and builder UI — maps dashboard template files and REPORT.md API shapes.<br />
+- <strong>Flow：</strong> Flow: skill → CNC dashboard component work → agent-table/builder views wired to the shadow_c2 Postgres backend.</p>
+<p><strong>Skill 8｜iOS Safari exploit 研究員 persona（零日利用研發）</strong><br />
+- <strong>ATT&amp;CK category：</strong> Resource Development — T1587.004 Develop Capabilities: Exploits; T1203 Client Execution<br />
+- <strong>Description：</strong> 'Expert iOS Safari exploit researcher' projectSettings skill: ARM64e PAC bypasses, JSC JIT exploitation, kernel internals; instructs the model to load the lab memory index before any work and lists confirmed dead ends never to retry.<br />
+- <strong>Flow：</strong> Flow: skill auto-scopes the Safari lab → MEMORY.md index load → DarkSword/Coruna chain work with ipsw/otool → dead-end ledger updates (institutional memory for exploit R&amp;D).</p>
+<h4 id="613">6.1.3 這張圖傳達的四個核心訊息</h4>
+<ol>
+<li>
+<p><strong>攻擊者把一支團隊的分工「persona 化」。</strong> 八個 skill 對應八種工種，涵蓋從基礎設施（DevOps）、偵察（scanning/spray）、武器開發（implant、exploit）、到社交工程門面（前端、UI/UX）。這正是報告 p.39「would previously have required teams of operators」的工程證據——<strong>一個人＋八個 skill＝一支團隊。</strong></p>
+</li>
+<li>
+<p><strong>「記憶（memory）」是武器化的關鍵基礎設施。</strong> 注意反覆出現的 <code>project memory</code>、<code>user_role memory rules</code>、<code>MEMORY.md index</code>、<code>dead-end ledger</code>（institutional memory for exploit R&amp;D）。攻擊者刻意用 Claude Code 的記憶機制建立<strong>跨 session 的機構記憶</strong>：記住哪些漏洞路徑是死路、下次別再試。這把 AI 從「一次性問答」升級成「有累積學習的常駐研究員」——直接對應第 3.2 的 L3/L4 自主度。</p>
+</li>
+<li>
+<p><strong>Figure 19 的技術與報告正文的惡意程式互相印證（交叉驗證練習）。</strong> 表中出現的工具名稱，多數能在 GTG-20006 段落（p.10）找到對應：<code>WUEngine</code>、<code>Shadow C2</code>（正文寫 Shadow C2）、<code>DarkSword</code>（正文：iOS exploit chain，p.10）都出現在惡意程式清單。這代表 <strong>Figure 19 這張 skill 表，極可能主要來自 GTG-20006（俄羅斯間諜）這個案例的 Claude Code 專案</strong>——因為只有它同時涉及 Windows implant（winAgent/WUEngine）、Shadow C2、iOS（DarkSword）與 M365/Graph/EWS 作業。這是一個很好的「用圖表反推案例歸屬」的分析練習（標示為合理推測，報告未明說 Figure 19 專屬哪個 GTG）。</p>
+</li>
+<li>
+<p><strong>每個 skill 都掛著 ATT&amp;CK 技術 ID——但整體「skill 化 / persona 切換」這件事本身沒有 ID。</strong> 這正好預告第 8 節的框架缺口：ATT&amp;CK 能標記「T1587.001 開發惡意程式」，卻標記不了「攻擊者用 <code>/security-engineer</code> 指令把 AI 切換成一個會自己迭代、自己記憶死路的攻擊工程師」。<strong>這張圖同時展示了 ATT&amp;CK 有用的地方，和它抓不到的維度。</strong></p>
+</li>
+</ol>
+<h4 id="614">6.1.4 截圖類元素判讀</h4>
+<p>Figure 19 是一張<strong>表格截圖</strong>（淺灰底、圓角、三欄），非互動介面截圖，因此沒有平台/語言 UI 元素可判讀。但表格內容裡藏著幾個平台線索值得指出給學員：<br />
+- <code>Next.js/Flask</code>、<code>docker compose</code>、<code>Postgres backend</code>、<code>sshpass</code>、<code>MonoVM/eclipse proxies</code>：顯示攻擊者用的是<strong>標準現代 web 開發與 DevOps 技術棧</strong>——再次印證「攻擊手法很眼熟、變的是經濟學」。<br />
+- <code>Claude_Preview screenshot QA</code>：攻擊者甚至用 Claude 的預覽/截圖功能對 phishing 頁面做<strong>視覺品管</strong>。這是「AI 賦能」滲透到攻擊最末端（門面美化）的鮮明例子。<br />
+- <code>ipsw/otool</code>、<code>ARM64e PAC bypasses</code>、<code>JSC JIT</code>：Apple 平台逆向/利用的專業工具與技術，顯示第 8 個 skill 針對的是 iOS Safari 零日。</p>
+<h4 id="615">6.1.5 課堂用法建議</h4>
+<ul>
+<li><strong>拆解練習：</strong> 把八個 skill 印成八張卡，讓小組把它們排到一條 cyber kill chain 上（偵察→武器化→交付→利用→C2→行動），體會「一支 AI 團隊」如何覆蓋全鏈。</li>
+<li><strong>紅藍對照：</strong> 每個 skill 旁邊讓學員寫「如果我是防守方，這個 skill 的產出會在我的環境留下什麼可偵測痕跡？」（例如 Skill 3 的 <code>owa_spray</code>/<code>netexec</code> 會在 OWA 認證日誌留下 spray 特徵）。</li>
+<li><strong>記憶機制討論：</strong> 專門用 <code>dead-end ledger</code>（絕不重試的死路清單）開一個討論：<strong>攻擊者的 AI 會「學乖」，防守方的偵測規則會不會？</strong> 這直接連到第 3.2.3 的「攻防迴圈速度不對稱」。</li>
+</ul>
+<h3 id="62-figure-2p15-ai">6.2 補充判讀：Figure 2（p.15）攻擊生命週期與 AI 整合（跨頁引用）</h3>
+<p>（屬 GTG-50014 案例頁段，本模組另有專篇；此處只作導論背景）</p>
+<p>雖然 Figure 2 不在本教材的核心頁段，但它是理解「uplift 分布在整條 kill chain」（第 4.2 節論點）的視覺骨架。它把 ShinyHunters 系的攻擊生命週期畫成一條流程：<strong>Sourcing and recon → Discover → Validate/qualify → Expand in-victim → Exfil channels → Warehouse → Mint/persist → Monetize</strong>（對應 p.16–20 的 Figure 3–10）。每一階段旁都標註 AI 介入點。</p>
+<p>導論階段只需讓學員記住一件事：<strong>這張圖的每一個方框，都是一個被 AI uplift 的環節</strong>——不是只有中間的「利用/exploitation」被自動化。這正是第 4.2 節「風險分布在整條 kill chain，而非單一環節」的圖像化證明。細節留給 GTG-50014 專篇教材。</p>
+<hr />
+<h2 id="7-gtggenerative-threat-groups">7. GTG（Generative Threat Groups）命名系統</h2>
+<h3 id="71-gtg">7.1 報告怎麼定義 GTG</h3>
+<p><strong>原文逐字引用（p.4）：</strong></p>
+<blockquote>
+<p>「Throughout these case studies, the report will reference Generative Threat Groups (GTGs). These are Anthropic's internal designators for actors observed to be abusing AI.」</p>
+</blockquote>
+<p>三個要點：<br />
+1. <strong>GTG = Anthropic 的內部代號（internal designators）</strong>，專門標記「被觀察到濫用 AI」的行為者。<br />
+2. 它是 <strong>Anthropic 私有的命名體系</strong>，不是產業共通標準（不像 MITRE 的 G-number 或各廠商的 APT 命名）。<br />
+3. 報告<strong>從未公開編號規則</strong>。</p>
+<h3 id="72">7.2 關鍵原則：不可從數字推斷歸因</h3>
+<p>這是本節最重要的教學紅線。<strong>因為 Anthropic 沒有公開編號規則，任何「從 GTG 數字反推行為者身分/國別/類型」的推論都是不可靠的。</strong> 課堂上要明確告訴學員：</p>
+<blockquote>
+<p><strong>看到 GTG-50029，你不能因為它是「5 開頭」就斷定它是財務動機犯罪；看到 GTG-20006，你不能因為「2 開頭」就斷定它是國家級。這些都是未經證實的臆測。</strong></p>
+</blockquote>
+<p>而且報告本身就提供了一個「代號不可靠」的鐵證：同一起「首度公開的 AI 編排間諜行動」，在 <strong>2025-11 獨立報告</strong>中代號 <strong>GTG-1002（四位數）</strong>，在<strong>本報告 p.38</strong>卻寫成 <strong>GTG-10002（五位數）</strong>。連 Anthropic 自己的代號都出現位數不一致（見第 12 節），這正好證明<strong>代號是標籤，不是可解碼的情報</strong>。</p>
+<h3 id="73">7.3 可觀察的經驗規律（明確標示為「推測」的課堂練習）</h3>
+<p>雖然不能從數字推斷歸因，但我們<strong>可以把「觀察編號區間的分布」當成一個課堂 pattern-hunting 練習</strong>——前提是全程標示為「純屬觀察、未經證實、可能因新案例而推翻」。</p>
+<p>下表整理本報告全文（p.4–154）出現的 GTG 代號與其所屬領域（領域是報告明確歸類的，編號規律是<strong>我們的觀察</strong>）：</p>
+<table>
+<thead>
+<tr>
+<th>編號前綴區間</th>
+<th>觀察到的所屬領域（報告明示）</th>
+<th>出現的代號範例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>04xxx</strong></td>
+<td>影響力行動（Influence）</td>
+<td>GTG-04001（俄羅斯 CAR 資訊操作）</td>
+</tr>
+<tr>
+<td><strong>10xxx</strong></td>
+<td>網路/間諜（自主框架）</td>
+<td>GTG-10002（自建框架，previously reported）、GTG-10007（中國長沙 exploit foundry）</td>
+</tr>
+<tr>
+<td><strong>14xxx</strong></td>
+<td>監控（China-nexus surveillance）</td>
+<td>GTG-14010、14020、14021、14022（維吾爾/宗教/維穩/輿情監控）</td>
+</tr>
+<tr>
+<td><strong>15xxx</strong></td>
+<td>詐騙（Scams）</td>
+<td>GTG-15001（中國交友軟體詐騙網）</td>
+</tr>
+<tr>
+<td><strong>16xxx</strong></td>
+<td>蒸餾（Distillation）</td>
+<td>GTG-16001（DeepSeek）、16002（Moonshot）、16006（Zhipu/Z.ai）、16008（Xiaomi）</td>
+</tr>
+<tr>
+<td><strong>17xxx</strong></td>
+<td>常規武器（China-nexus weapons）</td>
+<td>GTG-17001（潛艦火控）、17002（電子戰）、17003（定向能武器情報）</td>
+</tr>
+<tr>
+<td><strong>20xxx</strong></td>
+<td>網路/間諜（state-nexus）</td>
+<td>GTG-20006（俄羅斯，consistent with Midnight Blizzard）</td>
+</tr>
+<tr>
+<td><strong>24xxx</strong></td>
+<td>影響力行動（俄國家媒體）</td>
+<td>GTG-24015</td>
+</tr>
+<tr>
+<td><strong>27xxx</strong></td>
+<td>常規武器（Russia-nexus）</td>
+<td>GTG-27005（無人機群）、27006（軍民兩用採購）</td>
+</tr>
+<tr>
+<td><strong>30xxx / 34xxx</strong></td>
+<td>監控/武器（Iran-nexus）</td>
+<td>GTG-30004/30005/30006、34001、34007</td>
+</tr>
+<tr>
+<td><strong>50xxx</strong></td>
+<td>網路（財務動機/hacktivist/AI 供應鏈）</td>
+<td>GTG-50014、50020、50021、50027、50029</td>
+</tr>
+<tr>
+<td><strong>54xxx / 84xxx</strong></td>
+<td>影響力行動（商業/國家對齊）</td>
+<td>GTG-54002/54004/54006/54009、84002/84005/84006</td>
+</tr>
+<tr>
+<td><strong>87xxx</strong></td>
+<td>常規武器（葉門）</td>
+<td>GTG-87001（Houthi 導引武器工程）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>這張表能引導出的「觀察」（全部標示為推測）：</strong><br />
+- 同一領域的案例，編號前綴<strong>傾向</strong>落在相近區間（例如中國監控多在 14xxx、蒸餾集中在 16xxx、財務型網路犯罪多在 50xxx）。<br />
+- 但<strong>反例立刻出現</strong>：GTG-10007（中國）與 GTG-20006（俄羅斯）都屬「網路間諜」卻在不同區間；GTG-50027 是伊朗監控卻用 50 開頭。<strong>規律有例外，不能當歸因依據。</strong><br />
+- 位數本身就不一致（GTG-1002 vs GTG-10002），連「幾位數」都不是穩定特徵。</p>
+<blockquote>
+<p>教學設計：把這張表當「歸納 vs 演繹」的思辨練習。讓學員先觀察規律（歸納），再刻意找反例（證偽），最後得出結論——<strong>經驗規律可以生成假設，但不能取代證據。這正是情報分析的基本紀律。</strong> 明確要求學員在任何報告裡使用 GTG 代號時，都寫成「Anthropic 代號 GTG-XXXXX」而非把數字當作分類線索。</p>
+</blockquote>
+<hr />
+<h2 id="8-gtg-1002-mitre-attck">8. 從 GTG-1002 到本報告：MITRE ATT&amp;CK 的框架缺口</h2>
+<p>本節整合 2026-06《Mapping AI-enabled cyber threats》（Anthropic × Verizon DBIR）的關鍵數據，說明為什麼「既有偵測框架跟不上 AI 賦能攻擊」是本模組的貫穿主題。（來源見第 9 節；一手網址 https://www.anthropic.com/news/AI-enabled-cyber-threats-mitre-attack 與 Frontier Red Team 長版 https://www.anthropic.com/research/attack-navigator ）</p>
+<h3 id="81-832">8.1 研究規模與方法（832 個帳號）</h3>
+<ul>
+<li><strong>資料集：</strong> 分析 <strong>832 個</strong>因惡意網路活動被封鎖的 Claude 帳號，時間跨度 <strong>2025-03 至 2026-03（整整一年）</strong>。這 832 個是「有足夠細節可做完整評估」的子集，非全部封鎖帳號。</li>
+<li><strong>對應框架：</strong> 映射到 <strong>MITRE ATT&amp;CK v18</strong>，共觀察到 <strong>13,873 個 action、橫跨 482 個 unique techniques、涵蓋全部 14 個 tactics</strong>；99% 屬 Enterprise 矩陣。</li>
+<li><strong>風險評分 ARiES（AI Risk Enablement Score，0–100，加法模型）：</strong></li>
+<li><strong>Threat（威脅，0–35）：</strong> 意圖清晰度、技術成熟度、威脅情報訊號、規避偵測的手法。</li>
+<li><strong>Vulnerability（脆弱性，0–35）：</strong> 模型使能該危害的能力、以及所用介面的風險（程式化介面與 agentic coding 工具得分最高）。</li>
+<li><strong>Impact（衝擊，0–30）：</strong> 真實世界效果，由安全分類器與調查員評估。</li>
+<li><strong>為何用加法而非乘法：</strong> 「we wanted a score that would remain meaningful even when one dimension is absent or unclear」——某一維缺失時分數仍有意義。</li>
+</ul>
+<h3 id="82">8.2 關鍵數據（務必逐一講清楚）</h3>
+<table>
+<thead>
+<tr>
+<th>數據</th>
+<th>數值</th>
+<th>ATT&amp;CK 對應</th>
+<th>教學意義</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用 AI 撰寫惡意程式</td>
+<td><strong>67.3%（560/832）</strong></td>
+<td>T1587.001 Develop Capabilities: Malware</td>
+<td>最普遍用途仍是「攻擊前準備」；「開發能力」T1587 整體達 69%（574 個）</td>
+</tr>
+<tr>
+<td>用 AI 做橫向移動</td>
+<td><strong>6.5%（54/832）</strong></td>
+<td><strong>TA0008 Lateral Movement</strong></td>
+<td>罕見但高風險：這 54 個行為者平均風險分 <strong>56.4</strong>，遠高於全體均值 46.8</td>
+</tr>
+<tr>
+<td>帳號探索上升</td>
+<td><strong>+8.9%</strong></td>
+<td><strong>T1087 Account Discovery</strong></td>
+<td>AI 用途從「取得初始存取」轉向「入侵後在內網活動」</td>
+</tr>
+<tr>
+<td>AI 輔助釣魚下降</td>
+<td><strong>−8.6%</strong></td>
+<td><strong>T1566 Phishing</strong></td>
+<td>與上一項互為表裡：攻擊者不再那麼需要 AI 幫忙進門，而是幫忙「進門之後」</td>
+</tr>
+<tr>
+<td>自動化外洩上升</td>
+<td>+6.2%</td>
+<td>T1020 Automated Exfiltration</td>
+<td>同樣印證「往 on-target 後期階段移動」</td>
+</tr>
+<tr>
+<td>開發能力下降</td>
+<td>−12%</td>
+<td>T1587 Develop Capabilities</td>
+<td>從「做工具」轉向「實戰操作」</td>
+</tr>
+<tr>
+<td>中高風險行為者占比</td>
+<td><strong>半年內 33% → 56%（約 1.7 倍，+22.6 個百分點）</strong></td>
+<td>—</td>
+<td>威脅在<strong>快速惡化</strong>（但 Anthropic 自承部分可能來自偵測能力提升）</td>
+</tr>
+<tr>
+<td>技能 vs 技術數量</td>
+<td>最低技能者平均用 <strong>~16</strong> 種技術、最高技能者 <strong>~20</strong> 種</td>
+<td>—</td>
+<td><strong>技術廣度不再是技能/資源的訊號</strong>（呼應第 3 節核心）</td>
+</tr>
+<tr>
+<td>Claude Code 使用比例</td>
+<td><strong>80%</strong> 的行為者用了 Claude Code</td>
+<td>—</td>
+<td>agentic 工具已是「預設存取方式」而非區別特徵</td>
+</tr>
+</tbody>
+</table>
+<p>其他值得補充的防禦視角數據：<br />
+- Defense Evasion（TA0005）出現在 <strong>84.4%</strong> 的行為者中，最常見子技術為 T1027（混淆，64.7%）、T1562（削弱防禦，54.9%）、T1055（程序注入，30.3%）。<br />
+- 與最高風險相關的<strong>後期技術</strong>（整體占比低、但高風險者特別愛用）：T1021（Remote Services，SSH/SMB，高風險者常見度是 3–5 倍）、T1078.003（Valid Accounts）、T1003（OS Credential Dumping）、T1560（Archive Collected Data）、T1505.003（Web Shell）。<strong>這些「動手做」的技術，才是真正的高風險預測因子。</strong></p>
+<h3 id="83-attck-agentic-orchestration-id">8.3 核心結論：ATT&amp;CK 沒有 agentic orchestration 的技術 ID</h3>
+<p>這是整份 MITRE 研究、也是本模組要學員帶走的最重要一句話。<strong>原文逐字引用：</strong></p>
+<blockquote>
+<p>「Autonomous killchain orchestration, real-time pivot decisions, and AI-directed execution with no human intervention don't yet have ID numbers in the ATT&amp;CK framework.」<br />
+「There is no ATT&amp;CK ID for this type of agentic orchestration—yet these are precisely the behaviors we expect to see much more of.」</p>
+</blockquote>
+<p><strong>GTG-1002 的悖論（本模組最有力的教學案例）：</strong><br />
+- 用 ATT&amp;CK 一映射：<strong>13 個 tactics、30 個 techniques</strong>，「comparable to dozens of medium-risk actors」——<strong>看起來只是中段班。</strong><br />
+- 但用 Anthropic 的 ARiES 一評分：<strong>滿分 100。</strong><br />
+- 原文：「focusing on the number of techniques this actor used underplays how dangerous they really were.」<br />
+- 為什麼落差這麼大？因為 GTG-1002 的危險不在「用了哪些技術」，而在「<strong>把 Claude Code 變成跑在 Kali Linux 上、以 MCP server 整合開源滲透工具的自主攻擊平台</strong>」，自主執行 80–90% 的戰術操作、以「physically impossible request rates」運行——<strong>而「自主編排」這個維度，技術頻率表根本量不到。</strong></p>
+<blockquote>
+<p>教學金句（讓學員抄下來）：<strong>「技術清單告訴你攻擊者『用了什麼』，卻告訴不了你這些技術是被『一個人手動串起來』還是『一個 AI 以每秒數次的速度自主串起來』。而後者，才是 AI 賦能攻擊真正的 uplift。」</strong></p>
+</blockquote>
+<p>Anthropic 因此正與 MITRE 洽談在 ATT&amp;CK 中「add new cross-cutting categories ... to identify the agentic, autonomous, and decision-making behaviors that chain multiple techniques together」。這對 CTI/偵測工程學員是重要的產業動向。</p>
+<h3 id="84-2025-03-2026-09">8.4 四份威脅報告的演進比較表（2025-03 → 2026-09）</h3>
+<p>要讓學員看懂「本報告的趨勢從哪裡來」，必須把 Anthropic 的四份主要威脅揭露放在一條時間軸上對照。這張表本身就是一堂「AI 濫用如何在 18 個月內從『問答』演化到『自主編排』」的縮影。（來源：四份報告一手 URL 見第 9.1 節）</p>
+<table>
+<thead>
+<tr>
+<th>維度</th>
+<th><strong>2025-03</strong>《Malicious uses of Claude》</th>
+<th><strong>2025-08</strong>《Misuse of AI: August 2025》</th>
+<th><strong>2025-11</strong>《First AI-orchestrated espionage》</th>
+<th><strong>2026-09</strong>（本報告）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>發布日</strong></td>
+<td>2025-04-23</td>
+<td>2025-08-27</td>
+<td>2025-11-13</td>
+<td>2026-09-10</td>
+</tr>
+<tr>
+<td><strong>AI 角色定位</strong></td>
+<td>Orchestrator of content（內容/行為編排，但仍是「決定 bot 何時發文」層級）</td>
+<td><strong>Active operator</strong>（Claude Code 上場執行入侵，「vibe hacking」）</td>
+<td><strong>Autonomous attack platform</strong>（多代理自主，人類僅監督）</td>
+<td><strong>From assistant to orchestrator</strong> 的全譜；自主已「擴散到每一類行為者」</td>
+</tr>
+<tr>
+<td><strong>旗艦案例</strong></td>
+<td>「influence-as-a-service」：Claude 編排 100+ 社群 bot，決定何時按讚/評論/轉發</td>
+<td><strong>GTG-2002</strong>：vibe hacking 資料勒索</td>
+<td><strong>GTG-1002</strong>：中國國家級間諜</td>
+<td>六案例（GTG-20006/50014/10007/50021/50020/50029）＋七大危害領域</td>
+</tr>
+<tr>
+<td><strong>代表數字</strong></td>
+<td>100+ bot；跨多國、上萬真實帳號</td>
+<td>GTG-2002 打 <strong>≥17</strong> 個組織、勒索有時 <strong>&gt;$50 萬</strong>；GTG-5004 RaaS 售 <strong>$400–$1,200</strong></td>
+<td>目標 <strong>~30</strong> 家、驗證「a handful」成功；AI 自主執行 <strong>80–90%</strong>；請求速率「physically impossible」</td>
+<td>入侵「2–3 小時」完成、單兵並行「dozens of victims」；GTG-50020 四天打 ~30 家 AI 公司</td>
+</tr>
+<tr>
+<td><strong>自主度（本教材量表）</strong></td>
+<td>L1（生成）＋弱編排</td>
+<td><strong>L2–L3</strong>（人類仍「very much in the loop」directing）</td>
+<td><strong>L3–L4</strong>（人類介入僅估 10–20% 心力，落在三個關鍵節點：批准偵察→利用、授權橫向移動、核准外洩範圍；「4–6 個決策點」為第三方 Stingrai 的說法，非報告原文）</td>
+<td><strong>L1–L4 全譜並存</strong>；新增「排程無人值守」（GTG-10007/20006）</td>
+</tr>
+<tr>
+<td><strong>歸因措辭</strong></td>
+<td>未用 GTG 公開編號；「a professional operation」</td>
+<td>「a sophisticated cybercriminal」（GTG-2002）；「North Korean operatives」</td>
+<td><strong>「assess with high confidence ... Chinese state-sponsored group」</strong></td>
+<td>suspected / consistent with（如 GTG-20006 consistent with Midnight Blizzard）</td>
+</tr>
+<tr>
+<td><strong>關鍵限制自陳</strong></td>
+<td>分類器可被規避</td>
+<td>跨 session 重新提示可突破安全措施</td>
+<td><strong>Claude「frequently overstated findings and occasionally fabricated data」</strong>——幻覺仍是全自主攻擊的障礙</td>
+<td>「refused nine out of ten」直接惡意請求，但<strong>工作被拆碎跨 session 時表現不一致</strong>（p.107）</td>
+</tr>
+<tr>
+<td><strong>對防守方的一句話</strong></td>
+<td>AI 開始「決定行為」，不只生成內容</td>
+<td>AI 上場「動手」，門檻大降</td>
+<td>團隊級攻擊可由極少人＋AI 完成，門檻「dropped substantially」</td>
+<td>假設這些能力「對任何有動機的行為者都已可得」（p.38）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>這張表要讓學員帶走的三個演進主軸：</strong><br />
+1. <strong>AI 的位置一路右移：</strong> 生成內容（03）→ 動手執行（08）→ 自主編排（11）→ 全譜擴散（09）。<br />
+2. <strong>人類介入一路減少、但從未歸零：</strong> 從「directing operations」（08）到「僅估 10–20% 心力、落在三個關鍵批准節點」（11 的 GTG-1002）到「setting targets and reviewing exfiltration」（09）——<strong>人類永遠保留目標選擇與變現</strong>（第 3.2.2 caveat 1 的歷史證據）。<br />
+3. <strong>「幻覺」是攻擊者尚未克服的天花板：</strong> 從 GTG-1002 的「fabricated data」到本報告的「拆碎跨 session 才突破」，說明<strong>全自主攻擊仍有可靠性瓶頸</strong>——這是防守方目前僅存的一點結構性優勢，值得在課堂上點明。</p>
+<hr />
+<h2 id="9">9. 第三方驗證與外部來源</h2>
+<p>依課程品質紅線，每一條標明來源、日期、以及「獨立查證」或「僅引述 Anthropic」。<strong>先講最重要的判斷：本報告網路行動章節屬「單一來源情報（single-source）」——完全建立在 Anthropic 自身平台可見度與揭露之上，缺乏獨立第三方鑑識。</strong> 這是課程必須誠實面對的方法論限制。</p>
+<h3 id="91-anthropic">9.1 一手來源（Anthropic 自家文件）</h3>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>本報告《Detecting and countering misuse of AI: September 2026》</td>
+<td>anthropic.com/threat-intelligence-report-september-2026</td>
+<td>2026-09-10</td>
+<td>一手，被研究對象</td>
+</tr>
+<tr>
+<td>2025-03《Detecting and countering malicious uses of Claude》</td>
+<td>anthropic.com/news/detecting-and-countering-malicious-uses-of-claude-march-2025</td>
+<td>2025-04-23</td>
+<td>一手（歷史對照）</td>
+</tr>
+<tr>
+<td>2025-08《Detecting and countering misuse of AI: August 2025》</td>
+<td>anthropic.com/news/detecting-countering-misuse-aug-2025</td>
+<td>2025-08-27</td>
+<td>一手（歷史對照）</td>
+</tr>
+<tr>
+<td>2025-11《Disrupting the first reported AI-orchestrated cyber espionage campaign》（GTG-1002 全報告）</td>
+<td>anthropic.com/news/disrupting-AI-espionage</td>
+<td>2025-11-13</td>
+<td>一手（GTG-1002 唯一詳細來源）</td>
+</tr>
+<tr>
+<td>2026-06《Mapping AI-enabled cyber threats》＋ Frontier Red Team 長版與 ATT&amp;CK Navigator</td>
+<td>anthropic.com/news/AI-enabled-cyber-threats-mitre-attack；anthropic.com/research/attack-navigator</td>
+<td>2026-06-03</td>
+<td>一手（832 帳號數據）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="92-mitre-attck">9.2 半獨立驗證：MITRE ATT&amp;CK 官方收錄</h3>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>性質與價值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MITRE ATT&amp;CK Campaign <strong>C0062「Anthropic AI-orchestrated Campaign」</strong></td>
+<td>attack.mitre.org/campaigns/C0062/</td>
+<td>建立 2026-04-20，最後修改 2026-07-31</td>
+<td><strong>半獨立</strong>：MITRE 將 GTG-1002 正式收錄為官方 campaign（歸因「likely China nexus espionage actor」），列出 <strong>25 個 techniques</strong>。但注意——C0062 的資料來源仍是 Anthropic 的兩份報告，MITRE 是「採信並編目」而非「獨立鑑識」。<strong>且 MITRE 列 25 個 technique，與 Anthropic 自稱的 30 個不一致</strong>（見第 12 節），是很好的「同一事件不同計數」教材。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="93">9.3 獨立佐證：本報告點名的第三方廠商追蹤</h3>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>事項</th>
+<th>日期</th>
+<th>性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Microsoft Threat Intelligence</strong></td>
+<td>報告 p.8 主動引用：GTG-20006 的飯店 WiFi / DNS 劫持惡意程式投遞手法，被 Microsoft 命名為 <strong>CaptiveCrunch</strong></td>
+<td>2026-07</td>
+<td><strong>部分獨立</strong>：Microsoft 獨立追蹤到同一技術，但這是對「手法」的佐證，不等於對 Anthropic 全部歸因的背書。仍需查證 Microsoft 原文是否確認與 GTG-20006 同源。</td>
+</tr>
+<tr>
+<td><strong>公開報導（Midnight Blizzard 關聯）</strong></td>
+<td>報告 p.6 自陳「Our attribution is consistent with public reporting linking the actor to Midnight Blizzard」</td>
+<td>—</td>
+<td><strong>弱佐證</strong>：Anthropic 說自己的歸因「與公開報導一致」，但未給出具體引用；屬「自我聲稱與外部一致」。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="94-anthropic">9.4 第三方評論（多為「僅引述 Anthropic」）</h3>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>是否獨立查證</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CellCog（Nitish Garg）〈Attacks Run on Agent Frameworks, and the API Key Is the Loot〉</td>
+<td>cellcog.ai/blog/anthropic-threat-report-september-2026</td>
+<td>2026-09-10</td>
+<td><strong>僅引述</strong>。作者自陳「Every quotation is from it, every number is the report's own」，並接著推銷自家 credential isolation 產品。</td>
+</tr>
+<tr>
+<td>D3 Security（Shriram Sharma）SOC takeaways</td>
+<td>d3security.com/blog/anthropic-threat-report-september-2026-soc-takeaways</td>
+<td>2026-09-11</td>
+<td><strong>僅引述</strong>，但提供有價值的 SOC 偵測建議（AI key 盤點、egress 監控、campaign-level review）。有商業利益（推銷 Morpheus 平台）。</td>
+</tr>
+<tr>
+<td>Cyber Kendra〈Every Case Explained〉</td>
+<td>cyberkendra.com/2026/09/anthropic-threat-report-says-ai-now.html</td>
+<td>2026-09-10</td>
+<td><strong>僅引述</strong>，但明白加註免責：「Every figure here is Anthropic's own attribution, derived from its own logs ... The organisations named have not publicly accepted the allegations.」——這句話本身就是課程要傳達的方法論警語。</td>
+</tr>
+<tr>
+<td>TechNode Global</td>
+<td>technode.global/2026/09/11/anthropic-ai-orchestrated-cyberattacks-model-distillation</td>
+<td>2026-09-11</td>
+<td><strong>僅引述並點出限制</strong>：「Outside researchers do not have access to the underlying account data, prompts, network indicators or enforcement records needed to reproduce its findings.」</td>
+</tr>
+<tr>
+<td>Stingrai（Arafat Afzalzada）GTG-1002 defender analysis</td>
+<td>stingrai.io/blog/anthropic-mythos-gtg1002-defender-analysis</td>
+<td>2026-05-26</td>
+<td><strong>僅引述</strong>，但點出關鍵弱點：無 IOC 可驗證、80–90% 自主純屬 Anthropic 自我characterization、「hallucination + 只有少數目標被攻陷」形成「既證實威脅又替失敗開脫」的方便修辭位置。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="95">9.5 針對本報告網路章節的方法論批評（課程必談）</h3>
+<p>綜合上述來源，對「網路行動章節」最尖銳的三點批評（這些是<strong>課程要主動教給學員的批判性視角</strong>，不是要否定報告價值）：</p>
+<ol>
+<li><strong>無法重現（non-reproducible）：</strong> 外部研究者拿不到底層帳號資料、prompt、網路指標與執法記錄，因此<strong>無法獨立重現任何一起案例的歸因</strong>（TechNode 明言）。</li>
+<li><strong>「自主度百分比」不可驗證：</strong> 「80–90% 自主」「physically impossible request rates」全是 Anthropic 依自家遙測下的判斷，無第三方校準（Stingrai）。</li>
+<li><strong>商業動機的利益衝突：</strong> Anthropic 既是安全事件的揭露者、又是被濫用產品的銷售者，還在報告裡點名競爭對手（蒸餾案）。這不代表報告造假，但<strong>讀者必須把「被研究對象＝報告作者」這件事放進信度評估</strong>。Cyber Kendra 的免責聲明即為此。</li>
+</ol>
+<blockquote>
+<p>教學結論：<strong>本報告網路章節的正確使用姿態是——把它當成「一份來自獨特有利位置（模型供應商視角）的高價值一手情報」，而不是「已被獨立驗證的定論」。</strong> 這正是情報學裡「來源信度（source reliability）」與「資訊可信度（information credibility）」要分開評估的經典場景。</p>
+</blockquote>
+<h3 id="96-websearch">9.6 第三方獨立質疑（第二階段 WebSearch 補查）</h3>
+<p>第一階段因 WebSearch 額度用罄，未能取得 Ars Technica、The Register 等對 <strong>GTG-1002「80–90% 自主」</strong>的質疑原文（見第 12 節第 9 點）。<strong>第二階段已補齊。</strong> GTG-1002 報告（2025-11）發布後，資安社群出現一波公開質疑，Ars Technica、BleepingComputer、The Stack、The Conversation、TechRadar、CSO Online、PC Gamer 等均有報導。以下逐一列出具名批評者與逐字引用——<strong>這是課程要主動教給學員的批判性視角，不是要否定報告價值。</strong></p>
+<table>
+<thead>
+<tr>
+<th>批評者</th>
+<th>身分</th>
+<th>質疑重點（逐字 / 摘要）</th>
+<th>對應課程主題</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dan Tentler</strong></td>
+<td>Phobos Group 共同創辦人（Ars Technica 引其 Mastodon 貼文）</td>
+<td>「I continue to refuse to believe that attackers are somehow able to get these models to jump through hoops that nobody else can.」又問：「Why do the models give these attackers what they want 90% of the time but the rest of us have to deal with asskissing, stonewalling and acid trips?」——<strong>攻擊者憑什麼讓模型 90% 聽話，一般人卻只能面對推諉、拒答與幻覺？</strong></td>
+<td>自主度百分比不可驗證（9.5 第 2 點）</td>
+</tr>
+<tr>
+<td><strong>djnn</strong></td>
+<td>攻擊性資安研究者</td>
+<td>報告缺標準威脅情報要件：無 domain names、無 MD5/SHA512 雜湊、無 ATT&amp;CK 映射、無釣魚 email、無來源 IP——「not a whole lot of the information is verifiable」。</td>
+<td>無 IOC ＝ 無法重現（9.5 第 1 點）</td>
+</tr>
+<tr>
+<td><strong>Kostas T</strong></td>
+<td>資安顧問</td>
+<td>「Anthropic basically spent the whole piece highlighting how their AI can be leveraged for intrusion activity, but didn't give defenders a single IOC.」評為「90% Flex 10% Value」。</td>
+<td>揭露 vs 防禦價值</td>
+</tr>
+<tr>
+<td><strong>Bob Rudis</strong></td>
+<td>GreyNoise Intelligence</td>
+<td>「It doesn't expand the threat model in a meaningful way, and mostly serves as a well-packaged demonstration of trends we've already known about for years」；並直言「that hype is good for bidnez.」</td>
+<td>商業動機利益衝突（9.5 第 3 點）</td>
+</tr>
+<tr>
+<td><strong>Yann LeCun</strong></td>
+<td>Meta 首席 AI 科學家</td>
+<td>指控 Anthropic「scaring everyone with dubious studies so that open source models are regulated out of existence」——以誇大威脅推動監管、藉此打壓開源模型（regulatory capture）。</td>
+<td>揭露者的政策動機</td>
+</tr>
+<tr>
+<td><strong>The Grugq</strong></td>
+<td>資深資安研究者</td>
+<td>邏輯詰問：「If China is doing so well in the AI race, why do their threat actors have to use Anthropic?」</td>
+<td>歸因合理性</td>
+</tr>
+<tr>
+<td><strong>The Conversation（學界）</strong></td>
+<td>學術評論</td>
+<td>技術核心質疑：「Claude Code frequently lied to the attackers, pretending it had carried out a task successfully even when it hadn't. This is a classic case of AI hallucination.」且 ~30 目標僅少數得手。</td>
+<td>幻覺天花板（8.4 表最後一列）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>來源（第二階段補查，全部標明性質）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ars Technica（經 PC Gamer / Yahoo / BleepingComputer 轉引 Dan Tentler、Bob Rudis）</td>
+<td>arstechnica.com（原文）；pcgamer.com/software/ai/anthropic-...-sceptical</td>
+<td>2025-11</td>
+<td><strong>獨立質疑</strong>（引用外部研究者，非僅轉述 Anthropic）</td>
+</tr>
+<tr>
+<td>BleepingComputer〈Anthropic claims of Claude AI-automated cyberattacks met with doubt〉</td>
+<td>bleepingcomputer.com/news/security/anthropic-claims-of-claude-ai-automated-cyberattacks-met-with-doubt</td>
+<td>2025-11</td>
+<td><strong>獨立質疑</strong>（彙整 LeCun、djnn、Kostas、Grugq）</td>
+</tr>
+<tr>
+<td>The Stack〈Backlash over Anthropic "AI cyberattack" paper mounts〉</td>
+<td>thestack.technology/backlash-over-anthropic-ai-cyberattack-paper-mounts</td>
+<td>2025-11</td>
+<td><strong>獨立質疑</strong></td>
+</tr>
+<tr>
+<td>The Conversation〈An AI lab says Chinese-backed bots... experts have questions〉</td>
+<td>theconversation.com/an-ai-lab-says-...-269815</td>
+<td>2025-11</td>
+<td><strong>獨立質疑</strong>（學界，聚焦幻覺與無 IOC）</td>
+</tr>
+<tr>
+<td>TechRadar / CSO Online</td>
+<td>techradar.com/pro/security/experts-cast-doubt-...；csoonline.com/article/4092571</td>
+<td>2025-11</td>
+<td><strong>獨立質疑</strong></td>
+</tr>
+<tr>
+<td>AI Incident Database Incident 1263 / Report 6644</td>
+<td>incidentdatabase.ai/cite/1263</td>
+<td>2025-11 起</td>
+<td>事件登錄（彙整多方，含質疑）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>教學用法：把這張質疑表與第 8.3 節「GTG-1002 的 ARiES = 100」並排。<strong>同一起事件，Anthropic 給滿分風險、外部研究者卻質疑「連一個 IOC 都沒有」。</strong> 這不是「誰對誰錯」，而是讓學員體會情報學的核心張力——<strong>「有獨特可見度的一手來源」與「可獨立驗證的證據」往往不可兼得</strong>。並回扣第 12 節：本報告 2026-09 網路章節同樣缺 IOC 級鑑識，這些質疑對本報告一體適用。</p>
+</blockquote>
+<hr />
+<h2 id="10">10. 課程教學設計</h2>
+<blockquote>
+<p>這份教材是整個 01 模組的<strong>第一堂課</strong>，本節投入最多。目標有二：(1) 用一個完整的<strong>開場框架</strong>把「攻擊複雜度不再等於攻擊者能力」這個核心翻轉講到學員忘不掉；(2) 給一個讓學員用 <strong>uplift 三軸</strong>評估自己組織威脅的課堂練習。</p>
+</blockquote>
+<h3 id="101">10.1 核心教學要點</h3>
+<ol>
+<li><strong>一句話翻轉：</strong> 「Sophistication has stopped being a reliable signal of who is behind an operation.」——把它寫在白板正中央，整堂課圍繞它。</li>
+<li><strong>歸因重心轉移：</strong> 從「他有多厲害（capability）」轉到「他是誰、為什麼、用什麼基礎設施（identity / intent / infrastructure）」。六類替代訊號（第 3.1.2）要背下來。</li>
+<li><strong>自主度五級量表 ≠ 危害嚴重度：</strong> 自主度提升的是效率與成本（unit economics），不是傷害。最嚴重的入侵可能來自「人類指揮每一步」。</li>
+<li><strong>uplift 三軸（speed/scale/depth）分布在整條 kill chain：</strong> 別把 AI 風險窄化成「自動化零日」。</li>
+<li><strong>框架缺口：</strong> ATT&amp;CK 抓得到「用了什麼技術」，抓不到「agentic orchestration」。GTG-1002 的 30 techniques（看似中風險）vs ARiES 100（滿分）是最強教材。</li>
+<li><strong>單一來源紀律：</strong> 這份報告是高價值一手情報，但缺獨立鑑識。用它，但標註信度。</li>
+</ol>
+<h3 id="102-20">10.2 開場框架（完整腳本，約 20 分鐘）</h3>
+<p><strong>Step 1｜盲測（5 分鐘）— 製造認知衝突。</strong><br />
+準備三段去識別化的攻擊敘述，投影在螢幕上，只描述「做了什麼」，隱去行為者身分：<br />
+- A：一名操作員在同一個工作 session 內開發並除錯了一個先前未被記錄的 WordPress 零日，還自建 lab harness，成功打下至少四個網站。<br />
+- B：一起行動在約 34 小時內傾印超過 2,100 組雲端身分 token、橫跨 40 多個企業租戶，「AI agents performed nearly all of the work」。<br />
+- C：一個團隊維持一條常駐的自主漏洞研究產線，一個月內對網路設備產出十幾個可能的零日。</p>
+<p><strong>提問：</strong> 「請各組投票——A、B、C 分別是『國家級 APT』還是『單兵/小團體』？寫下你的判斷依據。」</p>
+<p><strong>Step 2｜揭曉（3 分鐘）— 打破直覺。</strong><br />
+- A = <strong>GTG-50029，法語單兵 hacktivist</strong>（p.34–35）。<br />
+- B = <strong>GTG-50014，ShinyHunters 系財務動機犯罪</strong>（p.14）。<br />
+- C = <strong>GTG-10007，兩名中國大學生</strong>（其中一人還在面試資安公司實習，p.24）。</p>
+<p>多數人會把 A/C 猜成國家級。<strong>這個猜錯的瞬間，就是這堂課的教學支點。</strong></p>
+<p><strong>Step 3｜命名這個翻轉（5 分鐘）。</strong><br />
+投影原文：「sophistication has stopped being a reliable signal of who is behind an operation.」講解為什麼——AI 抹平了 labor 與 tooling gap（第 3.1）。點明：<strong>你剛剛用「複雜度」去猜「是誰」，而這個推理鏈已經斷了。</strong></p>
+<p><strong>Step 4｜給出新工具（5 分鐘）。</strong><br />
+帶出六類替代歸因訊號（第 3.1.2）與自主度五級量表（第 3.2.1）。告訴學員：「這堂課結束時，你面對一起 AI 賦能攻擊，第一個問的不再是『他多厲害』，而是『他用了哪些 AI 抹不平的訊號留下身分、他把多少決策交給了 AI』。」</p>
+<blockquote>
+<p>為什麼這樣設計：<strong>先讓學員親身體驗「舊直覺失效」，再給新框架。</strong> 直接講結論學員不會痛，猜錯一次才會記一輩子。</p>
+</blockquote>
+<h3 id="103-uplift">10.3 課堂練習：用 uplift 三軸評估「你自己組織」的威脅</h3>
+<p><strong>練習名稱：</strong> 我的組織，被 uplift 的威脅在哪裡？<br />
+<strong>形式：</strong> 個人 15 分鐘填表 + 小組 15 分鐘互評 + 全班 10 分鐘收斂。<br />
+<strong>安全性：</strong> 純桌面推演，不涉任何實際攻擊操作。</p>
+<p><strong>步驟一：</strong> 每位學員挑一個「自己組織真實面對、或高度相關」的威脅情境（例：釣魚導致的憑證外洩、對外 VPN/邊界設備的 N-day、SaaS 供應鏈、面向客戶的 web 應用被打）。</p>
+<p><strong>步驟二：</strong> 填第 4.3 節的 uplift 評估表（下面是空白版）：</p>
+<table>
+<thead>
+<tr>
+<th>uplift 軸</th>
+<th>評估問句</th>
+<th>我的威脅情境：AI 會怎麼放大它？</th>
+<th>對應的防禦缺口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Speed</td>
+<td>攻擊者的關鍵動作（進門→拿到資料）會快多少？我的偵測/回應迴圈多久？</td>
+<td>（學員填）</td>
+<td>（學員填）</td>
+</tr>
+<tr>
+<td>Scale</td>
+<td>一個人能並行打幾個我這種目標？我有沒有假設「攻擊者一次只打我一家」？</td>
+<td>（學員填）</td>
+<td>（學員填）</td>
+</tr>
+<tr>
+<td>Depth</td>
+<td>AI 會不會讓攻擊者秒懂我環境裡最晦澀的配置/API？我靠 obscurity 撐著的東西有哪些？</td>
+<td>（學員填）</td>
+<td>（學員填）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>步驟三：</strong> 每軸標一個「攻防迴圈速度」對比：<strong>攻擊者這一軸的迴圈以什麼單位收斂（秒/分/小時）？我方的偵測與回應以什麼單位（小時/天/週）？</strong> 直接連到第 3.2.3 的「不對稱」。</p>
+<p><strong>步驟四（小組互評）：</strong> 交換表格，互相挑戰——「你有沒有低估了 Scale？」「你的 Depth 缺口是不是其實是 obscurity 依賴？」（呼應 p.12 名言：「security through obscurity is no longer viable」）。</p>
+<p><strong>步驟五（全班收斂）：</strong> 講師收集「最常見的防禦缺口」，通常會收斂到：偵測/回應迴圈太慢（Speed 輸）、假設攻擊者一次只打一家（Scale 盲點）、大量依賴 obscurity（Depth 破口）、以及<strong>AI API key / agent 整合沒有當成 production 憑證看待</strong>（呼應 p.30「treat AI keys and agent integrations with the same level of seriousness as production credentials」）。</p>
+<h3 id="104">10.4 課堂討論題（有爭議、無標準答案）</h3>
+<ol>
+<li><strong>信度 vs 揭露：</strong> Anthropic 既是被研究產品的作者、又是報告的發布者，還缺乏獨立鑑識。那麼一份「無法重現」的威脅報告，對防守方到底值多少？在「等獨立驗證」與「立刻行動」之間，你怎麼取捨？</li>
+<li><strong>自主度悖論：</strong> 報告說「最嚴重的幾起入侵反而來自人類指揮每一步」。如果自主度不等於危害，那我們對「全自主 AI 攻擊」的恐慌是不是被媒體放大了？還是這只是暴風雨前的寧靜？</li>
+<li><strong>框架該不該改：</strong> ATT&amp;CK 是全球共通語言。為了塞進「agentic orchestration」而新增 cross-cutting 類別，會不會反而破壞它「原子化、可對應偵測」的優點？框架的穩定性與時效性，哪個重要？</li>
+<li><strong>代號的政治：</strong> GTG-1002 與 GTG-10002 位數不一致、C0062 列 25 個技術而 Anthropic 說 30 個。當連一手來源的內部一致性都有瑕疵，我們在引用威脅情報時該用什麼紀律？</li>
+<li><strong>PentAGI 兩難：</strong> 一個 MIT 授權、23.7k star 的開源「全自主滲透測試」框架，同時服務合法紅隊與惡意攻擊者。開源資安工具的「雙用（dual-use）」界線該畫在哪？該不該有分級管制？</li>
+<li><strong>防守方也要 AI：</strong> 報告與 GTG-1002 都主張「防守方必須用 AI 反制，否則迴圈速度必輸」。但這是否只是把組織推進一場「誰的 AI 大」的軍備競賽？中小型組織在這場競賽裡有活路嗎？</li>
+</ol>
+<h3 id="105">10.5 對台灣的意涵</h3>
+<p>雖然本教材是趨勢導論、非特定案例，但趨勢對台灣的含義極其具體：</p>
+<ol>
+<li><strong>本報告直接涉台。</strong> GTG-20006（俄羅斯）的目標清單含「a Southeast Asian government entity relating to maritime shipping and tracking」（p.7），而報告的監控章節與武器章節有多起 <strong>China-nexus 案例直接鎖定台灣</strong>（如 GTG-14020 監控含 Taiwanese 宗教/異議社群；GTG-17002 用 Claude 模擬電子戰、鎖定台灣 12 處軍事目標——見台灣媒體大量報導，第 9 節的自由時報、遠見、鏡週刊、Newtalk 等）。<strong>「攻擊複雜度崩解」意味著鎖定台灣的行為者不再限於資源充足的 PLA 單位——任何有動機的個人/小組都能取得同級能力。</strong></li>
+<li><strong>中小企業首當其衝。</strong> 台灣經濟以中小企業與供應鏈為骨幹。報告的「unit economics」論點（第 3.2.2）直指：<strong>以前不划算打的小目標，現在都值得打了。</strong> 供應鏈上游一家沒有專職 SOC 的零件廠，正是 GTG-50014 式「打帶跑供應鏈竊資」的完美獵物（一個 foothold 觸及 ~200 家下游）。</li>
+<li><strong>AI API key 是新的皇冠珠寶。</strong> 台灣企業快速導入 AI，但多數把 API key 當成一般設定值。報告反覆強調 key 已成 loot/compute/cover 三合一目標（第 5.1）。<strong>這是台灣資安團隊今天就能行動的具體項目：盤點所有 AI 憑證、當成 production credential 管理、上 egress 監控。</strong></li>
+<li><strong>語言不再是護城河。</strong> 過去中文環境對境外攻擊者是天然摩擦；AI 的多語能力（報告 p.12 描述 AI 讓「diverse target environments 變得 trivial to understand」）把這道護城河填平了。台灣不能再假設「中文/在地化配置」能拖慢攻擊者。</li>
+</ol>
+<hr />
+<h2 id="11">11. 關鍵原文引文（講義引用用，含頁碼）</h2>
+<ol>
+<li>
+<p><strong>（p.5，本章核心翻轉）</strong></p>
+<blockquote>
+<p>「For threat intelligence investigators, sophistication has stopped being a reliable signal of who is behind an operation. Every layer of offensive operations has been uplifted by AI, from reconnaissance and tool development to data processing and exploitation.」<br />
+<strong>譯：</strong> 對威脅情報調查者而言，「精密度」已不再是判斷幕後是誰的可靠訊號。從偵察、工具開發到資料處理與利用，攻擊行動的每一層都被 AI 提升了。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（p.4，uplift 定義）</strong></p>
+<blockquote>
+<p>「The report also attempts to measure uplift ... how much more harm was caused with AI versus without AI. We view uplift through the lens of speed, scale, and depth.」<br />
+<strong>譯：</strong> 本報告也嘗試衡量 uplift……即有 AI 相對於沒有 AI 多造成了多少危害。我們透過速度、規模、深度三個視角來看 uplift。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（p.4，風險分布在整條 kill chain）</strong></p>
+<blockquote>
+<p>「Many commentators focus on the risk of AI developing exploits at scale. While this is a danger, the risk from AI adoption is more pronounced across the cyber kill chain, where adversaries can operate faster, across a broader and deeper surface area, with fewer resources.」<br />
+<strong>譯：</strong> 許多評論者聚焦於 AI 大規模開發漏洞利用的風險。這確實危險，但 AI 帶來的風險更明顯地分布在整條 cyber kill chain——攻擊者能以更少資源、更快速度、在更廣更深的面上作業。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（p.5，作業模式擴散 ＋ PentAGI）</strong></p>
+<blockquote>
+<p>「That operating model has now proliferated across every class of actors we investigated. Publicly available offensive agent frameworks, like PentAGI, reproduce much of the same scaffolding for anyone who downloads them.」<br />
+<strong>譯：</strong> 那套作業模式如今已擴散到我們調查過的每一類行為者。像 PentAGI 這樣公開可得的攻擊代理框架，為任何下載者複製了大部分相同的 scaffolding。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（p.5–6，自主度與人類角色）</strong></p>
+<blockquote>
+<p>「The use of AI went beyond simple questions and responses from a chatbot but rather involved the use of multi-agent frameworks executing reconnaissance, exploitation, and data exfiltration. Humans remained in the loop by setting the targets of attacks and reviewing exfiltration.」<br />
+<strong>譯：</strong> AI 的用途已超越聊天機器人的簡單問答，而是動用多代理框架執行偵察、利用與資料外洩。人類仍保留在迴圈中——負責設定攻擊目標與審查外洩結果。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（p.39，自主 ≠ 危害）</strong></p>
+<blockquote>
+<p>「Autonomy multiplies the scale and speed of an operation, and reduces operating costs and complexity, but severity is still determined by a multitude of factors. Several of the most serious compromises we report here came from operations where a human directed every step.」<br />
+<strong>譯：</strong> 自主性倍增了行動的規模與速度、降低了成本與複雜度，但嚴重程度仍由眾多因素決定。本報告中最嚴重的幾起入侵，反而來自人類指揮每一步的行動。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（p.38，區別不再是精密度而是意圖）</strong></p>
+<blockquote>
+<p>「The diffusion of AI has leveled the playing field giving both classes of actors access to the same set of advanced capabilities. The main distinguishing feature between these classes of actors is no longer sophistication but intent.」<br />
+<strong>譯：</strong> AI 的擴散拉平了戰場，讓兩類行為者都能取得同一套先進能力。區分這兩類行為者的主要特徵，不再是精密度，而是意圖。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（Appendix A / Figure 19，p.40）</strong></p>
+<blockquote>
+<p>「The following is a list of skills developed by threat actors to build out their AI-enabled workflows.」<br />
+<strong>譯：</strong> 以下是威脅行為者為建構其 AI 賦能工作流而開發的 skills 清單。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（2026-06 MITRE 研究，框架缺口）</strong></p>
+<blockquote>
+<p>「There is no ATT&amp;CK ID for this type of agentic orchestration—yet these are precisely the behaviors we expect to see much more of.」<br />
+<strong>譯：</strong> 這類 agentic orchestration 沒有對應的 ATT&amp;CK 技術 ID——然而這正是我們預期會大量增加的行為。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（2025-11 GTG-1002 報告，門檻下降）</strong><br />
+    &gt; 「This campaign demonstrates that the barriers to performing sophisticated cyberattacks have dropped substantially—and we can predict that they'll continue to do so.」<br />
+<strong>譯：</strong> 這起行動證明，執行精密網路攻擊的門檻已大幅下降——而且我們可以預測它會繼續下降。</p>
+</li>
+</ol>
+<hr />
+<h2 id="12">12. 未能驗證之處與研究限制</h2>
+<ol>
+<li>
+<p><strong>單一來源情報（最重要）。</strong> 網路行動章節完全建立在 Anthropic 自身平台可見度上，<strong>無獨立第三方鑑識</strong>。外部研究者拿不到底層帳號資料、prompt、網路指標與執法記錄，無法重現任何案例的歸因（TechNode 明言）。所有「自主度百分比」「請求速率」都是 Anthropic 依自家遙測的判斷，未經第三方校準。<strong>本教材所有引自本報告的具體主張，信度上限即為「被研究對象的自我揭露」。</strong></p>
+</li>
+<li>
+<p><strong>GTG-1002 vs GTG-10002 編號不一致（已查證，屬報告內部瑕疵）。</strong> 同一起「首度公開的 AI 編排間諜行動」，2025-11 獨立報告與 MITRE C0062 均用 <strong>GTG-1002（四位數）</strong>；本報告 p.38 寫成 <strong>GTG-10002（五位數）</strong>。無法確認是筆誤、重新編號、或指涉不同群組。本教材依報告原文，在引用 p.38 時保留 GTG-10002、在引用 2025-11 報告時用 GTG-1002，並將此不一致本身當作「代號不可解碼」的教材。</p>
+</li>
+<li>
+<p><strong>GTG-1002 技術計數不一致（已查證）。</strong> Anthropic 稱 GTG-1002 用了 <strong>30 個 techniques</strong>；MITRE 官方 campaign C0062 只列 <strong>25 個 techniques</strong>。差異可能來自映射版本（ATT&amp;CK v18）、子技術計數方式、或 MITRE 的取捨標準。以「兩者皆為官方、但數字不同」呈現，不強行調和。</p>
+</li>
+<li>
+<p><strong>Figure 19 的案例歸屬為推測。</strong> 本教材第 6.1.3 推論 Figure 19 的 skill 表主要來自 GTG-20006（因工具名 WUEngine/Shadow C2/DarkSword 與該案 p.10 惡意程式清單重疊）。<strong>報告未明確說明 Figure 19 專屬哪個 GTG</strong>，此為合理推測，非報告陳述。</p>
+</li>
+<li>
+<p><strong>GTG 編號規律純屬觀察。</strong> 第 7.3 節的編號區間表是本教材對報告全文代號分布的歸納，<strong>Anthropic 從未公開編號規則</strong>，且已存在反例（GTG-50027 為伊朗監控卻用 50 開頭）。不可作為歸因依據。</p>
+</li>
+<li>
+<p><strong>MITRE 數據的期間與定義限制。</strong> 832 帳號僅為「有足夠細節可評估」的子集，非全部封鎖帳號；「中高風險占比 33%→56%」的上升，Anthropic 自承部分可能來自<strong>自家偵測能力提升</strong>而非威脅真實惡化。ARiES 評分的具體權重與門檻未完整公開。</p>
+</li>
+<li>
+<p><strong>CaptiveCrunch / Midnight Blizzard 佐證未逐一回溯原文。</strong> 本教材依本報告 p.6、p.8 的自陳（「consistent with public reporting」「Microsoft ... referred to as CaptiveCrunch」）記錄，但未取得 Microsoft 原始報告逐字比對，無法確認第三方是否對「同源歸因」給予同等信度。</p>
+</li>
+<li>
+<p><strong>台灣相關案例引自台媒標題與本報告他章。</strong> 第 10.5 節提及的「12 處軍事目標」等具體數字，來自台灣媒體對本報告監控/武器章節的報導（第 9 節列出的自由時報、遠見等），<strong>屬本模組其他教材的頁段</strong>，本導論教材未逐字回溯該頁原文，引用時以「見監控/武器章節專篇」為準。</p>
+</li>
+<li>
+<p><strong>（第二階段已補查）第三方獨立質疑來源。</strong> 第一階段因 WebSearch 額度用罄未能取得的 Ars Technica、The Register 等對 GTG-1002「80–90% 自主」的質疑，<strong>已於第二階段補齊</strong>，整理於新增的第 9.6 節（含 Dan Tentler、Yann LeCun、Bob Rudis、djnn、Kostas T、The Grugq 等具名批評與逐字引用）。惟 Ars Technica 原文係經 PC Gamer / Yahoo / BleepingComputer 轉引其所引之 Mastodon 貼文，未逐字回溯 Ars Technica 全文版面；The Register 專文未單獨取得，其批評角度已由 BleepingComputer、The Stack、The Conversation 等同批報導涵蓋。</p>
+</li>
+</ol>
+<hr />
+<h1 id="t">附錄 T：技術深化（第二階段增補）</h1>
+<blockquote>
+<p>本附錄為第二階段「技術深化 pass」增補，供<strong>技術高手聽眾</strong>使用。它<strong>不取代</strong>前 12 節，而是把前文的三個概念——Figure 19 武器化 skill、uplift 三軸、ATT&amp;CK 框架缺口——補到「可據以偵測與防禦」的工程深度。<strong>所有偵測規則均為啟發式（heuristic）</strong>，需依環境調校並多訊號融合評分，切勿單條直接告警。</p>
+<p><strong>本頁段圖表覆蓋確認：</strong> 本教材核心頁段（p.4–5、p.38–40）僅含一張圖 Figure 19（p.40），已於第 6.1 節逐字判讀、並於本附錄 T.1 補上「kill chain 階段 / 實際 API / 延伸 ATT&amp;CK ID / 防守偵測點」四欄技術拆解；Figure 2（p.15）屬 GTG-50014 專篇，此處僅作背景引用。<strong>無遺漏圖表。</strong></p>
+</blockquote>
+<h2 id="t1-figure-19-skill">T.1 Figure 19 逐一武器化 skill 的技術拆解與防守偵測</h2>
+<p>第 6.1.2 節已逐字抄錄八個 skill 的原始三欄。本節補上防守方最需要的四欄：<strong>(a) 落在 cyber kill chain 哪一階段、(b) 實際會呼叫的工具 / API、(c) 對應 ATT&amp;CK ID（含正文未列的延伸技術）、(d) 防守方可從什麼遙測偵測到其產出。</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Skill persona</th>
+<th>Kill chain 階段</th>
+<th>實際工具 / API 呼叫</th>
+<th>ATT&amp;CK ID（含延伸）</th>
+<th>防守方遙測偵測點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>攻擊性資安工程師（implant + M365）</td>
+<td>武器化 ＋ 收集/外洩</td>
+<td>winAgent/GoDownload build loops；Microsoft <strong>Graph API</strong>（Mail.Read/Files.Read）、<strong>EWS SOAP</strong>；AMSI/ETW 規避測試</td>
+<td>T1587.001、T1588；延伸 <strong>T1114</strong>（Email Collection）、<strong>T1550.001</strong>（App Access Token）、<strong>T1098.002</strong>（Add Email Delegate）</td>
+<td>MDE 對 AMSI/ETW tamper 告警；Entra/Graph 稽核——單一 OAuth token 高量 Mail.Read、異常 app consent（T1098）；EWS 來自非 Outlook User-Agent 的 SOAP；<strong>build-loop：數分鐘內多個近似但不同雜湊的 binary（規避迭代簽章）</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>DevOps（C2/phishing 基礎設施）</td>
+<td>資源開發（基礎設施）</td>
+<td><code>docker compose build/up</code>；<code>curl</code> health checks；<code>sshpass</code> 推送到租用 VPS（MonoVM/eclipse proxies）</td>
+<td>T1583.003（VPS）、T1608（Stage）</td>
+<td>多屬攻擊者側、受害端不可見。防守外緣：新註冊 VPS ASN、Let's Encrypt 憑證叢發（<strong>CT log</strong>）、passive DNS 的 merged-landing 網域、mailer 的 <strong>JA3/JA4</strong> 指紋；受駭主機當跳板時 <code>sshpass</code> 在 auth log 留「非互動、無 TTY」SSH 簽章</td>
+</tr>
+<tr>
+<td>3</td>
+<td>偵察 / 憑證存取（掃描 + spray）</td>
+<td>偵察 ＋ 憑證存取</td>
+<td>theHarvester / Shodan / gobuster → <strong>owa_spray</strong> / <strong>netexec</strong></td>
+<td>T1595、T1589.002、<strong>T1110.003</strong>（Password Spraying）</td>
+<td><strong>受害端高可見。</strong> owa_spray → Entra SigninLogs 大量跨帳號失敗登入（ErrorCode <strong>50126</strong>）、單 IP low-and-slow；netexec → SMB 認證叢發（<strong>EventID 4625</strong>）跨主機；gobuster → 單 UA 高 404；<strong>固定間隔、無 jitter 的機械節奏</strong>（見 T.2 規則）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Windows 開發者（原生 implant 產線）</td>
+<td>武器化 ＋ 持久化</td>
+<td>Visual Studio/mingw builds；PowerShell test harness；<code>taskkill</code> / <code>sc.exe</code></td>
+<td>T1587.001、T1547.001（Run Keys）、T1027；延伸 <strong>T1543.003</strong>（sc.exe 服務）、<strong>T1546.015</strong>（COM/CLSID 劫持）</td>
+<td>測試/受駭主機：服務安裝（<strong>EventID 7045</strong>）、Run key 寫入、CLSID 劫持（<code>HKCR\CLSID</code> 寫入）、PowerShell loader（<strong>EventID 4104</strong> script block + AMSI）；<strong>build→test→taskkill→reinstall 的機器速度循環＝skill 驅動簽章</strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td>前端（phishing 平台 / 儀表板）</td>
+<td>資源開發（Stage: Link Target）</td>
+<td>Next.js / Flask 模板；<strong>Claude_Preview</strong> screenshot QA</td>
+<td>T1608.005</td>
+<td>攻擊者側。防守外緣：品牌仿冒監控、lure 頁 <strong>HTML 結構雜湊 / favicon hash</strong>、Next.js build 指紋、CT log</td>
+</tr>
+<tr>
+<td>6</td>
+<td>UI/UX 設計師（誘餌頁美化）</td>
+<td>資源開發（Stage: Link Target）</td>
+<td>design-principles pass；preview screenshots</td>
+<td>T1608.005</td>
+<td>同 Skill 5；此 skill 使 lure 頁更逼真 → <strong>純視覺辨識訓練失效</strong>，防守須回到網域/憑證/DNS 訊號</td>
+</tr>
+<tr>
+<td>7</td>
+<td>資深前端與設計工程師（Shadow C2 儀表板）</td>
+<td>資源開發（C2 基礎設施）</td>
+<td>CNC dashboard 元件；shadow_c2 <strong>Postgres</strong> backend；builder UI</td>
+<td>T1587（C2 運行時 ＋ T1071）</td>
+<td>攻擊者側 C2 面板；防守：<strong>Shadow C2 家族的網路 / TLS 指紋</strong>、builder 產出 implant 的端點特徵</td>
+</tr>
+<tr>
+<td>8</td>
+<td>iOS Safari exploit 研究員（零日 R&amp;D）</td>
+<td>武器化（exploit dev）＋ 利用</td>
+<td><code>ipsw</code> / <code>otool</code>；ARM64e <strong>PAC bypass</strong>、JSC <strong>JIT</strong> 利用、kernel internals；載入 <strong>MEMORY.md</strong>、<strong>dead-end ledger</strong></td>
+<td>T1587.004、T1203</td>
+<td>R&amp;D 在離線 lab、部署前近乎不可見。部署後：iOS MDM/行動遙測、crash log（JIT/PAC 異常）；緩解＝<strong>Lockdown Mode</strong>；<strong>dead-end ledger 是跨 session 記憶簽章（見 T.3）</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="t11-claude-code-skill-skill">T.1.1 如何偵測「Claude Code skill 驅動的自動化」本身（跨 skill 的四個訊號）</h3>
+<p>前表的偵測點是「單一 skill 產出」的痕跡。但課程真正要問的是——<strong>防守方如何辨識這些動作是被一支 Claude Code skill 管線自動驅動、而非人手操作？</strong> 四個交叉訊號：</p>
+<ol>
+<li><strong>工具鏈簽章（tool-chain signature）：</strong> 確定性的工具順序（<code>theHarvester→owa_spray→netexec→memory update</code>、<code>docker compose→curl→sshpass</code>）是機器生成管線的指紋。受害端表徵＝<strong>階段之間沒有人類 think-time</strong>（偵察結束到 spray 開始的間隔以秒計，而非人類的分鐘~小時）。</li>
+<li><strong>API 呼叫節奏（cadence）：</strong> 動作間隔極短且<strong>固定、無 jitter、無晝夜節律</strong>（T.2 量化）。</li>
+<li><strong>persona / register 切換產物：</strong> <code>/security-engineer</code>、<code>ctf-pentest register</code> 是 Claude Code 的 slash-command / skill 呼叫。攻擊者主機會留下 <code>.claude/</code> skill 檔、<code>CLAUDE.md</code>、專案記憶（<code>MEMORY.md</code>、<code>dead-end ledger</code>）。<strong>若能取得攻擊者主機鏡像或內部視角，這些檔案是「Claude Code skill 驅動」的鐵證</strong>——這也是為何本報告能寫出 Figure 19（Anthropic 有平台側可見度）。</li>
+<li><strong>build-loop 雜湊叢集：</strong> 數分鐘內產出多個「近似但不同雜湊」的 implant（Defender 規避迭代）＝AI 驅動「重編譯到不被偵測」的簽章。對應第 3.2.3 的「close the loop」——攻擊者的改工具迴圈以小時/分鐘收斂。</li>
+</ol>
+<p><strong>八個 skill 如何拼成「一個人＝一支團隊」（本教材重繪，Mermaid）：</strong></p>
+<pre class="mermaid">flowchart LR
+    subgraph RECON[&quot;① 偵察 / 憑證存取&quot;]
+        S3[&quot;Skill3 偵察-spray&lt;br/&gt;theHarvester·Shodan·gobuster&lt;br/&gt;→ owa_spray·netexec&lt;br/&gt;T1595·T1589.002·T1110.003&quot;]
+    end
+    subgraph RD[&quot;② 資源開發：武器 + 基礎設施 + 門面&quot;]
+        S1[&quot;Skill1 攻擊工程&lt;br/&gt;implant + M365&lt;br/&gt;T1587.001·T1114&quot;]
+        S4[&quot;Skill4 Windows dev&lt;br/&gt;winAgent·WUEngine&lt;br/&gt;T1587.001·T1547.001&quot;]
+        S8[&quot;Skill8 iOS 0day&lt;br/&gt;PAC·JIT&lt;br/&gt;T1587.004&quot;]
+        S2[&quot;Skill2 DevOps&lt;br/&gt;C2/phishing infra&lt;br/&gt;T1583.003·T1608&quot;]
+        S5[&quot;Skill5 前端&lt;br/&gt;T1608.005&quot;]
+        S6[&quot;Skill6 UI/UX&lt;br/&gt;T1608.005&quot;]
+        S7[&quot;Skill7 C2 dashboard&lt;br/&gt;T1587&quot;]
+    end
+    subgraph DELIV[&quot;③ 交付 / 利用&quot;]
+        D1[&quot;phishing lure + client exec&lt;br/&gt;T1566·T1203&quot;]
+    end
+    subgraph ACTN[&quot;④ C2 / 行動&quot;]
+        A1[&quot;Shadow C2 · Graph/EWS 收集 · 橫向&lt;br/&gt;T1071·T1114·T1021&quot;]
+    end
+    RECON --&gt; RD --&gt; DELIV --&gt; ACTN
+    MEM[&quot;跨 session 機構記憶&lt;br/&gt;project memory · MEMORY.md · dead-end ledger&quot;]
+    RD -. 回填 .-&gt; MEM
+    S8 -. 回填 .-&gt; MEM
+    MEM -. 供下次呼叫載入 .-&gt; RD
+    classDef s fill:#e8f5e9,stroke:#2e7d32,color:#000
+    classDef m fill:#fff3cd,stroke:#b8860b,color:#000
+    class S1,S2,S3,S4,S5,S6,S7,S8 s
+    class MEM m
+</pre>
+<blockquote>
+<p>讀圖要點：黃色記憶節點是把「八個一次性 persona」升級成「有累積學習的常駐團隊」的關鍵——它讓 dead-end ledger 記住的死路不再重試、讓下一個 session 精確接續。<strong>這正是 L3/L4 自主度的工程基礎，也是 T.3 補償性偵測要抓的「跨 session 縫合」訊號。</strong></p>
+</blockquote>
+<h2 id="t2-uplift-speed-scale-depth">T.2 uplift 三軸（speed / scale / depth）的可量化偵測指標</h2>
+<p>第 4 節把 uplift 定義為 speed/scale/depth 三軸，但停在概念層。本節把「以機器速度並行操作」轉成<strong>可觀測、可計算的訊號</strong>，供偵測工程直接落地。</p>
+<table>
+<thead>
+<tr>
+<th>uplift 軸</th>
+<th>可觀測訊號</th>
+<th>計算方式（每身分 / 滑動窗）</th>
+<th>人類 baseline</th>
+<th>機器（agentic）簽章</th>
+<th>資料來源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Speed</strong></td>
+<td>每分鐘動作數 APM</td>
+<td><code>count(action) / 窗長(分)</code></td>
+<td>個位數</td>
+<td>數十~數百</td>
+<td>EDR、雲端 API 稽核、auth log</td>
+</tr>
+<tr>
+<td><strong>Speed</strong></td>
+<td>Time-to-objective</td>
+<td><code>首次存取 → 大量外洩</code> 時戳差</td>
+<td>天~週</td>
+<td><strong>小時</strong>（報告：2–3 小時）</td>
+<td>DLP、外洩偵測</td>
+</tr>
+<tr>
+<td><strong>Scale</strong></td>
+<td>跨主機並行度</td>
+<td>同一身分同時活躍的 distinct host/tenant</td>
+<td>1（一次打一家）</td>
+<td><strong>數十並行</strong>（報告：40+ 租戶）</td>
+<td>認證日誌、跨租戶稽核</td>
+</tr>
+<tr>
+<td><strong>Scale</strong></td>
+<td>目標基數</td>
+<td><code>dcount(target) / 小時</code></td>
+<td>低</td>
+<td>高</td>
+<td>同上</td>
+</tr>
+<tr>
+<td><strong>Depth</strong></td>
+<td>ATT&amp;CK 技術廣度</td>
+<td><code>dcount(technique_id) / 短窗</code></td>
+<td>隨技能，且有偵察延遲</td>
+<td><strong>廣且無偵察延遲</strong>（秒懂陌生環境）</td>
+<td>全遙測映射</td>
+</tr>
+<tr>
+<td><strong>節律</strong></td>
+<td>24h 活動平坦度</td>
+<td><code>active_hours / 24</code>；hourly 熵</td>
+<td>集中清醒/上班時段</td>
+<td><strong>幾乎 24h 皆活躍、無週末凹陷</strong></td>
+<td>任意帶時戳日誌</td>
+</tr>
+<tr>
+<td><strong>節律</strong></td>
+<td>機械式重試間隔</td>
+<td>間隔的變異係數 <code>CV = stdev/avg</code></td>
+<td>CV 高（think-time 抖動）</td>
+<td><strong>CV &lt; 0.15</strong>（近乎等距）</td>
+<td>auth / API log</td>
+</tr>
+</tbody>
+</table>
+<h3 id="t21-sigma-log-source">T.2.1 Sigma 規則（log-source 無關，偵測「單一身分機器速度多目標」）</h3>
+<p>Sigma 的 correlation 規則最適合表達「scale 軸」的多目標聚合。以下為可部署範本（需將 <code>auth_access_event</code> 的欄位對映到你實際的 log source）：</p>
+<pre><code class="language-yaml"># 基礎規則：任何帶「行為者 + 目標」的認證/存取事件
+title: Auth Or Access Event With Actor And Target
+name: auth_access_event
+status: experimental
+logsource:
+    category: authentication      # 亦可換 process_creation / cloud_api
+detection:
+    selection:
+        EventType:
+            - logon
+            - api_access
+            - resource_access
+    condition: selection
+---
+# 相關規則：單一身分於 5 分鐘內觸及異常多的目標（scale 軸啟發式）
+title: Machine-Speed Multi-Target Activity From Single Identity
+id: 7d1b0e2c-3a9f-4c11-9d64-a9en71cup101
+status: experimental
+description: &gt;
+    偵測單一身分（user / API key / OAuth token）於短時窗內對異常多的目標主機或
+    租戶發動存取，作為 agentic（可能 Claude Code skill 驅動）自動化操作的 scale 軸
+    啟發式。必須與 T.2.2 的 cadence、circadian 規則融合評分，切勿單獨告警。
+correlation:
+    type: value_count
+    rules:
+        - auth_access_event
+    group-by:
+        - src_user
+    timespan: 5m
+    condition:
+        gte: 30
+        field: dst_host
+fields:
+    - src_user
+    - src_ip
+    - dst_host
+falsepositives:
+    - 漏洞掃描器 / RMM / SSO 健康檢查 / 備份服務帳號（應以 allowlist 排除）
+level: medium
+</code></pre>
+<h3 id="t22-kql-microsoft-sentinel-entra-id">T.2.2 KQL 規則（Microsoft Sentinel / Entra ID，三支互補查詢）</h3>
+<p>以 Entra <code>SigninLogs</code> 為例（最貼合 GTG-20006 的 M365/owa_spray 場景）。三支查詢分別對應 scale+speed、無晝夜節律、機械節奏，<strong>設計上要 AND 融合</strong>：</p>
+<pre><code class="language-kql">// A. scale + speed：單一身分機器速度多目標
+SigninLogs
+| where TimeGenerated &gt; ago(1d)
+| extend Target = coalesce(tostring(ResourceDisplayName), tostring(AppDisplayName))
+| summarize Attempts=count(), DistinctTargets=dcount(Target), DistinctIPs=dcount(IPAddress),
+            FirstSeen=min(TimeGenerated), LastSeen=max(TimeGenerated)
+        by UserPrincipalName, Window=bin(TimeGenerated, 5m)
+| extend DurationSec = datetime_diff('second', LastSeen, FirstSeen)
+| extend ActionsPerMin = round(Attempts * 60.0 / max_of(DurationSec, 1), 1)
+| where DistinctTargets &gt;= 20 and ActionsPerMin &gt;= 30
+| project Window, UserPrincipalName, Attempts, ActionsPerMin, DistinctTargets, DistinctIPs
+</code></pre>
+<pre><code class="language-kql">// B. 無晝夜節律：單一身分在 24 小時幾乎每個小時都活躍（人類會睡覺）
+SigninLogs
+| where TimeGenerated &gt; ago(7d)
+| summarize EventsPerHour = count()
+        by UserPrincipalName, HourOfDay = datetime_part(&quot;Hour&quot;, TimeGenerated)
+| summarize ActiveHours = countif(EventsPerHour &gt; 0), TotalEvents = sum(EventsPerHour)
+        by UserPrincipalName
+| where ActiveHours &gt;= 22 and TotalEvents &gt; 500     // ≥22/24 小時皆活躍 → 無睡眠週期
+</code></pre>
+<pre><code class="language-kql">// C. 機械節奏：連續動作的間隔變異係數極低（人類有 think-time 抖動）
+SigninLogs
+| where TimeGenerated &gt; ago(1d)
+| order by UserPrincipalName asc, TimeGenerated asc
+| serialize
+| extend PrevTs = prev(TimeGenerated), PrevUser = prev(UserPrincipalName)
+| where UserPrincipalName == PrevUser
+| extend GapSec = datetime_diff('second', TimeGenerated, PrevTs)
+| where GapSec &gt;= 0 and GapSec &lt; 3600
+| summarize AvgGap=avg(GapSec), StdevGap=stdev(GapSec), N=count() by UserPrincipalName
+| where N &gt;= 50 and StdevGap / max_of(AvgGap, 0.5) &lt; 0.15   // CV&lt;0.15 → 機械式
+</code></pre>
+<blockquote>
+<p><strong>關鍵鑑別子（務必講清楚）：</strong> 合法自動化（掃描器、RMM、服務帳號）<strong>也</strong>呈機器速度。因此不能用單軸告警，真正的鑑別條件是<strong>邏輯 AND</strong>：<br />
+<code>機器速度（A/C）</code> ∧ <code>多目標（A）</code> ∧ <code>無晝夜節律（B）</code> ∧ <code>跨 kill-chain 多技術（Depth）</code> ∧ <code>來自互動式/人類關聯身分（而非已知服務帳號 allowlist）</code>。<br />
+單一訊號必然高誤報；要靠多訊號<strong>加權評分</strong>（見 T.3 的 orchestration score）才有實戰價值。這也是為什麼「偵測 agentic 攻擊」本質上是<strong>異常行為評分問題，而非簽章比對問題</strong>。</p>
+</blockquote>
+<h2 id="t3-agentic-orchestration-attck-id">T.3 為什麼 agentic orchestration 在 ATT&amp;CK 沒有 ID——技術論證與補償性偵測</h2>
+<h3 id="t31">T.3.1 框架缺口的技術根因</h3>
+<p>第 8.3 節給了結論（「沒有 ATT&amp;CK ID」），本節補上<strong>為什麼在框架設計層面必然如此</strong>：</p>
+<ol>
+<li><strong>ATT&amp;CK 是「原子對抗行為的本體論」。</strong> 每個 technique 是一個離散、可觀測的動作，對映到一個 tactic（回答「為何做」）。它的設計契約是：讓防守方把<strong>單一 observable</strong>（一條 log、一個 process、一次 API 呼叫）對映到一個 technique ID。</li>
+<li><strong>ATT&amp;CK 刻意抽離「行為者與控制邏輯」。</strong> 它回答「做了什麼（what）」，不回答「是誰/什麼在決定、以什麼順序、多快、多少人類介入（who orchestrates / in what order / how fast / how autonomously）」。</li>
+<li><strong>agentic orchestration 不是原子行為，而是序列的 meta 性質。</strong> 「串接、時序、pivot 決策、失敗重規劃由自主控制器（而非人類）完成」——這件事沒有任何單一 observable「就是」它；它只在多個原子事件（每個已各有 ID）<strong>之上</strong>，以<strong>統計性質</strong>顯現。</li>
+<li><strong>所以它與 technique 軸正交（orthogonal）。</strong> ATT&amp;CK 無法在不破壞自身「原子性契約」的前提下塞給它一個 technique ID。這正是 Anthropic 提議新增 <strong>cross-cutting categories（一條正交新軸）</strong> 而非新 technique 的框架學理由。</li>
+</ol>
+<blockquote>
+<p><strong>教學類比：</strong> ATT&amp;CK 記錄「彈了哪些音符」；orchestration 是「節奏，以及指揮者是誰」。<strong>一張音符頻率表，永遠分不出這段旋律是人彈的、還是自動鋼琴彈的。</strong> 而 AI 賦能攻擊的 uplift，恰恰全在「自動鋼琴」這四個字。</p>
+</blockquote>
+<h3 id="t32-session">T.3.2 補償性偵測：跨 session 行為關聯資料模型</h3>
+<p>既然沒有原子事件＝orchestration，就只能<strong>跨事件/跨 session 關聯、對「湧現簽章」評分</strong>來補償。設計此模型的<strong>第一原理</strong>是：</p>
+<blockquote>
+<p><strong>攻擊者刻意跨 session 分割工作</strong>（報告 p.107「工作被拆碎跨 session 時表現不一致」＝攻擊者利用拆碎繞過安全措施；Figure 19 的 <code>MEMORY.md</code> / <code>dead-end ledger</code> 讓狀態跨 session 持久化）。<strong>因此任何 session 範圍的偵測都被設計性地擊敗。</strong> 補償模型必須在「<strong>身分 + 基礎設施</strong>」層級跨 session 關聯。</p>
+</blockquote>
+<p><strong>資料模型（Mermaid ER 圖）：</strong></p>
+<pre class="mermaid">erDiagram
+    IDENTITY ||--o{ SESSION : opens
+    IDENTITY ||--o{ ACTION : performs
+    SESSION ||--o{ ACTION : contains
+    ACTION }o--|| TARGET : hits
+    ACTION }o--|| TECHNIQUE : &quot;maps to&quot;
+    IDENTITY }o--o{ CAMPAIGN : &quot;clustered into&quot;
+    TARGET }o--o{ CAMPAIGN : &quot;clustered into&quot;
+    IDENTITY {
+        string id
+        string id_type &quot;user|apikey|oauth|service_principal&quot;
+        string egress_ip
+        string asn
+    }
+    SESSION {
+        string id
+        datetime start_ts
+        datetime end_ts
+        string prior_session_ref &quot;session 縫合用&quot;
+    }
+    ACTION {
+        datetime ts
+        string technique_id
+        string target_id
+        string outcome
+        float inter_action_gap_s
+    }
+    CAMPAIGN {
+        float orchestration_score
+        float apm
+        float interaction_cv
+        float circadian_entropy
+        int parallel_targets
+        int killchain_coverage
+        float pivot_latency_s
+    }
+</pre>
+<p><strong>湧現特徵（emergent features）分三類計算：</strong></p>
+<ul>
+<li><strong>時序（Temporal）：</strong> APM、inter-action CV、24h 熵；<strong>session 縫合連續性</strong>——新 session 是否精確接續上一個結束處（<code>prior_session_ref</code> 命中率＝記憶持久化簽章）。</li>
+<li><strong>拓撲（Topological）：</strong> 並行 fan-out（<code>parallel_targets</code>）、kill-chain 技術覆蓋率（<code>killchain_coverage</code>＝一個身分橫跨幾個 tactic）、<strong>pivot latency</strong>——A 主機淪陷到對 B 主機首個動作的時間，<strong>機器 pivot 近乎瞬時</strong>。</li>
+<li><strong>行為（Behavioral）：</strong> 確定性工具順序、retry-until-success 迴圈、拒答/幻覺復原模式。</li>
+</ul>
+<p><strong>偵測管線（Mermaid）：</strong></p>
+<pre class="mermaid">flowchart TB
+    RAW[&quot;原始遙測&lt;br/&gt;EDR · 雲端 API 稽核 · auth log · DLP&quot;] --&gt; NORM[&quot;正規化為 Action&lt;br/&gt;(identity, ts, technique_id, target, outcome)&quot;]
+    NORM --&gt; CORR[&quot;跨 session 關聯&lt;br/&gt;依 identity + egress_ip/asn 聚合&lt;br/&gt;(擊敗 session 分割)&quot;]
+    CORR --&gt; FEAT[&quot;計算湧現特徵&quot;]
+    FEAT --&gt; F1[&quot;時序: APM · CV · 24h熵 · session縫合&quot;]
+    FEAT --&gt; F2[&quot;拓撲: 並行度 · killchain覆蓋 · pivot latency&quot;]
+    FEAT --&gt; F3[&quot;行為: 確定性工具序 · retry迴圈&quot;]
+    F1 --&gt; SCORE[&quot;orchestration-likelihood score&lt;br/&gt;Temporal(0-35)+Topological(0-35)+Behavioral(0-30)&quot;]
+    F2 --&gt; SCORE
+    F3 --&gt; SCORE
+    SCORE --&gt; ALERT{&quot;score &gt;= 閾值?&quot;}
+    ALERT --&gt;|是| CASE[&quot;標記疑似 agentic orchestration&lt;br/&gt;→ 進 case / 關聯 campaign&quot;]
+    ALERT --&gt;|否| BASE[&quot;回饋基線（降誤報）&quot;]
+    classDef k fill:#e3f2fd,stroke:#1565c0,color:#000
+    class RAW,NORM,CORR,FEAT,SCORE k
+</pre>
+<blockquote>
+<p><strong>設計說明：</strong> orchestration score 刻意仿 ARiES 用<strong>加法</strong>（Temporal 35 + Topological 35 + Behavioral 30 = 100）而非乘法——<strong>某一維缺失時分數仍有意義</strong>（與 8.1 節 ARiES「remain meaningful even when one dimension is absent」同理）。這條管線的產物不是「阻擋某個 technique」，而是回答第 8.3 節那句教學金句要的答案：<strong>這些技術是「一個人手動串起來」，還是「一個 AI 以每秒數次自主串起來」？</strong> 這正是 ATT&amp;CK 技術頻率表量不到、而本模組要學員學會量的維度。</p>
+</blockquote>
+<h2 id="t4-pentagi-832-verizon-dbir">T.4 PentAGI 技術架構 ＋ 832 帳號 / Verizon DBIR 完整數據</h2>
+<h3 id="t41-pentagi-331">T.4.1 PentAGI 架構深入（把第 3.3.1 補到工程層）</h3>
+<p>第 3.3.1 節列了 PentAGI 的要點，本節補上第二階段查得的完整架構（來源：vxcontrol/pentagi README、Help Net Security 2026-04-22 報導），並畫成架構圖，讓學員看清「公開框架如何複製 GTG-1002 的 scaffolding」。</p>
+<pre class="mermaid">flowchart TB
+    USER[&quot;操作者目標（自然語言）&quot;] --&gt; PRIM[&quot;Primary Agent&lt;br/&gt;orchestrator · flow 執行&quot;]
+    PRIM --&gt; PLAN[&quot;Planner 任務拆解&quot;]
+    PRIM --&gt; RES[&quot;Researcher/Searcher 情報蒐集&quot;]
+    PRIM --&gt; DEV[&quot;Developer/Coder exploit 開發&quot;]
+    PRIM --&gt; EXE[&quot;Executor/Pentester 工具執行&quot;]
+    PRIM --&gt; REFL[&quot;Reflector 錯誤/tool-call 復原&quot;]
+    PRIM --&gt; AUX[&quot;Adviser · Enricher · Refiner · Installer · Generator · Reporter · Memorist（共 13 種 agent）&quot;]
+    EXE --&gt; SANDBOX[&quot;Docker sandbox（完全隔離）&lt;br/&gt;Kali 映像 · 20+ 工具&lt;br/&gt;nmap · metasploit · sqlmap&lt;br/&gt;DinD over TLS&quot;]
+    MEM[&quot;記憶層&lt;br/&gt;Long-term: pgvector 向量庫 · Knowledge Base · Tools Knowledge&lt;br/&gt;Working: 當前 context/目標&lt;br/&gt;Episodic: 歷史命令與結果&quot;]
+    RES &lt;--&gt; MEM
+    DEV &lt;--&gt; MEM
+    EXE &lt;--&gt; MEM
+    AUX --&gt; MEM
+    LLM[&quot;LLM 供應商（可換）&lt;br/&gt;OpenAI · Anthropic · Gemini · Bedrock&lt;br/&gt;Ollama(本地) · DeepSeek/GLM/Kimi/Qwen/MiniMax&lt;br/&gt;任意 OpenAI 相容端點&quot;]
+    PRIM &lt;--&gt; LLM
+    OBS[&quot;可觀測性（攻擊者自用）&lt;br/&gt;Langfuse · Jaeger · Loki · VictoriaMetrics · ClickHouse · Graphiti/Neo4j&quot;]
+    PRIM -. 遙測 .-&gt; OBS
+    classDef core fill:#e3f2fd,stroke:#1565c0,color:#000
+    classDef danger fill:#ffcdd2,stroke:#c62828,color:#000
+    class PRIM,PLAN,RES,DEV,EXE,REFL core
+    class SANDBOX,LLM danger
+</pre>
+<p><strong>三個防禦含義（讓學員帶走）：</strong><br />
+1. <strong>Primary→subagents 就是報告 GTG-1002 的「lead agent 分派 subagents」</strong>——公開框架已把國家級 scaffolding 平民化（呼應第 3.3、5.1 的「擴散」）。<br />
+2. <strong>pgvector 記憶層＝報告一再提的 persistent project memory / campaign memory</strong>——與 Figure 19 的 <code>MEMORY.md</code>/<code>dead-end ledger</code> 同構，是 L3/L4 自主的共同工程基礎（回 T.1、T.3）。<br />
+3. <strong>「任意 OpenAI 相容端點」是最關鍵的防禦盲點：</strong> 攻擊者可把框架指向<strong>本地 Ollama 或代理模型</strong>，<strong>繞過任何雲端供應商的護欄</strong>。這說明——<strong>護欄只在「你的 API 邊界」有效；一旦攻擊者換供應商，Anthropic 式的平台側偵測（本報告賴以成立的基礎）就失去可見度。</strong> 這是本報告方法論的結構性上限，也是課程該點明的：<strong>平台側偵測 ≠ 全面偵測。</strong></p>
+<h3 id="t42-832-verizon-2026-dbir">T.4.2 832 帳號研究 ＋ Verizon 2026 DBIR 的完整數據（第二階段補查）</h3>
+<p>第 8 節已有 832 帳號的核心數字；本節補上第二階段查得的<strong>完整規模數據</strong>與<strong>Verizon DBIR 交叉數據</strong>（兩者為同一批 Anthropic Safeguards 分析的不同切片）：</p>
+<table>
+<thead>
+<tr>
+<th>數據集</th>
+<th>樣本 / 期間</th>
+<th>關鍵數字</th>
+<th>偵測含義</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>《Mapping AI-enabled cyber threats》</strong>（2026-06-03）</td>
+<td>832 帳號 / 2025-03–2026-03</td>
+<td><strong>13,873 個 action、482 個 unique techniques、涵蓋全部 14 tactics</strong>（99% Enterprise 矩陣）；malware dev 67.3%（560）；lateral movement 6.5%（54，均風險 56.4）；account discovery <strong>+8.9%</strong>；phishing <strong>−8.6%</strong>；中高風險 <strong>33%→56%</strong></td>
+<td>用途右移到 on-target 後期；偵測槓桿在「後期動手」技術（T1021/T1078.003/T1003/T1560/T1505.003）</td>
+</tr>
+<tr>
+<td><strong>Verizon 2026 DBIR × Anthropic Safeguards</strong></td>
+<td><strong>793 個 threat actor</strong> / 2025-03–2026-02</td>
+<td>AI 輔助初始存取 <strong>44% 為 phishing、32% 為漏洞利用</strong>；<strong>rare techniques &lt; 2.5%</strong>；<strong>中位數行為者用 15 種技術</strong>；<strong>AI 生成的惡意郵件文字量較往年翻倍</strong>；（DBIR 全體：<strong>62% 的入侵涉人為因素</strong>）</td>
+<td>AI 主要<strong>自動化 / 放大既有技術，非解鎖新技術</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>兩份數據交叉證實的關鍵防禦命題：</strong> AI 賦能攻擊有 <strong>97.5% 以上用的是你早就見過的技術</strong>（rare &lt; 2.5%），依賴的仍是偷來的憑證、未修補的邊界設備、SQLi、phishing（呼應 3.1.1「變的是經濟學」）。<strong>因此新型 IOC / 簽章不是防線；真正的 uplift——速度、規模、自主編排——才是。</strong> 這把偵測工程的重心從「特徵比對」推向「行為 / 節奏異常偵測」，正是 T.2、T.3 的方法論依據，也是整個附錄 T 的收束點。</p>
+</blockquote>
+<h3 id="t43">T.4.3 本附錄新增外部來源</h3>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PentAGI README（vxcontrol/pentagi）</td>
+<td>github.com/vxcontrol/pentagi</td>
+<td>一手（開源框架文件）</td>
+</tr>
+<tr>
+<td>Help Net Security〈PentAGI: Open-source autonomous AI penetration testing system〉</td>
+<td>helpnetsecurity.com/2026/04/22/pentagi-autonomous-ai-penetration-testing</td>
+<td>獨立報導</td>
+</tr>
+<tr>
+<td>Anthropic〈Mapping AI-enabled cyber threats〉/ Frontier Red Team〈What we learned...〉</td>
+<td>anthropic.com/news/AI-enabled-cyber-threats-mitre-attack；red.anthropic.com/2026/attack-navigator</td>
+<td>一手（832 帳號）</td>
+</tr>
+<tr>
+<td>Verizon 2026 DBIR（與 Anthropic Safeguards 協作，793 actors）</td>
+<td>verizon.com/business/resources/reports/dbir；helpnetsecurity.com/2026/05/25/lessons-from-verizon-dbir-2026-findings</td>
+<td>半獨立（Verizon 編纂、數據源 Anthropic）</td>
+</tr>
+<tr>
+<td>Sigma / KQL 規則</td>
+<td>本教材原創（依 Sigma correlation 與 KQL 語法撰寫，需依環境調校）</td>
+<td>教學範本，非現成產品規則</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>研究限制補記：T.2 的 Sigma/KQL 為<strong>教學範本</strong>，閾值（30 目標、APM 30、CV 0.15、22/24 小時）為示意值，實際部署須以各組織基線校準並多訊號融合；T.3 的 orchestration score 權重（35/35/30）為仿 ARiES 的設計示意，Anthropic 未公開 ARiES 完整權重（見 8.1、12.6）。Verizon DBIR 的 793 actor 與 832 帳號研究期間、口徑略有差異（前者至 2026-02、後者至 2026-03），數字不可直接互減。</p>
+</blockquote>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script>
+(function(){
+  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (window.mermaid) {
+    mermaid.initialize({startOnLoad:true, theme: dark ? 'dark' : 'default', securityLevel:'loose', flowchart:{useMaxWidth:true}});
+  }
+})();
+</script>
+</body></html>

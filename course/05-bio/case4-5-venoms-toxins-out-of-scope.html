@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>case4-5-venoms-toxins-out-of-scope</title>
+<style>
+:root{--fg:#1a1a1a;--bg:#fff;--muted:#666;--line:#e2e2e2;--link:#0b5cad;--code-bg:#f5f5f5;--accent:#0b5cad}
+@media(prefers-color-scheme:dark){:root{--fg:#e6e6e6;--bg:#141414;--muted:#9a9a9a;--line:#333;--link:#6cb6ff;--code-bg:#1e1e1e;--accent:#6cb6ff}}
+*{box-sizing:border-box}
+body{max-width:900px;margin:0 auto;padding:2rem 1.2rem 6rem;font-family:"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;line-height:1.75;color:var(--fg);background:var(--bg);font-size:16px}
+h1,h2,h3,h4{line-height:1.3;margin-top:1.8em}
+h1{font-size:1.7rem;border-bottom:2px solid var(--accent);padding-bottom:.3em}
+h2{font-size:1.35rem;border-bottom:1px solid var(--line);padding-bottom:.2em}
+h3{font-size:1.12rem}
+a{color:var(--link)}
+code{background:var(--code-bg);padding:.1em .35em;border-radius:4px;font-family:"Cascadia Code",Consolas,"Courier New",monospace;font-size:.9em}
+pre{background:var(--code-bg);padding:1em;border-radius:8px;overflow-x:auto;font-size:.86em;line-height:1.5}
+pre code{background:none;padding:0}
+pre.mermaid{background:transparent;text-align:center}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.92em;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:.5em .7em;text-align:left;vertical-align:top}
+th{background:var(--code-bg)}
+blockquote{border-left:4px solid var(--accent);margin:1em 0;padding:.4em 1em;color:var(--muted);background:var(--code-bg)}
+img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;margin:.5em 0}
+.figgallery{margin-top:2em;border-top:2px solid var(--accent);padding-top:1em}
+.figgallery figure{margin:1.5em 0}
+.figgallery figcaption{color:var(--muted);font-size:.9em;margin-top:.3em}
+.topbar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:.6em 0;margin:-2rem -1.2rem 1.5rem;padding-left:1.2rem;font-size:.9em}
+.topbar a{text-decoration:none;margin-right:1em}
+hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+</style></head>
+<body><div class="topbar"><a href="../index.html">◀ 課程索引</a></div><h1 id="4-5">生物濫用案例 4 與 5：分類器「設計上不涵蓋」的範圍留白</h1>
+<blockquote>
+<p>課程模組：05 生物濫用 ｜ 一手來源：PDF p.136–137（Case studies 4 and 5: Venoms and toxins）＋ p.137–138（Conclusions）｜ 整理日期：2026-09-13<br />
+本教材由課程主編直接撰寫。原因：本案的 PDF 頁面含毒素研究敘述，交付研究 agent 時會觸發模型的生物安全防護而中止。主編僅擷取<strong>治理與偵測層次</strong>的句子，全程不記述任何化合物、毒素或合成的技術內容。</p>
+</blockquote>
+<hr />
+<h2 id="0">0. 寫作界線聲明</h2>
+<p>本教材只談<strong>分類器的範圍界定與治理</strong>，不涉及任何毒素、毒液、化合物的技術內容。凡報告描述的研究，一律以「某類新化合物研究」概括。教材價值全部落在：分類器<strong>為什麼「刻意不涵蓋」</strong>這兩案、這與「漏接」的根本差別、雙重用途在毒素領域的極端性、以及這如何收束為整個生物模組的核心結論——「內容分類器不能作為唯一防線」。</p>
+<hr />
+<h2 id="1">1. 一頁速覽</h2>
+<ol>
+<li><strong>本兩案是「分類器設計上不涵蓋（out of design scope）」的範例</strong>：報告明說「the work proceeded largely unimpeded by our biological safety classifier. This was by design.」（工作大致未受生物安全分類器阻礙，這是設計使然。）</li>
+<li>這與 Case 3「漏接」有<strong>根本差別</strong>：Case 3 是分類器該攔而沒攔（缺陷）；本兩案是分類器的<strong>設計範圍刻意不含</strong>（政策選擇）。</li>
+<li>兩案都涉及<strong>新化合物研究</strong>，且都<strong>框定為治療性目標</strong>（如止痛、抗憂鬱等醫療用途），但同一套研究產物<strong>同時可導向治療或有害用途</strong>。</li>
+<li>兩案都與<strong>國家支持的研究計畫（state-supported / national priority program）</strong>相關，且都因<strong>違反支援地區政策（unsupported region evasion / Supported Regions Policy）</strong>於 2026 年 5 月被封號。</li>
+<li>Case 5 有一個重要的偵測細節：研究者<strong>刻意指示 Claude 對敏感描述保持「低擬真度（low fidelity）」</strong>——主動要求模型模糊化，這本身是規避意識的證據。</li>
+<li><strong>本兩案是整個生物模組的收束</strong>：報告用它們論證「分類器不能作為唯一防線」，因為「在高度技術性的雙重用途領域，無法可靠辨識使用者意圖，分類器無法同時賦能善用又防止惡用」。</li>
+</ol>
+<hr />
+<h2 id="2">2. 核心機制：「設計上不涵蓋」是什麼意思</h2>
+<p>報告的關鍵段落（p.137，逐字引用）：</p>
+<blockquote>
+<p>「In both of these cases, the work proceeded largely unimpeded by our biological safety classifier. This was by design. The purpose and intent of the classifier is to restrict access to information that would make the development of known biological weapons with potentially catastrophic impact accessible to novices.」</p>
+</blockquote>
+<p>拆解：</p>
+<ol>
+<li><strong>分類器有明確的設計目標</strong>：它要守的是「讓<strong>新手</strong>能取得<strong>已知生物武器</strong>、造成<strong>潛在災難性影響</strong>的資訊」。</li>
+<li><strong>本兩案不落在這個目標內</strong>：它們是<strong>新化合物研究</strong>（不是已知武器）、研究者是<strong>專業人員</strong>（不是新手）、框架是治療性目標。</li>
+<li><strong>所以分類器刻意不動作</strong>：不是它失靈，而是這些內容根本不在它設計要管的範圍。</li>
+</ol>
+<p><strong>這是「範圍界定（scoping）」的政策問題，不是「偵測能力」的技術問題</strong>。分類器的每一次範圍界定都是取捨：涵蓋太廣會誤傷大量正當研究（毒素研究對新藥開發至關重要），涵蓋太窄會漏掉新型威脅。本兩案落在「刻意留白」的那一側。</p>
+<h3 id="21">2.1 雙重用途在毒素領域的極端性（公開科普史實）</h3>
+<p>報告用了幾個公開的歷史例子說明毒素的雙重用途本質（這些是廣為人知的科普事實，非操作內容）：某些劇毒物質曾被多國作為武器研究，如今卻是核准的醫療用藥或神經科學的基礎研究工具。這說明<strong>同一類研究，善用與惡用的界線不在技術本身，而在意圖與用途</strong>——而意圖無法從研究內容判讀。</p>
+<p>報告也指出這類化合物中，有部分因其雙重用途潛力而受<strong>澳洲集團（Australia Group）共同管制清單</strong>規範，且 Case 5 涉及的一個標的在<strong>世界衛生組織 R&amp;D Blueprint 優先疾病清單</strong>上。這把 AI 治理與既有的國際生化管制體系連結起來。</p>
+<hr />
+<h2 id="3">3. 兩案的治理要點（抽象層次）</h2>
+<h3 id="case-4">Case 4</h3>
+<ul>
+<li><strong>研究產物</strong>：某類生物毒素胜肽的圖譜，並發展為一個「生成式流程（generative pipeline）」以最佳化其特性。</li>
+<li><strong>框架</strong>：明確的治療目標（新型止痛藥、抗憂鬱等）。</li>
+<li><strong>雙重用途的具體體現</strong>：同一份圖譜「同時含有治療標的與致效／麻痺標的的骨架」，因此可生成治療或有害化合物。</li>
+<li><strong>研究者的規避意識</strong>：報告指出研究者本身「展現了對自身工作雙重用途性質的認知」，引用了討論蛋白質設計雙重用途的期刊文章。</li>
+<li><strong>國家關聯</strong>：報告從與 Claude 分享的資訊得知，研究者的產出是<strong>國家支持研究計畫</strong>的一部分。</li>
+<li><strong>處置</strong>：2026 年 5 月因不支援地區規避被封號。</li>
+<li><strong>合規訊號</strong>：報告指出「該地點的國際合規評估」對這類毒素、以及在此脈絡下把 AI/ML 用於生物武器應用，本就存在疑慮。</li>
+</ul>
+<h3 id="case-5">Case 5</h3>
+<ul>
+<li><strong>研究產物</strong>：對一組多樣毒素的計算性重新設計。</li>
+<li><strong>框架</strong>：同樣大致框定為治療脈絡，並描述為國家公共研究計畫下的優先研究。</li>
+<li><strong>雙重用途的具體體現</strong>：工作涵蓋的標的中，有一個在 WHO 的高流行／大流行威脅優先疾病清單上。</li>
+<li><strong>研究者的規避意識（重要偵測細節）</strong>：研究者與 Claude 共同撰寫季度進度報告，且<strong>刻意混淆敏感標的的身分，明確指示 Claude 讓描述保持「低擬真度」</strong>。這是主動要求 AI 模糊化的規避行為。</li>
+<li><strong>處置</strong>：2026 年 5 月因違反支援地區政策被封號。</li>
+</ul>
+<p><strong>兩案的共同教學點</strong>：研究者都展現了<strong>規避意識</strong>（Case 4 引用雙重用途文獻、Case 5 主動要求模糊化），且都與國家計畫相關。但分類器對這兩案都沒有動作——不是因為沒偵測到，而是因為設計上就不管這個範圍。</p>
+<hr />
+<h2 id="4">4. 收束論證：為什麼「分類器不能是唯一防線」</h2>
+<p>報告在 p.137 的核心論證（逐字引用）：</p>
+<blockquote>
+<p>「We believe these cases illustrate the challenge in using classifiers as the only safeguard layer: since it is not possible to reliably identify the intent of the user in highly technical dual-use areas, a classifier cannot simultaneously enable benefit and prevent harm. This knowledge and our observation of cases such as this suggest to us that the only safe way to serve frontier biological capabilities is to offer them in trusted user programs.」</p>
+</blockquote>
+<p>這是整個生物模組的<strong>理論高峰</strong>，論證鏈是：</p>
+<ol>
+<li>在高度技術性的雙重用途領域，<strong>無法可靠辨識使用者意圖</strong>。</li>
+<li>因此分類器<strong>無法同時「賦能善用」又「防止惡用」</strong>——因為善用與惡用的內容相同，只有意圖不同。</li>
+<li>所以「內容分類器」作為唯一防線在原理上不可能成功。</li>
+<li><strong>唯一安全的方式是「可信任使用者審核制（trusted user programs）」</strong>——把判斷從「內容」移到「經審核的使用者身分與機構正當性」。</li>
+</ol>
+<hr />
+<h2 id="5">5. 五案總表：分類器防線的完整光譜</h2>
+<p>這是整個生物模組的收束表，把五個案例的分類器結果並列。先用一張圖呈現「一個請求進入後，分類器可能落在哪個狀態」：</p>
+<pre class="mermaid">flowchart TD
+    REQ[&quot;生物相關請求進入&quot;] --&gt; INSCOPE{&quot;落在分類器&lt;br/&gt;設計覆蓋範圍內?&quot;}
+    INSCOPE --&gt;|&quot;否（新化合物/專業雙重用途）&quot;| S4[&quot;狀態 4：設計上不涵蓋&lt;br/&gt;Case 4-5 · 政策留白&lt;br/&gt;（by design）&quot;]
+    INSCOPE --&gt;|&quot;是（高風險病毒研究）&quot;| DETECT{&quot;分類器是否&lt;br/&gt;正確辨識風險?&quot;}
+    DETECT --&gt;|&quot;辨識成功、判定高危&quot;| BLOCK[&quot;狀態 1：攔下+調查&lt;br/&gt;Case 1&quot;]
+    DETECT --&gt;|&quot;辨識成功、判定中危&quot;| THROTTLE[&quot;狀態 2：降載到最弱模型&lt;br/&gt;Case 2&quot;]
+    DETECT --&gt;|&quot;被良性框架繞過&quot;| ALLOW[&quot;狀態 3：漏接（放行）&lt;br/&gt;Case 3 · 缺陷&quot;]
+    S4 --&gt; GAP[&quot;共同缺口：意圖無法從內容判斷&lt;br/&gt;→ 需要可信任使用者審核制&quot;]
+    ALLOW --&gt; GAP
+    style BLOCK fill:#d0f0d0
+    style THROTTLE fill:#f0f0d0
+    style ALLOW fill:#f0d0d0
+    style S4 fill:#f0d0d0
+    style GAP fill:#e0e0ff
+</pre>
+<table>
+<thead>
+<tr>
+<th>案例</th>
+<th>研究領域（抽象）</th>
+<th>分類器狀態</th>
+<th>性質</th>
+<th>報告依據</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Case 1</td>
+<td>某高風險病毒研究</td>
+<td><strong>攔下</strong> + 啟動調查</td>
+<td>設計範圍內，成功動作</td>
+<td>p.131-133</td>
+</tr>
+<tr>
+<td>Case 2</td>
+<td>某高風險病毒研究</td>
+<td><strong>降載到最弱模型</strong></td>
+<td>設計範圍內，成功動作</td>
+<td>p.133-135</td>
+</tr>
+<tr>
+<td>Case 3</td>
+<td>某病毒研究（良性框架）</td>
+<td><strong>漏接（放行）</strong></td>
+<td>設計範圍內的<strong>缺陷</strong>（框架繞過）</td>
+<td>p.135-136</td>
+</tr>
+<tr>
+<td>Case 4</td>
+<td>某新化合物研究</td>
+<td><strong>設計上不涵蓋</strong></td>
+<td>範圍外的<strong>政策留白</strong></td>
+<td>p.136-137</td>
+</tr>
+<tr>
+<td>Case 5</td>
+<td>某新化合物研究</td>
+<td><strong>設計上不涵蓋</strong></td>
+<td>範圍外的<strong>政策留白</strong></td>
+<td>p.136-137</td>
+</tr>
+</tbody>
+</table>
+<p>報告自己的歸納（p.137）：「our classifiers robustly guard content in domains that they have been designed to restrict (Cases 1-2), but also that an increasing range of dual-use content is becoming highly valuable to beneficial and potentially malicious users alike (Cases 3-5).」</p>
+<p><strong>這張表是整個生物模組最重要的一張教具</strong>：它展示分類器防線不是「有或沒有」，而是有攔下、降載、漏接、範圍外四種狀態，每種背後是不同的設計取捨與治理對策。</p>
+<hr />
+<h2 id="6-p137-138">6. 章節結論的三個治理洞察（p.137-138）</h2>
+<ol>
+<li><strong>30 天盤查的基準率（base rate）</strong>：報告掃描 30 天與敵對國家機構相關的活動，找出約 <strong>35 項研究，多數是普通民用科學（most of them ordinary civilian science）</strong>，部分具雙重用途潛力。這個「多數是民用」的基準率很重要——它說明威脅辨識的難處在於<strong>訊號稀疏</strong>：大量正當研究中混著少數值得關注的活動。</li>
+<li><strong>供應商的獨特可見性</strong>：報告指出 AI 供應商「acquire threat-relevant visibility into real-world use that even governments and intergovernmental organizations lack」，並以 Case 5 為例——研究者<strong>無意間透露了含防禦價值的秘密</strong>。這是「上游偵測」的價值：模型供應商看得到連政府都看不到的研究活動早期訊號。</li>
+<li><strong>解方是「過濾器 + 可信任存取」的組合</strong>：報告結論（p.138）：「these deployments will necessarily involve a combination of safety filters guarding the highest-risk content and capabilities and trusted access programs that enable such access for beneficial uses.」——最高風險內容用過濾器守，其餘雙重用途能力用可信任存取制開放。</li>
+</ol>
+<hr />
+<h2 id="7">7. 版面判讀（治理層次）</h2>
+<p>本兩案對應 PDF p.136–137，為純文字敘述，無流程圖或截圖。生物章節全程的視覺留白是負責任揭露的設計選擇。</p>
+<hr />
+<h2 id="8-anthropic">8. Anthropic 的處置與防線缺口</h2>
+<ul>
+<li><strong>處置</strong>：兩案均於 2026 年 5 月因規避支援地區政策被封號。</li>
+<li><strong>關鍵缺口</strong>：這不是「偵測失敗」，而是<strong>「範圍界定的必然留白」</strong>——分類器不可能涵蓋所有雙重用途研究，否則會癱瘓大量正當科學。這是設計上接受的殘餘風險，也是為什麼需要「可信任使用者審核」作為互補防線。</li>
+</ul>
+<hr />
+<h2 id="9">9. 第三方驗證與來源性質</h2>
+<ul>
+<li>本兩案具體事實為<strong>單一來源情報</strong>，僅來自 Anthropic 平台側遙測，行為者、國家、機構均未點名。</li>
+<li><strong>可獨立查證的背景</strong>：澳洲集團管制清單、化學武器公約（CWC）與生物武器公約（BWC）對毒素的雙重規範、WHO R&amp;D Blueprint 優先疾病清單、以及「雙重用途研究關切（DURC）」的治理框架，都有豐富公開文獻。</li>
+<li><strong>課堂提醒</strong>：本兩案的「設計上不涵蓋」是 Anthropic 對自家分類器範圍的說明，可信度較高（它主動揭露自己不管的範圍），但研究細節無從驗證。</li>
+</ul>
+<hr />
+<h2 id="10">10. 課程教學設計</h2>
+<h3 id="101">10.1 核心教學要點</h3>
+<ul>
+<li>「設計上不涵蓋」（政策留白）與「漏接」（缺陷）是不同的失敗類型——前者是刻意的範圍取捨，後者是能力不足。</li>
+<li>分類器範圍界定是取捨：涵蓋太廣誤傷正當研究，太窄漏掉威脅。</li>
+<li>內容分類器在雙重用途領域有原理性上限，必須與「可信任使用者審核」互補。</li>
+</ul>
+<h3 id="102">10.2 課堂討論題</h3>
+<ol>
+<li>如果毒素研究對新藥開發至關重要，AI 公司該把這類研究納入分類器攔截範圍嗎？誰有資格決定這條線畫在哪裡？</li>
+<li>「設計上不涵蓋」意味著 AI 公司<strong>明知</strong>某些雙重用途研究會通過。這是負責任的取捨，還是把風險外部化？</li>
+<li>報告說 30 天盤查中「多數是普通民用科學」。在訊號如此稀疏的情況下，把防線設得更嚴會誤傷多少正當研究？</li>
+</ol>
+<h3 id="103">10.3 桌面演練：分類器範圍界定</h3>
+<p>給學員一個假想的 AI 安全分類器，讓他們決定「應該涵蓋多廣」——提供數個<strong>只有研究領域類別、無技術內容</strong>的抽象描述，讓學員畫出「攔截／降載／放行」的界線，並計算各種界線下的「誤傷正當研究」與「漏掉威脅」的取捨。用五案總表作為總結，讓學員理解防線的完整光譜。</p>
+<h3 id="104">10.4 對台灣的意涵</h3>
+<ul>
+<li><strong>化學與生物研究治理</strong>：台灣的化學武器公約與生物武器公約國內落實、以及學術機構的雙重用途研究審查（IRB/IBC），需要把「使用 AI 輔助」納入。本兩案顯示，即使前沿 AI 公司也選擇不涵蓋這類研究，那麼機構層的審查就是最後防線。</li>
+<li><strong>「分類器範圍之外」的治理空白</strong>：台灣若發展自己的 AI 應用或使用開源模型，本兩案提醒——不要假設「模型有安全防護」就等於「所有危險用途都被擋」。範圍外的雙重用途研究需要靠機構治理與使用者審核，而非依賴模型內建的分類器。</li>
+<li><strong>供應商可見性的政策價值</strong>：報告指出 AI 供應商能看到連政府都缺乏的研究活動早期訊號。台灣的科技與生物安全主管機關可思考如何與 AI 供應商建立（在隱私與法律框架內的）威脅情報共享機制。</li>
+</ul>
+<hr />
+<h2 id="11">11. 關鍵原文引文</h2>
+<ol>
+<li>
+<p>設計上不涵蓋（p.137）：<br />
+   「In both of these cases, the work proceeded largely unimpeded by our biological safety classifier. This was by design.」<br />
+   （在這兩個案例中，工作大致未受我們的生物安全分類器阻礙。這是設計使然。）</p>
+</li>
+<li>
+<p>分類器的原理性上限（p.137）：<br />
+   「since it is not possible to reliably identify the intent of the user in highly technical dual-use areas, a classifier cannot simultaneously enable benefit and prevent harm.」<br />
+   （由於在高度技術性的雙重用途領域無法可靠辨識使用者意圖，分類器無法同時賦能善用又防止惡用。）</p>
+</li>
+<li>
+<p>解方（p.137）：<br />
+   「the only safe way to serve frontier biological capabilities is to offer them in trusted user programs.」<br />
+   （安全地提供前沿生物能力的唯一方式，是透過可信任使用者計畫提供。）</p>
+</li>
+<li>
+<p>30 天盤查基準率（p.137）：<br />
+   「we swept 30 days of activity associated with adversarial state institutions and found roughly 35 distinct research efforts, most of them ordinary civilian science, but some with notable dual-use potential.」<br />
+   （我們掃描了 30 天與敵對國家機構相關的活動，發現約 35 項不同的研究工作，多數是普通民用科學，但有些具明顯的雙重用途潛力。）</p>
+</li>
+<li>
+<p>供應商可見性（p.138）：<br />
+   「providers will continue to acquire threat-relevant visibility into real-world use that even governments and intergovernmental organizations lack.」<br />
+   （供應商將持續取得連政府與政府間組織都缺乏的、與威脅相關的真實世界使用可見性。）</p>
+</li>
+</ol>
+<hr />
+<h2 id="12">12. 未能驗證之處與研究限制</h2>
+<ol>
+<li>本兩案具體事實為<strong>單一來源情報</strong>，無外部查證。行為者、國家、機構、國家計畫名稱均未揭露。</li>
+<li>本教材<strong>刻意不記述</strong>任何毒素、化合物、合成的技術內容，僅保留治理與偵測層次。</li>
+<li>「設計上不涵蓋」是 Anthropic 對自家分類器範圍的說明，外部無法驗證分類器實際的範圍界定邏輯。</li>
+<li>「30 項研究、多數民用」的基準率為報告所述，無法獨立核實其抽樣方法與判定標準。</li>
+<li>兩案與國家計畫的關聯，報告說是「從與 Claude 分享的資訊」得知——這意味著歸因依賴使用者自己輸入的內容，可能不完整或有誤導。</li>
+<li>「五案總表」中各案的分類器狀態分類（攔下／降載／漏接／設計不涵蓋）是本教材綜合報告各案措辭的教學性歸納，其中「四種狀態」的框架是本課程的整理，非 Anthropic 的原始用語。</li>
+</ol>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script>
+(function(){
+  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (window.mermaid) {
+    mermaid.initialize({startOnLoad:true, theme: dark ? 'dark' : 'default', securityLevel:'loose', flowchart:{useMaxWidth:true}});
+  }
+})();
+</script>
+</body></html>

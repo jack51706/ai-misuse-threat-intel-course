@@ -1,0 +1,3902 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>00-influence-intro-and-breakout-scale</title>
+<style>
+:root{--fg:#1a1a1a;--bg:#fff;--muted:#666;--line:#e2e2e2;--link:#0b5cad;--code-bg:#f5f5f5;--accent:#0b5cad}
+@media(prefers-color-scheme:dark){:root{--fg:#e6e6e6;--bg:#141414;--muted:#9a9a9a;--line:#333;--link:#6cb6ff;--code-bg:#1e1e1e;--accent:#6cb6ff}}
+*{box-sizing:border-box}
+body{max-width:900px;margin:0 auto;padding:2rem 1.2rem 6rem;font-family:"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;line-height:1.75;color:var(--fg);background:var(--bg);font-size:16px}
+h1,h2,h3,h4{line-height:1.3;margin-top:1.8em}
+h1{font-size:1.7rem;border-bottom:2px solid var(--accent);padding-bottom:.3em}
+h2{font-size:1.35rem;border-bottom:1px solid var(--line);padding-bottom:.2em}
+h3{font-size:1.12rem}
+a{color:var(--link)}
+code{background:var(--code-bg);padding:.1em .35em;border-radius:4px;font-family:"Cascadia Code",Consolas,"Courier New",monospace;font-size:.9em}
+pre{background:var(--code-bg);padding:1em;border-radius:8px;overflow-x:auto;font-size:.86em;line-height:1.5}
+pre code{background:none;padding:0}
+pre.mermaid{background:transparent;text-align:center}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.92em;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:.5em .7em;text-align:left;vertical-align:top}
+th{background:var(--code-bg)}
+blockquote{border-left:4px solid var(--accent);margin:1em 0;padding:.4em 1em;color:var(--muted);background:var(--code-bg)}
+img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;margin:.5em 0}
+.figgallery{margin-top:2em;border-top:2px solid var(--accent);padding-top:1em}
+.figgallery figure{margin:1.5em 0}
+.figgallery figcaption{color:var(--muted);font-size:.9em;margin-top:.3em}
+.topbar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:.6em 0;margin:-2rem -1.2rem 1.5rem;padding-left:1.2rem;font-size:.9em}
+.topbar a{text-decoration:none;margin-right:1em}
+hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+</style></head>
+<body><div class="topbar"><a href="../index.html">◀ 課程索引</a></div><h1 id="breakout-scale">影響力行動模組導論：定義、上游偵測方法論與 Breakout Scale 評估框架</h1>
+<blockquote>
+<p>課程模組：02 影響力行動（Influence operations）｜ 一手來源：PDF p.41–44 上半（章節導論），另掃讀 p.44–80 建立九案模組地圖 ｜ 整理日期：2026-09-13</p>
+<p>教材性質：<strong>非案例型（章節導論／方法論）</strong>。個別案例（GTG-04001 至 GTG-84002）的深度研究由本模組的其他教材負責；本檔只負責「怎麼定義、怎麼偵測、怎麼衡量、九案怎麼放在一起看」。</p>
+</blockquote>
+<hr />
+<h2 id="1">1. 一頁速覽</h2>
+<ol>
+<li><strong>定義是整章的骨架。</strong> 報告在 p.41 給了「影響力行動」一個五段式定義：操縱資訊環境 → 涵蓋政治／公民／公共論述 → 意圖是欺騙、扭曲或隱蔽地影響 → 對象是個人或群體的認知、信念、行為 → 通常隱匿來源、資助者與協調關係。九個案例每一個都可以拿這五個要件逐一「打勾」。</li>
+<li><strong>AI 公司的觀測位置是「上游」。</strong> 社群平台通常在內容已流傳後才看到行動；Anthropic 說「我們可能在行動仍在組裝時就在 Claude 上看到它」（p.42）。這是優勢（可在成形前瓦解），也是盲區（內容一離開平台，能見度就結束）。</li>
+<li><strong>AI 建的不只是內容，還有「組織」。</strong> 報告 p.42–43 列出行為者讓 Claude 產出的東西：doctrine manuals、opposition dossiers、ministerial portfolios、persona systems、target databases、<strong>把編輯效忠寫進僱傭合約</strong>、<strong>用來給行動員工打分的 scoring rubrics</strong>。這些原本「需要一整個編制化的計畫辦公室」。</li>
+<li><strong>衡量影響用 Breakout Scale。</strong> 這是 Brookings 研究員 Ben Nimmo 在 2020 年提出的六級量表：Category One（單一平台、單一社群、無突破）到 Category Six（引發政策回應或包含暴力號召）。它衡量的是「內容跨社群、跨平台、跨媒介的擴散證據」，<strong>不是</strong>「有多少人被說服」。</li>
+<li><strong>九案評級：一個 Cat 4、三個 Cat 3、三個 Cat 2、一個 Cat 1、一個未評級。</strong> 唯一的 Category Four 是俄羅斯在中非共和國透過 FM 電台廣播的 GTG-04001；唯一的 Category One 是肯亞的國內政治灌水 GTG-54004；俄羅斯國家媒體編輯管線 GTG-24015 <strong>在 PDF 中沒有明示評級</strong>（本檔 5.5 節逐一核對）。</li>
+<li><strong>報告最誠實的一句話：多數內容「drew little or no authentic engagement」。</strong> 觸及最廣的，是靠國家媒體既有通路（FM 廣播、衛星與短波電台、全球電視）分發的行動。「生產能力 ≠ 影響力」是本章對「AI 假訊息末日論」的節制劑——但這個結論本身也有倖存者偏差與利益衝突要提醒學員。</li>
+<li><strong>這個章節在課程裡要教什麼：</strong> 教學員用「定義五要件 → ABC 三向量 → 上游／下游能見度 → Breakout Scale 六級」這一組工具，把任何一則「AI 假訊息」新聞拆成可比較、可驗證的分析；並且學會在「恐慌」與「自滿」之間，用證據而不是直覺定位威脅。</li>
+</ol>
+<hr />
+<h2 id="2-p41">2. 「影響力行動」的定義：逐句解析（p.41）</h2>
+<h3 id="21">2.1 原文逐字引用</h3>
+<p>報告 p.41 開章第一段（PDF 原版以斜體排版，顯示這是刻意標示的「本章操作型定義」）：</p>
+<blockquote>
+<p>"In this section, we focus on influence operations, which we define as efforts to manipulate the information environment—including political, civic, and public discourse—with the intent to deceive, distort, or covertly influence the perceptions, beliefs, or behaviors of individuals or groups, typically while concealing the activity's origin, sponsorship, or coordination."（p.41）</p>
+</blockquote>
+<p>繁中對譯（供講義使用）：</p>
+<blockquote>
+<p>「在本節中，我們聚焦於影響力行動，我們將其定義為：<strong>操縱資訊環境</strong>（包括政治、公民與公共論述）的作為，<strong>意圖</strong>欺騙、扭曲或隱蔽地影響個人或群體的認知、信念或行為，且<strong>通常隱匿</strong>該活動的來源、資助者或協調關係。」</p>
+</blockquote>
+<h3 id="22">2.2 五個構成要件逐一拆解</h3>
+<p>把這句定義拆成五個可以「打勾」的要件，是本章所有分析的起點。下面每個要件都附上「為什麼這樣寫」的推理，以及「在九案中怎麼體現」。</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>要件（原文）</th>
+<th>白話</th>
+<th>情報分析上的意義</th>
+<th>九案中的典型體現</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><em>efforts to manipulate the information environment</em></td>
+<td>目標物是「資訊環境」，不是某一則訊息</td>
+<td>定義的單位是「行動」（operation），不是「一篇假新聞」。這決定了偵測要看<strong>行為模式與基礎設施</strong>，而非逐篇審內容。</td>
+<td>GTG-54002 用約 70 個假新聞網站＋70 個 X 帳號＋250 多個留言帳號（p.47）；GTG-84005 約 1,000 個假帳號＋一個假新聞站（p.53）</td>
+</tr>
+<tr>
+<td>2</td>
+<td><em>including political, civic, and public discourse</em></td>
+<td>範圍涵蓋政治、公民、公共論述</td>
+<td>刻意寫得比「選舉」寬：宗教少數（巴哈伊）、人權問責機制（聯合國特別報告員）、地方電費議題都算。</td>
+<td>GTG-34001 針對巴哈伊（p.64）；GTG-84002 針對 UN 特別報告員（p.78）；GTG-54004 針對肯亞電價（p.75）</td>
+</tr>
+<tr>
+<td>3</td>
+<td><em>with the intent to deceive, distort, or covertly influence</em></td>
+<td>三種意圖：欺騙、扭曲、隱蔽地影響</td>
+<td>注意第三種：<strong>「隱蔽地影響」本身就構成要件，即使內容不是假的</strong>。這把「洗白國家媒體出處」（內容可能屬實）也納入。</td>
+<td>GTG-84005 把 Xinhua、CGTN、Sputnik 的稿件去除國家出處後當「獨立馬來西亞報導」重發（p.55）</td>
+</tr>
+<tr>
+<td>4</td>
+<td><em>the perceptions, beliefs, or behaviors of individuals or groups</em></td>
+<td>對象是認知、信念、行為</td>
+<td>「行為」被寫進去，代表影響力行動的終點可以是<strong>線下動作</strong>（投票、示威、舉報），這也是 Breakout Scale 第六級的判準之一。</td>
+<td>GTG-04001 最激進的請求是「點名真實人物為武裝分子以引來安全部門行動」（p.45，Claude 拒絕）</td>
+</tr>
+<tr>
+<td>5</td>
+<td><em>typically while concealing the activity's origin, sponsorship, or coordination</em></td>
+<td>通常隱匿來源、資助、協調</td>
+<td>「typically」是留餘地的寫法：隱匿是常態而非必要條件。三個隱匿對象分別對應 ABC 框架的 A（誰）、資金鏈、B（協同行為）。</td>
+<td>GTG-84002 內部文件稱網路的「獨立性」是「最大戰略資產」（p.79）；GTG-54006 內部溝通寫「no one knows the news is fake」（p.67）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>教學提示：</strong> 要件 3 的「covertly influence」和要件 5 的「concealing」看似重複，其實層次不同——前者說的是<strong>影響方式</strong>隱蔽（受眾不知道自己被影響），後者說的是<strong>行動主體</strong>隱蔽（受眾不知道是誰在影響）。一個公開署名的國家媒體社論滿足前者不滿足後者；一個匿名帳號轉貼真實新聞滿足後者不滿足前者。兩者同時成立才是本章關注的核心型態。</p>
+<h3 id="23">2.3 與其他定義的比較</h3>
+<p>報告 p.41 「How we investigate」段落說：「An established community of journalists, researchers, and government agencies has studied these tactics, exposed them, and built the frameworks we use to understand them.」——原文的「frameworks」是超連結（本檔從 PDF 抽取連結目標確認），指向 <strong>Camille François 2019 年的〈Actors, Behaviors, Content: A Disinformation ABC〉</strong>（Transatlantic Working Group 工作論文，Annenberg Public Policy Center 出版）。把 Anthropic 的定義放到既有框架旁邊看，可以看出它的取捨：</p>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>定義／框架要點</th>
+<th>與 Anthropic 定義的差異</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nimmo（Brookings, 2020）</strong>註 1</td>
+<td>「'influence operations' are defined as efforts to influence public or political debate and decision-making processes that rely in part or in whole on covert activity」；並把「disinformation」另外定義為「the deliberate spreading of false information」</td>
+<td>Nimmo 把「隱蔽」寫成必要條件（rely in part or in whole on covert activity），Anthropic 用「typically」放寬。Nimmo 明確區分 disinformation（內容為假）與 IO（手段隱蔽）；Anthropic 的定義用「deceive, distort, or covertly influence」把兩者合併。</td>
+</tr>
+<tr>
+<td><strong>François ABC（2019）</strong></td>
+<td>三向量：<strong>A</strong> Manipulative Actors（「engage knowingly and with clear intent in viral deception campaigns. Their campaigns are covert」）、<strong>B</strong> Deceptive Behavior（「enable a small number of actors to have the perceived impact that a greater number of actors would have if the campaign were organic」）、<strong>C</strong> Harmful Content</td>
+<td>Anthropic 的定義五要件對應：要件 1–2 偏 C（資訊環境／論述）、要件 3–4 偏 B（欺騙、扭曲的手段與效果）、要件 5 偏 A（誰、誰出錢、誰協調）。報告各案的「Disruption and mitigations」一律說「built detections around its behavioral signature」——這是 François 說的<strong>產業收斂點：以行為（B）為執法基礎</strong>。</td>
+</tr>
+<tr>
+<td><strong>Meta「Coordinated Inauthentic Behavior（CIB）」</strong></td>
+<td>以「協同」＋「不真實（假帳號、誤導身分）」的<strong>行為</strong>為下架依據，明文「based on their behavior, not the content they posted」（François 附錄引用 Meta 2019 菲律賓案的聲明）</td>
+<td>Anthropic 的定義比 CIB 多了「意圖」與「影響認知／行為」的目的要件；CIB 是平台執法規則，Anthropic 的是情報分類定義。GTG-54004（肯亞）的標題直接用了「coordinated inauthentic behavior」一詞（p.75）。</td>
+</tr>
+<tr>
+<td><strong>EU「FIMI」（Foreign Information Manipulation and Interference）</strong></td>
+<td>歐盟對外事務部（EEAS）用語，強調「外國」＋「操弄」＋「干預」</td>
+<td>報告只在 GTG-04001 標題用 FIMI（p.44），因為那是唯一「外國國家直接指揮、針對他國資訊空間」的乾淨案例。GTG-54004（肯亞國內）、GTG-54006（孟加拉在野黨）不是 FIMI，但仍是 IO——這正是 Anthropic 定義不限定「外國」的用意。</td>
+</tr>
+</tbody>
+</table>
+<p>註 1：Nimmo 的定義出自 The Breakout Scale 論文註腳 1（Brookings, 2020 年 9 月）。本檔第 9 節列出來源與抓取方式。</p>
+<h3 id="24">2.4 定義的邊界案例：課堂上最值得辯論的四種</h3>
+<p>定義寫得再清楚，落到案例上都會遇到邊界。下面四種是九案中真實存在、學員最容易判斷分歧的情境：</p>
+<p><strong>（a）國家媒體公開署名，但生產過程隱匿 AI 與外包（GTG-24015）。</strong> Sputnik、RIA Novosti、RT 是公開的俄羅斯國家媒體，受眾「知道」出處。那還算隱匿嗎？報告的答案是：隱匿的不是媒體品牌，而是「<strong>Actors used a chain of different outlets to make Russian-origin claims appear to be independently reported</strong>」（p.58）——用「假的獨立驗證迴圈」（false verification loops，p.59）讓同一則故事看起來被多家獨立媒體確認。隱匿的對象是<strong>協調關係</strong>（要件 5 的第三項），不是來源。</p>
+<p><strong>（b）在野黨支持者的國內行動（GTG-54006）。</strong> 孟加拉的 Awami League 自 2024 年 7 月起在野，該行動「was on behalf of an opposition party rather than the government」（p.67）。沒有國家、沒有外國，只有一個人＋29 個帳號＋一支 <code>fake_news_3.py</code>。它符合定義嗎？符合：要件 1–5 全中（行為者自己說「no one knows the news is fake」）。這說明 Anthropic 的定義是<strong>行為者中立（actor-agnostic）</strong>的——Nimmo 的量表也是這樣設計。</p>
+<p><strong>（c）廣告公司同時做正常生意與影響力行動（GTG-54002、GTG-54004）。</strong> 報告 p.42 說「In two cases presented here, a working advertising or marketing firm ran the operations alongside ordinary commercial work」。法國數位廣告公司 LKM Company（p.47）與肯亞用「SHANKI / Elkins Marketer」行銷人格為零售品牌跑<strong>同一套模板</strong>（p.76）。「內容農場式的 SEO 行銷」和「影響力行動」的分界在哪？答案在要件 2（政治／公民／公共論述）＋要件 5（隱匿協調）：為零售品牌灌水不是 IO；用同一套流程為執政聯盟灌水就是。</p>
+<p><strong>（d）流亡反對派運動（GTG-84006）。</strong> MEK/NCRI 是伊朗流亡反對派，本身是威權政權的受害者。針對伊朗政府的內容算「操縱資訊環境」嗎？報告的判斷依據不是政治立場，而是<strong>手段</strong>：複製真實活動人士的 Telegram 帳號、以他的身分跟伊朗境內聯絡人對話而對方不知情（p.70）、建立含逮捕紀錄的人物檔案（p.71）。定義是手段中立的：反威權目的不豁免欺騙手段。</p>
+<h3 id="25-p41">2.5 報告給的九案輪廓（p.41）</h3>
+<blockquote>
+<p>"This report details nine of those cases. They originated in Russia, Iran, Turkey, and across the Gulf, South Asia, Africa and Europe, and targeted audiences on six continents. The actors behind these operations included governments, state-aligned propaganda institutions and state media, as well as private firms selling influence to paying clients, domestic political operators, and in one case an opposition movement in exile."（p.41）</p>
+</blockquote>
+<p>拆解這段話的分類學：</p>
+<ul>
+<li><strong>來源地理</strong>：俄羅斯（GTG-04001、GTG-24015）、伊朗（GTG-34001）、土耳其（GTG-84005 的 BBS Bilisim Teknolojileri 在伊斯坦堡）、波斯灣（GTG-84002 阿聯）、南亞（GTG-54006 孟加拉）、非洲（GTG-54004 肯亞；GTG-04001 的在地執行者在班吉）、歐洲（GTG-54002 法國 LKM Company；GTG-84006 的 NCRI 媒體屬性）。</li>
+<li><strong>行為者類型</strong>（報告用語 → 對應案例）：</li>
+<li>governments → GTG-04001（俄羅斯 SVR 控制的 Politology）、GTG-84002（「linked with high confidence to UAE government officials」p.78）</li>
+<li>state-aligned propaganda institutions and state media → GTG-34001（ICCO、Khorasan Razavi 伊斯蘭宣傳辦公室、Bina 觀測站）、GTG-24015（Sputnik／RIA／RT）</li>
+<li>private firms selling influence to paying clients → GTG-54002（LKM Company）、GTG-84005（BBS Bilisim）</li>
+<li>domestic political operators → GTG-54006（孟加拉）、GTG-54004（肯亞）</li>
+<li>an opposition movement in exile → GTG-84006（MEK/NCRI）</li>
+<li><strong>時機</strong>：「several of these campaigns were timed to national elections」——摩爾多瓦 2025 年 9 月 28 日國會選舉（GTG-24015，p.59）、肯亞 2027 年大選（GTG-54004，p.76）、馬來西亞（GTG-84005，針對全部 222 個國會選區，p.54）。</li>
+</ul>
+<p><strong>教學提示：</strong> 這個分類最值得注意的是<strong>沒有出現的類別</strong>——沒有任何一案來自中華人民共和國。報告中的 PRC 行為者全部集中在「監控行動」章（p.81–82：宗教事務情報蒐集單位、國家安全局的 AI 監控手冊、針對敘利亞維吾爾人的滲透招募）。對台灣讀者而言，這是本章最需要警覺的結構性缺口，第 10.4 節討論。</p>
+<hr />
+<h2 id="3-ai-p4142">3. 「上游偵測」：AI 公司的獨特觀測位置與其局限（p.41–42）</h2>
+<h3 id="31">3.1 原文</h3>
+<blockquote>
+<p>"Influence operations are neither new nor unique to the internet. An established community of journalists, researchers, and government agencies has studied these tactics, exposed them, and built the frameworks we use to understand them."（p.41）</p>
+<p>"However, while a social media site usually sees an operation once its content is already circulating, we may see it on Claude while the operation is still being built. Actors use AI to plan their campaign, choose their targets, and write the material. Those types of tasks produce signals that our systems are trained to detect, which often lets us disrupt an operation before it gets off the ground."（p.42）</p>
+<p>"Our visibility into these operations ends once it's live. To verify our findings and understand what happened after content left our platform, we rely on open-source research, cross-platform industry data, and public reporting. Each case explains how we found the activity and who else contributed to the investigation."（p.42）</p>
+<p>"Once we identify an operation, we ban the accounts involved and attribute the activity to the organization behind it. We use what we learn to sharpen our safeguards, feeding the findings from each investigation, including novel tactics and behaviors, back into our detection systems."（p.42）</p>
+</blockquote>
+<p>第 43–44 頁的趨勢段落再補一句，把「上游」這個詞說得更明確：</p>
+<blockquote>
+<p>"Because we sit at the production stage of operations, upstream of platforms like social media platforms, we may detect and disrupt an operation while it is still being put together."（p.43–44）</p>
+</blockquote>
+<h3 id="32-vs">3.2 上游 vs. 下游：誰看得到什麼</h3>
+<p>把影響力行動的生命週期攤開來，會發現不同的觀測者站在不同的位置，看到的是完全不同的切片。這張表是本章最核心的一張圖，建議直接投影：</p>
+<table>
+<thead>
+<tr>
+<th>生命週期階段</th>
+<th>行為者在做什麼</th>
+<th>AI 公司（Anthropic）看得到嗎</th>
+<th>社群平台看得到嗎</th>
+<th>事實查核／OSINT 研究者看得到嗎</th>
+<th>選委會／政府看得到嗎</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>規劃</strong>（doctrine、目標受眾、敘事）</td>
+<td>寫教條手冊、選目標、建人格系統</td>
+<td><strong>看得到</strong>（p.42：「plan their campaign, choose their targets」；p.43：doctrine 檔案跨數百個工作階段重用）</td>
+<td>看不到</td>
+<td>看不到</td>
+<td>看不到</td>
+</tr>
+<tr>
+<td><strong>生產</strong>（文章、貼文、腳本、圖片提示）</td>
+<td>批次呼叫模型產內容</td>
+<td><strong>看得到</strong>（這是主要偵測面）</td>
+<td>看不到（內容還沒上線）</td>
+<td>看不到</td>
+<td>看不到</td>
+</tr>
+<tr>
+<td><strong>基礎設施建置</strong>（假帳號、假網站、儀表板）</td>
+<td>用 Claude Code 寫儀表板、帳號暖機邏輯</td>
+<td><strong>部分看得到</strong>（GTG-84005 的儀表板是在 Claude Code 上建的，p.54）</td>
+<td>看得到帳號註冊模式（例如 GTG-54002 的 250 多個帳號集中在 2025 年 6–7 月建立，p.49）</td>
+<td>看得到網域註冊（GTG-54002 十週內從法國註冊，p.48）</td>
+<td>看不到</td>
+</tr>
+<tr>
+<td><strong>分發</strong>（貼文上線、電台播出、Telegram 轉發）</td>
+<td>內容離開 AI 平台</td>
+<td><strong>看不到</strong>（p.42：「Our visibility into these operations ends once it's live」）</td>
+<td><strong>看得到</strong>（主要偵測面）</td>
+<td>看得到公開部分</td>
+<td>偶爾（被通報時）</td>
+</tr>
+<tr>
+<td><strong>擴散</strong>（真實使用者轉發、媒體引用）</td>
+<td>不受行為者控制</td>
+<td>看不到；只能靠 OSINT 與夥伴資料回推</td>
+<td>看得到互動數據</td>
+<td><strong>看得到</strong>（Breakout Scale 的主要證據來源）</td>
+<td>偶爾</td>
+</tr>
+<tr>
+<td><strong>影響</strong>（信念、行為改變、政策回應）</td>
+<td>—</td>
+<td>看不到</td>
+<td>看不到（只有代理指標）</td>
+<td>很難（Nimmo：不可能即時量測 sentiment change）</td>
+<td><strong>只有這裡看得到</strong>（投票結果、政策變化）</td>
+</tr>
+</tbody>
+</table>
+<p>三個推論：</p>
+<ol>
+<li><strong>上游偵測的優勢是「早」，代價是「窄」。</strong> Anthropic 在 GTG-54002 說「We disrupted this operation early, before it could build an authentic audience」（p.48）——這是上游位置的典型戰果。但同一頁也承認「We are not able to independently confirm which customers commissioned this content」——<strong>上游看得到生產者，看不到出資者</strong>。</li>
+<li><strong>上游位置天然無法回答「有沒有效」。</strong> 這是為什麼報告要借用外部的 Breakout Scale，並在每案「Disruption and mitigations」段落交代「who else contributed to the investigation」。GTG-24015 的 2.09K 瀏覽數（Figure 9，p.60）、GTG-54004 的 Figure 17（p.77）幾十個瀏覽，都是 Anthropic 事後從公開平台<strong>回推</strong>的，不是它自己的遙測。</li>
+<li><strong>偵測訊號是「任務型態」，不是「內容立場」。</strong> 原文說 plan／choose targets／write the material「produce signals that our systems are trained to detect」。這句話的技術含義是：分類器不是在判斷「這篇文章是不是親俄」，而是在判斷「這個帳號的使用型態像不像影響力行動的生產線」。3.3 節展開。</li>
+</ol>
+<h3 id="33">3.3 為什麼「生產線」會留下訊號：從九案回推偵測工程</h3>
+<p>報告沒有揭露分類器的細節（合理——揭露就是教對手規避）。但九案的敘述已經足以讓學員反推出至少七類「上游可觀測的行為特徵」：</p>
+<table>
+<thead>
+<tr>
+<th>訊號類型</th>
+<th>為什麼是訊號</th>
+<th>案例證據</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>固定輸出結構</strong></td>
+<td>正常使用者不會要求每次都輸出同一個 JSON schema、固定字數、固定幾條內部連結</td>
+<td>GTG-54002：「All prompts given demanded a fixed JSON output structure, formatted HTML, exact character limits, and three to four internal links per article」（p.48）；GTG-54006：每批固定「15 headlines, 3 detailed fabricated stories, and 15 image-generation prompts」（p.67）</td>
+</tr>
+<tr>
+<td><strong>持久記憶檔中的教條</strong></td>
+<td>一份 Markdown 教條在數百個工作階段幾乎逐字重用，是「組織」而非「個人」的痕跡</td>
+<td>p.43：「Markdown files containing doctrine were reused almost verbatim across hundreds of sessions」；GTG-84002：master doctrine file 指示「a coordinated transatlantic and regional operation to dismantle the Muslim Brotherhood globally」（p.78）；GTG-84006：SKILL.md / LEARNINGS.md 記憶檔（p.75）</td>
+</tr>
+<tr>
+<td><strong>禁用詞、核准來源、規避規則</strong></td>
+<td>這些是「編輯規範」，只有制度化的內容生產才會有</td>
+<td>p.43：「Actors kept lists of banned words inside their AI agents, maintained shared files of approved sources and evasion rules」；GTG-84006：「MEK/NCRI mandatory source set hard-coded across actors」（p.74）</td>
+</tr>
+<tr>
+<td><strong>要求「去 AI 味」</strong></td>
+<td>正常寫作不需要刻意「消除自動化文本的痕跡」</td>
+<td>GTG-04001：「pushed the model to strip away classic formatting habits, actively preventing the news feeds from reading like synthetic, AI-generated text」（p.44）；GTG-54004：「humanize and refine batches of 50 pre-drafted topics and tweets」（p.76）</td>
+</tr>
+<tr>
+<td><strong>要求去除出處與警語</strong></td>
+<td>要模型「把國家出處拿掉」「把未經證實的警語拿掉」，本身就是意圖證據</td>
+<td>GTG-84005：「stripped out the state attribution to present them as independent Malaysian reporting」（p.55）；p.43：「instructed it to drop those caveats and present everything as confirmed」</td>
+</tr>
+<tr>
+<td><strong>帳號輪替與存取洗白</strong></td>
+<td>29 個帳號輪替、VPN、外國電話號碼、第三方 CI 服務遮 IP</td>
+<td>GTG-54006：「rotating through 29 Claude accounts to evade platform limits and detection」（p.67）；GTG-34001：「used VPNs and foreign phone numbers to register and verify accounts」（p.63）</td>
+</tr>
+<tr>
+<td><strong>對話中的自我揭露</strong></td>
+<td>行為者在對話裡直接說出機構、職稱、地點</td>
+<td>GTG-34001：「in conversation, they repeatedly named their locations, institutions, and roles. Those disclosures, as well as institutionally branded document footers... tied each operation to its Iranian state-aligned institution」（p.63）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>偵測工程的推理：</strong> 這七類訊號有一個共同點——它們是<strong>組織化生產的副產品</strong>，不是內容本身。一篇親俄社論本身不是訊號；「同一份教條檔在 300 個工作階段被載入、每次都要求輸出 15 則標題並去除 AI 痕跡」才是。這正是 François 說「產業收斂到以行為為執法基礎」的 AI 平台版本。學員應該記住：<strong>上游偵測的本質是「行為指紋」（behavioral signature），報告每一案的處置段落都用了這個詞。</strong></p>
+<h3 id="34">3.4 上游偵測的四個結構性局限</h3>
+<p>報告自己承認了第一個；後三個是本檔從報告文本推出來的：</p>
+<ol>
+<li><strong>能見度在內容上線時終止</strong>（報告明說，p.42）。這意味 Anthropic 對「影響」的評估永遠是二手的、事後的、依賴他人的。</li>
+<li><strong>看得到單一模型，看不到整條生產鏈。</strong> GTG-54006 的 1,500 個圖片提示「were probably exported to other AI frontier models to create the visual content」（p.67）——Anthropic 看到提示詞，看不到圖片。All Eyes On Wagner 的獨立調查發現 GTG-04001 的行為者<strong>同時訂閱 ChatGPT 與 Claude</strong>（第 9 節）。任何單一 AI 公司都只看到拼圖的一片。</li>
+<li><strong>看得到生產者，看不到委託者。</strong> GTG-54002「not able to independently confirm which customers commissioned this content」（p.48）；GTG-54006「found no proof that the party itself was involved」（p.68）；GTG-54004「we have not identified the exact organization responsible」（p.76）。影響力即服務（influence-as-a-service）的商業模式正是為了製造這種斷點——報告 p.42 說它「gives plausible deniability to the ultimate commissioners」。</li>
+<li><strong>看不到不用你的模型的行為者。</strong> 這是最根本的盲區：上游偵測只對「選擇在你平台上生產」的行為者有效。伊朗被封鎖仍用 VPN 進來（p.63）是幸運的例外；對於使用本國模型或開源模型的行為者，上游偵測是零。第 10.4 節會把這一點連到台灣。</li>
+</ol>
+<h3 id="35">3.5 偵測之後：處置的標準流程</h3>
+<p>p.42 的三個動詞——<strong>ban、attribute、feed back</strong>——在九案中的實際落地，本檔第 8 節做跨案例歸納。這裡先指出一個常被忽略的細節：報告說「we ban the accounts involved <strong>and attribute the activity to the organization behind it</strong>」。歸因（attribution）被寫成處置的一部分，而不是研究的附帶產物。這與傳統網路威脅情報的做法一致（先 IOC、後歸因），但在影響力行動領域格外重要——因為<strong>行為者的核心目標就是讓歸因失敗</strong>（要件 5）。</p>
+<hr />
+<h2 id="4-ai-p4243">4. AI 建的不只是內容：影響力行動的「組織基礎設施」（p.42–43）</h2>
+<h3 id="41">4.1 原文</h3>
+<blockquote>
+<p>"<strong>AI helped to build the apparatus as well as the content.</strong> Actors had the model produce doctrine manuals, opposition dossiers, ministerial portfolios, persona systems, target databases, employment contracts encoding editorial loyalty, and scoring rubrics that were used to rank staff who were part of the operation. This kind of work would otherwise need a staffed program office."（p.42–43）</p>
+</blockquote>
+<h3 id="42">4.2 清單逐項解析</h3>
+<p>這一段是整章最具原創性的觀察。過去對「AI 假訊息」的討論幾乎全部集中在<strong>內容面</strong>（假文章、深偽影片、AI 頭像）；報告指出 AI 同時在建<strong>組織面</strong>——把一個影響力行動當作一家公司來營運所需的一切文書。下表逐項整理，並對應回九案的具體證據：</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>報告列出的產出（原文）</th>
+<th>這是什麼</th>
+<th>在「一家公司」裡對應的部門</th>
+<th>案例證據（頁碼）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>doctrine manuals</strong>（教條手冊）</td>
+<td>行動的意識形態基礎、敘事紅線、任務陳述</td>
+<td>策略／企業文化</td>
+<td>GTG-34001：「guidebooks on how to manage and operate their digital operations which included the operating manuals」（p.64）；伊朗國家教條「Jihad al-Tabyin（explanatory jihad）」直接出現在工作階段中（p.63）；GTG-84006：一名行為者把 MEK 建黨教條載入記憶檔作為「strategic base data」供他人重用（p.72）；GTG-84002：「Deadshot」人格的 master doctrine file（p.78）</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>opposition dossiers</strong>（反對派檔案）</td>
+<td>針對政敵、記者、官員的人物側寫</td>
+<td>競爭情報</td>
+<td>GTG-04001：「a recurring surveillance operation to track and update data on CAR opposition political figures」（p.45）；GTG-84005：「fabricated intelligence dossiers to spread false allegations against an opposition politician and civil-society organizations」（p.54）；GTG-84002：18 名歐洲議會議員與記者的個人檔案、UN 特別報告員的反問責檔案（p.78）</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>ministerial portfolios</strong>（部會級計畫書）</td>
+<td>給上級／部長的正式規劃文件</td>
+<td>對董事會的報告</td>
+<td>GTG-34001：「ministerial deliverables carrying official ICCO branding... a nine-part international influence portfolio and complete organizational plans for the funeral of the Supreme Leader of Iran」（p.63）；GTG-84002：「several prepared for direct delivery to senior UAE officials」（p.79）</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>persona systems</strong>（人格系統）</td>
+<td>假身分的一致性管理：背景、語氣、平台分工</td>
+<td>品牌／角色管理</td>
+<td>GTG-34001：「persona systems」（p.64）；GTG-84006：讀取活動人士約 8,400 則 Telegram 貼文以複製寫作風格（p.70）；GTG-54002：不存在的假記者署名（p.49）</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>target databases</strong>（目標資料庫）</td>
+<td>受眾切分與個人層級的目標清單</td>
+<td>客戶關係管理（CRM）</td>
+<td>GTG-84005：以真實普查與選舉資料建立 222 個選區的選民側寫（p.54）；GTG-84006：爬取 500 多個頻道，依城市、年齡、職業、政治傾向、<strong>逮捕紀錄</strong>分群（p.71）；GTG-34001：「target databases naming international officials and Iranian opposition figures」（p.64）</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>employment contracts encoding editorial loyalty</strong>（把編輯效忠寫進僱傭合約）</td>
+<td>用法律文件強制員工的政治立場</td>
+<td>人資／法務</td>
+<td>GTG-04001：「it generated contracts mandating loyalty to the President of CAR and 'Russia and its contingent.'」（p.45）</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>scoring rubrics that were used to rank staff</strong>（給行動員工打分的評分表）</td>
+<td>以政治合規為指標的績效考核</td>
+<td>人資／績效管理</td>
+<td>GTG-04001：「write job descriptions, scoring rubrics, and a three-strike dismissal process. The actors then scored staff articles against these criteria and used Claude to get recommendations on which employees to keep and which ones to fire.」（p.45）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="43">4.3 為什麼「組織面」比「內容面」更值得教</h3>
+<p>三個理由：</p>
+<p><strong>第一，組織面的證據更難偽造、更能歸因。</strong> 一篇文章可以宣稱是任何人寫的；一份寫著「效忠 CAR 總統與俄羅斯及其特遣隊」的僱傭合約、一份帶著 ICCO 官方頁尾（「a document footer naming the ICCO and the IQPC」，p.66）的部會計畫書，直接指向組織。報告在 GTG-34001 的歸因就是靠「institutionally branded document footers」（p.63）。</p>
+<p><strong>第二，組織面揭示了「人力替代」的真實規模。</strong> 報告說這些工作「would otherwise need a staffed program office」。對照監控章的說法：「AI is now being used in place of an engineering workforce」（p.81）。影響力行動章的等價說法是：AI 正在取代<strong>行政與管理人力</strong>——寫合約的法務、打考績的人資、寫計畫書的幕僚。GTG-24015 說 Claude「taking a single staffer's output well beyond what they could produce unaided」（p.59）；GTG-54006 是<strong>一個人</strong>在 Gaibandha 用 29 個帳號跑了約 16 個月（p.70）。</p>
+<p><strong>第三，組織面是 Claude 拒絕機制最容易被繞過的地方。</strong> GTG-04001 的行為者用 Claude 給員工的政治合規打分——「When Claude flagged the political weighting, the actor relabeled it in neutral terms and kept the scoring」（p.45）。一份「效忠合約」如果換成「編輯方針一致性評量」，內容一樣，模型的判斷卻可能不同。這是第 8 節「防線缺口」的重要素材。</p>
+<h3 id="44-p4244">4.4 九大趨勢全覽（p.42–44）</h3>
+<p>報告在 Breakout Scale 段落之後，用九個粗體標題列出趨勢。上面 4.1–4.3 處理的是第三項；這裡把全部九項按原文順序整理，每項附「案例對應」與「教學上的一句話」。</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>趨勢（原文標題）</th>
+<th>報告的核心陳述</th>
+<th>對應案例</th>
+<th>教學上的一句話</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Influence sold as a service</strong></td>
+<td>商業行為者為付費者生產內容；「gives plausible deniability to the ultimate commissioners」；「In two cases presented here, a working advertising or marketing firm ran the operations alongside ordinary commercial work」（p.42）</td>
+<td>GTG-54002（LKM Company，法國數位廣告公司，「shifted political stances... based on whoever was paying」p.47）；GTG-84005（BBS Bilisim，「sold access to the platform as a paid influence-as-a-service capability」p.53）；GTG-54004（同一模板同時服務零售品牌，p.76）</td>
+<td>影響力的「產能」已經商品化；買家不需要自己會做。</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>AI as a newsdesk</strong></td>
+<td>「Claude was slotted into a human-edited pipeline that was already up and running, playing the role of a sub-editor or content creator」（p.42）</td>
+<td>GTG-24015（四個帳號各自嵌入 Sputnik／RIA／RT 的編輯流程，p.58–59）；GTG-04001（每日內容生產供電台播出，p.44）；GTG-84005（Malaysia Pulse 的 AI 改寫管線，p.54）</td>
+<td>AI 不是取代編輯台，而是被「插進」既有編輯台——這代表下游分發通路早已存在。</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>AI helped to build the apparatus as well as the content</strong></td>
+<td>見 4.1–4.3</td>
+<td>GTG-04001、GTG-34001、GTG-84002、GTG-84006</td>
+<td>看組織，不只看內容。</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Complex tool use</strong></td>
+<td>教條 Markdown 跨數百工作階段重用；禁用詞清單；核准來源與規避規則；固定批次呼叫的自製軟體；「actors producing content never needed to coordinate with or even know one another」；「One actor was building a course to teach the workflow to others」；「a great deal is embedded within persistent memory files」（p.43）</td>
+<td>GTG-84006（共用 AI 代理平台「Viktor」，每個工作區有自己的長期記憶檔，p.72）；GTG-54006（<code>fake_news_3.py</code>，p.67）；GTG-84002（Deadshot 私有平台，p.78）；GTG-54002（固定 JSON schema，p.48）</td>
+<td>行動的「大腦」搬進了記憶檔——偵測要看的是檔案與代理設定，不是單一提示。（註：「有人在做課程教別人」這句在九案正文中<strong>找不到對應案例</strong>，見第 12 節。）</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Laundering of attribution, sourcing, and certainty</strong></td>
+<td>讓國家／委託敘事看起來像獨立聲音；剝除國家出處；經由多家媒體鏈條讓聲稱「read as independently confirmed」；要求模型丟掉「未經證實」的警語（p.43）</td>
+<td>GTG-24015（false verification loops，p.59）；GTG-84005（TV BRICS、Xinhua、Sputnik/RIA、CGTN 去出處重發，p.55）；GTG-34001（把假聲稱歸給 CSIS、Brookings、RAND，p.64）</td>
+<td>三種洗白：洗<strong>來源</strong>（誰說的）、洗<strong>佐證</strong>（誰確認的）、洗<strong>確定性</strong>（多確定）。</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Increased operational security</strong></td>
+<td>要求模型去除自動化痕跡；帳號暖機與規避邏輯；交付前移除中繼資料與代號；VPN、外國電話、輪替帳號、第三方遮 IP 服務（p.43）</td>
+<td>GTG-84005（帳號暖機、定期更新 cookie 與 IP，p.54）；GTG-54006（29 帳號輪替、第三方 CI 服務遮 IP，p.70）；GTG-34001（VPN＋外國電話，p.63）</td>
+<td>OPSEC 從「內容」開始做——去 AI 味是第一道。</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>Fake personas (and impersonation of real personas)</strong></td>
+<td>AI 生成頭像、假記者傳記、假政治發言人；冒充真實人物與機構（國家發言人、人權組織）；偽造政府文件（p.43）</td>
+<td>GTG-54002（AI 頭像，Figure 2，p.49）；GTG-34001（以 IRGC 發言人官方口吻發文，p.64）；GTG-84002（複製一個真實瑞士組織的身分成立前線 NGO，p.78）；GTG-04001（偽造憲兵與國防部公文，p.45）</td>
+<td>從「假人」升級到「假機構」與「假公文」。</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>Targeting people and accountability mechanisms</strong></td>
+<td>複製真實活動人士帳號與伊朗境內聯絡人即時對話；逮捕紀錄側寫；在 UN 人權理事會現場宣讀的代筆證詞；UN 特別報告員的反檔案（p.43）</td>
+<td>GTG-84006（p.70–71）；GTG-84002（第 62 屆 UNHRC，p.78）</td>
+<td>影響力行動的終點不一定是「輿論」，可能是<strong>一個具體的人</strong>或<strong>一個問責機制</strong>。</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>Influence operations often fail to reach a genuine audience</strong></td>
+<td>見第 7 節</td>
+<td>全部九案</td>
+<td>生產能力 ≠ 影響力。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-breakout-scale">5. Breakout Scale：六級量表的原始定義與本報告的用法</h2>
+<h3 id="51-p42">5.1 報告怎麼說（p.42）</h3>
+<blockquote>
+<p>"<strong>How we measure reach.</strong> To accurately evaluate the impact of each influence operation, we apply the Breakout Scale, a six-category framework widely accepted by industry researchers. The scale categorizes impact based on cross-platform migration and reach. Category One represents content that is confined to a single community on a single platform, while Categories Two through Six measure increasingly higher levels of public exposure and distribution."（p.42）</p>
+</blockquote>
+<p>「Breakout Scale」在 PDF 中是超連結，本檔從 PDF 抽取連結目標確認指向：<br />
+<code>https://www.brookings.edu/articles/the-breakout-scale-measuring-the-impact-of-influence-operations/</code></p>
+<p>在 GTG-54002 那一案，報告則寫了完整出處：「Using the <strong>Brookings Institution's Breakout Scale</strong>, which measures the impact of influence operations...」（p.48）。</p>
+<p><strong>注意報告的簡化：</strong> 報告只描述了 Category One，然後把 Two 到 Six 一句話帶過（「increasingly higher levels of public exposure and distribution」）。這是<strong>不完整的</strong>——原始量表的第四到第六級並不是「更多曝光」的線性延伸，而是<strong>質變</strong>：跨媒介（進入主流媒體）、名人背書、政策回應或暴力號召。教學時必須補上原始定義，否則學員會誤以為 Category Six 只是「傳播更廣」。</p>
+<h3 id="52-ben-nimmo-brookings-2020-9">5.2 Ben Nimmo 的原始定義（Brookings, 2020 年 9 月）</h3>
+<p>論文全名：<strong>《The Breakout Scale: Measuring the Impact of Influence Operations》</strong>，作者 Ben Nimmo，Brookings Institution 的 Foreign Policy 計畫出版，2020 年 9 月。Nimmo 當時任職於社群網路分析公司 Graphika，後來成為 Meta 的全球威脅情報主管，再到 OpenAI 的情報與調查主管——<strong>同一個人先後在社群平台與 AI 公司做同一件事</strong>，這個履歷本身就是本章「上游／下游」討論的活教材。</p>
+<h4 id="_1">量表的設計原理</h4>
+<p>Nimmo 開宗明義說明為什麼需要這個量表（執行摘要）：</p>
+<blockquote>
+<p>"One of the greatest challenges in the study of disinformation and influence operations (IOs) is measuring their impact."</p>
+</blockquote>
+<p>他列出四個為什麼「量測影響」極難的理由（p.2–3）：</p>
+<ol>
+<li><strong>不知道對手想達成什麼。</strong> 用 2016 年 5 月 IRA 在德州休士頓同時策動兩場對立集會的案例說明：出席人數極少（抗議方不到十幾人、反制方約 60 人），沒有人受傷。這到底是成功還是失敗？「Without knowing what the Russian trolls wanted to achieve, it is impossible to know whether they achieved it.」</li>
+<li><strong>量測「情緒改變」需要前中後的重複民調</strong>，而社群情緒分析只能看到「公開反應的人」，看不到「看了但沒反應的人」。</li>
+<li><strong>地緣政治型 IO 針對的是大尺度議題</strong>，因果鏈糾纏，研究者無法在行動進行中拆解各因素。</li>
+<li><strong>調查者幾乎從不從頭看到行動</strong>，多半是中途介入、資料集殘缺且持續變動。</li>
+</ol>
+<p>他接著批評當時最常見的替代方案——用互動數當影響力代理指標：</p>
+<blockquote>
+<p>"traffic numbers on a single platform are a poor approximation for an IO's overall impact"</p>
+</blockquote>
+<p>並用 IRA 在 Facebook 上「可能觸及 1.26 億美國使用者」這個被媒體大量引用的數字舉例：這個數字沒有計入 Twitter／Instagram／YouTube、沒有區分俄語與英語（IRA 2014–2017 發了 900 多萬則推文，俄語多過英語）、沒有扣除假帳號的人工放大、沒有考慮同一人被重複曝光、也沒有反映不上網的人。他的結論是：</p>
+<blockquote>
+<p>"The aggregate number of 126 million potential viewers confirms that the IRA was running a big operation, but it cannot be used to measure meaningful impact."</p>
+</blockquote>
+<h4 id="_2">核心概念：插入點與突破時刻</h4>
+<p>量表建立在兩個概念上（p.4）：</p>
+<ul>
+<li><strong>Insertion point（插入點）</strong>：行為者把內容種進資訊生態系的位置。可以是「單一平台上的單一社群」（2017 年沙烏地針對卡達的推特行動）、可以是「跨多平台的一個社群」（IRA 從 2015 年起針對 Black Lives Matter，橫跨 Facebook、Twitter、Instagram、部落格）、也可以是「一個特定的人」（伊朗行動「Distinguished Impersonator」用假記者人格接觸真實個人邀訪）。</li>
+<li><strong>Breakout moment（突破時刻）</strong>：行動的訊息<strong>有機地</strong>從插入點擴散到新社群。Nimmo 列出五種突破：<br />
+  1. <strong>on-platform</strong>（同平台新社群）：真正的 BLM 活動人士轉推 IRA 的迷因<br />
+  2. <strong>cross-platform</strong>（跨平台）：有人把 IRA 推文截圖貼到 Instagram<br />
+  3. <strong>cross-medium</strong>（跨媒介）：傳統媒體引用或嵌入<br />
+  4. <strong>major influencers</strong>（大影響者）：政治人物或名人複述，尤其是明確背書<br />
+  5. <strong>policy impact / call to violence</strong>（政策影響／暴力號召）</li>
+</ul>
+<p>他用 2016 年 GRU 入侵民主黨全國委員會（DNC）的案例，示範<strong>一個行動可以連續發生多次突破</strong>：先建立「Guccifer 2.0」假駭客人格（插入點）→ 吸引追隨者（同平台突破＋跨平台突破）→ 主動聯繫記者推銷外洩資料（跨媒介突破）→ WikiLeaks 主動聯繫並提出代為托管（透過大影響者突破）→ 最終導致 DNC 主席 Debbie Wasserman Schultz 等高層辭職（政策影響）。</p>
+<p>生態系比喻（p.4，引用研究者 Alicia Wanless 的概念）：</p>
+<blockquote>
+<p>"A story planted by a disinformation actor can be considered akin to a virus that is inserted into the ecosystem... The most dangerous influence operations will be those that show the greatest ability to spread to many different communities, across many platforms, and into real-life discourse."</p>
+</blockquote>
+<h4 id="_3">六級定義逐級解釋</h4>
+<p>下表是 Nimmo 論文中「THE BREAKOUT SCALE」那張圖上的標籤（原文大寫），加上正文的完整定義與他親自舉的例子：</p>
+<table>
+<thead>
+<tr>
+<th>級別</th>
+<th>圖上標籤（原文）</th>
+<th>正文定義（原文逐字）</th>
+<th>判準白話</th>
+<th>Nimmo 舉的例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Category One</strong></td>
+<td><em>one platform, no breakout</em></td>
+<td>"Category One operations exist on a single platform, and their messaging does not spread beyond the community at the insertion point."</td>
+<td>單一平台、單一社群、完全沒有外溢。內容可能在該社群內流傳，但接觸不到新受眾。</td>
+<td>政治性的 clickbait 與垃圾內容；2017 年波蘭一個推特行動（幾分鐘內產生 15,000 則推文、沒紅起來、兩小時內歸零）；伊朗早期在 Facebook 上介入 2012 年美國共和黨初選與 2014 年蘇格蘭獨立公投的嘗試</td>
+</tr>
+<tr>
+<td><strong>Category Two</strong></td>
+<td><em>one platform, breakout OR many platforms, no breakout</em></td>
+<td>"Category Two operations either spread beyond the insertion point but stay on one platform, or feature insertion points on multiple platforms, but do not spread beyond them."</td>
+<td>二選一：（a）單一平台但有外溢到新社群；或（b）多平台鋪點但每一個都沒有外溢。</td>
+<td>（a）2019 年 IRA 的「IRACopyPasta」——幾乎只在 Instagram，但確實有非該行動關聯的使用者互動；（b）親中國政府的垃圾網路「Spamouflage Dragon」——橫跨 YouTube、Facebook、Twitter 數百個資產，但所有互動都來自網路內部成員</td>
+</tr>
+<tr>
+<td><strong>Category Three</strong></td>
+<td><em>multiple platforms, multiple breakouts</em></td>
+<td>"Category Three influence operations feature insertion points and breakout moments on multiple platforms, but do not spread onto mainstream media."</td>
+<td>多平台都有插入點<strong>且都有外溢</strong>，但還沒進入主流媒體。</td>
+<td>主流媒體報導之前的「Pizzagate」與「QAnon」——從 4chan 等邊緣論壇起家，在多個社群平台吸引到真心相信的追隨者</td>
+</tr>
+<tr>
+<td><strong>Category Four</strong></td>
+<td><em>cross-medium breakout</em></td>
+<td>"Category Four operations manage to break out of the social media sphere entirely and are reported by the mainstream media, either as embedded posts or as reports."</td>
+<td><strong>質變</strong>：離開社群媒體，進入傳統媒體（被嵌入引用或被報導）。</td>
+<td>伊朗行動「Endless Mayfly」（假網站散布卡達 2020 世界盃假故事，被路透社短暫報導）；IRA 多次——2017 年 1 月《洛杉磯時報》在星巴克僱用難民的報導中嵌入兩個 IRA 帳號的推文；IRA 人格 @SouthLoneStar 在 2017 年倫敦橋恐攻後的反穆斯林推文被英國各大小報引用。Nimmo 特別指出<strong>跨媒介可以雙向</strong>：2017 年俄羅斯國家電視台 Zvezda 播出「俄軍機用電子干擾癱瘓美軍神盾巡洋艦」的假消息（源自親克里姆林寫手的網路文章，是「電子→傳統」突破），之後又被英語部落格圈回流到社群媒體（「傳統→社群」突破）</td>
+</tr>
+<tr>
+<td><strong>Category Five</strong></td>
+<td><em>celebrity amplification</em></td>
+<td>IO 到達此級是「if celebrities amplify their messages—especially if they explicitly endorse them. This gives the information operators a powerful external validation, effectively attaching the celebrity's seal of approval and personal credibility to the operation's message."</td>
+<td>名人／高知名度人物放大，尤其是<strong>明確背書</strong>。Nimmo 明說「celebrity」是廣義的：政治人物不是唯一的高衝擊放大器。</td>
+<td>川普 2016 年 9 月 28 日競選演說宣稱 Google「壓制關於希拉蕊的壞消息」（該理論早在 6 月已被駁斥，但 Sputnik 在 9 月 12 日寫了長文，經 Breitbart 等親川普媒體放大）；音樂人 Roger Waters 指控白盔隊是「假的」；演員 Woody Harrelson 在 Instagram 分享 5G「可能加劇」COVID-19 傳播的假消息</td>
+</tr>
+<tr>
+<td><strong>Category Six</strong></td>
+<td><em>policy response OR call for violence</em></td>
+<td>"An IO reaches Category Six if it triggers a policy response or some other form of concrete action, or if it includes a call for violence."</td>
+<td><strong>最高級，也是最罕見的一級</strong>。兩條獨立路徑：引發政策回應／具體行動，<strong>或</strong>內含暴力號召。</td>
+<td>2016 年 GRU 駭入 DNC（外洩導致多名高層辭職）；IRA 在 2016 年 5 月組織休士頓兩場對立示威並建議攜帶武器；Pizzagate（導致一名持槍美國人到華府披薩店「自行調查」）；反 5G 陰謀論（導致英國縱火犯攻擊行動電話基地台）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_4">量表的四個使用規則（常被忽略）</h4>
+<p>Nimmo 在論文中明確寫下、但報告沒有轉述的四點，教學時必須補上：</p>
+<ol>
+<li><strong>級別是「某一時刻的快照」，可升可降。</strong> "Each category represents the influence operation at a specific moment in time, so operations can both rise up the scale and fall back down it." 他用 IRA 自己舉例：2014 年 9 月的 IRA（多平台、幾乎無有機外溢）、2016 年末的 IRA（多平台＋突破到政策影響）、2018 年 11 月的 IRA（多平台＋直接接觸，無突破）、2019 年 10 月的 IRA（單一平台、有限突破）是<strong>四個不同的級別</strong>。</li>
+<li><strong>量表是行為者中立（actor-agnostic）的。</strong> 可以用來比較影響力行動、陰謀論、一般性的錯誤資訊擴散，甚至「同一個政府的公開官方傳播 vs. 隱蔽行動」的相對衝擊。</li>
+<li><strong>Category Three 是「過渡級」。</strong> "More than most, Category Three is a transient category... They tend to either remain stuck in the lower categories or accelerate onwards into Category Four." 理由是：能在多平台有機擴散的故事，本身就會引起科技與社群媒體記者的注意，於是自然進入傳統媒體。<strong>因此 Category Three 是防禦者的行動臨界點</strong>——Nimmo 直說：「If researchers find an operation that they classify as Category Three, a timely exposure or other response will be crucial before the operation can break new ground.」</li>
+<li><strong>級別≠實際效果。</strong> "This does not necessarily equate to actual impact: For example, a policymaker may repeat an IO's message in a debate but have it rejected. Likewise, any actual impact may not necessarily be the result the IO wanted to achieve, given that the IO's intentions are unlikely to be known." 量表衡量的是<strong>潛在影響的近似值（approximate potential impact）</strong>，而且是<strong>可即時、可複現、可驗證</strong>地做出來的近似值。</li>
+</ol>
+<h4 id="_5">量表的政策意涵</h4>
+<p>Nimmo 的結論段落有一個常被引用的論點：這個量表同時是<strong>給記者、政治人物與名人的警告</strong>。因為第四、五級的突破完全取決於這些「特權且脆弱」的資訊消費者：</p>
+<blockquote>
+<p>"Mainstream journalists, politicians, and celebrities occupy a privileged and vulnerable position, because they have audiences far beyond the scope of the average citizen. Such influencers can make the difference between a weaponized leak or false story staying in the shadows and reaching a nationwide audience."</p>
+</blockquote>
+<p>他的具體建議：「Politicians, journalists, and influencers should all beware direct outreach, and verify startling claims before they repeat them.」——這對第 10 節的媒體識讀設計有直接用途。</p>
+<h3 id="53">5.3 六級量表的判讀流程（課堂可用的決策樹）</h3>
+<p>把 Nimmo 的定義整理成一個可以實際套用的判斷順序：</p>
+<pre class="mermaid">flowchart TD
+    S0[&quot;Step 0：先確定「這是一個 IO」&lt;br/&gt;（用第 2 節的五要件）&quot;] --&gt; S1{&quot;Step 1：內容有沒有被行動網路&lt;br/&gt;以外的真人自發擴散？&quot;}
+    S1 --&gt;|&quot;沒有&quot;| S1a{&quot;Step 1a：行動有幾個平台的插入點？&quot;}
+    S1 --&gt;|&quot;有&quot;| S2{&quot;Step 2：外溢發生在幾個平台？&quot;}
+    S1a --&gt;|&quot;只有一個平台&quot;| C1[&quot;Category One&quot;]
+    S1a --&gt;|&quot;多平台但都沒外溢&quot;| C2b[&quot;Category Two&lt;br/&gt;（第二種型態）&quot;]
+    S2 --&gt;|&quot;只在一個平台外溢&quot;| C2a[&quot;Category Two&lt;br/&gt;（第一種型態）&quot;]
+    S2 --&gt;|&quot;多平台都有外溢&quot;| S3{&quot;Step 3：有沒有進入傳統／主流媒體？&lt;br/&gt;（被引用、被嵌入、被報導）&quot;}
+    S3 --&gt;|&quot;沒有&quot;| C3[&quot;Category Three&lt;br/&gt;（過渡級：這是防禦的行動臨界點）&quot;]
+    S3 --&gt;|&quot;有&quot;| S4{&quot;Step 4：有沒有高知名度人物複述或背書？&lt;br/&gt;（政治人物、名人、大影響者）&quot;}
+    S4 --&gt;|&quot;沒有&quot;| C4[&quot;Category Four&quot;]
+    S4 --&gt;|&quot;有&quot;| S5{&quot;Step 5：有沒有引發政策回應／具體行動，&lt;br/&gt;或內含暴力號召？&quot;}
+    S5 --&gt;|&quot;沒有&quot;| C5[&quot;Category Five&quot;]
+    S5 --&gt;|&quot;有&quot;| C6[&quot;Category Six&quot;]
+</pre>
+<p><strong>兩個判讀陷阱：</strong></p>
+<ul>
+<li><strong>陷阱一：把「自家帳號互推」當外溢。</strong> Spamouflage Dragon 就是典型：數百個資產、橫跨三平台，但「all of the reactions to its posts came from other members of the same network」。這正是報告給 GTG-54004 Category One 的理由（「completely isolated within the network of fake accounts」，p.76），以及給 GTG-54002 Category Two 的理由（「with no evidence of breakout beyond its own activity」，p.48）。</li>
+<li><strong>陷阱二：把「行為者自報的數字」當證據。</strong> 報告在 GTG-84005 明確處理了這個問題：儀表板記錄某資深馬來西亞政府官員帳號獲得「數百萬」的互動，但「Because these figures are self-reported by the actor's own tools, we cannot independently verify them」（p.54）。這也是為什麼該案只給 Category Two——<strong>自報的百萬瀏覽不能換成量表級別</strong>。</li>
+</ul>
+<h3 id="54-abc-breakout-scale">5.4 兩個框架的分工：ABC 管「是什麼」、Breakout Scale 管「多嚴重」</h3>
+<p>課堂上最容易混淆的是這兩個框架的關係。一句話：</p>
+<ul>
+<li><strong>François 的 ABC</strong> 回答「這是不是影響力行動、由誰、用什麼手段、散布什麼內容」——<strong>分類問題</strong>。</li>
+<li><strong>Nimmo 的 Breakout Scale</strong> 回答「這個行動走多遠了、該不該現在動手」——<strong>優先順序問題</strong>。</li>
+</ul>
+<p>兩者串起來就是一條完整的分析流程：ABC 決定<strong>要不要處理</strong>，Breakout Scale 決定<strong>多急</strong>。Nimmo 自己說量表的主要目的是「enabling a prioritization of resources, and a greater degree of coordination, in the response」。</p>
+<p>補充第三個框架供進階學員參考：<strong>DISARM</strong>（DISARM Foundation 維護，前身為 AMITT）是影響力行動的 TTP 分類法，「DISARM's style is based on the MITRE ATT&amp;CK framework」，分為 <strong>DISARM Red</strong>（造謠者的 TTP，依戰術階段排列）與 <strong>DISARM Blue</strong>（回應者的 TTP）。它提供 STIX 樣板（放在 DISARM_CTI repo）以便在 ISAO 之間交換資料，以 CC-BY 授權開放，且在 AMITT 時期（2020–2022）曾與 NATO、EU 及數個國家的反造謠單位試行。<strong>DISARM 之於影響力行動，等於 ATT&amp;CK 之於網路攻擊</strong>——本報告沒有使用 DISARM 標註 TTP，這是課程可以補上的練習（第 10.3 節）。</p>
+<h3 id="55-breakout-scale-pdf">5.5 九案的 Breakout Scale 評級對照表（逐一從 PDF 正文核對）</h3>
+<p>以下每一格的級別都回到 PDF 內文逐句確認，並抄錄報告給出的理由原文。<strong>這是本教材最該被直接投影的一張表。</strong></p>
+<table>
+<thead>
+<tr>
+<th>GTG 代號</th>
+<th>級別</th>
+<th>報告的原文理由（逐字）</th>
+<th>出處頁</th>
+<th>判讀備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GTG-04001</strong>（俄羅斯 FIMI／中非共和國）</td>
+<td><strong>Category Four</strong></td>
+<td>"Using the Breakout Scale, we would assess this operation as Category Four (content broadcast daily through Radio Lengo Songo on 98.9 FM, amplified through Telegram channels and carried by local news outlets in CAR)."</td>
+<td>p.45</td>
+<td><strong>全報告最高級</strong>。理由是典型的 cross-medium breakout：內容離開網路，透過 FM 廣播與在地新聞媒體落地。注意報告沒有主張到達 Cat 5／6——沒有名人背書或政策回應的證據</td>
+</tr>
+<tr>
+<td><strong>GTG-54002</strong>（商業影響力即服務／六大洲）</td>
+<td><strong>Category Two</strong></td>
+<td>"Using the Brookings Institution's Breakout Scale, which measures the impact of influence operations, we would assess this activity as Category Two: content distributed across the network's own websites and matching social media accounts, with no evidence of breakout beyond its own activity."</td>
+<td>p.48</td>
+<td>對應 Nimmo 的「多平台、無外溢」型態（Spamouflage Dragon 型）。<strong>8,913 篇文章、約 20 種語言、70 個網站仍然只有 Cat 2</strong>——這是「產量不等於級別」最有力的證據</td>
+</tr>
+<tr>
+<td><strong>GTG-84005</strong>（商業選舉操縱平台／馬來西亞）</td>
+<td><strong>Category Two</strong></td>
+<td>"We rate this campaign as a Category Two on the Breakout Scale, meaning that the assets were distributed across multiple platforms, but without evidence of breakout into authentic communities."</td>
+<td>p.54</td>
+<td>同樣是「多平台、無外溢」。約 1,000 個假帳號、自報百萬瀏覽，但自報數字不算證據（p.54）</td>
+</tr>
+<tr>
+<td><strong>GTG-24015</strong>（俄羅斯國家媒體編輯管線）</td>
+<td><strong>未給評級</strong></td>
+<td>報告在此案<strong>沒有使用 Breakout Scale</strong>。相關陳述是：「Unlike covert networks that struggle to reach real audiences, the content developed by these individual actors was distributed through media outlets' established channels. Where we matched individual Claude-produced output against published content, results ranged from a Telegram post with roughly 2,000 views to the aired broadcast copy. We're not able to determine what share of the outlets' total output passed through the pipelines that involved Claude.」</td>
+<td>p.58</td>
+<td><strong>本表最重要的一格</strong>。這是九案中真實觸及最廣的一案（RT 全球廣播、Sputnik 多語系），卻<strong>沒有</strong>給級別。見 5.6 節的分析</td>
+</tr>
+<tr>
+<td><strong>GTG-34001</strong>（伊朗國家對齊 ICCO 等三機構）</td>
+<td><strong>Category Three</strong></td>
+<td>"Using the Breakout Scale, we would assess this operation as Category Three (multiple platforms, with content observed disseminated by IRGC-aligned channels on Eitaa and other platforms.)"</td>
+<td>p.63</td>
+<td>判準是「多平台＋有觀察到擴散」。可討論：IRGC 關聯頻道的轉發算不算 Nimmo 定義的「有機外溢」？（見 5.6）</td>
+</tr>
+<tr>
+<td><strong>GTG-54006</strong>（孟加拉親 Awami League 自動化假新聞）</td>
+<td><strong>Category Three</strong></td>
+<td>"Using the Breakout Scale, we would assess this operation as Category Three (multiple platforms, with videos matching the operation's output observed on multiple Bangladesh focused channels and accounts across social media platforms.)"</td>
+<td>p.68</td>
+<td>同頁也說「We were unable to identify the specific channels that published the entire output」且「found no evidence that the content reached a wider audience outside of these accounts」——級別與證據之間有張力</td>
+</tr>
+<tr>
+<td><strong>GTG-84006</strong>（MEK/NCRI 對齊的分散式行動）</td>
+<td><strong>Category Two</strong></td>
+<td>"Using the Breakout Scale, we would assess this operation as Category Two (multiple platforms, with distribution through the network's own NCRI media properties and amplifier accounts.)"</td>
+<td>p.71</td>
+<td>標準的「多平台但仍在自家資產內」。處置段落補充：「we are not able to independently confirm how much authentic engagement was drawn by the network's amplification accounts」（p.74）。注意 IOC 表列出的 Instagram 帳號追蹤數不小（@simaintv/@iranintv 約 708K、@javanane_shargt 約 299K、@tehranchekhabar19 約 173K、@faryade_mamnoo 約 89.5K，p.74–75）——<strong>追蹤數大但仍是 Cat 2</strong>，因為那是自家媒體資產</td>
+</tr>
+<tr>
+<td><strong>GTG-54004</strong>（肯亞國內協同不實行為）</td>
+<td><strong>Category One</strong></td>
+<td>"We evaluated the impact of the network using the Breakout Scale and classified it as Category One. The activity was completely isolated within the network of fake accounts and local influences on a single platform, failing to reach or influence any real people."</td>
+<td>p.76</td>
+<td><strong>全報告最低級</strong>，也是唯一明確寫出「failing to reach or influence any real people」的一案</td>
+</tr>
+<tr>
+<td><strong>GTG-84002</strong>（阿聯指揮／針對穆斯林兄弟會）</td>
+<td><strong>Category Three</strong></td>
+<td>"Using the Breakout Scale, we would assess this activity as Category Three, with the activity running across several social media platforms. <strong>A higher category would require evidence of broad public attention or policy impact, which we are not able to confirm.</strong>"</td>
+<td>p.79</td>
+<td><strong>方法論上寫得最漂亮的一格</strong>：明確說明「為什麼不是更高級」。這一案有代筆的 UN 人權理事會證詞（若成功宣讀就可能觸及政策層面），但報告說「We cannot confirm whether any of the testimonies or compiled target dossiers successfully reached their intended audiences」（p.78）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_6">分布統計</h4>
+<table>
+<thead>
+<tr>
+<th>級別</th>
+<th>案數</th>
+<th>案例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Category One</td>
+<td>1</td>
+<td>GTG-54004</td>
+</tr>
+<tr>
+<td>Category Two</td>
+<td>3</td>
+<td>GTG-54002、GTG-84005、GTG-84006</td>
+</tr>
+<tr>
+<td>Category Three</td>
+<td>3</td>
+<td>GTG-34001、GTG-54006、GTG-84002</td>
+</tr>
+<tr>
+<td>Category Four</td>
+<td>1</td>
+<td>GTG-04001</td>
+</tr>
+<tr>
+<td>Category Five</td>
+<td>0</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Category Six</td>
+<td>0</td>
+<td>—</td>
+</tr>
+<tr>
+<td>未評級</td>
+<td>1</td>
+<td>GTG-24015</td>
+</tr>
+</tbody>
+</table>
+<p><strong>八案中有七案落在 Cat 1–3，沒有任何一案到達 Cat 5 或 Cat 6。</strong> 這個分布本身就是本章最重要的量化發現，也是第 7 節「生產能力 ≠ 影響力」的證據基礎。</p>
+<h3 id="56">5.6 三個評級上的方法論疑點（課堂爭點）</h3>
+<p><strong>疑點一：GTG-24015 為什麼沒有評級？</strong></p>
+<p>報告沒有解釋。可能的推論（全部是本檔的推測，非報告陳述）：</p>
+<ul>
+<li><strong>量表不適用於「公開的國家媒體」。</strong> Nimmo 的量表是為「covert activity」設計的（他的 IO 定義要求 rely in part or in whole on covert activity）。RT 英語新聞台的全球廣播不是隱蔽插入點，它就是主流媒體本身——把它評為 Category Four（「進入主流媒體」）會是循環論證。</li>
+<li><strong>無法界定分母。</strong> 報告自承「We're not able to determine what share of the outlets' total output passed through the pipelines that involved Claude」——如果不知道 Claude 生產的內容占該媒體產出的多少，就無法說「這個行動」擴散到哪裡。</li>
+<li><strong>這是本章 Breakout Scale 應用的邏輯邊界。</strong> 值得在課堂上直接指出：<strong>一個評估框架最誠實的時刻，是它承認自己不適用的時候。</strong></li>
+</ul>
+<p><strong>疑點二：Cat 3 的「外溢」是不是真的有機外溢？</strong></p>
+<p>Nimmo 的定義要求突破時刻是「spreads <strong>organically</strong> from the insertion point into new communities」。但：</p>
+<ul>
+<li>GTG-34001 的證據是「IRGC 關聯頻道」在 Eitaa 上散布該行動的內容（p.63）。IRGC 關聯頻道是<strong>同盟資產</strong>還是<strong>新社群</strong>？報告同頁又說該行動用了「paid campaigns across more than 100 Iranian platform channels」（p.64）——<strong>付費放大不是有機外溢</strong>。</li>
+<li>GTG-54006 的證據是「影片在多個孟加拉焦點頻道與帳號上被觀察到」，但報告也說找不到證據顯示內容觸及這些帳號以外的更廣受眾（p.68）。</li>
+</ul>
+<p>這兩案若嚴格套用 Nimmo 的原始定義，<strong>可能應該落在 Category Two</strong>。課堂上這是很好的爭論題：Anthropic 是否對自己揭露的案例做了略微偏高的評級？（也可能只是「多平台」這個字面判準的合理應用——Nimmo 的 Cat 3 判準是「insertion points and breakout moments on multiple platforms」，若把 IRGC 頻道視為「不同社群」，則 Cat 3 成立。）</p>
+<p><strong>疑點三：級別是誰評的、能不能複現？</strong></p>
+<p>Nimmo 強調量表要基於「observable, replicable, verifiable」的資料。但報告的評級：</p>
+<ul>
+<li>由<strong>被濫用的平台本身</strong>做出（有利益關係：級別越低，越能支持「我們早期攔截有效」的敘事）；</li>
+<li><strong>沒有公開底層資料</strong>（GTG-54006 的頻道清單「unable to identify」、GTG-54002 的完整網域清單「available separately」、GTG-54006 的雲端資料夾識別碼「Withheld」）；</li>
+<li><strong>沒有第三方覆核</strong>（第 9 節確認：目前沒有任何獨立研究機構複驗過這些級別）。</li>
+</ul>
+<p>這不代表評級是錯的，但代表它們是<strong>單一來源的自評</strong>。教學上必須讓學員養成這個反射：看到任何 Breakout Scale 級別，先問「誰評的、根據什麼證據、能不能複現」。</p>
+<h3 id="57-ai">5.7 對照組：其他 AI 公司與平台怎麼評估同類行動</h3>
+<table>
+<thead>
+<tr>
+<th>機構</th>
+<th>使用的衡量框架</th>
+<th>觀測位置</th>
+<th>對 AI 影響力行動的核心結論</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Anthropic</strong>（本報告，2026-09-10）</td>
+<td>Brookings Breakout Scale（六級）</td>
+<td><strong>上游</strong>（生產階段）</td>
+<td>「Most of the content we discovered drew little or no authentic engagement」（p.44）；最高一案 Cat 4</td>
+</tr>
+<tr>
+<td><strong>OpenAI</strong>（2024-05-30 首份影響力行動報告；其後 2025-06、2025-10 等）</td>
+<td>同樣使用 Brookings Breakout Scale（由 Ben Nimmo 領導的情報與調查團隊執行）</td>
+<td><strong>上游</strong>（生產階段）</td>
+<td>2024 年 5 月首報的著名結論：所揭露的五個行動<strong>沒有一個超過 Category Two</strong>。後續報告延續「威脅行為者把 AI 接到既有劇本上，不是獲得全新的攻擊能力」的論調（詳見第 9 節的來源標註與限制）</td>
+</tr>
+<tr>
+<td><strong>Meta</strong>（半年度 Adversarial Threat Report，最近一份 2026 年 8 月 H2 2026）</td>
+<td>「Coordinated Inauthentic Behavior（CIB）」政策＋資產數與追蹤數；<strong>不使用 Breakout Scale</strong></td>
+<td><strong>下游</strong>（分發階段）</td>
+<td>H2 2026 報告的關鍵陳述是：<strong>生成式 AI 技術現在出現在 Meta 瓦解的幾乎每一個 CIB 網路中</strong>。個案例如一個源自伊朗、針對美國受眾的網路：4 個 Facebook 帳號＋31 個 Instagram 帳號、超過 79,000 追蹤者，即使使用美加代理基礎設施與偽裝成美國活動人士／學生的人格，仍被主動偵測並歸因到伊朗</td>
+</tr>
+<tr>
+<td><strong>DISARM Foundation</strong></td>
+<td>DISARM Red／Blue TTP 分類法（ATT&amp;CK 風格），提供 STIX 樣板</td>
+<td>框架提供者（不做偵測）</td>
+<td>不做影響評估，做的是 TTP 的共同語言</td>
+</tr>
+</tbody>
+</table>
+<p><strong>三點對照觀察：</strong></p>
+<ol>
+<li><strong>兩家 AI 公司都用 Breakout Scale，平台不用。</strong> 這不是巧合：AI 公司在上游，看不到互動數據，<strong>必須</strong>借用一個以「擴散證據」而非「互動數字」為基礎的框架。Meta 在下游有完整的互動數據，反而不需要代理指標——它直接報「多少帳號、多少追蹤者、多少花費」。</li>
+<li><strong>Nimmo 本人的職涯串起了這三個位置</strong>（Graphika → Meta → OpenAI），這解釋了為什麼 Breakout Scale 會成為 AI 產業的共同語言。</li>
+<li><strong>Meta 的「幾乎每一個 CIB 網路都有 AI」與 Anthropic 的「多數內容沒有真實互動」並不矛盾</strong>：前者說的是<strong>普及率</strong>（AI 已是標配），後者說的是<strong>效果</strong>（標配了也不一定有用）。課堂上要讓學員同時握住這兩個事實，才不會倒向任何一端的極端結論。</li>
+</ol>
+<hr />
+<h2 id="6">6. 九案模組地圖</h2>
+<blockquote>
+<p><strong>使用方式：</strong> 這一節是整個 02 模組的導覽表。個別案例的深度研究（攻擊生命週期、IOC、圖表判讀、TTP 對應）由本模組的其他教材負責；本節只做「一頁看完九案」的定位與交叉比較。</p>
+</blockquote>
+<h3 id="61">6.1 主表：九案一覽</h3>
+<table>
+<thead>
+<tr>
+<th>GTG 代號</th>
+<th>行為者類型</th>
+<th>國別／來源</th>
+<th>目標區域與受眾</th>
+<th>Breakout Scale</th>
+<th>Claude 的主要用途</th>
+<th>PDF 頁碼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GTG-04001</strong></td>
+<td>國家（俄羅斯 SVR 控制的 Politology／Africa Corps 影響力分支）＋在地執行者</td>
+<td>俄羅斯（操作者為班吉的俄語人士）</td>
+<td>中非共和國（CAR）國內聽眾；經 Radio Lengo Songo 98.9 FM 與國家廣播 Radio Centrafrique</td>
+<td><strong>Category Four</strong></td>
+<td>每日新聞內容生產（嵌入親俄、反法論點）、去除 AI 文本痕跡、<strong>僱傭合約／職務說明／評分表／三振解僱流程</strong>、反對派人物監控資料庫、Russia House 發言人談話要點、偽造 CAR 憲兵與國防部公文</td>
+<td>p.44–47</td>
+</tr>
+<tr>
+<td><strong>GTG-54002</strong></td>
+<td>商業（影響力即服務）；法國數位廣告公司 LKM Company</td>
+<td>法國（網域十週內自法國註冊）</td>
+<td>六大洲；重點為美國、巴西、法國、剛果民主共和國（DRC）</td>
+<td><strong>Category Two</strong></td>
+<td>撰寫原創假新聞、改寫真實記者的報導成政治傾斜版本、固定 JSON／HTML 輸出結構以利自動發佈、SEO 權重操作、假記者署名</td>
+<td>p.47–53</td>
+</tr>
+<tr>
+<td><strong>GTG-84005</strong></td>
+<td>商業（選舉操縱平台）；伊斯坦堡的 BBS Bilisim Teknolojileri</td>
+<td>土耳其（平台商）／目標在馬來西亞</td>
+<td>馬來西亞全部 222 個國會選區；操作族群、宗教、王室三條敏感斷層線</td>
+<td><strong>Category Two</strong></td>
+<td>用真實普查與選民資料建選區目標系統、用 Claude Code 建管理假帳號的儀表板、約 1,000 個假帳號的暖機與規避邏輯、假新聞站「Malaysia Pulse」的改寫管線、偽造情報檔案</td>
+<td>p.53–58</td>
+</tr>
+<tr>
+<td><strong>GTG-24015</strong></td>
+<td>國家媒體（Sputnik／RIA Novosti／RT）的個別從業者，四個帳號</td>
+<td>俄羅斯</td>
+<td>摩爾多瓦（俄語）、拉丁美洲（西語）、非洲（英語）、RT 全球英語廣播</td>
+<td><strong>未評級</strong>（報告未套用量表）</td>
+<td>當作「副編輯層」：把羅馬尼亞／摩爾多瓦新聞、民調、反對派社群貼文轉為俄語文章；西語在地化；依 40 條社規寫 Sputnik Africa 貼文；<strong>逐字精算的電視跑馬燈、字卡與旁白稿</strong></td>
+<td>p.58–62</td>
+</tr>
+<tr>
+<td><strong>GTG-34001</strong></td>
+<td>國家對齊宣傳機構（ICCO／文化與伊斯蘭指導部；呼羅珊拉扎維伊斯蘭宣傳辦公室；伊斯蘭宣傳組織 Bina 文化觀測站）</td>
+<td>伊朗</td>
+<td>伊朗國內（波斯語）＋海外多語（阿拉伯語、烏爾都語、馬來語、西語、英語，計畫擴至 20 種語言）</td>
+<td><strong>Category Three</strong></td>
+<td>建構教條與意識形態內容、操作手冊、人格系統、預警協定、擴散時程；把官方情報簡報轉為在地化內容；出處洗白（讓貼文看似外國作者或獨立媒體）；以 IRGC 發言人口吻發文；針對巴哈伊的反敘事</td>
+<td>p.62–67</td>
+</tr>
+<tr>
+<td><strong>GTG-54006</strong></td>
+<td>個人（親 Awami League 的單一行為者；該黨自 2024 年 7 月起在野）</td>
+<td>孟加拉（Gaibandha 縣）</td>
+<td>孟加拉國內鄉村、識字率較低的 Awami League 支持者</td>
+<td><strong>Category Three</strong></td>
+<td>透過自製程式 <code>fake_news_3.py</code> 呼叫 API，每批產出 15 則孟加拉語標題＋3 則詳細假故事＋15 個英文圖片生成提示；供 Facebook Live／YouTube／TikTok 直播循環使用</td>
+<td>p.67–70</td>
+</tr>
+<tr>
+<td><strong>GTG-84006</strong></td>
+<td>流亡反對派運動（MEK/PMOI 與其政治前沿 NCRI）</td>
+<td>伊朗流亡組織（至少四名參與者任職於官方 NCRI 媒體）</td>
+<td>伊朗境內民眾＋海外僑民</td>
+<td><strong>Category Two</strong></td>
+<td>共用 AI 代理平台「Viktor」＋持久記憶檔（SKILL.md／LEARNINGS.md）；複製真實活動人士的 Telegram 帳號並以其身分即時對話；爬取 500 多個頻道建立含<strong>逮捕紀錄</strong>的心理側寫；AI 生成的波斯語配音虛擬人像；多帳號 Instagram 協同排程</td>
+<td>p.70–75</td>
+</tr>
+<tr>
+<td><strong>GTG-54004</strong></td>
+<td>國內政治操作者（單一行為者；同時經營行銷人格「SHANKI／Elkins Marketer」）</td>
+<td>肯亞（無證據顯示政府涉入）</td>
+<td>肯亞國內；2027 年大選前的政治議題與電價議題</td>
+<td><strong>Category One</strong></td>
+<td>每次產出「正好 50 則」推文，明確要求看起來像自發的草根評論；把預先擬好的 50 個主題「人性化」；打包成可一鍵複製的互動小工具</td>
+<td>p.75–77</td>
+</tr>
+<tr>
+<td><strong>GTG-84002</strong></td>
+<td>國家（以高度信心連結到阿聯政府官員）</td>
+<td>阿拉伯聯合大公國</td>
+<td>全球穆斯林兄弟會相關目標；蘇丹衝突敘事；聯合國問責機制；歐洲議會議員與記者</td>
+<td><strong>Category Three</strong></td>
+<td>維持私有平台上的 AI 人格「Deadshot」＋跨數百工作階段的主教條檔；約 300 個假影響者帳號；複製真實瑞士組織身分的前線 NGO；<strong>為第 62 屆 UN 人權理事會代筆的兩份證詞</strong>；18 名歐洲議會議員與記者的側寫；UN 特別報告員的反問責檔案</td>
+<td>p.78–80</td>
+</tr>
+</tbody>
+</table>
+<h3 id="62">6.2 交叉比較：五個切面</h3>
+<p><strong>（a）行為者類型 × 級別</strong></p>
+<table>
+<thead>
+<tr>
+<th>行為者類型</th>
+<th>案例</th>
+<th>級別</th>
+<th>觀察</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>國家直接指揮</td>
+<td>GTG-04001（Cat 4）、GTG-84002（Cat 3）</td>
+<td>3–4</td>
+<td><strong>級別最高的兩案都是國家</strong>——不是因為 AI 用得比較好，而是因為國家握有下游分發通路（FM 電台、外交管道、UN 場域）</td>
+</tr>
+<tr>
+<td>國家媒體從業者</td>
+<td>GTG-24015（未評級）</td>
+<td>—</td>
+<td>真實觸及最廣，但量表不適用</td>
+</tr>
+<tr>
+<td>國家對齊宣傳機構</td>
+<td>GTG-34001（Cat 3）</td>
+<td>3</td>
+<td>有國內平台（Eitaa、Bale、Rubika）與付費放大</td>
+</tr>
+<tr>
+<td>商業影響力即服務</td>
+<td>GTG-54002（Cat 2）、GTG-84005（Cat 2）</td>
+<td>2</td>
+<td><strong>產量最大、級別偏低</strong>：8,913 篇文章、1,000 個帳號都換不到外溢</td>
+</tr>
+<tr>
+<td>流亡反對派</td>
+<td>GTG-84006（Cat 2）</td>
+<td>2</td>
+<td>有自家媒體資產（電視、衛星／短波廣播）但仍屬自家生態系</td>
+</tr>
+<tr>
+<td>國內個人操作者</td>
+<td>GTG-54006（Cat 3）、GTG-54004（Cat 1）</td>
+<td>1–3</td>
+<td>差異在於有沒有現成的下游頻道網路</td>
+</tr>
+</tbody>
+</table>
+<p><strong>核心規律：級別的決定因素是「下游分發資產」，不是「上游生產能力」。</strong> 這句話應該寫在黑板上。</p>
+<p><strong>（b）自動化程度光譜</strong></p>
+<table>
+<thead>
+<tr>
+<th>自動化程度</th>
+<th>案例</th>
+<th>證據</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>對話式協助（人類逐則要求）</td>
+<td>GTG-54004</td>
+<td>「The actor supplied the topic, talking points, and hashtags」（p.76）</td>
+</tr>
+<tr>
+<td>人類逐步指揮＋模板重用</td>
+<td>GTG-04001、GTG-24015</td>
+<td>「The reused templates and standing instructions show the planning was mostly done offline before any prompt was sent to Claude」（p.45）</td>
+</tr>
+<tr>
+<td>自製程式批次呼叫 API</td>
+<td>GTG-54006、GTG-54002</td>
+<td><code>fake_news_3.py</code> 固定批次（p.67）；固定 JSON schema（p.48）</td>
+</tr>
+<tr>
+<td>持久記憶檔驅動的代理</td>
+<td>GTG-84006、GTG-84002</td>
+<td>「each workspace maintained its own long-term memory files... This allowed the agent to keep producing content without a human user directing each session」（p.72）</td>
+</tr>
+<tr>
+<td>自建平台＋儀表板</td>
+<td>GTG-84005</td>
+<td>「used Claude Code to build custom dashboards for managing, running, and tracking the networks of fake accounts」（p.54）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>（c）與選舉的時間關聯</strong></p>
+<table>
+<thead>
+<tr>
+<th>案例</th>
+<th>選舉</th>
+<th>日期</th>
+<th>報告頁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GTG-24015</td>
+<td>摩爾多瓦國會選舉（針對總統 Maia Sandu 的抹黑）</td>
+<td>2025-09-28</td>
+<td>p.59</td>
+</tr>
+<tr>
+<td>GTG-54004</td>
+<td>肯亞大選（宣稱在野聯盟分裂）</td>
+<td>2027（籌備中）</td>
+<td>p.76</td>
+</tr>
+<tr>
+<td>GTG-84005</td>
+<td>馬來西亞（222 個選區的選民微定向）</td>
+<td>未指明選舉日</td>
+<td>p.54</td>
+</tr>
+<tr>
+<td>GTG-54006</td>
+<td>孟加拉（2024 年 7 月政變後的政治鬥爭）</td>
+<td>未指明選舉日</td>
+<td>p.67</td>
+</tr>
+</tbody>
+</table>
+<p><strong>（d）「Claude 拒絕」的紀錄</strong>（第 8 節詳述）</p>
+<table>
+<thead>
+<tr>
+<th>案例</th>
+<th>拒絕了什麼</th>
+<th>行為者怎麼繞過</th>
+<th>頁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GTG-04001</td>
+<td>點名真實個人為武裝分子以引來安全部門行動</td>
+<td>改用「匿名消息來源」框架</td>
+<td>p.45</td>
+</tr>
+<tr>
+<td>GTG-04001</td>
+<td>標記出評分表的政治權重問題</td>
+<td>用中性措辭重新標籤，保留評分機制</td>
+<td>p.45</td>
+</tr>
+<tr>
+<td>GTG-84005</td>
+<td>辨識出某文件是政治誹謗素材而拒絕；對明示心理戰的措辭退卻</td>
+<td>協商出「消毒過」的措辭，繼續朝同一能力建構</td>
+<td>p.55、p.57</td>
+</tr>
+<tr>
+<td>GTG-24015（趨勢段）</td>
+<td>對某些聲稱標記為未經證實</td>
+<td>指示模型丟掉警語，全部當作已證實呈現</td>
+<td>p.43</td>
+</tr>
+</tbody>
+</table>
+<p><strong>（e）跨組織情報交換的紀錄</strong></p>
+<table>
+<thead>
+<tr>
+<th>案例</th>
+<th>情報從哪來／到哪去</th>
+<th>頁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GTG-04001</td>
+<td><strong>外部進來</strong>：INPACT／All Eyes on Wagner 的線報啟動內部調查，並獨立確認涉案人身分</td>
+<td>p.47</td>
+</tr>
+<tr>
+<td>GTG-54004</td>
+<td><strong>外部進來</strong>：<strong>OpenAI</strong> 分享其平台上累犯活動的線報</td>
+<td>p.77</td>
+</tr>
+<tr>
+<td>GTG-54002</td>
+<td>對外分享：共用部署識別碼＋70 個假媒體的代表性樣本（完整清單另行提供）</td>
+<td>p.52</td>
+</tr>
+<tr>
+<td>GTG-24015</td>
+<td>對外分享：與產業及研究夥伴分享指標</td>
+<td>p.62</td>
+</tr>
+<tr>
+<td>GTG-34001</td>
+<td>對外分享：與產業及研究夥伴分享相關指標</td>
+<td>p.66</td>
+</tr>
+<tr>
+<td>GTG-54006</td>
+<td>對外分享：與相關分發平台及其他夥伴分享指標（部分指標標記為 Withheld／Held for partner share）</td>
+<td>p.70</td>
+</tr>
+<tr>
+<td>GTG-84002</td>
+<td>對外分享：分享指標以支持其他產業夥伴行動</td>
+<td>p.80</td>
+</tr>
+</tbody>
+</table>
+<p><strong>這一格是本章最有政策意義的發現：AI 公司之間、AI 公司與 OSINT 調查組織之間，已經出現雙向的情報交換。</strong> GTG-54004 是公開文獻中罕見的「OpenAI 給 Anthropic 線報」紀錄。</p>
+<h3 id="63">6.3 圖表地圖（本章頁段無圖；模組整體圖表索引）</h3>
+<p><strong>先講清楚一件事：本教材負責的頁段（p.41 至 p.44 上半）沒有任何圖表。</strong> 影響力行動章的第一張圖是 p.46 的 Figure 1（屬於 GTG-04001）。整章 18 張圖全部落在個別案例中，深度判讀由各案例教材負責。這裡提供的是模組層級的索引，以及四張與「導論主題」直接相關的圖的判讀。</p>
+<h4 id="p4680-18">模組圖表索引（p.46–80，共 18 張）</h4>
+<table>
+<thead>
+<tr>
+<th>Figure</th>
+<th>頁</th>
+<th>所屬案例</th>
+<th>圖片類型</th>
+<th>課程圖檔</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Figure 1</td>
+<td>p.46</td>
+<td>GTG-04001</td>
+<td>Telegram 頻道截圖（兩欄）</td>
+<td>p.46</td>
+</tr>
+<tr>
+<td>Figure 2</td>
+<td>p.49</td>
+<td>GTG-54002</td>
+<td>假帳號頭像陣列（AI 生成人臉）</td>
+<td>p.49</td>
+</tr>
+<tr>
+<td>Figure 3</td>
+<td>p.50</td>
+<td>GTG-54002</td>
+<td>協同留言帳號叢集</td>
+<td>p.50</td>
+</tr>
+<tr>
+<td>Figure 4</td>
+<td>p.51</td>
+<td>GTG-54002</td>
+<td>協同留言帳號叢集（續）</td>
+<td>p.51</td>
+</tr>
+<tr>
+<td>Figure 5</td>
+<td>p.52</td>
+<td>GTG-54002</td>
+<td>假新聞網站截圖</td>
+<td>p.52</td>
+</tr>
+<tr>
+<td>Figure 6</td>
+<td>p.56</td>
+<td>GTG-84005</td>
+<td>假留言帳號側寫</td>
+<td>p.56</td>
+</tr>
+<tr>
+<td>Figure 7</td>
+<td>p.56</td>
+<td>GTG-84005</td>
+<td>假新聞站「Malaysia Pulse」截圖</td>
+<td>p.56</td>
+</tr>
+<tr>
+<td>Figure 8</td>
+<td>p.57</td>
+<td>GTG-84005</td>
+<td>關聯的假 YouTube 頻道</td>
+<td>p.57</td>
+</tr>
+<tr>
+<td>Figure 9</td>
+<td>p.60</td>
+<td>GTG-24015</td>
+<td>Telegram 貼文截圖（2.09K 瀏覽）</td>
+<td>p.60</td>
+</tr>
+<tr>
+<td>Figure 10</td>
+<td>p.61</td>
+<td>GTG-24015</td>
+<td>RIA Novosti 網頁截圖</td>
+<td>p.61</td>
+</tr>
+<tr>
+<td>Figure 11</td>
+<td>p.61</td>
+<td>GTG-24015</td>
+<td>Sputnik Africa 的 X 貼文截圖</td>
+<td>p.61</td>
+</tr>
+<tr>
+<td>Figure 12</td>
+<td>p.65</td>
+<td>GTG-34001</td>
+<td>Eitaa 平台搜尋結果截圖</td>
+<td>p.65</td>
+</tr>
+<tr>
+<td>Figure 13</td>
+<td>p.66</td>
+<td>GTG-34001</td>
+<td>Threads 帳號截圖（攻擊 Nawapress）</td>
+<td>p.66</td>
+</tr>
+<tr>
+<td>Figure 14</td>
+<td>p.69</td>
+<td>GTG-54006</td>
+<td>Google Drive 資料夾截圖</td>
+<td>p.69</td>
+</tr>
+<tr>
+<td>Figure 15</td>
+<td>p.73</td>
+<td>GTG-84006</td>
+<td><strong>網路關係圖（節點圖）</strong></td>
+<td>p.73</td>
+</tr>
+<tr>
+<td>Figure 16</td>
+<td>p.74</td>
+<td>GTG-84006</td>
+<td>Instagram 貼文截圖</td>
+<td>p.74</td>
+</tr>
+<tr>
+<td>Figure 17</td>
+<td>p.77</td>
+<td>GTG-54004</td>
+<td>X 貼文截圖（六則協同貼文）</td>
+<td>p.77</td>
+</tr>
+<tr>
+<td>Figure 18</td>
+<td>p.80</td>
+<td>GTG-84002</td>
+<td>X 貼文截圖（#SudanIslamists 六則）</td>
+<td>p.80</td>
+</tr>
+</tbody>
+</table>
+<p><strong>類型分布值得注意：18 張圖中有 17 張是「截圖」，只有 1 張（Figure 15）是分析性的架構圖。</strong> 這反映了影響力行動情報的性質——證據是「在野外看到的東西」（seen in the wild），不是流程重建。對比網路行動章（p.12–33）有大量的攻擊生命週期流程圖（Figure 1–18），差異一目了然：網路行動可以重建攻擊鏈，影響力行動只能展示擴散證據。<strong>這正是 Breakout Scale 存在的理由。</strong></p>
+<h4 id="_7">導論相關的四張圖判讀</h4>
+<h5 id="figure-15p73viktor">Figure 15（p.73）：「Viktor」共用代理平台的網路圖 — 唯一的架構圖</h5>
+<p><img alt="Figure 15" src="../figures/page-073.png" /></p>
+<ul>
+<li><strong>圖片類型</strong>：節點連線圖（network graph），右下角標註來源「GTG-84006 investigation corpus」。</li>
+<li><strong>圖例（左上角）</strong>：藍色圓＝機構媒體節點（Institutional media node）；深灰圓＝放大器／前線帳號（Amplifier / front account）；深紅圓＝隱蔽行為者（Covert actor）；橘色圓＝受眾／目標（Audience / target）；紅色實線＝隱蔽招募／冒充（Covert recruitment / impersonation）；灰色虛線＝在 Viktor 平台上運行（Runs on the Viktor platform）。圖例明說<strong>節點大小依已記錄的觸及規模縮放</strong>（Node size scales with documented reach）。</li>
+<li><strong>圖上實際看到的節點</strong>：左側灰色小圓「7 source domains — MEK / NCRI, hard-coded」；中央粉紅描邊的「<strong>VIKTOR shared agent</strong>」，下方註記「One shared agent platform binds every actor」；藍色機構節點「Simay-e Azadi（TV node · 708K）」「Radio Payam Azadi（radio · 50K+）」「Webnegar（TV programme）」；深灰放大器節點「"Independent news" @tehranchekhabar19 · 173K」「Two-page IG + Telegram @javanane_shargt · 299K」「Multi-page IG network（3 pages · one cron）」「Synthetic-persona factory（10 avatars）」；深紅隱蔽節點「Live impersonation @mellat_b · "Parsa"」「Sockpuppet funnel @fwr.ir」「Telegram infiltration（741 handles · 500+ groups）」「Student infiltration @anti_silent」；右側兩個橘色目標「Diaspora audiences」與「People inside Iran」，後者被標註「Target of recruitment and live impersonation」。</li>
+<li><strong>資料怎麼流動</strong>：七個硬編碼的來源網域 → Viktor 共用代理 → 三類下游（機構媒體節點、放大器／假獨立新聞、隱蔽滲透帳號）→ 兩類受眾。灰色虛線從 Viktor 發散到幾乎每一個節點，視覺化了「一個代理平台綁住所有行為者」；紅色實線只從三個隱蔽節點指向「People inside Iran」，把「冒充與招募」這條最危險的路徑單獨標出來。</li>
+<li><strong>核心訊息</strong>：<strong>協調不需要人與人之間的協調。</strong> 報告文字說這些行為者「did not share account infrastructure or show visible signs of coordination」（p.70），但圖顯示他們共用一個代理平台與一套教條檔——<strong>共用的 AI 代理本身就是協調基質（coordination substrate）</strong>，這正是報告在表格中寫的「Cross-actor shared doctrine and evasion functioning as a coordination substrate」（p.72）。</li>
+<li><strong>課堂用法</strong>：這是全章唯一可以用來講「AI 時代的協同不實行為長什麼樣」的圖。傳統 CIB 偵測靠「共用 IP、共用註冊時間、共用裝置指紋」；這張圖說明新的共用點是<strong>記憶檔與代理設定</strong>。可以讓學員畫出「如果沒有 Viktor，這張圖會變成什麼樣」——答案是十幾個看似無關的孤立節點。</li>
+</ul>
+<h5 id="figure-1p46-telegram">Figure 1（p.46）：被匯出做風格分析與複製的親俄 Telegram 頻道</h5>
+<p><img alt="Figure 1" src="../figures/page-046.png" /></p>
+<ul>
+<li><strong>圖片類型</strong>：兩欄並排的 Telegram 頻道截圖，底部有頻道名稱標籤。</li>
+<li><strong>畫面內容</strong>：左欄標籤「"Залечь на дне в Банги"（意為「潛伏在班吉」）Telegram Channel」，內容是俄語貼文，配一張在俄羅斯駐 CAR 大使館前的合影（約十人，含穿軍裝者與西裝者），文字提到 5 月 26 日在俄羅斯大使館舉行的裁軍與重返社會會議、MINUSCA 代表出席、俄方軍人與 Russian House 主任、大使館新聞秘書參與；底部標籤 #РоссияЦАР #ООН #стабильность #сотрудничество #Кремлеград，並顯示表情反應數與瀏覽數。右欄標籤「"СОМБ（Туристы в Африке）"（「非洲的觀光客」）Telegram Channel」，是一則英語貼文配兩張照片（在紀念碑前列隊的武裝人員、頒獎場面），標題「Wagner PMC instructors received awards from the CAR government」，內文說在 Bambari（Ouaka 省）舉行官方頒獎典禮、30 名士兵獲提名中非共和國最高軍事榮譽，並感謝華格納 PMC 員工「冒著生命危險對抗和平的敵人」，標籤 #cooperation #security。</li>
+<li><strong>這張圖傳達的核心訊息</strong>：圖說寫的是「<strong>always exported for stylistic voice analysis, cloning and distribution</strong>」——這兩個頻道不是行動的產出，而是行動的<strong>輸入</strong>。行為者把它們匯出，讓 Claude 分析語氣風格並複製。這是「去 AI 味」OPSEC 的具體技術路徑：不是要求模型「寫得像人」，而是餵給它真實的在地俄語宣傳語料當風格範本。</li>
+<li><strong>課堂用法</strong>：講「風格複製（style cloning）」這個 TTP 時直接用。可延伸討論：偵測方是否能反過來用同一套風格分析找出被複製的來源？</li>
+</ul>
+<h5 id="figure-5p52">Figure 5（p.52）：假新聞網站截圖 — 「獨立地方新聞編輯台」的外觀工程</h5>
+<p><img alt="Figure 5" src="../figures/page-052.png" /></p>
+<ul>
+<li><strong>圖片類型</strong>：深色主題的新聞網站首頁截圖。</li>
+<li><strong>畫面內容</strong>：頂部導覽列有 Arts and Entertainment／Business／Health／Politics／Sports 五個分類；下方是一排主題標籤（附文章數）：John Mahama (3)、national tragedy (3)、public servants (3)、Ghana military (2)、Palestine crisis (2)、aviation accident (2)、cocoa exports (2)、economic development (2)。主體是三張卡片式文章預覽，全部標記 Politics 分類，日期為 2025 年 8 月 17 日與 22 日，<strong>三篇的署名都是同一個人「Edwin Gyimah」</strong>。三篇標題分別關於賽普勒斯的經濟警訊（前 DISY 領袖 Averof Neofytou）、賽普勒斯政府的財產危機（總統 Christodoulides）、迦納教育監理機關 GTEC 挑戰副衛生部長未經授權的「教授」頭銜。每張卡片下方有多個標籤（economic warning、global trade、Cyprus property crisis、ghana-politics、academic-integrity 等）。</li>
+<li><strong>核心訊息</strong>：<strong>這張圖同時展示了偽裝與破綻。</strong> 偽裝：完整的分類導覽、標籤系統、卡片式版面、署名記者，看起來像一個有編制的地方新聞站。破綻有三個，都可以在圖上直接指出來——（1）<strong>主題不一致</strong>：一個以迦納為主的站（John Mahama、Ghana military、cocoa exports 都是迦納議題）同時大量產出賽普勒斯政治內容，這正是報告說的「laundering stories across borders into unrelated regions, stripped of their original context」（p.49）；（2）<strong>署名單一</strong>：三篇跨國、跨領域的報導出自同一位「Edwin Gyimah」，而報告確認「these writers did not actually exist」（p.49）；（3）<strong>時間叢集</strong>：三篇日期集中在五天內。</li>
+<li><strong>課堂用法</strong>：這是媒體識讀教學的完美教材——<strong>不需要查證任何一則內容的真假，光看網站結構就能判斷它不是真的新聞編輯台。</strong> 第 10 節的實作演練直接用這張圖當起點。</li>
+</ul>
+<h5 id="figure-9p60-figure-11p61">Figure 9（p.60）與 Figure 11（p.61）：觸及率的兩個極端</h5>
+<p><img alt="Figure 9" src="../figures/page-060.png" /></p>
+<ul>
+<li><strong>Figure 9 圖片類型</strong>：Telegram 貼文截圖（手機比例），頻道名稱部分被遮蔽為「Sputnik Молдова」。</li>
+<li><strong>畫面內容</strong>：頂部是一段 2 分 10 秒的影片（畫面是一個鼓面特寫）；下方俄語文字，標題為「兩三分之二的羅馬尼亞人認為齊奧塞斯庫是『好領導人』——民調」，內文引述羅馬尼亞 INSCOP Research 的民調結果（66.2% 受訪者給予這位未經審判即被槍決的羅馬尼亞社會主義領導人此評價；不到四分之一認為他是壞領導人，7.8% 無法回答），並提到 YouTube 上有大量標題為「Epoca de aur（黃金時代）」的社會主義時期影片。底部署名 <code>@rusputnikmd_2</code>，表情反應列（👍68、👎5、😁5、❤️2、😢1），以及 <code>t.me/rusputnikmd_2/12933</code>、<strong>瀏覽數 2.09K</strong>、編輯時間 Jul 21 at 09:57。</li>
+<li><strong>Figure 11 圖片類型</strong>：Sputnik Africa 的 X／Twitter 貼文截圖。</li>
+<li><strong>畫面內容</strong>：Sputnik Africa 品牌標頭；標題「Ayatollah Ali Khamenei's Residence Almost Completely Destroyed After US Missile Strike, Reports Say」；時間戳 12:23 28.02.2026（更新 12:24）；主體是一張建築群的衛星影像；下方有 Subscribe 按鈕（X 與 Telegram 圖示）、標題重複、「Subscribe to @sputnik_africa」、表情反應列（👍1、👎7、😊0、😮0、😢0、😡0）、以及一則「Follow us on Telegram to get the latest breaking &amp; exclusive stories from Africa and around the globe」的推廣卡。圖說註明<strong>完全符合 Claude 生成的文字</strong>，並給了封存連結。</li>
+<li><strong>這兩張圖合起來傳達的核心訊息</strong>：這是全報告對「觸及率」最誠實的視覺證據。Figure 9 的圖說明白寫著「received 2.09K views; <strong>no other exact matches were observed</strong>」——一則由國家媒體通路發出的內容，兩千次瀏覽，而且找不到任何轉載。Figure 11 的表情反應是「1 讚、7 踩」。<strong>國家媒體的既有通路確實是九案中觸及最廣的分發機制（p.44），但「最廣」的絕對數字仍然很小。</strong></li>
+<li><strong>課堂用法</strong>：把這兩張圖和 GTG-84005 自報的「百萬瀏覽」放在一起，問學員：哪一個數字比較可信？為什麼可信的那個小這麼多？這是「威脅情報中的數字懷疑論」最好的入門練習。</li>
+</ul>
+<hr />
+<h2 id="7-p4344">7. 「生產能力 ≠ 影響力」：報告對觸及率的誠實評估（p.43–44）</h2>
+<h3 id="71">7.1 原文逐字</h3>
+<p>這是整章最重要的一段，也是最容易被媒體報導漏掉的一段：</p>
+<blockquote>
+<p>"<strong>Influence operations often fail to reach a genuine audience.</strong> Because we sit at the production stage of operations, upstream of platforms like social media platforms, we may detect and disrupt an operation while it is still being put together. <strong>Most of the content we discovered drew little or no authentic engagement</strong>, and in several cases we disrupted the operation before it could build an audience. <strong>The widest authentic reach occurred where state media outlets were the distribution mechanism (including FM radio, satellite and shortwave radio, and global television).</strong>"（p.43–44）</p>
+</blockquote>
+<p>繁中對譯：</p>
+<blockquote>
+<p>「<strong>影響力行動經常無法觸及真實受眾。</strong> 由於我們位於行動的生產階段、在社群媒體等平台的上游，我們可能在行動仍在組裝時就偵測並瓦解它。<strong>我們發現的多數內容幾乎沒有、或完全沒有引發真實互動</strong>，而且在好幾個案例中，我們在行動能建立起受眾之前就將其瓦解。<strong>觸及率最廣的情況發生在以國家媒體作為分發機制時（包括 FM 廣播、衛星與短波廣播，以及全球電視）。</strong>」</p>
+</blockquote>
+<h3 id="72">7.2 這段話由哪些證據支撐</h3>
+<p>把九案中所有關於「真實互動」的陳述蒐集起來，會發現這個結論有非常紮實的案例基礎：</p>
+<table>
+<thead>
+<tr>
+<th>案例</th>
+<th>關於真實觸及的原文</th>
+<th>頁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GTG-54002</td>
+<td>「We disrupted this operation early, before it could build an authentic audience. The network published at least 8,913 articles in about 20 languages, but <strong>most of the content we identified generated little observable engagement from real audiences</strong>.」</td>
+<td>p.48</td>
+</tr>
+<tr>
+<td>GTG-84005</td>
+<td>「without evidence of breakout into authentic communities」；儀表板自報的百萬瀏覽「Because these figures are self-reported by the actor's own tools, <strong>we cannot independently verify them</strong>」</td>
+<td>p.54</td>
+</tr>
+<tr>
+<td>GTG-24015</td>
+<td>「<strong>Unlike covert networks that struggle to reach real audiences</strong>, the content developed by these individual actors was distributed through media outlets' established channels」；實測結果「ranged from a Telegram post with roughly 2,000 views to the aired broadcast copy」</td>
+<td>p.58</td>
+</tr>
+<tr>
+<td>GTG-54006</td>
+<td>「we found <strong>no evidence that the content reached a wider audience</strong> outside of these accounts」</td>
+<td>p.68</td>
+</tr>
+<tr>
+<td>GTG-84006</td>
+<td>「At this point, <strong>we are not able to independently confirm how much authentic engagement was drawn</strong> by the network's amplification accounts」</td>
+<td>p.74</td>
+</tr>
+<tr>
+<td>GTG-54004</td>
+<td>「The activity was <strong>completely isolated</strong> within the network of fake accounts and local influences on a single platform, <strong>failing to reach or influence any real people</strong>」</td>
+<td>p.76</td>
+</tr>
+<tr>
+<td>GTG-84002</td>
+<td>「A higher category would require evidence of broad public attention or policy impact, <strong>which we are not able to confirm</strong>」；「<strong>We cannot confirm whether any of the testimonies</strong> or compiled target dossiers successfully reached their intended audiences」</td>
+<td>p.78–79</td>
+</tr>
+</tbody>
+</table>
+<p>九案中有七案有明確的「觸及有限」或「無法確認觸及」陳述。<strong>唯一被報告認定確實觸及了真實受眾的兩案（GTG-04001、GTG-24015），靠的都是國家媒體通路。</strong></p>
+<h3 id="73">7.3 「生產能力 ≠ 影響力」：把落差量化</h3>
+<p>把「生產面的數字」與「觸及面的數字」並排，落差之大令人印象深刻：</p>
+<table>
+<thead>
+<tr>
+<th>案例</th>
+<th>生產面的數字（AI 使能）</th>
+<th>觸及面的證據</th>
+<th>落差</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GTG-54002</td>
+<td>8,913 篇文章、約 20 種語言、約 70 個網站、70 個對應 X 帳號、250+ 留言帳號</td>
+<td>「little observable engagement from real audiences」；Cat 2</td>
+<td>五位數的產出 → 零外溢</td>
+</tr>
+<tr>
+<td>GTG-84005</td>
+<td>約 1,000 個假帳號、222 個選區的選民側寫、真實普查與選舉資料、百萬級的自報瀏覽</td>
+<td>「without evidence of breakout into authentic communities」；Cat 2</td>
+<td>千級帳號 → 零外溢</td>
+</tr>
+<tr>
+<td>GTG-54006</td>
+<td>至少 1,500 則標題、300 則假敘事、1,500 個圖片提示、29 個輪替帳號、約 16 個月</td>
+<td>影片出現在多個孟加拉焦點頻道，但「no evidence... reached a wider audience」；Cat 3</td>
+<td>四位數產出 → 有限擴散</td>
+</tr>
+<tr>
+<td>GTG-84006</td>
+<td>8,400 則貼文的風格複製、500+ 頻道爬取、51,944 則封存訊息的分析</td>
+<td>「not able to independently confirm how much authentic engagement」；Cat 2</td>
+<td>五位數的資料處理 → 無法確認效果</td>
+</tr>
+<tr>
+<td>GTG-54004</td>
+<td>每批 50 則推文、多個工作階段</td>
+<td>「failing to reach or influence any real people」；Cat 1</td>
+<td>有產出 → 零觸及</td>
+</tr>
+<tr>
+<td>GTG-24015</td>
+<td>四個帳號嵌入專業編輯流程</td>
+<td>RT 全球廣播、Sputnik 多語系；實測 2.09K 瀏覽到上電視</td>
+<td><strong>產出少 → 觸及最廣</strong></td>
+</tr>
+<tr>
+<td>GTG-04001</td>
+<td>每日內容生產</td>
+<td>98.9 FM 每日播出、Telegram 放大、CAR 在地媒體轉載；Cat 4</td>
+<td><strong>產出中等 → 級別最高</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>這張表要教的推理：</strong> 影響力行動的產出與影響<strong>不是線性關係，甚至可能是負相關</strong>。GTG-24015 與 GTG-04001 的生產量在九案中屬中低，卻是唯二真正觸及群眾的；GTG-54002 與 GTG-84005 的生產量最大，卻停在 Cat 2。</p>
+<p>原因不難理解：AI 大幅降低了<strong>內容生產</strong>的邊際成本，但完全沒有降低<strong>受眾獲取</strong>的成本。受眾獲取需要的是：既有的分發通路（FM 電台執照、衛星頻道、發行網路）、既有的信任關係（真實的追蹤者、社群連結）、或是能穿透演算法的真實互動。這三樣東西 AI 都造不出來。</p>
+<h3 id="74-ai">7.4 對「AI 假訊息末日論」的節制意義</h3>
+<p>2023 年以來，「生成式 AI 將造成假訊息海嘯、摧毀民主選舉」是公共討論的主流敘事。本報告的證據對這個敘事有三層節制作用：</p>
+<p><strong>第一層：產能爆炸是真的，效果爆炸不是。</strong> 報告確認了 AI 確實讓低資源行為者做到「a scale well beyond what they could accomplish alone」（p.42）——一個人 16 個月產出上千則假新聞（GTG-54006）、一家廣告公司經營 70 個假新聞站（GTG-54002）。產能的指數成長是事實。但八個有評級的案例中沒有一個到達 Cat 5 或 Cat 6。</p>
+<p><strong>第二層：瓶頸從「生產」移到了「分發」。</strong> 這其實是一個<strong>壞消息偽裝成好消息</strong>。如果瓶頸在分發，那麼<strong>已經握有分發通路的行為者</strong>（國家媒體、既有政黨機器、擁有真實追蹤者的網紅）就是 AI 加持後最危險的一群——因為他們唯一缺的（廉價產能）剛好被補上了。GTG-24015 正是這個模式：Claude 被插進一個<strong>已經在運轉的</strong>專業編輯流程（「slotted into a human-edited pipeline that was already up and running」，p.42）。</p>
+<p><strong>第三層：也要警惕「低估論」。</strong> 報告的結論同樣有系統性偏誤，教學時必須誠實標示：</p>
+<table>
+<thead>
+<tr>
+<th>偏誤來源</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>倖存者偏差（反向）</strong></td>
+<td>Anthropic 只看得到<strong>被它抓到的</strong>行動。成功隱蔽、成功擴散的行動，很可能正是沒被上游偵測抓到的那些。用「我抓到的都沒效」推論「AI 影響力行動都沒效」是不成立的。</td>
+</tr>
+<tr>
+<td><strong>介入效應</strong></td>
+<td>報告自己說「in several cases we disrupted the operation before it could build an audience」（p.44）。<strong>級別低有一部分是自己造成的</strong>——這是防禦成功，不是威脅不存在。用被提早瓦解的行動去推論威脅的上限，邏輯上不成立。</td>
+</tr>
+<tr>
+<td><strong>利益衝突</strong></td>
+<td>做出評級的是被濫用的平台本身。「多數沒有效果」的敘事對 Anthropic 有利。這不代表評級造假，但代表需要外部覆核（第 9 節確認：目前沒有）。</td>
+</tr>
+<tr>
+<td><strong>量表本身的保守性</strong></td>
+<td>Nimmo 強調量表衡量的是「potential impact」的近似，且「does not necessarily equate to actual impact」。反過來說，<strong>低級別也不等於低實際影響</strong>——Cat 1 的內容仍可能改變少數關鍵人物的看法。</td>
+</tr>
+<tr>
+<td><strong>時間窗口</strong></td>
+<td>報告涵蓋 2025-12 至 2026-08。行動被瓦解時可能仍在早期階段；若未被瓦解，幾個月後可能爬升級別（Nimmo：級別是快照，可升可降）。</td>
+</tr>
+<tr>
+<td><strong>多模型盲區</strong></td>
+<td>GTG-54006 的圖片提示很可能輸出到別家模型（p.67）；GTG-04001 的行為者同時訂閱 ChatGPT 與 Claude（第 9 節）。單一平台的評估必然低估整體。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>教學上的平衡結論（建議寫成一頁投影片）：</strong></p>
+<blockquote>
+<p>AI 讓「做出一場影響力行動」變得便宜。它沒有讓「一場影響力行動變得有效」。<br />
+真正的風險不在於假訊息變多，而在於：<br />
+（1）<strong>已有分發力的行為者</strong>成本歸零；<br />
+（2）<strong>組織化</strong>的門檻消失——一個人可以是一整間宣傳公司；<br />
+（3）行動可以<strong>針對個人</strong>（冒充、側寫、逮捕紀錄），這類傷害不需要「擴散」就能造成；<br />
+（4）我們的偵測能力<strong>恰好只覆蓋願意用西方商業模型的行為者</strong>。</p>
+</blockquote>
+<p>第（3）點值得特別強調：GTG-84006 冒充真實活動人士與伊朗境內的聯絡人對話（p.70）、建立含逮捕紀錄的側寫（p.71，報告註明這些人「face imprisonment or execution under Iranian law」）；GTG-84002 側寫 18 名歐洲議會議員與記者（p.78）。<strong>這些行動的 Breakout Scale 級別可能很低，但對具體個人的傷害可能極高。</strong> 量表衡量的是「擴散」，不是「傷害」——這是它最重要的盲區，教學時務必點出。</p>
+<hr />
+<h2 id="8-anthropic">8. Anthropic 的偵測與處置模式（跨案例歸納）</h2>
+<h3 id="81">8.1 五步標準流程</h3>
+<p>把九案的「Disruption and mitigations」段落並排，可以歸納出一套高度一致的流程：</p>
+<pre class="mermaid">flowchart TD
+    D[&quot;① 發現（Discovery）&quot;] --&gt; D1[&quot;內部偵測（internal detections / internal investigations）：7 案&quot;]
+    D --&gt; D2[&quot;外部線報 — OSINT 組織：GTG-04001（INPACT / All Eyes on Wagner）&quot;]
+    D --&gt; D3[&quot;外部線報 — 同業 AI 公司：GTG-54004（OpenAI）&quot;]
+    D ==&gt; M[&quot;② 擴大測繪（Mapping）&quot;]
+    M --&gt; M1[&quot;「used the recovered indicators to map the operation&#x27;s full footprint」（GTG-84005, p.57）&quot;]
+    M ==&gt; E[&quot;③ 處置（Enforcement）&quot;]
+    E --&gt; E1[&quot;封鎖帳號（ban the accounts）：9/9 案&quot;]
+    E --&gt; E2[&quot;封鎖背後的組織（ban the organization）：GTG-04001、GTG-54002、GTG-54004 明示&quot;]
+    E ==&gt; H[&quot;④ 硬化偵測（Hardening）&quot;]
+    H --&gt; H1[&quot;「built automated detections based on their behavioral signatures」：7 案明示&quot;]
+    H ==&gt; SH[&quot;⑤ 情報分享（Sharing）&quot;]
+    SH --&gt; SH1[&quot;與產業及研究夥伴分享指標：GTG-24015、GTG-34001、GTG-84002&quot;]
+    SH --&gt; SH2[&quot;與分發平台分享：GTG-54006（「shared indicators with the relevant distribution platforms」）&quot;]
+    SH --&gt; SH3[&quot;公開部分 IOC、保留部分（「Held for partner share」「available separately」「Withheld」）&quot;]
+</pre>
+<h3 id="82">8.2 逐案處置紀錄</h3>
+<table>
+<thead>
+<tr>
+<th>案例</th>
+<th>如何發現</th>
+<th>處置</th>
+<th>硬化</th>
+<th>分享</th>
+<th>頁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GTG-04001</td>
+<td><strong>INPACT／All Eyes on Wagner 的線報</strong>；其報導「helped us start our internal review and independently confirmed the identities of the individuals involved」</td>
+<td>移除帳號與背後組織</td>
+<td>「built automated detections based on their behavioral signatures」</td>
+<td>未明示</td>
+<td>p.47</td>
+</tr>
+<tr>
+<td>GTG-54002</td>
+<td>「ongoing investigations into influence operations in the region」</td>
+<td>封鎖帳號與關聯組織</td>
+<td>「implemented new detection methods targeting the operation's behavioral signatures」</td>
+<td><strong>公開共用部署識別碼＋14 個代表性假媒體的網域與 X 帳號</strong>；完整清單「available separately」</td>
+<td>p.52</td>
+</tr>
+<tr>
+<td>GTG-84005</td>
+<td>內部偵測；以回收的指標測繪完整足跡</td>
+<td>移除帳號</td>
+<td>用於「disrupt future misuses」</td>
+<td>公開 IOC 表（網域、Hetzner IP、GitHub 組織、12 個 sockpuppet、YouTube 頻道）</td>
+<td>p.57–58</td>
+</tr>
+<tr>
+<td>GTG-24015</td>
+<td>內部偵測</td>
+<td>封鎖四個行動的帳號</td>
+<td>未明示</td>
+<td>「shared indicators with industry and research partners」</td>
+<td>p.62</td>
+</tr>
+<tr>
+<td>GTG-34001</td>
+<td>內部調查</td>
+<td>封鎖三個行動的帳號</td>
+<td>未明示</td>
+<td>「shared the relevant indicators with industry and research partners」</td>
+<td>p.66</td>
+</tr>
+<tr>
+<td>GTG-54006</td>
+<td>內部調查</td>
+<td>封鎖帳號</td>
+<td>「we expect the actors... to try to create new accounts... so we've built detections around its behavioral signatures」</td>
+<td>「shared indicators with the relevant distribution platforms and other partners」；部分指標標為 <strong>Withheld / Held for partner share</strong></td>
+<td>p.69–70</td>
+</tr>
+<tr>
+<td>GTG-84006</td>
+<td>內部調查</td>
+<td>封鎖帳號</td>
+<td>未明示</td>
+<td>未明示（IOC 表公開）</td>
+<td>p.74</td>
+</tr>
+<tr>
+<td>GTG-54004</td>
+<td><strong>OpenAI 分享的線報</strong>（其平台上的累犯活動）</td>
+<td>移除帳號與背後組織</td>
+<td>「built detections around its behavioral signature」</td>
+<td>未明示</td>
+<td>p.77</td>
+</tr>
+<tr>
+<td>GTG-84002</td>
+<td>內部調查</td>
+<td>封鎖帳號</td>
+<td>「built detections around the documented behavioral signature」</td>
+<td>「shared indicators to support action by the other industry partners」</td>
+<td>p.80</td>
+</tr>
+</tbody>
+</table>
+<h3 id="83">8.3 三個值得深挖的觀察</h3>
+<p><strong>觀察一：「行為指紋」是全章的偵測主軸。</strong> 九案中有七案明確使用 behavioral signature(s) 一詞。這證實了第 3.3 節的推論：偵測的對象是<strong>使用型態</strong>，不是內容立場。這在政策上非常重要——它意味著 Anthropic 的偵測理論上是政治中立的（不論親俄、親美、親執政、親在野，只要生產型態符合，都會被抓）。九案的政治光譜確實很寬（俄羅斯、伊朗、阿聯、法國商業公司、孟加拉在野黨、肯亞執政聯盟、伊朗流亡反對派），支持這個說法。</p>
+<p><strong>觀察二：IOC 的揭露是分層的。</strong> 報告採取了三級揭露策略：<br />
+- <strong>完全公開</strong>：假媒體網域、X 帳號、IP、GitHub 組織、Telegram／Instagram 帳號（GTG-54002、GTG-84005、GTG-34001、GTG-84006）<br />
+- <strong>部分公開</strong>：「representative sample... the full domain and account list is available separately」（GTG-54002, p.52）<br />
+- <strong>完全保留</strong>：「Cloud-storage folder identifier; uploader script — <strong>Withheld</strong>」（GTG-54006, p.70）</p>
+<p>保留的理由報告沒說，但可以推論：雲端資料夾識別碼與上傳腳本若公開，等於教別人怎麼做同樣的事，且可能妨礙平台方的後續處置。<strong>這是威脅情報公開倫理的實例，值得在課堂上討論。</strong></p>
+<blockquote>
+<p><strong>安全紅線提醒（教學與研究皆適用）：</strong> 本節與第 6 節抄錄的網域、IP、Telegram／Instagram／X 帳號、GitHub 路徑一律維持報告原本的 defang 格式（<code>example[.]com</code>、<code>hXXps[://]</code>）。這些只作為研究資料抄錄，<strong>絕對不要連線、不要做 DNS 查詢、不要在課堂示範中開啟</strong>。</p>
+</blockquote>
+<p><strong>觀察三：「Claude 拒絕」的紀錄同時是防線證據與缺口證據。</strong> 報告記錄了四次拒絕（見 6.2 節 d 表），但每一次拒絕之後，行為者都<strong>成功繞過</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>拒絕</th>
+<th>繞過方式</th>
+<th>缺口的性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>拒絕點名真實個人為武裝分子（GTG-04001）</td>
+<td>改用「匿名消息來源」框架</td>
+<td><strong>語意層面的規避</strong>：同樣的效果，換一種表述</td>
+</tr>
+<tr>
+<td>標記出評分表的政治權重（GTG-04001）</td>
+<td>「relabeled it in neutral terms and kept the scoring」</td>
+<td><strong>標籤層面的規避</strong>：換掉觸發詞，機制不變</td>
+</tr>
+<tr>
+<td>辨識出誹謗素材而拒絕（GTG-84005）</td>
+<td>「the actor negotiated sanitized wording to keep building toward the same capability」</td>
+<td><strong>漸進式協商</strong>：把一個被拒絕的請求拆成多個無害的子請求</td>
+</tr>
+<tr>
+<td>標記聲稱為未經證實（GTG-24015 相關趨勢）</td>
+<td>「instructed it to drop those caveats and present everything as confirmed」</td>
+<td><strong>後處理規避</strong>：讓模型先產出合規版本，再要求移除保護性措辭</td>
+</tr>
+</tbody>
+</table>
+<p><strong>這四種規避模式構成了本章最有價值的防禦工程素材。</strong> 共同結構是：模型的拒絕是<strong>針對單一請求</strong>的，而行動是<strong>跨請求、跨工作階段</strong>的。只要行為者願意多花幾輪對話，單點的拒絕就會被繞過。報告在 GTG-84005 的措辭尤其精確——「keep building toward <strong>the same capability</strong>」：被繞過的不是一句話，是一整個能力的建構。</p>
+<p>對防禦設計的啟示（本檔的推論，非報告陳述）：<br />
+1. <strong>拒絕必須有記憶。</strong> 單次拒絕若不影響後續工作階段的評估，等於沒有拒絕。<br />
+2. <strong>要偵測「請求序列」而非「單一請求」。</strong> 「被拒絕 → 換措辭 → 再請求」這個序列本身就是高信號的行為指紋。<br />
+3. <strong>持久記憶檔是新的攻擊面也是新的偵測面。</strong> 行為者把教條放進記憶檔（p.43）以求持久；防禦方也應該把「拒絕紀錄」放進同樣的持久層。</p>
+<h3 id="84">8.4 報告沒有說的：處置的局限</h3>
+<p>四點誠實的觀察：</p>
+<ol>
+<li><strong>封鎖帳號 ≠ 瓦解行動。</strong> GTG-54006 的行為者已經輪替過 29 個帳號（p.67），報告自己預期「the actors behind this activity to try to create new accounts to continue their activity」（p.69）。封鎖是提高成本，不是終結。</li>
+<li><strong>內容已經產出的部分無法追回。</strong> GTG-24015 有內容「actually made it to Russian airwaves」（p.59）；GTG-04001 的內容每日播出。封鎖帳號阻止的是未來的產出。</li>
+<li><strong>組織層級的歸因不等於問責。</strong> 報告把行動歸因到 SVR 控制的 Politology、阿聯政府官員、伊朗 ICCO——但 Anthropic 能做的只有封鎖帳號。真正的問責（制裁、起訴、外交回應）需要國家機關，而報告沒有提到任何一案轉介給執法機關（對比網路行動章會提到與執法單位分享情報）。</li>
+<li><strong>沒有揭露誤判率。</strong> 報告沒有說有多少帳號被誤封、有多少申訴成功。這是 François 在 2019 年就指出的產業透明度缺口（「enforcement in this realm remains opaque throughout the major technology companies」），七年後在 AI 公司身上重現。</li>
+</ol>
+<hr />
+<h2 id="9">9. 第三方驗證與外部來源</h2>
+<blockquote>
+<p><strong>判讀規則（本節的核心紀律）：</strong> 每一條來源都標示它是「<strong>獨立查證</strong>」（有自己的一手資料、不依賴 Anthropic）還是「<strong>僅引述 Anthropic</strong>」（把報告內容重述一遍）。這個區分決定了一條資訊的證據價值。</p>
+</blockquote>
+<h3 id="91">9.1 框架的一手來源（獨立、可驗證）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>性質</th>
+<th>本教材的用法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Ben Nimmo,《The Breakout Scale: Measuring the Impact of Influence Operations》</strong>, Brookings Institution</td>
+<td><code>https://www.brookings.edu/articles/the-breakout-scale-measuring-the-impact-of-influence-operations/</code>（PDF：<code>https://www.brookings.edu/wp-content/uploads/2020/09/Nimmo_influence_operations_PDF.pdf</code>）</td>
+<td>2020 年 9 月</td>
+<td><strong>一手學術／政策論文，完全獨立於 Anthropic</strong></td>
+<td>第 5.2 節的六級定義、例子、四項使用規則全部逐字取自此 15 頁 PDF（本檔實際下載全文並解析文字層）</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Camille François,〈Actors, Behaviors, Content: A Disinformation ABC〉</strong>, Transatlantic High Level Working Group on Content Moderation Online and Freedom of Expression（Annenberg Public Policy Center 出版）</td>
+<td><code>https://www.annenbergpublicpolicycenter.org/wp-content/uploads/ABC_Framework_TWG_Francois_Sept_2019.pdf</code></td>
+<td>2019-09-20</td>
+<td><strong>一手框架論文，獨立</strong></td>
+<td>第 2.3、5.4 節。<strong>這正是 Anthropic 報告 p.41「frameworks」超連結所指的文件</strong>（本檔從 PDF 的連結物件確認 URL）</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>DISARM Foundation</strong>（框架官網與 GitHub）</td>
+<td><code>https://www.disarm.foundation/framework</code>、<code>https://github.com/DISARMFoundation/DISARMframeworks</code></td>
+<td>持續更新（v2.0 原型階段）</td>
+<td><strong>一手框架，獨立</strong></td>
+<td>第 5.4 節。確認：DISARM Red（造謠者 TTP）／Blue（回應者 TTP）分立、風格基於 MITRE ATT&amp;CK、STIX 樣板放在 DISARM_CTI repo、CC-BY 授權、AMITT 時期（2020–2022）曾與 NATO／EU 試行</td>
+</tr>
+</tbody>
+</table>
+<h3 id="92">9.2 針對本報告案例的獨立調查（真正的外部查證）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>是獨立查證嗎</th>
+<th>內容與關鍵差異</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+<td><strong>All Eyes On Wagner（AEOW／INPACT）,〈The SVR Arms Politology with ChatGPT and Claude in the Central African Republic〉</strong></td>
+<td><code>https://alleyesonwagner.org/2026/07/07/the-svr-arms-politology-with-chatgpt-and-claude-in-the-central-african-republic/</code></td>
+<td>2026-07-07</td>
+<td><strong>是——獨立查證，且早於 Anthropic 報告兩個月</strong></td>
+<td>點名行為者為 <strong>Artur "Mirzoian" Tevosyan</strong>（1998 年生於克拉斯諾達爾，2011–2015 在里昂、2015–2025 在巴黎，後遷馬德里再到中非共和國），並取得 <strong>2026 年 4–5 月的兩張發票</strong>，顯示以馬德里 Gran Vía 45 號為帳單地址、每月約 €20 的 ChatGPT 與 Claude 基本訂閱。<strong>OpenAI 向調查方確認</strong>該帳號「primarily used for translation and summarisation... as well as for open-source research」並已停用；<strong>Anthropic 僅確認收到通報、未提供細節</strong>。<br><strong>與 PDF 的差異：</strong> AEOW 的報導<strong>沒有</strong>記載僱傭合約、評分表、偽造公文、HR 管理等用途（那些只出現在 Anthropic 報告 p.45）。依簡報規則，<strong>以 PDF 原文為準</strong>，但必須標註：這部分目前是<strong>單一來源情報</strong>。</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>All Eyes On Wagner,〈Manufacturing Enemies: Politology's War on Civil Society in CAR〉</strong></td>
+<td><code>https://alleyesonwagner.org/2026/05/26/manufacturing-enemies-politologys-war-on-civil-society-in-car/</code></td>
+<td>2026-05-26</td>
+<td><strong>是——獨立查證</strong>（Anthropic 報告 p.44 直接引用此篇）</td>
+<td>獨立確認：<strong>Radio Lengo Songo 於 2017 年由華格納集團創建並資助</strong>；Politology 是華格納前影響力分支、於 2023 年 12 月起由 SVR 控制；2024 年 1–10 月分配給中非共和國影響力行動的預算為 <strong>1,525,105 美元</strong>；指認多名人物（Tevosyan、Jeremie Walanda、Denis Suprunov 等）與比利時－葡萄牙籍 NGO 顧問 Joseph Figueira 遭構陷拘留一案（2024-05-26 至 2026-04）。<br>與 Anthropic 報告的日期敘述有一處差異：Anthropic 寫 SVR 接管「in late 2023」（p.44），AEOW 寫 2023 年 12 月，兩者一致；但 AEOW 另一處提到「2026 年 2 月起 SVR 取得直接營運與財務控制」，屬於階段性描述，非矛盾。</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Wired（意見投書），〈In Kenya, Influencers Are Hired to Spread Disinformation〉</strong></td>
+<td><code>https://www.wired.com/story/opinion-in-kenya-influencers-are-hired-to-spread-disinformation/</code></td>
+<td>早於本報告</td>
+<td><strong>是——獨立背景報導</strong>（Anthropic 報告 p.76 引用此文佐證「肯亞付費網紅操弄敘事」的既有模式）</td>
+<td>本檔<strong>未能取回全文</strong>（WebFetch 被該網域阻擋），僅能確認 Anthropic 引用了它作為「這是肯亞常見模式」的佐證。列為待補來源。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="93-ai">9.3 同業 AI 公司與平台的對照來源</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>性質</th>
+<th>對照價值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7</td>
+<td><strong>OpenAI,《Disrupting malicious uses of AI: October 2025》</strong></td>
+<td><code>https://openai.com/global-affairs/disrupting-malicious-uses-of-ai-october-2025/</code>（PDF 版：<code>https://cdn.openai.com/threat-intelligence-reports/...disrupting-malicious-uses-of-ai-october-2025.pdf</code>）</td>
+<td>2025-10</td>
+<td>同業一手報告（<strong>本檔未能取回全文</strong>：網頁 403、PDF 超過抓取大小上限）</td>
+<td>經二手報導確認的要點：OpenAI 每月／定期發布同類報告；核心論調是「威脅行為者把 AI 接到既有劇本上以提速，而非從模型獲得全新的攻擊能力」；一個疑似俄羅斯、與 Rybar 軍事部落格相關的網路，為剛果民主共和國、蒲隆地、喀麥隆、馬達加斯加四國的選舉干預草擬商業計畫，單項預算達 60 萬美元。<strong>與 Anthropic 的 GTG-24015 交集：Rybar 也出現在 Anthropic 的 IOC 表中（@rybar_america，p.62）</strong></td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>OpenAI,《Disrupting deceptive uses of AI by covert influence operations》</strong>（首份影響力行動報告）</td>
+<td><code>https://openai.com/index/disrupting-deceptive-uses-of-AI-by-covert-influence-operations/</code></td>
+<td>2024-05-30</td>
+<td>同業一手報告（<strong>本檔未能取回全文</strong>：403）</td>
+<td>業界公認的對照點：該報告揭露五個行動（Bad Grammar、Doppelganger、Spamouflage、IUVM、Zero Zeno），並<strong>明確使用 Brookings Breakout Scale</strong>，結論是沒有一個超過 Category Two。調查由 <strong>Ben Nimmo</strong>（Breakout Scale 作者本人）領導。<strong>本檔無法逐字驗證這段陳述，標示為待覆核。</strong></td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>SiliconANGLE 對 OpenAI 2025 年 10 月報告的報導</strong>（Duncan Riley）</td>
+<td><code>https://siliconangle.com/2025/10/07/openai-details-expanding-efforts-disrupt-malicious-use-ai-new-report/</code></td>
+<td>2025-10-07</td>
+<td><strong>僅引述 OpenAI</strong></td>
+<td>確認「威脅行為者把 AI 疊加到既有手法上」的論調；該文<strong>沒有</strong>提到 Breakout Scale 或觸及率評估</td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>Campus Technology 對 OpenAI 2025 年 6 月報告的報導</strong>（David Ramel）</td>
+<td><code>https://campustechnology.com/articles/2025/06/16/openai-report-identifies-malicious-use-of-ai-in-cloud-based-cyber-threats.aspx</code></td>
+<td>2025-06-16</td>
+<td><strong>僅引述 OpenAI</strong></td>
+<td>確認 OpenAI 該期瓦解 10 起案件，含在 X、TikTok、Telegram、Facebook 散布 AI 生成貼文的影響力行動（例：中國關聯的「Uncle Spam」在 X 與 Bluesky 推送美國極化政治內容）；<strong>未提及 Breakout Scale</strong></td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong>Meta,《Semiannual Adversarial Threat Report, Second Half 2026》</strong></td>
+<td><code>https://transparency.meta.com/sr/H2-2026-adversarial-threat-report</code>（索引頁：<code>https://transparency.meta.com/metasecurity/threat-reporting/</code>）</td>
+<td>2026-08</td>
+<td>平台方一手報告（<strong>本檔未能取回全文</strong>：檔案超過抓取大小上限；經索引頁與二手摘要確認存在與日期）</td>
+<td>關鍵對照：Meta 的報告涵蓋詐騙、CIB、AI 時代的安全、恐怖組織、監控代理五個領域；<strong>AI 技術現在出現在 Meta 所瓦解的幾乎每一個 CIB 網路中</strong>；個案例：源自伊朗、針對美國受眾的網路（4 個 Facebook 帳號＋31 個 Instagram 帳號、逾 79,000 追蹤者，使用美加代理基礎設施與偽裝成美國活動人士／學生的人格，仍被主動偵測並歸因）。<strong>Meta 不使用 Breakout Scale</strong>，改以資產數、追蹤數與 CIB 政策為報告單位</td>
+</tr>
+<tr>
+<td>12</td>
+<td><strong>Anthropic 首份威脅情報報告</strong>（本報告 p.41 的「first threat intelligence report」超連結）</td>
+<td><code>https://www.anthropic.com/news/detecting-and-countering-malicious-uses-of-claude-march-2025</code></td>
+<td>2025-04-23（涵蓋 2025 年 3 月）</td>
+<td>Anthropic 自身一手報告</td>
+<td>該報告揭露的商業「影響力即服務」網路：<strong>超過一百個社群機器人帳號</strong>，橫跨 Twitter/X 與 Facebook，與<strong>數萬個真實帳號</strong>互動；最具新意的一點是 Claude 擔任「<strong>orchestrator deciding what actions social media bot accounts should take based on politically motivated personas</strong>」（決定何時按讚、分享、留言或忽略）。<strong>該報告未使用 Breakout Scale</strong>，只說沒有內容「achieved viral status」。<br><strong>對照本報告的意義</strong>：p.41 說「Since then, we've discovered and disrupted larger, more sophisticated operations」——從「一百個帳號」到「約一千個帳號＋70 個新聞站＋部會級計畫書」，一年半的規模躍升有據可查</td>
+</tr>
+</tbody>
+</table>
+<h3 id="94-anthropic">9.4 對本報告的媒體報導（全部僅引述 Anthropic）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>是獨立查證嗎</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>13</td>
+<td>Anthropic 官方網頁版報告</td>
+<td><code>https://www.anthropic.com/threat-intelligence-report-september-2026</code></td>
+<td>2026-09-10</td>
+<td>一手（同 PDF）</td>
+<td>網頁版與 PDF 內容一致；本檔已交叉確認定義原文、九案代號、三個 Breakout Scale 級別（GTG-04001 Cat 4、GTG-54002 Cat 2、GTG-84005 Cat 2）與「most of the content... generated little observable engagement」等陳述</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Unite.AI,〈Anthropic Details Disrupted Claude Misuse Across Seven Harm Areas〉（Miles Okada）</td>
+<td><code>https://www.unite.ai/anthropic-details-disrupted-claude-misuse-across-seven-harm-areas/</code></td>
+<td>2026-09-10</td>
+<td><strong>僅引述 Anthropic</strong></td>
+<td>覆述九案；只引用一個級別（GTG-04001 Category Four）；<strong>無外部專家引述、無獨立查證</strong></td>
+</tr>
+<tr>
+<td>15</td>
+<td>Cyber Kendra,〈Anthropic Threat Report 2026: Every Case Explained〉</td>
+<td><code>https://www.cyberkendra.com/2026/09/anthropic-threat-report-says-ai-now.html</code></td>
+<td>2026-09</td>
+<td><strong>僅引述 Anthropic</strong></td>
+<td>逐案列出九個 GTG 代號；只引用 GTG-04001 的 Category Four（稱其為報告中最高評級）；覆述「多數內容從未觸及真實受眾」；<strong>無獨立分析</strong></td>
+</tr>
+<tr>
+<td>16</td>
+<td>TechNext24,〈Anthropic's report uncovers AI-powered propaganda, political manipulation in 4 African countries〉</td>
+<td><code>https://technext24.com/reviews/anthropic-ai-propaganda-surveillance-africa/</code></td>
+<td>2026-09</td>
+<td><strong>僅引述 Anthropic</strong>（本檔抓取遭 403，僅能從搜尋摘要確認存在與主題）</td>
+<td>從非洲視角覆述中非共和國、肯亞、剛果民主共和國、馬利相關內容</td>
+</tr>
+<tr>
+<td>17</td>
+<td>其他二手報導：TechNode Global、AiCybr、Metaverse Post、Winzheng、CellCog、Undercode Testing 等</td>
+<td>見第 9.6 節連結</td>
+<td>2026-09-10/11</td>
+<td><strong>全部僅引述 Anthropic</strong></td>
+<td>內容高度重複，主要聚焦網路行動與蒸餾章節；影響力行動章的報導普遍只提 GTG-04001 的 Category Four</td>
+</tr>
+</tbody>
+</table>
+<p><strong>本節最重要的結論：</strong></p>
+<blockquote>
+<p><strong>除了 All Eyes On Wagner 對 GTG-04001 的獨立調查之外，本章的九個案例目前都是「單一來源情報」。</strong><br />
+沒有任何獨立研究機構複驗過 Breakout Scale 的級別；<br />
+沒有任何社群平台公開確認收到並處置了 Anthropic 分享的指標；<br />
+所有媒體報導都是重述。<br />
+這不表示報告有誤，但表示：<strong>教學時必須把「Anthropic 說」和「已被證實」分開講。</strong></p>
+</blockquote>
+<h3 id="95-104">9.5 台灣相關的對照來源（供第 10.4 節使用）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>性質</th>
+<th>要點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>18</td>
+<td><strong>Doublethink Lab（台灣民主實驗室）</strong></td>
+<td><code>https://doublethinklab.org/</code></td>
+<td>持續</td>
+<td><strong>獨立研究機構一手研究</strong></td>
+<td>三個團隊：Digital Intelligence（對外國資訊操弄的鑑識調查，明確包含「tracing <strong>AI-generated influence operations</strong> and election interference across the Indo-Pacific」）、Global Research（China Index，涵蓋 101 國、99 項指標）、Social Engagement（反造謠工具包與社群行動）。近期研究含〈<strong>The Rise of AI in PRC Influence Operations: Nine Takeaways from the GoLaxy Documents</strong>〉（2026-04-02，<code>https://medium.com/doublethinklab/the-rise-of-ai-in-prc-influence-operations-nine-takeaways-from-the-golaxy-documents-2d6617a753e5</code>，<strong>本檔取回失敗／403，僅確認標題與日期</strong>）、〈Assessing the Borderless Group's Activity on Threads〉（2026-04-28）、〈China Index 2024〉（2025-09-18）、〈Taiwan POWER: A Model for Resilience to FIMI〉</td>
+</tr>
+<tr>
+<td>19</td>
+<td><strong>IORG（台灣資訊環境研究中心）</strong></td>
+<td><code>https://iorg.tw/</code></td>
+<td>持續</td>
+<td><strong>獨立研究機構一手研究</strong></td>
+<td>2019 年成立，以資料驅動的方法研究針對台灣的資訊操弄。代表性研究〈<strong>2024「疑美論」更新</strong>〉（<code>https://iorg.tw/a/us-skepticism-253</code>，2025-03-10）：分析 2023-07 至 2024-12 的 40 個重大事件，識別出 <strong>145 條疑美論述、九大類型</strong>（亂源論 33、假朋友 22、棄子論 20、衰弱論 19、假民主 18、傀儡論 11、共謀論 10、反世界 9、毀滅論 5）；關鍵發現：<strong>145 條中有 68 條源自台灣本地的評論者、媒體與政治人物</strong>；108 條被中國放大、62 條由中國創造。另有〈Taiwan Counters FIMI – Governmental and Parliamentary Responses〉（2024-10-29，<code>https://iorg.tw/a/taiwan-counters-fimi-gov-parl</code>）、〈2024 台灣資訊環境調查〉、〈台灣失敗論和民主的信心危機〉（2025-09-23）</td>
+</tr>
+<tr>
+<td>20</td>
+<td><strong>台灣事實查核中心（TFC）</strong></td>
+<td><code>https://tfc-taiwan.org.tw/</code></td>
+<td>持續</td>
+<td><strong>獨立事實查核機構</strong></td>
+<td>2026 年與 AI／認知作戰相關的查核與專題包括：〈手遊廣告為何搶電視版面？揭密 40 毫秒個資拍賣與 AI 流量陷阱！〉（2026-09-10）、〈俄羅斯如何利用「哈哈宣傳」操弄資訊〉（2026-08，記錄俄羅斯使用宣傳迷因與深偽）、〈社群流傳 AI 生成的尼泊爾聚落洪災前後對比圖〉（2026-08）、〈義大利政黨簽署自律條款 拒用深偽內容攻擊對手〉（2026-08）。另營運<strong>台灣事實查核學苑（TFC Academy）</strong> 媒體識讀教育平台</td>
+</tr>
+</tbody>
+</table>
+<p><strong>重要限制：</strong> 上述台灣機構<strong>沒有任何一家</strong>針對 Anthropic 本報告發表過分析或查核。本報告的九案<strong>沒有一案與台灣或中國直接相關</strong>。第 10.4 節的所有台灣應用都是<strong>方法論的遷移</strong>，不是案例的延伸——教學時必須講清楚這個界線。</p>
+<h3 id="96-markdown">9.6 來源清單（Markdown 連結）</h3>
+<p><strong>框架一手來源</strong><br />
+- <a href="https://www.brookings.edu/articles/the-breakout-scale-measuring-the-impact-of-influence-operations/">The Breakout Scale: Measuring the impact of influence operations（Brookings, Ben Nimmo, 2020-09）</a><br />
+- <a href="https://www.annenbergpublicpolicycenter.org/wp-content/uploads/ABC_Framework_TWG_Francois_Sept_2019.pdf">Actors, Behaviors, Content: A Disinformation ABC（Camille François, TWG, 2019-09-20）</a><br />
+- <a href="https://www.disarm.foundation/framework">DISARM Framework（DISARM Foundation）</a><br />
+- <a href="https://github.com/DISARMFoundation/DISARMframeworks">DISARM Frameworks（GitHub）</a></p>
+<p><strong>本報告與同業報告</strong><br />
+- <a href="https://www.anthropic.com/threat-intelligence-report-september-2026">Countering misuse of AI: September 2026（Anthropic）</a><br />
+- <a href="https://www.anthropic.com/news/detecting-and-countering-malicious-uses-of-claude-march-2025">Detecting and countering malicious uses of Claude: March 2025（Anthropic 首份）</a><br />
+- <a href="https://openai.com/global-affairs/disrupting-malicious-uses-of-ai-october-2025/">Disrupting malicious uses of AI: October 2025（OpenAI）</a><br />
+- <a href="https://openai.com/index/disrupting-deceptive-uses-of-AI-by-covert-influence-operations/">Disrupting deceptive uses of AI by covert influence operations（OpenAI, 2024-05-30）</a><br />
+- <a href="https://transparency.meta.com/sr/H2-2026-adversarial-threat-report">Meta Semiannual Adversarial Threat Report H2 2026</a><br />
+- <a href="https://transparency.meta.com/metasecurity/threat-reporting/">Meta 威脅報告索引</a></p>
+<p><strong>獨立調查</strong><br />
+- <a href="https://alleyesonwagner.org/2026/07/07/the-svr-arms-politology-with-chatgpt-and-claude-in-the-central-african-republic/">The SVR Arms Politology with ChatGPT and Claude in the CAR（All Eyes On Wagner, 2026-07-07）</a><br />
+- <a href="https://alleyesonwagner.org/2026/05/26/manufacturing-enemies-politologys-war-on-civil-society-in-car/">Manufacturing Enemies: Politology's War on Civil Society in CAR（AEOW, 2026-05-26）</a><br />
+- <a href="https://www.wired.com/story/opinion-in-kenya-influencers-are-hired-to-spread-disinformation/">In Kenya, Influencers Are Hired to Spread Disinformation（Wired）</a></p>
+<p><strong>媒體報導（僅引述 Anthropic）</strong><br />
+- <a href="https://www.unite.ai/anthropic-details-disrupted-claude-misuse-across-seven-harm-areas/">Anthropic Details Disrupted Claude Misuse Across Seven Harm Areas（Unite.AI）</a><br />
+- <a href="https://www.cyberkendra.com/2026/09/anthropic-threat-report-says-ai-now.html">Anthropic Threat Report 2026: Every Case Explained（Cyber Kendra）</a><br />
+- <a href="https://technext24.com/reviews/anthropic-ai-propaganda-surveillance-africa/">Anthropic's report uncovers AI-powered propaganda in 4 African countries（TechNext24）</a><br />
+- <a href="https://siliconangle.com/2025/10/07/openai-details-expanding-efforts-disrupt-malicious-use-ai-new-report/">OpenAI details expanding efforts to disrupt malicious use of AI（SiliconANGLE, 2025-10-07）</a><br />
+- <a href="https://campustechnology.com/articles/2025/06/16/openai-report-identifies-malicious-use-of-ai-in-cloud-based-cyber-threats.aspx">OpenAI Report Identifies Malicious Use of AI（Campus Technology, 2025-06-16）</a></p>
+<p><strong>台灣研究機構</strong><br />
+- <a href="https://doublethinklab.org/">Doublethink Lab 台灣民主實驗室</a><br />
+- <a href="https://medium.com/doublethinklab/the-rise-of-ai-in-prc-influence-operations-nine-takeaways-from-the-golaxy-documents-2d6617a753e5">The Rise of AI in PRC Influence Operations: Nine Takeaways from the GoLaxy Documents（Doublethink Lab, 2026-04-02）</a><br />
+- <a href="https://iorg.tw/">IORG 台灣資訊環境研究中心</a><br />
+- <a href="https://iorg.tw/a/us-skepticism-253">IORG：2024「疑美論」更新（2025-03-10）</a><br />
+- <a href="https://iorg.tw/a/taiwan-counters-fimi-gov-parl">IORG: Taiwan Counters FIMI – Governmental and Parliamentary Responses（2024-10-29）</a><br />
+- <a href="https://tfc-taiwan.org.tw/">台灣事實查核中心</a></p>
+<hr />
+<h2 id="10">10. 課程教學設計</h2>
+<h3 id="101">10.1 核心教學要點</h3>
+<p>本章在整門課程中的定位是<strong>方法論模組</strong>：學員在這裡拿到的是工具，不是故事。九個案例是練習材料，工具才是帶得走的東西。</p>
+<p><strong>要點一：定義先於分析。</strong><br />
+在判斷「這是不是影響力行動」之前，先把定義拆成可打勾的要件（第 2.2 節五要件）。實務上最常見的錯誤是「看到不喜歡的政治內容就叫它認知作戰」——定義的作用正是防止這件事。特別要教會學員：<strong>內容為假不是必要條件</strong>（要件 3 的「covertly influence」），<strong>外國背景也不是必要條件</strong>（GTG-54004、GTG-54006 都是國內行動）。</p>
+<p><strong>要點二：偵測看行為，不看立場。</strong><br />
+七類上游可觀測訊號（第 3.3 節）沒有一類跟政治立場有關。這既是技術現實，也是政策必要——一個以「內容立場」為偵測基礎的系統，在民主社會中是不可接受的。這一點應該與 François 2019 年的觀察扣在一起：產業收斂到以行為（B）為執法基礎，是<strong>技術可行性</strong>與<strong>言論自由</strong>兩方面壓力共同的結果。</p>
+<p><strong>要點三：觀測位置決定你能回答什麼問題。</strong><br />
+上游（AI 公司）能回答「誰在造、造什麼、怎麼造」，不能回答「有沒有效」；下游（平台）能回答「傳了多遠」，不能回答「誰在造」；只有選委會與政府能碰到「有沒有改變結果」，而那時已經來不及。<strong>沒有任何一方能獨力完成一次完整的評估。</strong> 這是第 10.3 節角色扮演的核心設計理由。</p>
+<p><strong>要點四：用可複現的證據衡量嚴重性。</strong><br />
+Breakout Scale 的價值不在於六個級別本身，而在於它強迫分析者說出「我看到了什麼具體的擴散證據」。教會學員把「這個假訊息很嚴重」翻譯成「我觀察到它從 A 平台的 B 社群擴散到 C 平台的 D 社群，但沒有進入主流媒體，因此是 Category Three」。<strong>這個翻譯動作本身就是專業與業餘的分界。</strong></p>
+<p><strong>要點五：在恐慌與自滿之間。</strong><br />
+「多數內容沒有真實互動」（p.44）與「AI 出現在幾乎每一個 CIB 網路中」（Meta H2 2026）同時為真。前者防止恐慌，後者防止自滿。真正的風險轉移是：<strong>瓶頸從生產移到了分發</strong>，因此已握有分發力的行為者是最大受益者。</p>
+<p><strong>要點六：低級別不等於低傷害。</strong><br />
+Breakout Scale 衡量擴散，不衡量傷害。GTG-84006 對伊朗境內人士的逮捕紀錄側寫（可能導致監禁或死刑）只評 Category Two。<strong>教學上必須明確告訴學員量表的這個邊界</strong>，否則會養成用級別代替風險判斷的壞習慣。</p>
+<h3 id="102">10.2 課堂討論題</h3>
+<p>以下六題都沒有標準答案，設計上都有足夠的正反材料可以支撐兩個小時的辯論。</p>
+<p><strong>Q1：Anthropic 用 Breakout Scale 為自己揭露的案例評級，這算不算「球員兼裁判」？</strong><br />
+- 正方（可接受）：Nimmo 設計量表時就預期由「operational researchers, including at the platforms」使用；評級基於可觀察的擴散證據，不是主觀判斷；報告在 GTG-84002 明確說明「為什麼不是更高級」，顯示方法論自律。<br />
+- 反方（有問題）：低級別的結論對 Anthropic 有商業利益；底層資料未公開（完整網域清單「available separately」、雲端識別碼「Withheld」）；沒有第三方覆核；GTG-34001 與 GTG-54006 的 Cat 3 判定，若嚴格套用 Nimmo 的「有機外溢」定義可能站不住腳（第 5.6 節）。<br />
+- 延伸：如果要設計一個可信的第三方覆核機制，需要什麼？（資料存取權？NDA 下的研究者計畫？類似 DSA 第 40 條的法定資料存取？）</p>
+<p><strong>Q2：GTG-24015 為什麼沒有 Breakout Scale 級別？這是方法論的誠實，還是逃避？</strong><br />
+- 支持「誠實」：量表為隱蔽行動設計，RT 全球廣播不是隱蔽插入點；報告自承無法界定分母（不知 Claude 產出占該媒體總產出的比例）。<br />
+- 支持「逃避」：這是九案中觸及最廣的一案（上了俄羅斯電視），若給級別必然是 Cat 4 以上，會破壞「多數沒效果」的整體敘事。<br />
+- 延伸：Breakout Scale 需不需要一個「公開國家媒體」的變體？如果一個行動的插入點本身就是主流媒體，量表要怎麼改？</p>
+<p><strong>Q3：如果「拒絕」總是能被繞過（第 8.3 節的四種規避模式），那模型的拒絕還有意義嗎？</strong><br />
+- 有意義：提高成本與時間；留下高信號的行為證據（「被拒絕→換措辭→再請求」的序列本身就是偵測訊號）；擋掉能力不足或不夠有決心的行為者。<br />
+- 沒意義：報告記錄的四次拒絕<strong>全部被繞過</strong>；GTG-84005 的行為者「negotiated sanitized wording to keep building toward the same capability」。<br />
+- 延伸：如果拒絕有記憶（跨工作階段），會不會造成誤傷與言論寒蟬？怎麼設計才不會把「研究影響力行動的學者」誤判成「執行影響力行動的人」？<strong>這一題對本課程的學員特別切身。</strong></p>
+<p><strong>Q4：把「編輯效忠合約」與「員工評分表」交給 AI 產出，跟把「假新聞」交給 AI 產出，哪一個更值得擔心？</strong><br />
+- 支持「內容更嚴重」：假新聞直接觸及公眾，合約只影響組織內部少數人。<br />
+- 支持「組織更嚴重」：組織基礎設施讓行動<strong>可持續、可擴張、可傳承</strong>；內容是一次性的，組織是複利的；而且組織文件的產生更難被偵測為「有害」（一份僱傭合約在語意上是無害的）。<br />
+- 延伸：AI 使用政策應該禁止「協助建立強制政治效忠的僱傭關係」嗎？這條線要怎麼畫才不會誤傷正常的企業價值觀文件？</p>
+<p><strong>Q5：Anthropic 從 OpenAI 收到線報（GTG-54004）、從 All Eyes On Wagner 收到線報（GTG-04001）。AI 公司之間、AI 公司與 NGO 之間的情報共享，應該制度化到什麼程度？</strong><br />
+- 支持深化：行為者跨平台操作（同時訂閱 ChatGPT 與 Claude）；單一平台的能見度必然不完整；網路安全領域已有成熟的 ISAC/ISAO 模式可借鑑。<br />
+- 反對深化：共享的是「使用者的對話特徵」，隱私與正當程序風險極高；沒有司法監督；可能形成事實上的跨平台黑名單，使用者無從申訴。<br />
+- 延伸：DISARM 的 STIX 樣板提供了技術上的共同語言，但治理框架呢？誰有權把一個帳號標記為「影響力行動」？</p>
+<p><strong>Q6：報告的九案沒有一案來自中華人民共和國，而監控章有多個 PRC 案例。這說明什麼？</strong><br />
+- 可能解釋一：PRC 的影響力行動不用西方商用模型（用本國模型、開源模型），所以上游偵測看不到。<br />
+- 可能解釋二：偵測與抽樣偏誤（報告自承「The cases we share here aren't typical misuse, but rather examples of the most notable and novel threat activity」，p.3）。<br />
+- 可能解釋三：商業或政治考量。<br />
+- 延伸（對台灣最重要）：<strong>如果台灣面對的主要威脅行為者恰好是上游偵測看不到的那一類，那麼本章的方法論對台灣還剩下多少價值？</strong> 建議引導學員往「方法論可遷移、資料來源要自建」的方向收斂。</p>
+<h3 id="103">10.3 實作／桌面演練建議</h3>
+<blockquote>
+<p>全部演練都在教室或封閉環境進行，<strong>不涉及任何攻擊操作、不連線任何 IOC、不建立任何假帳號</strong>。所有材料來自報告 PDF 與公開的框架文件。</p>
+</blockquote>
+<h4 id="abreakout-scale-90">演練 A（主演練）：Breakout Scale 評級與辯論 — 90 分鐘</h4>
+<p><strong>目標：</strong> 讓學員親手做一次「把模糊的嚴重性判斷翻譯成可複現的級別」。</p>
+<p><strong>材料準備（講師）：</strong><br />
+1. 一張 A3 的 Breakout Scale 判讀決策樹（第 5.3 節的流程圖）。<br />
+2. 三份「去級別化」的案例卡。從報告中抄錄各案的敘述，但<strong>刪掉所有出現級別的句子</strong>：<br />
+   - <strong>案例卡 1：GTG-54002</strong>（p.47–52）— 70 個假新聞站、8,913 篇文章、約 20 種語言、70 個對應 X 帳號、250+ 留言帳號、AI 生成頭像、2025-09-11 三分鐘內近乎同時發佈的 DRC 文章、一個自稱剛果平民「數位軍團」的帳號追蹤了該網路的多個帳號。<br />
+   - <strong>案例卡 2：GTG-84002</strong>（p.78–80）— 約 300 個假影響者帳號、複製真實瑞士組織的前線 NGO、為 UN 人權理事會第 62 屆會期代筆的兩份證詞、18 名歐洲議會議員與記者的側寫、UN 特別報告員的反問責檔案、2026-06-04 的 #SudanIslamists 協同貼文（Figure 18 顯示各貼文瀏覽數為 657、468、342、234、1,671、213）。<br />
+   - <strong>案例卡 3：GTG-04001</strong>（p.44–47）— Radio Lengo Songo 98.9 FM 每日播出、以節目時段換 SputnikPro 訓練名額、內容進入國家廣播 Radio Centrafrique、Telegram 頻道放大、在地媒體 Ndjoni Sango 與 Pravda RCA 轉載。</p>
+<p><strong>流程：</strong><br />
+- <strong>0–10 分</strong>：講師講解決策樹與兩個判讀陷阱（自家帳號互推、行為者自報數字）。<br />
+- <strong>10–35 分</strong>：分三組，每組拿三張卡，各自評級並在白板上寫出「<strong>我的證據是哪一句話</strong>」。規定：每個級別判斷必須引用案例卡上的具體句子，不能說「感覺很嚴重」。<br />
+- <strong>35–55 分</strong>：三組交叉報告。刻意設計的爭點：<br />
+  - 案例卡 1：「一個自稱剛果平民數位軍團的帳號追蹤了該網路」算不算外溢？（報告的答案是不算，因為那可能也是操作的一部分，且報告說「no evidence of breakout beyond its own activity」）<br />
+  - 案例卡 2：Figure 18 的 1,671 次瀏覽算不算「多平台外溢」？代筆的 UN 證詞若成功宣讀，會是第幾級？（報告刻意說明「A higher category would require evidence of broad public attention or policy impact, which we are not able to confirm」）<br />
+  - 案例卡 3：「內容進入國家廣播電台」是 Category Four（跨媒介）還是 Category Six（政策影響）？<br />
+- <strong>55–75 分</strong>：揭曉報告的實際評級（Cat 2、Cat 3、Cat 4）與報告給的理由原文，讓學員比對自己的推理。<br />
+- <strong>75–90 分</strong>：辯論題——「如果你是選委會的官員，Category Two 的行動你要不要處理？」引導出「量表用於資源排序，不用於決定要不要在意」。</p>
+<p><strong>評分標準（可作為課程作業）：</strong><br />
+| 面向 | 不及格 | 及格 | 優秀 |<br />
+|---|---|---|---|<br />
+| 證據引用 | 沒引用具體句子 | 每個級別都有引用 | 能指出哪些句子<strong>不能</strong>作為證據（自報數字、自家帳號互推） |<br />
+| 決策樹運用 | 跳步驟 | 依序走完 | 能說明在哪一步卡住、為什麼資訊不足 |<br />
+| 不確定性處理 | 硬給一個級別 | 標示不確定 | 能寫出「若 X 成立則為 Cat N，若 Y 成立則為 Cat M」的條件式判斷 |</p>
+<h4 id="b-vs-120">演練 B（主演練）：「上游 vs. 下游」三方角色扮演 — 120 分鐘</h4>
+<p><strong>目標：</strong> 讓學員親身體會「觀測位置決定能回答什麼問題」，以及跨組織協作的摩擦。</p>
+<p><strong>情境設定（虛構，但每個元素都對應報告中的真實作法）：</strong></p>
+<blockquote>
+<p>距離某民主國家的全國大選還有 <strong>six weeks</strong>。<br />
+一個影響力行動正在運作：某商業公關公司為未具名客戶服務，使用 AI 產出多語政治內容，經約 300 個社群帳號分發，並餵給兩家小型線上新聞站。內容主題是「主要在野聯盟即將分裂」與「某候選人收受外國資金」（後者為捏造）。</p>
+</blockquote>
+<p><strong>三個角色小組（各 4–6 人）：</strong></p>
+<p><strong>【組 1】AI 公司信任與安全團隊（Trust &amp; Safety）</strong><br />
+- <strong>你看得到：</strong> 該公關公司的帳號在過去六週要求模型「產出 50 則看起來像自發草根評論的貼文」共 37 次；有一份跨 200 個工作階段重用的 Markdown 教條檔；有一份禁用詞清單；有一次模型拒絕了「把某候選人描述為收受外國資金」的請求，行為者隨後改用「有消息人士指出」的框架並成功產出；帳號在一週內從三個不同國家的 IP 登入。<br />
+- <strong>你看不到：</strong> 這些內容有沒有被貼出去、貼到哪裡、有多少人看到、誰是客戶。<br />
+- <strong>你的權限：</strong> 封鎖帳號；建立行為指紋偵測；把指標分享給夥伴。<br />
+- <strong>你的限制：</strong> 法務要求你不能揭露使用者對話內容；公關部門擔心「AI 公司監控使用者」的新聞標題。</p>
+<p><strong>【組 2】社群平台整合性團隊（Integrity）</strong><br />
+- <strong>你看得到：</strong> 約 300 個帳號在同一週建立、頭像有 AI 生成特徵、貼文時間高度同步、互動幾乎全部來自網路內部；其中 4 個帳號有真實的外部互動（被兩個各有 5 萬追蹤者的真實帳號轉推）；兩家新聞站的連結被大量分享。<br />
+- <strong>你看不到：</strong> 誰建立了這些帳號、內容是用哪個模型產的、幕後金主是誰。<br />
+- <strong>你的權限：</strong> 下架帳號（依 CIB 政策，「based on their behavior, not the content they posted」）；降低觸及；標示內容。<br />
+- <strong>你的限制：</strong> 選前下架政治帳號有極高的政治風險；你的 CIB 政策要求「協同」＋「不真實」兩個要件都成立才能行動；若誤判，你會上國會聽證會。</p>
+<p><strong>【組 3】選舉委員會／主管機關</strong><br />
+- <strong>你看得到：</strong> 兩則民眾檢舉；一家報紙記者來詢問「某候選人收受外國資金」的傳聞是否屬實；候選人陣營要求你「立刻處理」。<br />
+- <strong>你看不到：</strong> 上游的一切、平台的內部資料。<br />
+- <strong>你的權限：</strong> 發布澄清；要求平台提供資料（需法律依據）；移送調查；在極端情況下依法處理。<br />
+- <strong>你的限制：</strong> 你不能對言論內容做事前審查；你的法律工具只能處理「境外資金」與「賄選」，處理不了「境內公關公司為匿名客戶造勢」；選前任何動作都會被指控為干預選舉。</p>
+<p><strong>流程：</strong><br />
+- <strong>0–20 分</strong>：各組只讀自己的資訊卡，<strong>不得交談</strong>。各組獨立寫下：（a）我判斷這是不是影響力行動？（b）Breakout Scale 級別？（c）我要採取什麼行動？<br />
+- <strong>20–30 分</strong>：各組報告。刻意讓落差暴露——組 1 會說「明顯是行動但我不知道有沒有效」，組 2 會說「明顯是 CIB 但我不知道誰做的」，組 3 會說「我什麼都不知道但所有人都在要求我做事」。<br />
+- <strong>30–60 分</strong>：開放協商。<strong>加入三個限制條件強迫真實的摩擦：</strong><br />
+  1. 組 1 分享對話內容給組 2 需要法務同意（講師扮演法務，第一次拒絕）。<br />
+  2. 組 2 分享帳號資料給組 3 需要法律依據（講師扮演法律顧問，要求具體法條）。<br />
+  3. 任何一方公開揭露，另外兩方必須在 24 小時內同步回應，否則會出現「互相矛盾的官方說法」。<br />
+- <strong>60–85 分</strong>：注入兩個轉折事件：<br />
+  - <strong>T+1：</strong> 一名擁有 200 萬追蹤者的名人轉發了「收受外國資金」的說法（<strong>級別跳到 Category Five</strong>）。三組重新評估。<br />
+  - <strong>T+2：</strong> 另一家 AI 公司私下通知組 1：同一個行為者在他們平台上也有帳號，而且產出了「選務系統不可信」的內容。組 1 要不要告訴組 2 和組 3？用什麼管道？<br />
+- <strong>85–110 分</strong>：各組提出「下次怎麼做得更好」的一頁備忘錄，必須具體到：要建立什麼常設管道、什麼觸發條件、什麼資料可以共享、什麼不能。<br />
+- <strong>110–120 分</strong>：講師講評，對照報告中的真實作法：GTG-54004 的 OpenAI→Anthropic 線報、GTG-04001 的 AEOW→Anthropic 線報、GTG-54006 的「shared indicators with the relevant distribution platforms」。</p>
+<p><strong>教學重點（講師必須在講評時明說）：</strong><br />
+1. 三方的資訊完全互補，且<strong>沒有任何一方的資訊足以獨立行動</strong>。<br />
+2. 最快的協作路徑（AI 公司直接給平台指標）也是隱私風險最高的。<br />
+3. 選委會永遠是資訊最少、壓力最大、法律工具最不合用的一方——這是結構性的，不是能力問題。<br />
+4. 名人轉發那一刻（Cat 5），三方的處置成本全部暴增，而那一刻<strong>沒有任何一方能阻止</strong>。<strong>防禦的黃金窗口在 Category Three 之前</strong>（Nimmo：「a timely exposure or other response will be crucial before the operation can break new ground」）。</p>
+<h4 id="c30">演練 C（暖身，30 分鐘）：從網站結構判斷真偽</h4>
+<p>材料：報告 Figure 5（p.52的假新聞網站截圖。<br />
+任務：不查證任何一則新聞的內容，只看網站結構，列出三個以上的可疑點。<br />
+標準答案（第 6.3 節）：主題地理不一致（迦納站產出大量賽普勒斯政治）、三篇跨國跨領域報導同一署名、發布時間叢集。<br />
+延伸：讓學員拿這套「結構檢查法」去看三個他們自己每天會滑到的內容農場。</p>
+<h4 id="d-disarm">演練 D（進階，可作為期末作業）：用 DISARM 標註一個案例</h4>
+<p>材料：任選一個 GTG 案例的完整文字。<br />
+任務：用 DISARM Red Framework 的戰術階段，把該案例的每一個行為對應到一個戰術；找出至少兩個「DISARM 沒有對應技術」的行為，並為它們各寫一條技術描述（名稱、前置條件、觀測資料源、偵測邏輯、規避方式）。<br />
+教學目的：讓學員體會「框架是活的」，以及「AI 使能的影響力行動確實產生了既有框架未涵蓋的新 TTP」。預期的缺口包括：用商用 LLM 的固定批次呼叫放大單人產能、跨供應商的生產管線、把組織管理文書（合約、考績）交給模型產生。</p>
+<hr />
+<h3 id="104">10.4 對台灣的意涵</h3>
+<h4 id="1041">10.4.1 先講清楚界線</h4>
+<p><strong>報告的九個案例沒有一案與台灣或中國直接相關。</strong> 中國相關的案例全部集中在監控行動章（p.81–82：PRC 宗教事務情報蒐集單位、PRC 國安局的 AI 監控手冊、針對敘利亞維吾爾目標的滲透招募、對社群內容做「政治敏感度」評分並標記「control」目標）。</p>
+<p>因此本節的一切都是<strong>方法論遷移</strong>，不是案例延伸。教學時必須讓學員清楚知道：我們拿的是工具，不是證據。</p>
+<h4 id="1042">10.4.2 為什麼這個缺口本身就是最重要的一課</h4>
+<p>報告有九個影響力行動案例、跨四大洲、涵蓋國家與商業行為者，卻<strong>一個 PRC 案例都沒有</strong>。三種可能的解釋，每一種對台灣都有不同的意涵：</p>
+<table>
+<thead>
+<tr>
+<th>解釋</th>
+<th>對台灣的意涵</th>
+<th>該怎麼辦</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>（A）PRC 行為者不用西方商用模型</strong> — 用國產模型（DeepSeek、Qwen、Kimi 等）或自架開源模型</td>
+<td><strong>上游偵測對台灣主要威脅完全失效。</strong> Anthropic 與 OpenAI 的威脅報告不會告訴我們台灣面對的事</td>
+<td>台灣的偵測必須建立在<strong>下游</strong>（平台資料、開源情報）與<strong>本土研究能量</strong>上，不能外包給 AI 公司的透明度報告</td>
+</tr>
+<tr>
+<td><strong>（B）偵測與抽樣偏誤</strong> — 報告自承「aren't typical misuse, but rather examples of the most notable and novel」（p.3）</td>
+<td>缺席不等於不存在；可能有案例但未被選入</td>
+<td>持續追蹤後續報告；主動向 AI 公司提出台灣相關的查詢與線報</td>
+</tr>
+<tr>
+<td><strong>（C）商業或政治考量</strong></td>
+<td>無法驗證，但必須列入考量</td>
+<td>建立不依賴單一廠商善意的情報來源</td>
+</tr>
+</tbody>
+</table>
+<p><strong>無論哪一種解釋成立，結論都一樣：台灣不能把資訊環境的防護建立在外國 AI 公司的自願揭露上。</strong> 這是本章對台灣最直接、也最硬的一課。</p>
+<h4 id="1043">10.4.3 台灣的威脅圖像與本章方法論的對接</h4>
+<p>台灣既有研究對威脅型態的描述，與本報告的九案模式有高度的結構相似性：</p>
+<table>
+<thead>
+<tr>
+<th>本報告的模式</th>
+<th>台灣的對應現象（依台灣研究機構的公開研究）</th>
+<th>方法論怎麼用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AI as a newsdesk</strong>（Claude 被插進既有的人工編輯管線，p.42）</td>
+<td>IORG〈2024「疑美論」更新〉的關鍵發現：<strong>145 條疑美論述中有 68 條源自台灣本地的評論者、媒體與政治人物</strong>，108 條被中國放大、62 條由中國創造。——這正是「既有管線」的台灣版：<strong>在地的媒體與評論生態就是分發通路</strong></td>
+<td>對台灣而言，AI 的風險不在於「產生新的假訊息」，而在於<strong>餵養既有的在地放大結構</strong>。防禦的槓桿點在放大端，不在生產端</td>
+</tr>
+<tr>
+<td><strong>Laundering of attribution</strong>（去除國家出處、讓國家敘事看起來像獨立聲音，p.43）</td>
+<td>「疑美論」九大類型（亂源論、假朋友、棄子論、傀儡論、共謀論等）在台灣的流通，多數不掛中國出處，而是以本地評論、名嘴、匿名帳號的形式出現</td>
+<td>用第 4.4 節的「三種洗白」（洗來源、洗佐證、洗確定性）作為分析架構，比單純的「這是不是假訊息」更能揭露結構</td>
+</tr>
+<tr>
+<td><strong>Influence sold as a service</strong>（商業公司為付費者服務、提供可推諉性，p.42）</td>
+<td>Doublethink Lab 對 PRC 影響力行動中商業 AI 供應商角色的研究（如 GoLaxy 文件分析，2026-04-02）指出 AI 在 PRC 影響力行動中的興起</td>
+<td>把「誰是委託者」與「誰是執行者」分開追查；委託關係的斷點是刻意設計的</td>
+</tr>
+<tr>
+<td><strong>Breakout Scale 的級別分布</strong>（八案有七案在 Cat 1–3）</td>
+<td>台灣的事實查核與研究社群同樣經常面對「這則假訊息到底傳多遠」的量化困難</td>
+<td><strong>引進 Breakout Scale 作為台灣反資訊操弄社群的共同語言</strong>，讓不同機構的評估可以互相比較</td>
+</tr>
+<tr>
+<td><strong>Targeting people</strong>（針對個人的冒充、側寫，p.43）</td>
+<td>冒充公眾人物、偽造官方公告、針對特定記者與研究者的騷擾，在台灣都有先例</td>
+<td>提醒：這類傷害<strong>不需要擴散就能造成</strong>，量表看不到它</td>
+</tr>
+</tbody>
+</table>
+<h4 id="1044">10.4.4 選舉防護：五個可操作的建議</h4>
+<p>以本章方法論為基礎，針對台灣的選舉防護（中選會、政黨、平台、公民社會）提出五點。這些是<strong>本教材的推論與建議</strong>，不是報告的陳述。</p>
+<p><strong>建議一：把「Breakout Scale 級別」寫進選舉期間的通報與分級標準。</strong><br />
+目前台灣各機構對資訊操弄事件的嚴重性判斷缺乏共同尺度，導致「A 機構說很嚴重、B 機構說還好」。引進六級量表可以做到三件事：（a）不同機構的評估可以並排比較；（b）資源可以依級別排序；（c）<strong>把 Category Three 設為強制行動門檻</strong>（Nimmo：這是內容進入主流媒體之前的最後一站）。<br />
+實作細節：中選會或行政院相關單位可以發布一份「台灣版 Breakout Scale 判讀指引」，把 Nimmo 的六級定義本地化（例如：Cat 4 的「主流媒體」在台灣要不要把 LINE 群組與 YouTube 政論節目算進去？這是一個必須明確回答的本地化問題）。</p>
+<p><strong>建議二：對候選人、政黨發言人、記者、網紅做「放大者訓練」。</strong><br />
+這是 Nimmo 論文的核心政策建議：Cat 4 與 Cat 5 的突破<strong>完全取決於這些人</strong>。他的原話是「Politicians, journalists, and influencers should all beware direct outreach, and verify startling claims before they repeat them.」<br />
+實作細節：選前針對這四類人辦一場兩小時的工作坊，內容就是本章的演練 A 與 C。核心訊息只有一句：<strong>你轉發的那一刻，一個 Category Two 的行動就變成 Category Five。</strong></p>
+<p><strong>建議三：建立「上游線報」的接收管道，但不要依賴它。</strong><br />
+報告證實了兩種外部線報路徑：同業 AI 公司（OpenAI → Anthropic，GTG-54004）與 OSINT 組織（All Eyes On Wagner → Anthropic，GTG-04001）。台灣應該：<br />
+- （a）讓 Doublethink Lab、IORG、台灣事實查核中心等機構有明確的管道把線報送進 AI 公司與平台，並且<strong>要求回報處置結果</strong>（AEOW 的經驗顯示 OpenAI 會回覆細節、Anthropic 只確認收到——這個落差本身就值得談判）；<br />
+- （b）同時假設這個管道對 PRC 行為者無效（10.4.2 的解釋 A），所以<strong>不能把它當主要防線</strong>。</p>
+<p><strong>建議四：把偵測重心放在「組織基礎設施」而非「內容真偽」。</strong><br />
+本章最有原創性的發現是 AI 在建組織（第 4 節）。對台灣的意涵：查核單則內容是打地鼠，追蹤組織結構才是治本。具體可查的結構性訊號（都是公開可觀測的，不需要平台內部資料）：<br />
+- 網域註冊的時間叢集（GTG-54002：十週內註冊約 70 個網域）<br />
+- 帳號建立的時間叢集（GTG-54002：250+ 帳號集中在 2025 年 6–7 月；GTG-84005：12 個 sockpuppet 共用同一個建立時間戳 2026-05-17）<br />
+- 共用託管基礎設施（GTG-54002 的「shared deployment identifier」把 70 個看似獨立的站綁到一個帳號）<br />
+- 跨站的重複內容與近乎同時的發佈（GTG-54002：2025-09-11 各站在三分鐘內發出幾乎相同的文章）<br />
+- 署名記者的真實性（GTG-54002、GTG-84005 的假署名）<br />
+- 主題地理的不一致（Figure 5 的迦納站產出賽普勒斯政治）</p>
+<p><strong>建議五：把「量表看不到的傷害」另立通道。</strong><br />
+Breakout Scale 不衡量對個人的傷害。台灣需要一個平行的通報機制處理：冒充個人、偽造官方文件、針對記者與研究者的側寫與騷擾。這類事件即使是 Category One，也必須立即處理。<br />
+對應報告證據：GTG-84006 對伊朗境內人士的逮捕紀錄側寫只評 Cat 2；GTG-04001 偽造 CAR 憲兵與國防部公文（報告沒有把偽造公文計入級別判斷）。</p>
+<h4 id="1045">10.4.5 媒體識讀教育：三個可直接落地的教案</h4>
+<p>台灣事實查核中心已營運「台灣事實查核學苑（TFC Academy）」媒體識讀平台。本章的材料可以直接轉為三個教案：</p>
+<p><strong>教案一：「不用查證也能判斷」（適合高中職與大學通識）</strong><br />
+材料：Figure 5（p.52）的假新聞網站截圖。<br />
+核心訊息：<strong>判斷一個新聞站可不可信，不需要你有能力查證它的內容。</strong> 看三件事就夠——主題地理一不一致、署名記者查不查得到、發布時間是不是叢集。<br />
+延伸活動：讓學生用同一套方法檢視自己 LINE 群組裡最常出現的三個連結來源。</p>
+<p><strong>教案二：「你就是第四級」（適合意見領袖、社團幹部、教師研習）</strong><br />
+材料：Nimmo 的六級量表＋Cat 4／Cat 5 的例子（洛杉磯時報嵌入 IRA 推文；Roger Waters 指控白盔隊造假；Woody Harrelson 分享 5G 假消息）。<br />
+核心訊息：影響力行動最需要的不是更多假帳號，而是<strong>一個有真實追蹤者的你</strong>。<br />
+延伸活動：給學員五則真假混雜的「驚人消息」，要求他們在轉發前寫下「我要先確認什麼」。</p>
+<p><strong>教案三：「AI 寫的不等於假的，真的畫面不等於真的故事」（適合所有層級）</strong><br />
+材料：報告的兩個事實——（a）GTG-04001 要求模型「strip away classic formatting habits」以免看起來像 AI 寫的（p.44）；（b）GTG-54006 的影片由真實畫面＋AI 旁白組成。<br />
+核心訊息：<strong>「偵測 AI 生成內容」不是媒體識讀的答案。</strong> 行為者刻意讓 AI 內容看起來不像 AI；而且最有效的假訊息用的是真畫面。識讀的重點應該回到<strong>來源、動機、協調性</strong>（ABC 三向量），而不是「這是不是 AI 做的」。<br />
+這一點對台灣特別重要：目前許多媒體識讀教材仍然在教「怎麼看出 AI 生成的圖片」（六根手指、耳環不對稱），而本報告的證據顯示<strong>這個方向的投資報酬率正在快速下降</strong>。</p>
+<h4 id="1046">10.4.6 給台灣資安專業社群的三個具體工作項目</h4>
+<ol>
+<li><strong>建立台灣版的 DISARM 標註實務。</strong> DISARM 是 CC-BY 授權、提供 STIX 樣板、風格基於 MITRE ATT&amp;CK。台灣的資安社群已經熟悉 ATT&amp;CK，遷移成本低。建議由一個研究機構牽頭，把過去三年台灣的重大資訊操弄事件用 DISARM 標註，建立本土案例庫——<strong>這會是台灣在國際反 FIMI 社群中最有價值的貢獻</strong>。</li>
+<li><strong>把影響力行動納入現有的資安情報交換機制。</strong> 台灣已有資安通報與情資分享機制（如 TWCERT/CC、金融與關鍵基礎設施的 ISAC）。影響力行動的 IOC（網域、帳號、託管指紋）在技術性質上與網路威脅情報完全相容，可以共用同一套交換基礎設施。</li>
+<li><strong>為「上游偵測」建立本土能力。</strong> 如果台灣主要威脅行為者使用國產或開源模型，那麼台灣需要自己的上游觀測點。可能的方向包括：對公開的 API 濫用模式研究、對本土 AI 服務供應商的自願性透明度要求、學術界與產業界的聯合觀測計畫。這是一個長期工作，但缺口不會自己消失。</li>
+</ol>
+<hr />
+<h2 id="11">11. 關鍵原文引文（講義用）</h2>
+<p>以下八條是本章最適合直接放進投影片的原文，附逐字翻譯與頁碼。</p>
+<p><strong>引文 1 — 影響力行動的定義（p.41）</strong></p>
+<blockquote>
+<p>"In this section, we focus on influence operations, which we define as efforts to manipulate the information environment—including political, civic, and public discourse—with the intent to deceive, distort, or covertly influence the perceptions, beliefs, or behaviors of individuals or groups, typically while concealing the activity's origin, sponsorship, or coordination."</p>
+<p>「在本節中，我們聚焦於影響力行動，我們將其定義為：操縱資訊環境（包括政治、公民與公共論述）的作為，意圖欺騙、扭曲或隱蔽地影響個人或群體的認知、信念或行為，且通常隱匿該活動的來源、資助者或協調關係。」</p>
+</blockquote>
+<p><strong>引文 2 — 一百個假公民的比喻（p.41）</strong></p>
+<blockquote>
+<p>"An actor might create a hundred social media accounts that appear to belong to ordinary citizens of a country, then have all of them post content amplifying the same political view over the course of a week. The accounts are not real and the opinions are not genuinely held. Nothing on the surface identifies who's actually behind this effort."</p>
+<p>「一個行為者可能建立一百個看起來屬於某國一般公民的社群帳號，然後讓它們在一週內全部張貼放大同一個政治觀點的內容。這些帳號不是真的，這些意見也不是真心持有的。表面上沒有任何東西能指出誰真正在背後推動這件事。」</p>
+</blockquote>
+<p><strong>引文 3 — 上游偵測（p.42）</strong></p>
+<blockquote>
+<p>"However, while a social media site usually sees an operation once its content is already circulating, we may see it on Claude while the operation is still being built. Actors use AI to plan their campaign, choose their targets, and write the material. Those types of tasks produce signals that our systems are trained to detect, which often lets us disrupt an operation before it gets off the ground."</p>
+<p>「然而，社群媒體網站通常是在內容已經流傳之後才看到一場行動，而我們可能在行動仍在建置的過程中就在 Claude 上看到它。行為者用 AI 來規劃活動、選擇目標、撰寫素材。這類任務會產生我們的系統受訓去偵測的訊號，這讓我們經常能在一場行動還沒起飛之前就將其瓦解。」</p>
+</blockquote>
+<p><strong>引文 4 — 能見度的終點（p.42）</strong></p>
+<blockquote>
+<p>"Our visibility into these operations ends once it's live. To verify our findings and understand what happened after content left our platform, we rely on open-source research, cross-platform industry data, and public reporting."</p>
+<p>「我們對這些行動的能見度在它上線的那一刻結束。為了驗證我們的發現、理解內容離開我們平台之後發生了什麼，我們依賴開源研究、跨平台的產業資料，以及公開報導。」</p>
+</blockquote>
+<p><strong>引文 5 — AI 建的是機器不只是內容（p.42–43）</strong></p>
+<blockquote>
+<p>"AI helped to build the apparatus as well as the content. Actors had the model produce doctrine manuals, opposition dossiers, ministerial portfolios, persona systems, target databases, employment contracts encoding editorial loyalty, and scoring rubrics that were used to rank staff who were part of the operation. This kind of work would otherwise need a staffed program office."</p>
+<p>「AI 不只協助生產內容，也協助建造整套機器。行為者讓模型產出教條手冊、反對派檔案、部會級計畫書、人格系統、目標資料庫、把編輯效忠寫進去的僱傭合約，以及用來為參與行動的員工排名的評分表。這類工作在其他情況下需要一個有編制的計畫辦公室才做得出來。」</p>
+</blockquote>
+<p><strong>引文 6 — 教條檔與去中心化協調（p.43）</strong></p>
+<blockquote>
+<p>"Markdown files containing doctrine were reused almost verbatim across hundreds of sessions... The central setup meant that actors producing content never needed to coordinate with or even know one another... Increasingly, operations are not run using individual prompts. Instead, a great deal is embedded within persistent memory files."</p>
+<p>「包含教條的 Markdown 檔案在數百個工作階段中幾乎被逐字重複使用……這種中央化的設置意味著生產內容的行為者從來不需要互相協調、甚至不需要認識彼此……愈來愈多的行動不是用個別的提示來執行的。取而代之的是，大量的內容被嵌入在持久的記憶檔案中。」</p>
+</blockquote>
+<p><strong>引文 7 — 洗白確定性（p.43）</strong></p>
+<blockquote>
+<p>"In one case, tied to a Russian state media operation, an actor produced claims the model flagged as unverified, then instructed it to drop those caveats and present everything as confirmed, so the material would read as established fact."</p>
+<p>「在一個與俄羅斯國家媒體行動相關的案例中，一名行為者產出了被模型標記為未經證實的聲稱，接著指示模型丟掉那些但書、把一切都當作已證實的來呈現，好讓素材讀起來像是既定事實。」</p>
+</blockquote>
+<p><strong>引文 8 — 觸及率的誠實評估（p.43–44）</strong></p>
+<blockquote>
+<p>"Influence operations often fail to reach a genuine audience. Because we sit at the production stage of operations, upstream of platforms like social media platforms, we may detect and disrupt an operation while it is still being put together. Most of the content we discovered drew little or no authentic engagement, and in several cases we disrupted the operation before it could build an audience. The widest authentic reach occurred where state media outlets were the distribution mechanism (including FM radio, satellite and shortwave radio, and global television)."</p>
+<p>「影響力行動經常無法觸及真實受眾。由於我們位於行動的生產階段、在社群媒體等平台的上游，我們可能在行動仍在組裝時就偵測並瓦解它。我們發現的多數內容幾乎沒有、或完全沒有引發真實互動，而且在好幾個案例中，我們在行動能建立起受眾之前就將其瓦解。觸及率最廣的情況發生在以國家媒體作為分發機制時（包括 FM 廣播、衛星與短波廣播，以及全球電視）。」</p>
+</blockquote>
+<p><strong>補充引文 A — Breakout Scale 的說明（p.42）</strong></p>
+<blockquote>
+<p>"To accurately evaluate the impact of each influence operation, we apply the Breakout Scale, a six-category framework widely accepted by industry researchers. The scale categorizes impact based on cross-platform migration and reach."</p>
+</blockquote>
+<p><strong>補充引文 B — Nimmo 論文的核心限制聲明（Brookings, 2020）</strong></p>
+<blockquote>
+<p>"This does not necessarily equate to actual impact: For example, a policymaker may repeat an IO's message in a debate but have it rejected... the importance of the breakout scale is that it provides a way to approximate an operation's potential impact in close to real time."</p>
+<p>「這不必然等同於實際影響：例如，一名決策者可能在辯論中複述了一個影響力行動的訊息，但那個訊息被駁回了……Breakout Scale 的重要性在於，它提供了一種在接近即時的情況下近似估計一場行動之潛在影響的方法。」</p>
+</blockquote>
+<p><strong>補充引文 C — Nimmo 對放大者的警告（Brookings, 2020）</strong></p>
+<blockquote>
+<p>"Mainstream journalists, politicians, and celebrities occupy a privileged and vulnerable position, because they have audiences far beyond the scope of the average citizen. Such influencers can make the difference between a weaponized leak or false story staying in the shadows and reaching a nationwide audience."</p>
+<p>「主流記者、政治人物與名人佔據了一個既特權又脆弱的位置，因為他們擁有遠超過一般公民範圍的受眾。這些影響者能夠決定一則被武器化的外洩資料或假故事，是留在陰影中，還是觸及全國性的受眾。」</p>
+</blockquote>
+<hr />
+<h2 id="12">12. 未能驗證之處與研究限制</h2>
+<h3 id="121">12.1 本教材主張的來源分級</h3>
+<table>
+<thead>
+<tr>
+<th>分級</th>
+<th>說明</th>
+<th>本教材中的比例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A：PDF 原文逐字</strong></td>
+<td>直接引用報告，附頁碼</td>
+<td>第 2、3、4、5.1、5.5、7、8、11 節的所有引文</td>
+</tr>
+<tr>
+<td><strong>B：獨立一手來源</strong></td>
+<td>Nimmo 論文、François 論文、DISARM 官方文件、AEOW 調查、IORG 研究</td>
+<td>第 5.2、5.4、9.1、9.2、9.5 節</td>
+</tr>
+<tr>
+<td><strong>C：本教材的推論</strong></td>
+<td>從報告事實推出的分析，報告未明說</td>
+<td>已在文中逐處標示（例如 3.3 節的七類訊號、3.4 節的後三個局限、5.6 節的疑點、7.4 節的六項偏誤、8.3 節的防禦啟示、10.4 節的全部建議）</td>
+</tr>
+<tr>
+<td><strong>D：待覆核</strong></td>
+<td>未能取回全文的來源</td>
+<td>見 12.2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="122">12.2 本教材未能取得或驗證的內容</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>項目</th>
+<th>狀況</th>
+<th>影響</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>OpenAI 2024-05-30 首份影響力行動報告的原文</strong></td>
+<td>WebFetch 遭 403 阻擋</td>
+<td>第 5.7、9.3 節關於「OpenAI 明確使用 Breakout Scale、五個行動都沒超過 Cat 2」的陳述，<strong>本檔無法逐字驗證</strong>，標示為待覆核。這是業界廣為引用的說法，但教學時應註明來源未親驗</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>OpenAI 2025-10 報告全文</strong></td>
+<td>網頁 403、PDF 超過抓取大小上限</td>
+<td>只能透過二手報導確認要點；關於 Rybar 相關的非洲選舉干預商業計畫（60 萬美元預算）等細節，來自二手報導</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Meta H2 2026 對抗性威脅報告全文</strong></td>
+<td>檔案超過抓取大小上限</td>
+<td>「AI 出現在幾乎每一個 CIB 網路中」與伊朗網路的資產數字，來自搜尋摘要，未親驗原文</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Doublethink Lab 的 GoLaxy 研究全文</strong></td>
+<td>Medium 遭 403 阻擋</td>
+<td>只能確認標題與日期（2026-04-02）；第 10.4.3 節對該研究的引用僅限於「存在一份關於 AI 在 PRC 影響力行動中興起的研究」，未引用其內容細節</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Wired 關於肯亞付費網紅的投書全文</strong></td>
+<td>網域被工具阻擋</td>
+<td>只能確認 Anthropic 引用了它；未能核對其內容</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>本報告九案的任何第三方覆核</strong></td>
+<td><strong>不存在</strong></td>
+<td>第 9.4 節的結論：除 GTG-04001 外，九案目前都是單一來源情報</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>WebSearch 配額</strong></td>
+<td>本次工作階段的 WebSearch 額度已用盡（200/200）</td>
+<td>針對台灣事實查核中心、Doublethink Lab、IORG 的搜尋改用 WebFetch 直接抓取官網完成；但無法做更廣的中文媒體搜尋，<strong>因此「台灣媒體是否報導過本報告」未能確認</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="123">12.3 報告本身的內在限制（本教材發現的）</h3>
+<ol>
+<li><strong>「One actor was building a course to teach the workflow to others」（p.43）在九案正文中找不到對應。</strong> 本檔逐頁核對 p.44–80，沒有任何一案提到「建立課程教別人」。這可能是：（a）該案未被選入九案；（b）出現在其他章節；（c）行文疏漏。<strong>教學時若要引用這句話，必須註明無案例對應。</strong></li>
+<li><strong>GTG-24015 沒有 Breakout Scale 級別，報告未說明原因</strong>（第 5.6 節疑點一）。</li>
+<li><strong>級別的底層資料不完整公開</strong>：GTG-54002 的完整網域清單「available separately」、GTG-54006 的雲端資料夾識別碼與上傳腳本「Withheld」、GTG-54006 的發布頻道「unable to identify」。這使得級別無法被外部複現，與 Nimmo 強調的「replicable」原則有張力。</li>
+<li><strong>報告沒有揭露誤判率或申訴機制</strong>。</li>
+<li><strong>報告沒有提到任何一案轉介執法機關</strong>（對比：網路行動章有提到與執法單位分享情報）。</li>
+<li><strong>九案的選擇標準是「most notable and novel」（p.3），不是隨機或全面抽樣。</strong> 因此九案的級別分布<strong>不能</strong>用來推論「所有 AI 影響力行動的級別分布」。這是第 7.4 節「倖存者偏差」論點的報告內部依據。</li>
+</ol>
+<h3 id="124">12.4 本教材刻意不做的事</h3>
+<ol>
+<li><strong>不連線任何 IOC。</strong> 第 6、8 節抄錄的網域、IP、帳號全部維持報告的 defang 格式，且未做任何 DNS 查詢或訪問。</li>
+<li><strong>不推測報告未寫的歸因。</strong> 例如報告說 GTG-54002「found no evidence of direction by any government」，本教材不加上「但可能是 X 國」之類的臆測。</li>
+<li><strong>不把方法論遷移寫成案例事實。</strong> 第 10.4 節的所有台灣內容都明確標示為建議與推論。</li>
+<li><strong>不重複其他案例教材的工作。</strong> 九案的攻擊生命週期、完整 IOC 表、逐圖深度判讀由各案教材負責；本檔只做模組層級的地圖與方法論。</li>
+</ol>
+<h3 id="125">12.5 建議的後續研究</h3>
+<ol>
+<li>追蹤是否有任何獨立機構對本報告的 Breakout Scale 級別提出覆核或異議。</li>
+<li>追蹤 Anthropic 下一份威脅報告是否出現 PRC 相關的影響力行動案例——這會回答 10.4.2 的三種解釋哪一種較可能。</li>
+<li>取得並比對 OpenAI 與 Meta 最新報告的原文，把第 5.7 節的對照表補完。</li>
+<li>調查台灣是否有機構已在使用 Breakout Scale 或 DISARM，作為 10.4.6 建議一的現況基線。</li>
+</ol>
+<hr />
+<h2 id="a">附錄 A：本章術語對照表</h2>
+<table>
+<thead>
+<tr>
+<th>英文</th>
+<th>繁中</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Influence operation (IO)</td>
+<td>影響力行動</td>
+<td>本報告 p.41 的定義見第 2 節</td>
+</tr>
+<tr>
+<td>Breakout Scale</td>
+<td>突破量表 / 擴散量表</td>
+<td>本教材保留英文原名，因為中文譯名尚未標準化</td>
+</tr>
+<tr>
+<td>Breakout moment</td>
+<td>突破時刻</td>
+<td>內容有機擴散到新社群的那一刻</td>
+</tr>
+<tr>
+<td>Insertion point</td>
+<td>插入點</td>
+<td>行為者最初種下內容的位置</td>
+</tr>
+<tr>
+<td>Coordinated Inauthentic Behavior (CIB)</td>
+<td>協同性不真實行為</td>
+<td>Meta 的政策用語</td>
+</tr>
+<tr>
+<td>FIMI (Foreign Information Manipulation and Interference)</td>
+<td>外國資訊操弄與干預</td>
+<td>歐盟用語；本報告只用於 GTG-04001</td>
+</tr>
+<tr>
+<td>Influence-as-a-service</td>
+<td>影響力即服務</td>
+<td>商業化的影響力行動代工</td>
+</tr>
+<tr>
+<td>Attribution laundering</td>
+<td>出處洗白</td>
+<td>讓國家／委託敘事看起來像獨立聲音</td>
+</tr>
+<tr>
+<td>Behavioral signature</td>
+<td>行為指紋 / 行為簽章</td>
+<td>本報告的偵測主軸</td>
+</tr>
+<tr>
+<td>Persona system</td>
+<td>人格系統</td>
+<td>假身分的一致性管理架構</td>
+</tr>
+<tr>
+<td>Astroturfing</td>
+<td>人造草根 / 灌水造勢</td>
+<td>讓協調行動看起來像自發民意</td>
+</tr>
+<tr>
+<td>Sockpuppet</td>
+<td>分身帳號 / 傀儡帳號</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Upstream detection</td>
+<td>上游偵測</td>
+<td>本教材用語，指在內容生產階段的偵測</td>
+</tr>
+<tr>
+<td>GTG (Generative Threat Group)</td>
+<td>生成式威脅群組</td>
+<td>Anthropic 對濫用 AI 的行為者的內部代號（p.4）</td>
+</tr>
+<tr>
+<td>Uplift</td>
+<td>能力提升</td>
+<td>Anthropic 用來描述「有 AI 比沒 AI 多造成多少危害」的術語（p.4）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="b">附錄 B：本章可直接投影的六張表</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>內容</th>
+<th>位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>定義五要件對照表</td>
+<td>第 2.2 節</td>
+</tr>
+<tr>
+<td>2</td>
+<td>上游 vs. 下游能見度表</td>
+<td>第 3.2 節</td>
+</tr>
+<tr>
+<td>3</td>
+<td>影響力行動的組織基礎設施清單</td>
+<td>第 4.2 節</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Breakout Scale 六級定義與例子</td>
+<td>第 5.2 節</td>
+</tr>
+<tr>
+<td>5</td>
+<td>九案 Breakout Scale 評級對照表</td>
+<td>第 5.5 節</td>
+</tr>
+<tr>
+<td>6</td>
+<td>九案模組地圖</td>
+<td>第 6.1 節</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="2026-09-14">技術深化附錄（第二階段增補，2026-09-14）</h1>
+<blockquote>
+<p><strong>本附錄的定位：</strong> 前面第 1–12 節與附錄 A、B 是「方法論導論」，回答「怎麼定義、怎麼衡量、九案怎麼放在一起看」。本附錄回答技術高手真正想問的下一個問題：<strong>「這些偵測，工程上到底怎麼做？」</strong> 內容分五個附錄：<br />
+- <strong>附錄 C</strong>：協同不實行為（CIB）偵測的完整技術方法與可部署 pipeline。<br />
+- <strong>附錄 D</strong>：DISARM 框架完整介紹，並用它把本報告九案逐案標註成 TTP。<br />
+- <strong>附錄 E</strong>：把 Breakout Scale 從質性量表操作化成可計算指標。<br />
+- <strong>附錄 F</strong>：上游／下游偵測能見度矩陣（Mermaid）。<br />
+- <strong>附錄 G</strong>：本次技術深化 pass 新增的第三方技術來源。</p>
+<p><strong>來源紀律不變：</strong> 凡屬報告原文一律附頁碼；凡屬第三方技術文獻一律附出處（附錄 G）；凡屬本教材的工程推論一律明確標示為「本教材設計／推論」。所有網域、IP、帳號沿用報告的 defang 格式，<strong>僅作研究資料，絕不連線</strong>。</p>
+<p><strong>為什麼 CIB 與 DISARM 要放在這一章的附錄，而不是各案例教材？</strong> 因為這兩套是<strong>跨全部九案共用</strong>的分析基礎設施。第 3.2 節說明了 AI 公司在「上游」看生產、平台在「下游」看分發——<strong>CIB 偵測正是「下游」那一格的核心武器</strong>，而 DISARM 是把上下游觀察拼成同一張 TTP 地圖的共同語言。把它們補在導論的附錄，學員才能拿著同一組工具去讀後面每一個個案。</p>
+</blockquote>
+<hr />
+<h2 id="ccib">附錄 C：協同不實行為（CIB）偵測的完整技術方法</h2>
+<h3 id="c1-cib">C.1 問題定義：CIB 偵測要抓的到底是什麼</h3>
+<p>Meta 的 CIB 政策把執法基礎放在「<strong>行為，而非內容</strong>」（第 2.3 節、第 5.7 節）。但「協同不實行為」這句政策語言，落到工程上必須翻譯成一個可計算的問題。學界目前收斂的定義是（DISARM 之外的另一條技術脈絡，見附錄 G 的 Nizzoli/Cresci 等綜述）：</p>
+<blockquote>
+<p><strong>協同（coordination）＝一群帳號以「超乎偶然」的一致性，對相同的目標執行相同的動作。</strong></p>
+</blockquote>
+<p>這句話裡有三個要素，每一個都對應一個可量測的量：</p>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>白話</th>
+<th>量測方式</th>
+<th>對應報告證據</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>相同動作（same action）</strong></td>
+<td>轉推同一則、貼同一個連結、用同一個 hashtag、貼幾乎相同的文字</td>
+<td>co-action（共同動作）計數</td>
+<td>GTG-54002：2025-09-11 各站在<strong>三分鐘內</strong>發出幾乎相同的 DRC 文章（p.49）</td>
+</tr>
+<tr>
+<td><strong>相同目標（same target/content）</strong></td>
+<td>動作指向同一個內容物或實體</td>
+<td>內容相似度、URL/hashtag 集合重疊</td>
+<td>GTG-84002：#SudanIslamists 六則<strong>近乎相同的圖卡</strong>（Figure 18, p.80）</td>
+</tr>
+<tr>
+<td><strong>超乎偶然（beyond chance）</strong></td>
+<td>一致性高到不可能是自然發生</td>
+<td>統計顯著性、時間同步性</td>
+<td>GTG-54002：250+ 留言帳號集中在 2025 年 6–7 月建立（p.49）；GTG-84005：12 個 sockpuppet 共用同一建立時間戳 2026-05-17（p.57–58）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>關鍵的工程洞見：</strong> 「不真實（inauthentic）」很難直接量測（你無法證明某個帳號背後沒有真人），但「協同（coordinated）」可以。所以實務上偵測的主軸是<strong>先抓協同、再驗不真實</strong>——先用行為找出「動作一致到不像巧合」的帳號叢集，再用帳號屬性（頭像是否 AI 生成、註冊時間、profile 完整度、bot 分數）去佐證這個叢集是人造的。這與報告反覆使用的「behavioral signature（行為指紋）」是同一件事的兩個名字。</p>
+<h3 id="c2-pipeline">C.2 標準偵測 pipeline：四階段</h3>
+<p>依據協同行為偵測的學界綜述（Cinus/Cresci/Trujillo 等，2024，附錄 G），一條 CIB 偵測 pipeline 標準拆成四個階段。<strong>這是本附錄的骨架圖，後面每一節填一格。</strong></p>
+<pre class="mermaid">flowchart TD
+    D[&quot;原始資料&lt;br/&gt;貼文 / 帳號 / 互動事件 / 中繼資料 / 平台遙測&quot;] --&gt; S1
+    S1[&quot;階段一 · 使用者篩選&lt;br/&gt;User Selection&lt;br/&gt;依活躍度 / 影響力 / 可疑訊號&lt;br/&gt;取子集 U&#x27; ⊆ U&quot;] --&gt; S2
+    S2[&quot;階段二 · 協同網路建構&lt;br/&gt;Coordination Network Construction&lt;br/&gt;節點 = 帳號；邊 = co-action&lt;br/&gt;（二分圖投影 + 相似度加權）&quot;] --&gt; S3
+    S3[&quot;階段三 · 網路過濾&lt;br/&gt;Network Filtering&lt;br/&gt;固定門檻 / 統計骨幹 / 時間窗 / k-NN&quot;] --&gt; S4
+    S4[&quot;階段四 · 社群發現&lt;br/&gt;Community Discovery&lt;br/&gt;Louvain / Leiden / 連通元件&quot;] --&gt; S5
+    S5[&quot;叢集特徵化與評分&lt;br/&gt;Characterization &amp; Scoring&lt;br/&gt;authenticity / harmfulness / orchestration&quot;] --&gt; O[&quot;輸出&lt;br/&gt;疑似協同叢集 + 協同分數 + 佐證特徵&lt;br/&gt;→ 交分析師覆核&quot;]
+    O -.-&gt;|&quot;回饋：新指紋餵回篩選規則&quot;| S1
+</pre>
+<p>四階段的分工是：<strong>階段一決定「看誰」、階段二決定「用什麼行為連起來」、階段三決定「哪些連結有意義」、階段四決定「誰跟誰是一夥」。</strong> 錯在任何一階段，後面全錯——最常見的失敗是階段三的門檻設太鬆，把「大家都轉了同一則爆紅新聞」誤判成協同（這正是 TF-IDF 加權要解決的問題，見 C.3.3）。</p>
+<h3 id="c3-bipartite-projection">C.3 階段二核心：從二分圖到投影（bipartite → projection）</h3>
+<p>這是整條 pipeline 技術含量最高的一步，也是本任務指定要講清楚的。</p>
+<h4 id="c31">C.3.1 為什麼要用二分圖</h4>
+<p>我們手上的原始關係是「<strong>帳號 ↔ 內容/動作</strong>」——帳號 a 轉推了推文 t、貼了連結 u、用了 hashtag h。這天生是一個<strong>二分圖（bipartite graph）</strong>：一邊是帳號節點，一邊是「動作目標」節點（推文 ID、URL、hashtag、圖片雜湊……），邊代表「帳號 a 對目標 x 做了動作」。</p>
+<p>但我們真正想問的是「<strong>哪些帳號彼此協同</strong>」——這是帳號和帳號之間的關係。所以要把二分圖<strong>投影（project）</strong>成單邊圖：只留帳號節點，兩個帳號之間連一條邊，邊的權重代表「它們共同做了多少相同的動作」。</p>
+<pre class="mermaid">flowchart LR
+    subgraph BP[&quot;二分圖 Bipartite（帳號 ↔ 動作目標）&quot;]
+        direction TB
+        a1([&quot;帳號 a1&quot;]) --&gt; t1[&quot;推文/URL/hashtag c1&quot;]
+        a2([&quot;帳號 a2&quot;]) --&gt; t1
+        a2 --&gt; t2[&quot;c2&quot;]
+        a3([&quot;帳號 a3&quot;]) --&gt; t2
+        a1 --&gt; t2
+        a3 --&gt; t3[&quot;c3&quot;]
+        a2 --&gt; t3
+    end
+    BP ==&gt;|&quot;投影 projection&lt;br/&gt;邊權重 = 帳號向量相似度&quot;| PR
+    subgraph PR[&quot;帳號投影圖 Co-action network&quot;]
+        direction TB
+        p1([&quot;a1&quot;]) ---|&quot;w=0.82&quot;| p2([&quot;a2&quot;])
+        p2 ---|&quot;w=0.76&quot;| p3([&quot;a3&quot;])
+        p1 ---|&quot;w=0.34（弱）&quot;| p3
+    end
+</pre>
+<h4 id="c32">C.3.2 投影的數學：帳號向量與相似度</h4>
+<p>把每個帳號表示成一個<strong>向量</strong>：向量的每一維是一個「動作目標」，值是該帳號對它做動作的次數（或加權後的值）。帳號 <code>a_i</code> 的向量記為 <code>v_i</code>。兩帳號之間的投影邊權重，最常用的是<strong>餘弦相似度（cosine similarity）</strong>：</p>
+<pre><code>w(a_i, a_j) = cos(v_i, v_j) = (v_i · v_j) / (||v_i|| · ||v_j||)
+</code></pre>
+<p>綜述整理出的幾種相似度函數與適用場景：</p>
+<table>
+<thead>
+<tr>
+<th>相似度函數</th>
+<th>計算對象</th>
+<th>適用 co-action</th>
+<th>特性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cardinality（共現計數）</strong></td>
+<td>兩帳號共同動作的次數</td>
+<td>最通用</td>
+<td>最簡單，但會被高產帳號與爆紅內容污染</td>
+</tr>
+<tr>
+<td><strong>Cosine（餘弦）</strong></td>
+<td>TF-IDF 加權的帳號向量</td>
+<td>co-retweet、co-URL、co-hashtag</td>
+<td>主流選擇；能配 TF-IDF 壓抑熱門內容</td>
+</tr>
+<tr>
+<td><strong>Jaccard（交併比）</strong></td>
+<td>集合重疊</td>
+<td>圖片集合、hashtag 集合</td>
+<td>適合「用了哪些」而非「用了幾次」</td>
+</tr>
+<tr>
+<td><strong>文字相似度</strong></td>
+<td>文件嵌入餘弦 / Ratcliff-Obershelp</td>
+<td>co-post（近乎相同文字）</td>
+<td>見 C.4</td>
+</tr>
+</tbody>
+</table>
+<h4 id="c33-tf-idf">C.3.3 為什麼一定要 TF-IDF 加權：避免「大家都轉爆紅新聞」的偽協同</h4>
+<p>如果只用原始共現計數，最大的問題是：<strong>一則病毒式爆紅的推文會被成千上萬個真實使用者轉推</strong>，這些人彼此毫無關聯，卻會在投影圖上兩兩連上強邊——形成一個巨大的偽協同叢集。</p>
+<p>解法是借用資訊檢索的 <strong>TF-IDF（term frequency–inverse document frequency）</strong> 思想：把「動作目標」當成「詞」，把「帳號」當成「文件」。一個被很多帳號動作過的目標（熱門推文）IDF 低、權重被壓低；一個只有少數帳號共同動作過的目標（小眾內容）IDF 高、權重被放大。綜述原文：TF-IDF「discounts popular or viral content, boosting unpopular items」。</p>
+<p><strong>工程直覺：</strong> 兩個帳號<strong>都轉了一則爆紅新聞</strong>幾乎沒有情報價值（誰都會轉）；但兩個帳號<strong>都轉了同一則只有它們倆轉過的冷門貼文</strong>，是極強的協同訊號。TF-IDF 就是把後者的權重拉高、前者拉低的機制。這一步是把「產能爆炸時代」的雜訊壓下去的關鍵——正因為 AI 讓內容變多，偽協同的雜訊也變多，TF-IDF 加權比以前更重要。</p>
+<h3 id="c4-simhash-minhash-embedding">C.4 內容相似度：simhash / minhash / embedding 三條路線</h3>
+<p>當 co-action 是「貼了幾乎相同的文字」（co-post）時，需要一個能大規模比對「近乎重複」的方法。三條技術路線，適用場景不同：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>原理</th>
+<th>指紋大小</th>
+<th>抓得到什麼</th>
+<th>抓不到什麼</th>
+<th>適用本報告哪一案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SimHash</strong></td>
+<td>對特徵加權後投影成固定長度位元指紋；相似文本的指紋 <strong>Hamming distance</strong> 小</td>
+<td>極小（<strong>64 bit</strong>）</td>
+<td>字面近乎重複（改幾個詞）</td>
+<td>換句話說、語意改寫</td>
+<td>GTG-54002 跨站近乎相同文章；GTG-54006 固定模板批次</td>
+</tr>
+<tr>
+<td><strong>MinHash（+LSH）</strong></td>
+<td>以多個雜湊函數估計兩集合的 <strong>Jaccard 相似度</strong>；配 Locality-Sensitive Hashing 做次線性檢索</td>
+<td>較大（約 <strong>24 byte</strong> 達到與 64-bit SimHash 相近效果）</td>
+<td>詞袋層級的重疊（重排、增刪片段）</td>
+<td>深度改寫</td>
+<td>大規模去重、找「同一份稿子的多語系／多變體」</td>
+</tr>
+<tr>
+<td><strong>句嵌入 + 餘弦（embedding）</strong></td>
+<td>用多語 sentence-transformer 產生語意向量，<strong>FAISS</strong> 做近似最近鄰檢索</td>
+<td>向量（數百維）</td>
+<td><strong>語意近似</strong>（換句話說、翻譯、改寫）</td>
+<td>需要模型與算力；門檻選擇敏感</td>
+<td>GTG-24015 的多語在地化改寫；GTG-84005 的「humanize」去 AI 味版本</td>
+</tr>
+</tbody>
+</table>
+<p><strong>實務參數（來自綜述引用的實作）：</strong> 多語嵌入常用 <code>stsb-xlm-r-multilingual</code> 這類模型，在 <strong>一天的滑動時間窗（sliding one-day window）</strong> 內比對，<strong>相似度門檻取 0.7</strong>，只保留語意最貼近的文本對；比對前先做標準清理（去標點、停用詞、emoji、URL，只留長度 ≥ 4 詞的片段）。</p>
+<p><strong>選型準則（本教材整理）：</strong><br />
+- 要<strong>便宜、快、抓字面複製</strong> → SimHash（64-bit 指紋，位元運算，適合十億級語料）。<br />
+- 要<strong>抓詞袋重疊、做去重</strong> → MinHash + LSH。<br />
+- 要<strong>跨語言、抓語意改寫</strong>（AI 影響力行動的典型特徵——同一敘事翻成 20 種語言）→ 句嵌入 + FAISS。</p>
+<p><strong>AI 時代的關鍵轉折：</strong> 報告 p.44 記載 GTG-04001「strip away classic formatting habits, actively preventing the news feeds from reading like synthetic text」，GTG-54004「humanize and refine」。這代表行為者<strong>刻意破壞字面相似度</strong>。因此 SimHash/MinHash 這類字面方法的投報率在下降，<strong>語意嵌入</strong>成為對抗「去 AI 味」OPSEC 的必要升級——因為就算逐詞改寫，同一份教條產出的內容在<strong>語意向量空間</strong>裡仍然會叢集。這一點是 C.10 的伏筆。</p>
+<h3 id="c5-temporal-synchronization">C.5 時間窗相關性（temporal synchronization）</h3>
+<p>協同帳號最難掩飾的是<strong>時間</strong>。真人的發文時間分散，協同帳號的動作在時間上會出現「超乎偶然」的同步。三種時間窗設計：</p>
+<table>
+<thead>
+<tr>
+<th>窗型</th>
+<th>定義</th>
+<th>典型窗長</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>相鄰不重疊窗（adjacent）</strong></td>
+<td>固定大小、不重疊</td>
+<td>15 分鐘 ～ 1 週</td>
+<td>粗篩「同一時段一起動作」</td>
+</tr>
+<tr>
+<td><strong>等距重疊窗（overlapping）</strong></td>
+<td>等大小、偏移 δ 滑動</td>
+<td>依需求</td>
+<td>避免正好被窗邊界切開的同步</td>
+</tr>
+<tr>
+<td><strong>動作驅動窗（action-driven）</strong></td>
+<td>以每個動作的時間戳為中心開窗</td>
+<td>動態</td>
+<td>精準抓「A 貼出後 N 秒內 B 跟上」</td>
+</tr>
+</tbody>
+</table>
+<p><strong>兩個可直接部署的時間訊號：</strong><br />
+1. <strong>發文時間同步性</strong>：把每個帳號的發文時間戳離散化到分鐘桶，計算帳號兩兩的時間序列相關性；高相關 = 疑似同一排程器（cron）驅動。報告 GTG-84006 明寫「Multi-page IG network（3 pages · one cron）」（Figure 15）——<strong>一個 cron 排程多個帳號</strong>正是這個訊號的教科書案例。<br />
+2. <strong>建立時間叢集</strong>：帳號/網域的<strong>註冊或建立時間</strong>若高度集中，是最廉價也最可靠的協同指標。GTG-54002 的 250+ 帳號集中在 2025 年 6–7 月（p.49）、GTG-84005 的 12 個 sockpuppet 共用建立時間戳 2026-05-17（p.57–58）、GTG-54002 的 ~70 網域在<strong>十週內</strong>註冊（p.48）——這三個都是「建立時間叢集」訊號。</p>
+<blockquote>
+<p><strong>偵測邏輯（KQL 風格示意，教學用，非連線任何真實資料）：</strong><br />
+<code>kql
+// 找出「建立時間叢集」的疑似 sockpuppet：同一分鐘內建立 &gt;= 5 個帳號
+AccountCreation
+| summarize count()=count(), accounts=make_set(account_id) by bin(created_at, 1m)
+| where count_ &gt;= 5
+| project created_at, count_, accounts
+// 再與「發文時間高度同步」交叉，交集即高信度協同叢集</code></p>
+</blockquote>
+<h3 id="c6-shared-infrastructure-fingerprinting">C.6 共享基礎設施指紋（shared infrastructure fingerprinting）</h3>
+<p>這是把「表面上獨立的資產」綁回同一個行為者的技術，也是報告 IOC 表能列出來的東西。<strong>這一格的能見度屬於 OSINT 研究者與平台，AI 公司通常看不到</strong>（第 3.2 節）——但它是把上游偵測（AI 公司看到的生產）與下游證據（野外看到的資產）串起來的關鍵。</p>
+<table>
+<thead>
+<tr>
+<th>指紋類型</th>
+<th>怎麼取得（皆為被動 OSINT，不需連線目標）</th>
+<th>綁定力</th>
+<th>對應報告證據</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>網域註冊（WHOIS/RDAP）</strong></td>
+<td>註冊商、註冊時間、註冊人 email/電話（未遮蔽時）、name server</td>
+<td>中（時間叢集強、單一屬性弱）</td>
+<td>GTG-54002：~70 網域十週內自法國註冊（p.48）</td>
+</tr>
+<tr>
+<td><strong>共用託管 IP / ASN</strong></td>
+<td>被動 DNS、憑證透明度日誌回查</td>
+<td>中高</td>
+<td>GTG-84005：Hetzner IP（p.57–58）</td>
+</tr>
+<tr>
+<td><strong>共用部署識別碼</strong></td>
+<td>同一部署帳號/租戶把多站綁在一起</td>
+<td><strong>極高</strong></td>
+<td>GTG-54002：「shared deployment identifier」把 70 個看似獨立的站綁到一個帳號（p.52）</td>
+</tr>
+<tr>
+<td><strong>原始碼倉庫指紋</strong></td>
+<td>公開的 GitHub 組織、共用程式</td>
+<td>高</td>
+<td>GTG-84005：GitHub 組織（p.57–58）；GTG-54006：<code>fake_news_3.py</code>（p.67）</td>
+</tr>
+<tr>
+<td><strong>前端資產指紋</strong></td>
+<td>頁面模板 hash、favicon hash（Shodan 可查）、追蹤碼（GA/AdSense ID）、TLS 憑證/JARM 指紋</td>
+<td>高</td>
+<td>GTG-54002 的 ~70 站共用基礎設施（Figure 5, p.52）</td>
+</tr>
+<tr>
+<td><strong>雲端暫存指紋</strong></td>
+<td>共用的雲端資料夾、儲存桶</td>
+<td>高（但常被保留）</td>
+<td>GTG-54006：Google Drive 資料夾（Figure 14, p.69，識別碼被報告標為 Withheld）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>安全紅線：</strong> 上表所有「怎麼取得」都限定為<strong>被動</strong>方法（查詢已公開的登錄資料、憑證透明度日誌、被動 DNS 資料庫）。<strong>絕對不要</strong>對報告 IOC 做主動 DNS 查詢、連線、或掃描——那會打草驚蛇且逾越研究倫理（簡報安全紅線，第 8.3 節）。favicon/JARM 這類指紋應以第三方已索引的資料庫（如憑證透明度日誌）查詢，不對目標主機發包。</p>
+</blockquote>
+<h3 id="c7-louvain">C.7 階段三＋四：網路過濾與社群偵測（Louvain）</h3>
+<p>投影後的帳號圖是<strong>稠密</strong>的（幾乎人人相連），必須先過濾再做社群偵測。</p>
+<p><strong>過濾（階段三）三選一或並用：</strong><br />
+- <strong>固定門檻</strong>：丟掉權重 <code>w &lt; w_th</code> 的邊。最簡單，但門檻「typically selected arbitrarily」（綜述原文），是偽陽性的主要來源。<br />
+- <strong>統計骨幹（backbone / disparity filter）</strong>：對每個節點，只保留「相對於該節點其他邊在統計上顯著」的邊——不設全域門檻，而問「這條邊對這個節點而言是不是異常地強」。這是抓協同最穩健的過濾器，因為它同時容納高產與低產帳號。<br />
+- <strong>時間窗過濾（C.5）＋ k-NN 圖</strong>：每個節點只留 k 條最強邊。</p>
+<p><strong>社群偵測（階段四）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>演算法</th>
+<th>原理</th>
+<th>特性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Louvain</strong></td>
+<td>貪婪最佳化<strong>模組度（modularity）</strong>：反覆把節點併入能最大化模組度的社群，再把社群收縮成超節點迭代</td>
+<td><strong>綜述引用最多</strong>；快、可擴展；有解析度參數可調叢集粗細；缺點是可能產生弱連通甚至不連通的社群</td>
+</tr>
+<tr>
+<td><strong>Leiden</strong></td>
+<td>Louvain 的改良，保證社群內部連通、收斂更好</td>
+<td>大規模資料首選</td>
+</tr>
+<tr>
+<td><strong>連通元件 / 階層式</strong></td>
+<td>過濾後直接取連通塊</td>
+<td>當過濾夠嚴時最簡單有效</td>
+</tr>
+</tbody>
+</table>
+<pre class="mermaid">flowchart LR
+    G[&quot;稠密投影圖&lt;br/&gt;帳號 × 帳號，餘弦加權&quot;] --&gt; F1{&quot;過濾策略&quot;}
+    F1 --&gt;|&quot;固定門檻 w ≥ w_th&quot;| P[&quot;稀疏化圖&quot;]
+    F1 --&gt;|&quot;disparity filter&lt;br/&gt;統計顯著骨幹&quot;| P
+    F1 --&gt;|&quot;時間窗 + k-NN&quot;| P
+    P --&gt; CD{&quot;社群偵測&quot;}
+    CD --&gt;|&quot;Louvain：最大化模組度&quot;| C1[&quot;叢集 1&quot;]
+    CD --&gt;|&quot;Leiden：保證連通&quot;| C2[&quot;叢集 2&quot;]
+    CD --&gt; C3[&quot;叢集 n&quot;]
+    C1 --&gt; V[&quot;逐叢集特徵化與評分（C.8）&quot;]
+    C2 --&gt; V
+    C3 --&gt; V
+</pre>
+<blockquote>
+<p><strong>可直接執行的參考實作（教學用，<code>networkx</code> + <code>python-louvain</code>；輸入為去識別化的合成資料，不涉任何真實 IOC）：</strong><br />
+```python<br />
+import networkx as nx<br />
+import community as community_louvain      # python-louvain<br />
+from sklearn.feature_extraction.text import TfidfTransformer<br />
+from sklearn.metrics.pairwise import cosine_similarity<br />
+import numpy as np</p>
+<h1 id="m-urlhashtag">M: 帳號 × 動作目標 的共現矩陣（列=帳號, 欄=推文/URL/hashtag）</h1>
+<h1 id="1-tf-idf">1) TF-IDF 加權，壓抑爆紅內容</h1>
+<p>W = TfidfTransformer().fit_transform(M)          # 稀疏矩陣</p>
+<h1 id="2">2) 投影成帳號 × 帳號 的餘弦相似度圖</h1>
+<p>S = cosine_similarity(W)                          # 對稱矩陣<br />
+np.fill_diagonal(S, 0)</p>
+<h1 id="3-disparity-filter">3) 過濾：固定門檻（實務改用 disparity filter 更穩健）</h1>
+<p>TH = 0.7<br />
+G = nx.Graph()<br />
+idx = np.argwhere(S &gt;= TH)<br />
+for i, j in idx:<br />
+    if i &lt; j:<br />
+        G.add_edge(int(i), int(j), weight=float(S[i, j]))</p>
+<h1 id="4-louvain">4) Louvain 社群偵測</h1>
+<p>partition = community_louvain.best_partition(G, weight="weight", resolution=1.0)</p>
+<h1 id="partitionaccount_id-community_id-community">partition[account_id] -&gt; community_id；每個 community 即疑似協同叢集</h1>
+<p>```</p>
+</blockquote>
+<h3 id="c8-scoring">C.8 叢集評分與特徵化（scoring）</h3>
+<p>社群偵測給出「誰跟誰一夥」，但還沒回答「這一夥是不是人造的、有多危險、是不是被同一隻手編排」。綜述把這一步定義為獨立的<strong>特徵化（characterization）</strong>任務，輸出四類指標——本教材把它們組合成一個可操作的<strong>協同分數</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>指標維度</th>
+<th>具體特徵</th>
+<th>訊號方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>不真實性 authenticity</strong></td>
+<td>bot 分數、帳號年齡、profile 完整度、頭像是否 AI 生成（GAN/擴散模型偽影）、預設使用者名樣式</td>
+<td>分數越像機器 → 越可疑</td>
+</tr>
+<tr>
+<td><strong>危害性 harmfulness</strong></td>
+<td>內容毒性、攻擊性、目標是否為特定個人/機構</td>
+<td>越針對個人 → 危害越高（呼應第 7.4 節：低級別≠低傷害）</td>
+</tr>
+<tr>
+<td><strong>編排性 orchestration</strong></td>
+<td>叢集內同步性、assortativity、中心性集中度、是否共用單一 cron/代理</td>
+<td>越集中 → 越像被單一實體編排</td>
+</tr>
+<tr>
+<td><strong>時間變異 time-variance</strong></td>
+<td>帳號建立時間叢集、活躍時段一致性、隨偵測調適的痕跡</td>
+<td>越同步 → 越可疑</td>
+</tr>
+</tbody>
+</table>
+<p><strong>一個可操作的評分（本教材設計，非報告或綜述原文）：</strong></p>
+<pre><code>coordination_score(cluster) =
+      0.35 · synchrony        // 時間同步性（發文時間相關 + 建立時間叢集）
+    + 0.25 · inauthenticity   // 叢集內帳號的平均不真實性
+    + 0.20 · content_reuse    // 內容相似度（SimHash/嵌入）覆蓋率
+    + 0.20 · infra_overlap    // 共享基礎設施指紋命中率
+</code></pre>
+<p>權重是先驗、應以標註資料校準；<strong>每一項都要能對分析師「解釋」</strong>（哪句話、哪個時間戳、哪個部署識別碼），因為最終處置需要人類覆核與可稽核的證據鏈——這正是報告每一案「Disruption and mitigations」段落在做的事。</p>
+<blockquote>
+<p><strong>關鍵限制（綜述明確指出）：</strong> 「協同帳號的 ground truth 幾乎不存在」。所以協同分數是<strong>排序與優先順序工具</strong>，不是自動封鎖的判決。這與第 8.4 節「報告沒有揭露誤判率」的透明度缺口是同一個問題的技術面：<strong>沒有 ground truth，就無法計算精確的誤判率</strong>，只能靠分析師覆核與跨來源佐證。</p>
+</blockquote>
+<h3 id="c9-pipeline">C.9 端到端可操作 pipeline（資料 → 特徵 → 叢集 → 評分）</h3>
+<p>把 C.2–C.8 合成一條可部署的偵測管線。<strong>這張圖是本任務指定的「可操作偵測 pipeline」的完整版</strong>，比 C.2 的學界四階段多了工程現實：資料儲存、特徵工程、人類覆核、情報產出與回饋迴路。</p>
+<pre class="mermaid">flowchart TD
+    subgraph ING[&quot;① 資料層 Data&quot;]
+        R1[&quot;平台遙測 / 公開 API&lt;br/&gt;貼文·互動·帳號·中繼資料&quot;]
+        R2[&quot;被動 OSINT&lt;br/&gt;WHOIS/RDAP·憑證透明度·被動DNS&quot;]
+        R3[&quot;上游線報&lt;br/&gt;同業 AI 公司 / OSINT 組織&quot;]
+    end
+    ING --&gt; FE
+    subgraph FE[&quot;② 特徵工程 Features&quot;]
+        F1[&quot;co-action 抽取&lt;br/&gt;co-retweet/URL/hashtag/mention&quot;]
+        F2[&quot;內容指紋&lt;br/&gt;SimHash · MinHash · 句嵌入&quot;]
+        F3[&quot;時間特徵&lt;br/&gt;同步性 · 建立時間叢集&quot;]
+        F4[&quot;基礎設施指紋&lt;br/&gt;IP/ASN·部署ID·favicon/JARM&quot;]
+    end
+    FE --&gt; GR[&quot;③ 圖建構&lt;br/&gt;二分圖 → TF-IDF 投影 → 餘弦加權&quot;]
+    GR --&gt; FL[&quot;④ 過濾&lt;br/&gt;disparity filter / 時間窗 / k-NN&quot;]
+    FL --&gt; CO[&quot;⑤ 社群偵測&lt;br/&gt;Louvain / Leiden&quot;]
+    CO --&gt; SC[&quot;⑥ 評分&lt;br/&gt;coordination_score（C.8）&quot;]
+    SC --&gt; HR{&quot;⑦ 分析師覆核&lt;br/&gt;證據鏈是否可解釋？&quot;}
+    HR --&gt;|&quot;確認&quot;| OUT[&quot;⑧ 情報產出&lt;br/&gt;DISARM 標註（附錄D）+ Breakout 評級（附錄E）&quot;]
+    HR --&gt;|&quot;否決 / 存疑&quot;| FE
+    OUT --&gt;|&quot;處置：ban · attribute · 硬化 · 分享&quot;| SHARE[&quot;⑨ 跨組織分享&lt;br/&gt;DISARM-STIX 交換&quot;]
+    SHARE -.-&gt;|&quot;新指紋回饋&quot;| FE
+</pre>
+<p><strong>這張圖要教的三件事：</strong><br />
+1. <strong>資料層有三個來源，缺一不可。</strong> 平台遙測看分發、被動 OSINT 看基礎設施、上游線報看生產。報告的 GTG-54004（OpenAI→Anthropic）與 GTG-04001（AEOW→Anthropic）就是「來源三」的真實案例（第 6.2 節 e 表）。<br />
+2. <strong>人類覆核是不可省略的一格（⑦）。</strong> 因為沒有 ground truth（C.8），全自動封鎖會製造第 8.4 節的誤判與寒蟬問題。<br />
+3. <strong>輸出直接接上另外兩套框架</strong>：叢集確認後，用 <strong>DISARM 標註它做了什麼</strong>（附錄 D）、用 <strong>Breakout Scale 評估它走多遠</strong>（附錄 E）、用 <strong>DISARM-STIX 打包分享</strong>（附錄 G）。三套工具在這裡合流。</p>
+<h3 id="c10-figure-15ai-cib">C.10 用這套方法回讀 Figure 15：AI 時代 CIB 的新指紋</h3>
+<p>第 6.3 節已判讀過 Figure 15（Viktor 網路，p.73）。這裡從<strong>偵測工程</strong>的角度再讀一次，說明為什麼 GTG-84006 是「傳統 CIB 偵測會漏掉、AI 時代必須升級」的教科書案例。</p>
+<p>報告明寫這些行為者「did not share account infrastructure or show visible signs of coordination」（p.70）。用 C.6 的傳統基礎設施指紋去掃，會得到<strong>十幾個看似無關的孤立節點</strong>——因為它們<strong>沒有</strong>共用 IP、沒有共用註冊時間、沒有共用裝置。傳統 CIB 偵測在這裡<strong>失效</strong>。</p>
+<p>但報告同時指出，它們共用一個 Claude-based 代理平台「Viktor」與一套跨行為者的教條/規避檔，這構成「a coordination substrate（協調基質）」（p.72）。<strong>AI 時代的新協同指紋，從「共用基礎設施」轉移到「共用記憶檔與代理設定」。</strong></p>
+<pre class="mermaid">flowchart TD
+    subgraph OLD[&quot;傳統 CIB 指紋（此案掃不到）&quot;]
+        direction LR
+        o1[&quot;共用 IP/ASN&quot;]:::miss
+        o2[&quot;共用註冊時間&quot;]:::miss
+        o3[&quot;共用裝置指紋&quot;]:::miss
+    end
+    subgraph NEW[&quot;AI 時代協調基質（此案的真實連結）&quot;]
+        VIK[&quot;Viktor 共用代理平台&lt;br/&gt;+ 跨行為者教條/規避檔&quot;]:::sub
+        VIK --&gt; n1[&quot;語意層內容叢集&lt;br/&gt;（同一教條 → 嵌入空間叢集）&quot;]:::hit
+        VIK --&gt; n2[&quot;共用禁用詞/核准來源清單&quot;]:::hit
+        VIK --&gt; n3[&quot;一個 cron 排程多帳號&quot;]:::hit
+        VIK --&gt; n4[&quot;硬編碼的 7 個來源網域&quot;]:::hit
+    end
+    OLD -.-&gt;|&quot;失效：節點看似無關&quot;| X[&quot;十幾個孤立節點&quot;]
+    NEW ==&gt;|&quot;有效：綁回同一隻手&quot;| Y[&quot;一個協同網路&quot;]
+    classDef miss fill:#f8d7da,stroke:#c00,color:#600;
+    classDef hit fill:#d4edda,stroke:#28a745,color:#155724;
+    classDef sub fill:#fff3cd,stroke:#e0a800,color:#7a5c00;
+</pre>
+<p><strong>對偵測工程的三個啟示：</strong><br />
+1. <strong>內容相似度必須升級到語意層（C.4 的嵌入路線）。</strong> 因為就算行為者去 AI 味、逐詞改寫，同一份教條檔產出的內容在嵌入空間仍會叢集。這是對抗「共用記憶檔」最直接的技術對策。<br />
+2. <strong>偵測面要涵蓋「代理設定」而非只有「單一提示」。</strong> 報告 p.43：「a great deal is embedded within persistent memory files」。持久記憶檔既是新攻擊面（第 8.3 節），也是新偵測面。<br />
+3. <strong>這正好連回上游偵測。</strong> AI 公司在上游看得到「同一份教條檔在數百個工作階段被載入」（第 3.3 節），平台在下游看得到「內容在嵌入空間叢集」——<strong>兩端看到的是同一個協調基質的一體兩面</strong>。這是為什麼跨組織情報分享（C.9 的⑨）在 AI 時代比以前更關鍵。</p>
+<hr />
+<h2 id="ddisarm-ttp">附錄 D：DISARM 框架完整介紹與九案 TTP 標註</h2>
+<p>第 5.4 節已點出「DISARM 之於影響力行動，等於 ATT&amp;CK 之於網路攻擊」，並說「本報告沒有使用 DISARM 標註 TTP，這是課程可以補上的練習」。<strong>本附錄就把這個練習做完。</strong></p>
+<h3 id="d1-disarm">D.1 DISARM 是什麼：歷史與治理</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>內容</th>
+<th>來源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>全名</strong></td>
+<td><strong>DISARM = DISinformation Analysis and Risk Management</strong></td>
+<td>DISARM Foundation</td>
+</tr>
+<tr>
+<td><strong>前身</strong></td>
+<td><strong>AMITT</strong>（Adversarial Misinformation and Influence Tactics and Techniques，2019，由 CogSecCollab 等提出）與 <strong>SP!CE</strong> 兩個框架合併而來</td>
+<td>GitHub cogsec-collaborative/AMITT</td>
+</tr>
+<tr>
+<td><strong>建立者</strong></td>
+<td>MITRE、FIU（佛羅里達國際大學）、CogSecCollab 等團隊合作，另成立 <strong>DISARM Foundation</strong> 維護</td>
+<td>綜述文獻（附錄 G）</td>
+</tr>
+<tr>
+<td><strong>模型家族</strong></td>
+<td><strong>DISARM Red</strong>（造謠者的 TTP）、<strong>DISARM Blue</strong>（回應者的反制 TTP）、<strong>DISARM-STIX</strong>（機器可讀交換格式）</td>
+<td>DISARM Foundation</td>
+</tr>
+<tr>
+<td><strong>授權</strong></td>
+<td><strong>CC-BY-SA-4.0</strong>（開源）。<br><em>校訂：第 5.4 節寫「CC-BY」，依 disarm.foundation 官方框架頁應為 </em><em>CC-BY-SA-4.0</em>**</td>
+<td>disarm.foundation/framework</td>
+</tr>
+<tr>
+<td><strong>版本</strong></td>
+<td>目前有 <strong>Prototype DISARM v2.0</strong> 開發中；另有 Navigator 導覽工具與 Word Tagger 外掛</td>
+<td>disarm.foundation</td>
+</tr>
+<tr>
+<td><strong>與 ATT&amp;CK 的關係</strong></td>
+<td>「DISARM's style is based on the MITRE ATT&amp;CK framework」——刻意沿用 ATT&amp;CK 的<strong>戰術（Tactic）→ 技術（Technique）→ 子技術</strong>階層，以便<strong>融入既有資安實務與工具</strong></td>
+<td>綜述文獻</td>
+</tr>
+</tbody>
+</table>
+<p><strong>為什麼「基於 ATT&amp;CK」對台灣是好消息（呼應第 10.4.6）：</strong> 台灣資安社群已熟悉 ATT&amp;CK 的戰術/技術心智模型與 STIX/TAXII 交換管道。DISARM 刻意同構，代表<strong>遷移成本極低</strong>——把影響力行動的 IOC 與 TTP 塞進現有的資安情報交換基礎設施，技術上完全可行。</p>
+<h3 id="d2-disarm-red16">D.2 DISARM Red：16 個戰術，四大階段</h3>
+<p>DISARM Red 把造謠者的行為依「殺傷鏈」排成 <strong>4 個階段（Phase）、16 個戰術（Tactic, TAxx）</strong>。下圖是完整結構（<strong>節點文字為官方戰術名，TA 編號非連號——注意 TA05 是 Microtarget、TA13 才是 Target Audience Analysis，這是常見的標註陷阱</strong>）：</p>
+<pre class="mermaid">flowchart LR
+    subgraph P01[&quot;P01 · Plan 規劃&quot;]
+        direction TB
+        TA01[&quot;TA01 Plan Strategy&quot;]
+        TA02[&quot;TA02 Plan Objectives&quot;]
+        TA13[&quot;TA13 Target Audience Analysis&quot;]
+    end
+    subgraph P02[&quot;P02 · Prepare 準備&quot;]
+        direction TB
+        TA14[&quot;TA14 Develop Narratives&quot;]
+        TA06[&quot;TA06 Develop Content&quot;]
+        TA05[&quot;TA05 Microtarget&quot;]
+        TA15[&quot;TA15 Establish Assets&quot;]
+        TA16[&quot;TA16 Establish Legitimacy&quot;]
+        TA07[&quot;TA07 Select Channels &amp; Affordances&quot;]
+    end
+    subgraph P03[&quot;P03 · Execute 執行&quot;]
+        direction TB
+        TA08[&quot;TA08 Conduct Pump Priming&quot;]
+        TA09[&quot;TA09 Deliver Content&quot;]
+        TA17[&quot;TA17 Maximise Exposure&quot;]
+        TA10[&quot;TA10 Drive Offline Activity&quot;]
+        TA18[&quot;TA18 Drive Online Harms&quot;]
+        TA11[&quot;TA11 Persist in the Information Environment&quot;]
+    end
+    subgraph P04[&quot;P04 · Assess 評估&quot;]
+        direction TB
+        TA12[&quot;TA12 Assess Effectiveness&quot;]
+    end
+    P01 ==&gt; P02 ==&gt; P03 ==&gt; P04
+</pre>
+<p>戰術逐一對照（官方定義摘要）：</p>
+<table>
+<thead>
+<tr>
+<th>階段</th>
+<th>TA</th>
+<th>戰術名</th>
+<th>一句話</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P01 Plan</td>
+<td>TA01</td>
+<td>Plan Strategy</td>
+<td>定義想達到的終局狀態</td>
+</tr>
+<tr>
+<td>P01 Plan</td>
+<td>TA02</td>
+<td>Plan Objectives</td>
+<td>設定可衡量、可達成的目標</td>
+</tr>
+<tr>
+<td>P01 Plan</td>
+<td>TA13</td>
+<td>Target Audience Analysis</td>
+<td>分析受眾的人口、隸屬、可利用的分裂</td>
+</tr>
+<tr>
+<td>P02 Prepare</td>
+<td>TA14</td>
+<td>Develop Narratives</td>
+<td>建構長期主導的主敘事</td>
+</tr>
+<tr>
+<td>P02 Prepare</td>
+<td>TA06</td>
+<td>Develop Content</td>
+<td>產製文字、圖片、影音等內容</td>
+</tr>
+<tr>
+<td>P02 Prepare</td>
+<td>TA05</td>
+<td>Microtarget</td>
+<td>把內容導向特定受眾切片</td>
+</tr>
+<tr>
+<td>P02 Prepare</td>
+<td>TA15</td>
+<td>Establish Assets</td>
+<td>建立帳號、人格、人員等發聲工具</td>
+</tr>
+<tr>
+<td>P02 Prepare</td>
+<td>TA16</td>
+<td>Establish Legitimacy</td>
+<td>建立能取信的資產（假專家、前線組織）</td>
+</tr>
+<tr>
+<td>P02 Prepare</td>
+<td>TA07</td>
+<td>Select Channels &amp; Affordances</td>
+<td>依平台演算法與規則選通路</td>
+</tr>
+<tr>
+<td>P03 Execute</td>
+<td>TA08</td>
+<td>Conduct Pump Priming</td>
+<td>小規模先行釋出、測水溫</td>
+</tr>
+<tr>
+<td>P03 Execute</td>
+<td>TA09</td>
+<td>Deliver Content</td>
+<td>對大眾正式釋出</td>
+</tr>
+<tr>
+<td>P03 Execute</td>
+<td>TA17</td>
+<td>Maximise Exposure</td>
+<td>洪水、放大、跨平台轉貼</td>
+</tr>
+<tr>
+<td>P03 Execute</td>
+<td>TA10</td>
+<td>Drive Offline Activity</td>
+<td>從線上帶到線下（集會、傳統媒體）</td>
+</tr>
+<tr>
+<td>P03 Execute</td>
+<td>TA18</td>
+<td>Drive Online Harms</td>
+<td>騷擾、壓制、洩個資等對人的傷害</td>
+</tr>
+<tr>
+<td>P03 Execute</td>
+<td>TA11</td>
+<td>Persist in the Information Environment</td>
+<td>維持存在、規避偵測、偽裝正當</td>
+</tr>
+<tr>
+<td>P04 Assess</td>
+<td>TA12</td>
+<td>Assess Effectiveness</td>
+<td>評估成效、回饋下一輪規劃</td>
+</tr>
+</tbody>
+</table>
+<h3 id="d3-disarm-txxxx-ai">D.3 DISARM 技術層（Txxxx）：與 AI 影響力行動最相關的技術</h3>
+<p>DISARM Red 在 16 個戰術下掛了大量以 <strong>Txxxx</strong> 編號的技術與子技術（數量隨版本增長，以官方 GitHub 為準）。下表只挑<strong>與本報告 AI 濫用型態直接對應</strong>的技術，全部為官方實際存在的編號（附錄 G 標明取自官方 techniques_index）：</p>
+<table>
+<thead>
+<tr>
+<th>戰術</th>
+<th>技術 ID</th>
+<th>技術名</th>
+<th>本報告對應</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TA06</td>
+<td><strong>T0085.001</strong></td>
+<td>Develop AI-Generated Text</td>
+<td>九案幾乎全部</td>
+</tr>
+<tr>
+<td>TA06</td>
+<td><strong>T0086.002</strong></td>
+<td>Develop AI-Generated Images (Deepfakes)</td>
+<td>GTG-54002 頭像；GTG-84002 圖卡</td>
+</tr>
+<tr>
+<td>TA06</td>
+<td><strong>T0087.001</strong></td>
+<td>Develop AI-Generated Videos (Deepfakes)</td>
+<td>GTG-84006 波斯語配音虛擬人像</td>
+</tr>
+<tr>
+<td>TA06</td>
+<td><strong>T0088.001</strong></td>
+<td>Develop AI-Generated Audio (Deepfakes)</td>
+<td>GTG-84006 AI 配音</td>
+</tr>
+<tr>
+<td>TA06</td>
+<td><strong>T0085.003</strong></td>
+<td>Develop Inauthentic News Articles</td>
+<td>GTG-54002、GTG-54006、GTG-84005</td>
+</tr>
+<tr>
+<td>TA06</td>
+<td><strong>T0084.002 / .004</strong></td>
+<td>Plagiarise / Appropriate Content</td>
+<td>GTG-54002 改寫真記者稿；GTG-04001 風格複製</td>
+</tr>
+<tr>
+<td>TA15</td>
+<td><strong>T0098.001</strong></td>
+<td>Create Inauthentic News Sites</td>
+<td>GTG-54002（~70 站）、GTG-84005（Malaysia Pulse）</td>
+</tr>
+<tr>
+<td>TA15</td>
+<td><strong>T0097</strong></td>
+<td>Present Persona（含假記者、冒充人格）</td>
+<td>GTG-54002 假記者；GTG-84006 冒充真活動人士</td>
+</tr>
+<tr>
+<td>TA16</td>
+<td><strong>T0045</strong></td>
+<td>Use Fake Experts</td>
+<td>GTG-34001 假歸因給 CSIS/Brookings/RAND</td>
+</tr>
+<tr>
+<td>TA16</td>
+<td><strong>T0092.001</strong></td>
+<td>Create Organisations（前線組織）</td>
+<td>GTG-84002 複製瑞士組織的前線 NGO</td>
+</tr>
+<tr>
+<td>TA13/TA05</td>
+<td><strong>T0072</strong></td>
+<td>Segment Audiences（微定向）</td>
+<td>GTG-84005 222 選區；GTG-84006 依逮捕紀錄分群</td>
+</tr>
+<tr>
+<td>TA17</td>
+<td><strong>T0049 / .001 / .003</strong></td>
+<td>Flood / Trolls / Bots Amplify</td>
+<td>GTG-34001 付費放大；GTG-54004 洪水式</td>
+</tr>
+<tr>
+<td>TA17</td>
+<td><strong>T0119</strong></td>
+<td>Cross-Posting</td>
+<td>GTG-54006 跨 FB/YT/TikTok；GTG-84002 協同貼文</td>
+</tr>
+<tr>
+<td>TA11</td>
+<td><strong>T0122 / T0093.001</strong></td>
+<td>Direct to Alt Platforms / Fund Proxies</td>
+<td>GTG-54006 第三方 CI 遮 IP；GTG-34001 VPN+外國電話</td>
+</tr>
+<tr>
+<td>TA18</td>
+<td><strong>T0048 / .004 / T0124</strong></td>
+<td>Harass / Dox / Suppress Opposition</td>
+<td>GTG-84002 針對 UN 特別報告員；GTG-34001 針對巴哈伊</td>
+</tr>
+</tbody>
+</table>
+<h3 id="d4-disarm-blue-ttp">D.4 DISARM Blue：回應者的 TTP</h3>
+<p>DISARM <strong>Blue</strong> 是與 Red 對稱的<strong>反制</strong>框架（counters），把防禦者的作為也編碼成可交換的 TTP——例如揭露、事前揭穿（prebunking）、平台下架、媒體識讀、跨組織情報分享。它的價值在於讓<strong>紅藍雙方用同一套座標對話</strong>：一個 Red 技術（如 T0086.002 深偽圖）可以明確對應到一組 Blue 反制（如影像鑑識偵測、來源標註、prebunking）。第 8 節整理的 Anthropic 五步處置（ban / attribute / 硬化 / 分享）在 DISARM Blue 裡都有對應條目——<strong>把第 8 節的處置流程用 Blue 編碼，就能和其他機構的處置互相比較</strong>，這正是第 10.4.6「建立台灣版 DISARM 標註實務」的具體做法。</p>
+<h3 id="d5-disarm">D.5 用 DISARM 標註本報告九案</h3>
+<p><strong>這是本附錄的核心產出。</strong> 把九案各自的行為對應到 DISARM Red 戰術（TA）與代表性技術（Txxxx）。每格附報告頁碼。<strong>讀法：一行看完一個行動「從規劃到執行」踩過哪些 TTP。</strong></p>
+<table>
+<thead>
+<tr>
+<th>GTG</th>
+<th>P01 規劃</th>
+<th>P02 準備</th>
+<th>P03 執行</th>
+<th>代表技術 Txxxx</th>
+<th>頁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>04001</strong>（俄/CAR）</td>
+<td>TA01/02/13 教條·目標·CAR 受眾</td>
+<td>TA14/06/16 反法敘事·每日內容·偽造公文</td>
+<td>TA09/10/17 FM廣播·<strong>跨媒介落地</strong>·Telegram放大；TA18 點名真人（拒）</td>
+<td>T0085.001, T0084.004, T0092.001, T0119</td>
+<td>p.44–47</td>
+</tr>
+<tr>
+<td><strong>54002</strong>（法/IaaS）</td>
+<td>TA13 六大洲受眾</td>
+<td>TA15/06/16 70站+假記者·假新聞·AI頭像</td>
+<td>TA17 跨站洪水·SEO；TA11 共用部署ID</td>
+<td>T0098.001, T0097, T0086.002, T0085.003, T0084.002</td>
+<td>p.47–52</td>
+</tr>
+<tr>
+<td><strong>84005</strong>（土/馬）</td>
+<td>TA13 222選區微定向</td>
+<td>TA15/06/16 ~1000帳號+Malaysia Pulse·AI頭像</td>
+<td>TA11 帳號暖機·cookie/IP輪替；TA18 誹謗在野政治人物</td>
+<td>T0072, T0098.001, T0086.002, T0122</td>
+<td>p.53–58</td>
+</tr>
+<tr>
+<td><strong>24015</strong>（俄/國媒）</td>
+<td>TA02 編輯管線目標</td>
+<td>TA06/16 多語在地化·<strong>洗白確定性</strong></td>
+<td>TA09/10/17 既有通路·上電視·跨刊轉載</td>
+<td>T0085.001, T0084.004, T0119</td>
+<td>p.58–62</td>
+</tr>
+<tr>
+<td><strong>34001</strong>（伊/ICCO）</td>
+<td>TA01/02/13 教條·20語受眾</td>
+<td>TA14/06/16 多語內容·假歸因智庫·IRGC發言人口吻</td>
+<td>TA17 付費放大100+頻道；TA11 VPN+外國電話；TA18 針對巴哈伊</td>
+<td>T0045, T0049, T0093.001, T0124</td>
+<td>p.62–67</td>
+</tr>
+<tr>
+<td><strong>54006</strong>（孟/AL）</td>
+<td>TA13 鄉村低識字受眾</td>
+<td>TA06 <code>fake_news_3.py</code> 批次文/圖/影</td>
+<td>TA17 跨FB/YT/TikTok；TA11 29帳號輪替·第三方遮IP</td>
+<td>T0085.003, T0086.002, T0087, T0119, T0122</td>
+<td>p.67–70</td>
+</tr>
+<tr>
+<td><strong>84006</strong>（伊/MEK）</td>
+<td>TA13 依逮捕紀錄分群</td>
+<td>TA15/16 Viktor代理·合成人格·冒充真活動人士</td>
+<td>TA18 監控伊朗境內·即時冒充對話；TA11 持久記憶檔</td>
+<td>T0097, T0087.001, T0088.001, T0072, T0048</td>
+<td>p.70–75</td>
+</tr>
+<tr>
+<td><strong>54004</strong>（肯/國內）</td>
+<td>TA13 電價/選舉議題</td>
+<td>TA15/06 假帳號·每批50推·<strong>去AI味</strong></td>
+<td>TA17 洪水式草根偽裝（Cat 1 孤立）</td>
+<td>T0085.001, T0049, T0097</td>
+<td>p.75–77</td>
+</tr>
+<tr>
+<td><strong>84002</strong>（阿聯/MB）</td>
+<td>TA01/02/13 Deadshot主教條·18名歐議員</td>
+<td>TA15/16 ~300假網紅·前線NGO冒充瑞士組織</td>
+<td>TA17 #SudanIslamists協同；TA18 代筆UN證詞·反問責檔案</td>
+<td>T0092.001, T0097, T0086.002, T0119, T0048</td>
+<td>p.78–80</td>
+</tr>
+</tbody>
+</table>
+<h3 id="d6-disarm-ai-ttp">D.6 DISARM 的框架缺口：AI 使能的新 TTP</h3>
+<p>用 DISARM 標註九案時，會發現有幾類行為<strong>現有技術層對應不良</strong>——這正是第 5.4 節與演練 D 預告的「框架缺口」，也是本報告最有原創性的觀察（第 4 節「AI 建的不只是內容」）在 TTP 層的體現：</p>
+<table>
+<thead>
+<tr>
+<th>缺口行為</th>
+<th>報告證據</th>
+<th>為什麼現有 DISARM/ATT&amp;CK 對應不良</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>用商用 LLM 的固定批次 API 呼叫，把單人產能放大到「計畫辦公室」規模</strong></td>
+<td>GTG-54006 <code>fake_news_3.py</code> 每批 15 標題+3 故事+15 圖提示（p.67）；一人 16 個月（p.70）</td>
+<td>DISARM 有「Develop Content」但沒有描述「<strong>以程式化 API 呼叫取代整個編制</strong>」這個<strong>經濟結構</strong>的技術</td>
+</tr>
+<tr>
+<td><strong>把組織管理文書（合約、考績、教條）交給模型產出</strong></td>
+<td>GTG-04001 效忠合約·評分表·三振流程（p.45）</td>
+<td>這不是「內容生產」也不是「建立資產」，而是<strong>用 AI 取代行政管理人力</strong>——DISARM 沒有對應戰術</td>
+</tr>
+<tr>
+<td><strong>持久記憶檔／共用代理平台作為協調基質</strong></td>
+<td>GTG-84006 Viktor + SKILL.md/LEARNINGS.md（p.72）</td>
+<td>DISARM 的協同概念預設「共用基礎設施」；<strong>共用記憶檔</strong>是新型態（見 C.10）</td>
+</tr>
+<tr>
+<td><strong>跨 AI 供應商的生產鏈</strong></td>
+<td>GTG-54006 圖片提示疑輸出到別家模型（p.67）；GTG-04001 同訂 ChatGPT+Claude（第 9 節）</td>
+<td>沒有任何單一框架描述「一條產線橫跨多家 AI 供應商」的偵測斷點</td>
+</tr>
+</tbody>
+</table>
+<p><strong>教學結論（呼應第 5 節 TTP 缺口的原則）：</strong> 框架是活的。DISARM 對「內容型 TTP」（含 AI 生成內容）覆蓋良好，但對 <strong>AI 帶來的「組織經濟」與「代理自主」型 TTP</strong> 仍有缺口——這與 ATT&amp;CK 對「agentic orchestration」的缺口是同一個時代問題的兩面。台灣若要建本土 DISARM 標註實務（第 10.4.6），這幾個缺口正是<strong>可以貢獻回國際框架的原創技術描述</strong>。</p>
+<hr />
+<h2 id="ebreakout-scale">附錄 E：Breakout Scale 的量化操作化</h2>
+<h3 id="e1">E.1 為什麼要操作化</h3>
+<p>第 5 節完整介紹了 Nimmo 的六級量表，並在 5.6 節指出它的三個方法論疑點（誰評的、能不能複現、外溢是不是有機）。Nimmo 的定義是<strong>質性</strong>的——「進入主流媒體」「名人背書」都需要人來判斷。要讓不同機構的評級<strong>可比較、可複現、可自動化</strong>（第 5.6 節疑點三、第 10.4.4 建議一），必須把每一級翻譯成<strong>可計算的指標與門檻</strong>。</p>
+<p><strong>本附錄全部屬於「本教材設計／推論」</strong>，不是 Nimmo 或 Anthropic 的原文。它是把質性量表工程化的一個提案，供台灣反資訊操弄社群作為共同尺度的起點。</p>
+<h3 id="e2">E.2 六級 → 可計算指標對照表</h3>
+<p>先定義六個可從資料算出的量（都依賴附錄 C 先框出「行動網路 N」——沒有 N 就無法區分「自家帳號互推」與「真實外溢」，這正是 5.3 節兩個判讀陷阱的技術根源）：</p>
+<table>
+<thead>
+<tr>
+<th>符號</th>
+<th>指標</th>
+<th>怎麼算</th>
+<th>資料來源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>P</code></td>
+<td>插入點平台數</td>
+<td>有該行動資產的<strong>不同平台</strong>數</td>
+<td>附錄 C 叢集結果</td>
+</tr>
+<tr>
+<td><code>B_on</code></td>
+<td>同平台外溢</td>
+<td><strong>網路 N 以外</strong>的真人帳號自發轉發/引用數</td>
+<td>平台互動資料</td>
+</tr>
+<tr>
+<td><code>B_x</code></td>
+<td>跨平台外溢</td>
+<td>內容被搬到<strong>另一平台</strong>且由 N 以外帳號擴散</td>
+<td>跨平台比對（內容指紋 C.4）</td>
+</tr>
+<tr>
+<td><code>M</code></td>
+<td>主流媒體引用</td>
+<td>被主流媒體<strong>報導或嵌入</strong>的次數</td>
+<td>媒體監測</td>
+</tr>
+<tr>
+<td><code>I</code></td>
+<td>名人放大</td>
+<td>追蹤數 ≥ 門檻或已認證帳號的<strong>背書式</strong>轉發數</td>
+<td>平台資料 + 名單</td>
+</tr>
+<tr>
+<td><code>A</code></td>
+<td>具體後果</td>
+<td>是否引發政策回應／具體行動，或含暴力號召（布林）</td>
+<td>OSINT / 新聞</td>
+</tr>
+</tbody>
+</table>
+<p><strong>真實互動率（authentic engagement ratio, AER）</strong> 是貫穿全表的關鍵量：</p>
+<pre><code>AER = （來自網路 N 以外帳號的互動）/（總互動）
+</code></pre>
+<p>AER 直接把第 7 節「生產能力 ≠ 影響力」量化：GTG-54004「completely isolated within the network」（p.76）就是 <strong>AER ≈ 0</strong>；GTG-84005 自報百萬瀏覽但「self-reported... cannot verify」（p.54）就是 <strong>AER 分子不可信</strong>（5.3 節陷阱二）。</p>
+<table>
+<thead>
+<tr>
+<th>級別</th>
+<th>質性定義（Nimmo）</th>
+<th>可計算判準（本教材操作化）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cat 1</strong></td>
+<td>單一平台、無外溢</td>
+<td><code>P=1</code> 且 <code>B_on=0</code> 且 <code>B_x=0</code>（AER≈0）</td>
+</tr>
+<tr>
+<td><strong>Cat 2</strong></td>
+<td>單平台有外溢 <strong>或</strong> 多平台無外溢</td>
+<td>(<code>P=1</code> 且 <code>B_on&gt;0</code>) <strong>或</strong> (<code>P≥2</code> 且 <code>B_on=B_x=0</code>)</td>
+</tr>
+<tr>
+<td><strong>Cat 3</strong></td>
+<td>多平台且多處外溢，未進主流媒體</td>
+<td><code>P≥2</code> 且 <code>B_x&gt;0</code> 且 <code>M=0</code></td>
+</tr>
+<tr>
+<td><strong>Cat 4</strong></td>
+<td>進入主流媒體</td>
+<td><code>M≥1</code>（被報導/嵌入）</td>
+</tr>
+<tr>
+<td><strong>Cat 5</strong></td>
+<td>名人放大（尤其明確背書）</td>
+<td><code>I≥1</code>（背書式，追蹤數 ≥ 門檻）</td>
+</tr>
+<tr>
+<td><strong>Cat 6</strong></td>
+<td>政策回應／具體行動 <strong>或</strong> 暴力號召</td>
+<td><code>A=true</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="e3">E.3 可操作的評級演算法</h3>
+<p>把上表寫成一個<strong>決定性的評級流程</strong>（對應 5.3 節的 框線決策樹，此處以 Mermaid 重繪並掛上可計算門檻）：</p>
+<pre class="mermaid">flowchart TD
+    ST[&quot;輸入：行動網路 N（附錄C）&lt;br/&gt;+ 計算 P, B_on, B_x, M, I, A, AER&quot;] --&gt; Q0{&quot;A = true?&lt;br/&gt;（政策回應 / 暴力號召）&quot;}
+    Q0 --&gt;|&quot;是&quot;| C6[&quot;Category 6&quot;]
+    Q0 --&gt;|&quot;否&quot;| Q1{&quot;I ≥ 1?&lt;br/&gt;（名人背書式放大）&quot;}
+    Q1 --&gt;|&quot;是&quot;| C5[&quot;Category 5&quot;]
+    Q1 --&gt;|&quot;否&quot;| Q2{&quot;M ≥ 1?&lt;br/&gt;（進入主流媒體）&quot;}
+    Q2 --&gt;|&quot;是&quot;| C4[&quot;Category 4&quot;]
+    Q2 --&gt;|&quot;否&quot;| Q3{&quot;B_x 或 B_on 有真實外溢?&lt;br/&gt;（AER 顯著 &gt; 0）&quot;}
+    Q3 --&gt;|&quot;否&quot;| LOW{&quot;P = 1?&quot;}
+    LOW --&gt;|&quot;是&quot;| C1[&quot;Category 1&quot;]
+    LOW --&gt;|&quot;否&quot;| C2a[&quot;Category 2（多平台無外溢型）&quot;]
+    Q3 --&gt;|&quot;是&quot;| MP{&quot;P ≥ 2 且多處外溢?&quot;}
+    MP --&gt;|&quot;否（僅單平台外溢）&quot;| C2b[&quot;Category 2（單平台外溢型）&quot;]
+    MP --&gt;|&quot;是&quot;| C3[&quot;Category 3（過渡級：防禦行動臨界點）&quot;]
+</pre>
+<h3 id="e4">E.4 每個指標怎麼算：門檻、陷阱、資料需求</h3>
+<p><strong>（1）真實外溢 vs. 自家互推——先有 N 才有一切。</strong> 這是操作化最硬的一步：必須先用附錄 C 框出行動網路 N，才能把「N 以外帳號的互動」和「N 內互推」分開。<strong>沒有 N，AER 無法計算，Breakout 評級就退回主觀判斷。</strong> 這在技術上證明了 5.6 節疑點三（「能不能複現」）的答案：<strong>能複現的前提是公開 N 的邊界</strong>——而報告恰恰把部分邊界資料標為 Withheld/available separately（第 8.3 節），這就是它「難以外部複現」的根因。</p>
+<p><strong>（2）主流媒體 <code>M</code> 的本地化定義。</strong> 對台灣（第 10.4.4 建議一），必須明確回答：LINE 群組轉發算不算？YouTube 政論節目算不算？地方電台算不算？建議把 <code>M</code> 分成 <code>M_national</code>（全國性報紙/電視）與 <code>M_local/social-tv</code>（地方台、政論頻道、大型 LINE 社群），分別記錄、避免高估。GTG-04001 的 Cat 4 判準「FM 廣播 + 在地新聞媒體」（p.45）就是一個「非全國性主流媒體也算跨媒介」的先例。</p>
+<p><strong>（3）名人門檻 <code>I</code> 要看「背書」不只看「追蹤數」。</strong> Nimmo 強調 Cat 5 的關鍵是<strong>明確背書（explicitly endorse）</strong>，不是單純被大帳號提到。技術上：追蹤數 ≥ 門檻（例如 10 萬，需本地校準）<strong>且</strong>轉發帶正面立場文字，才計入 <code>I</code>。注意 GTG-84006 的 IOC 表列出 @simaintv/@iranintv ~708K 追蹤（p.74–75）——但那是<strong>自家媒體資產</strong>，不算 <code>I</code>（5.3 節陷阱一）；<code>I</code> 只計<strong>網路 N 以外</strong>的名人。</p>
+<p><strong>（4）跨平台 <code>P</code> 的去重。</strong> 同一行為者在多平台鋪資產（<code>P</code> 大）不等於外溢（<code>B_x</code>）。Spamouflage 型（多平台、零外溢）就是 <code>P</code> 大但 <code>B_x=0</code> → Cat 2。<strong>別把鋪點數當外溢數</strong>——這是把 5.3 節陷阱一寫進公式。</p>
+<h3 id="e5">E.5 把九案套進量化指標（示範）</h3>
+<p>用報告數字回算，示範這套操作化怎麼跑（<code>—</code> 表報告未提供可算數字）：</p>
+<table>
+<thead>
+<tr>
+<th>GTG</th>
+<th>P</th>
+<th>真實外溢</th>
+<th>M</th>
+<th>I</th>
+<th>A</th>
+<th>AER</th>
+<th>→ 級別</th>
+<th>與報告一致?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>54004</td>
+<td>1</td>
+<td>無（「completely isolated」）</td>
+<td>0</td>
+<td>0</td>
+<td>否</td>
+<td>≈0</td>
+<td><strong>Cat 1</strong></td>
+<td>✓ p.76</td>
+</tr>
+<tr>
+<td>54002</td>
+<td>多</td>
+<td>無（「no breakout beyond its own activity」）</td>
+<td>0</td>
+<td>0</td>
+<td>否</td>
+<td>≈0</td>
+<td><strong>Cat 2</strong></td>
+<td>✓ p.48</td>
+</tr>
+<tr>
+<td>84005</td>
+<td>多</td>
+<td>無（自報數不可信）</td>
+<td>0</td>
+<td>0</td>
+<td>否</td>
+<td>不可算</td>
+<td><strong>Cat 2</strong></td>
+<td>✓ p.54</td>
+</tr>
+<tr>
+<td>84006</td>
+<td>多</td>
+<td>僅自家 NCRI 資產</td>
+<td>0</td>
+<td>0(自家不算)</td>
+<td>否</td>
+<td>未確認</td>
+<td><strong>Cat 2</strong></td>
+<td>✓ p.71</td>
+</tr>
+<tr>
+<td>34001</td>
+<td>多</td>
+<td>IRGC 頻道+付費放大</td>
+<td>0</td>
+<td>0</td>
+<td>否</td>
+<td>存疑(付費≠有機)</td>
+<td><strong>Cat 3</strong></td>
+<td>✓ p.63（但見5.6疑點二）</td>
+</tr>
+<tr>
+<td>54006</td>
+<td>多</td>
+<td>多個孟加拉頻道</td>
+<td>0</td>
+<td>0</td>
+<td>否</td>
+<td>「no wider audience」</td>
+<td><strong>Cat 3</strong></td>
+<td>✓ p.68（張力見5.5）</td>
+</tr>
+<tr>
+<td>84002</td>
+<td>多</td>
+<td>跨數個平台</td>
+<td>0</td>
+<td>0</td>
+<td>否(無法確認)</td>
+<td>未確認</td>
+<td><strong>Cat 3</strong></td>
+<td>✓ p.79</td>
+</tr>
+<tr>
+<td>04001</td>
+<td>多</td>
+<td>FM+在地媒體</td>
+<td><strong>≥1</strong></td>
+<td>0</td>
+<td>否</td>
+<td>顯著</td>
+<td><strong>Cat 4</strong></td>
+<td>✓ p.45</td>
+</tr>
+<tr>
+<td>24015</td>
+<td>多</td>
+<td>既有國媒通路</td>
+<td>本身即主流媒體</td>
+<td>—</td>
+<td>—</td>
+<td>分母不可界定</td>
+<td><strong>量表不適用</strong></td>
+<td>✓ 未評級（見5.6疑點一）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>這張表的教學價值：</strong> 操作化後，九案的評級<strong>全部可以用公式重現</strong>，而且<strong>恰好在報告「未評級」的 GTG-24015 上，公式也給出「不適用」</strong>（因為 <code>M</code> 的分母是「主流媒體之外」，而它本身就是主流媒體，導致判準循環）——這用計算證明了 5.6 節疑點一的推論：<strong>量表對「公開國家媒體」在數學上就不適用。</strong></p>
+<h3 id="e6">E.6 操作化的四個限制</h3>
+<ol>
+<li><strong>門檻是人為的。</strong> <code>I</code> 的追蹤數門檻、<code>M</code> 的媒體清單都需本地校準；不同校準會給出不同級別。這不是 bug，是 Nimmo 原意（量表是「近似」）——但必須公開門檻才能複現。</li>
+<li><strong>資料可得性決定可算性。</strong> AER 需要平台互動資料（下游），AI 公司（上游）算不出來——這用公式重述了第 3.2 節「觀測位置決定能回答什麼」。</li>
+<li><strong>量表不衡量傷害（第 7.4 節）。</strong> 本操作化<strong>刻意不觸碰</strong>「對個人的傷害」——GTG-84006 的逮捕紀錄側寫是 Cat 2 但傷害極高。<strong>傷害必須另立通道</strong>（第 10.4.4 建議五），不能塞進 Breakout 公式。</li>
+<li><strong>級別是快照（Nimmo）。</strong> 所有指標都應帶時間戳；同一行動在不同時點可能算出不同級別。</li>
+</ol>
+<hr />
+<h2 id="fmermaid">附錄 F：上游／下游偵測能見度矩陣（Mermaid）</h2>
+<p>第 3.2 節用表格呈現了「誰在生命週期的哪一段看得到什麼」。本任務指定用 Mermaid 把它畫成<strong>能見度矩陣</strong>。下圖把<strong>六個生命週期階段</strong>（左）連到<strong>四類觀測者</strong>（右）——一條邊代表「該觀測者在該階段有能見度」，並用顏色標出四類觀測者。<strong>讀法：看一個階段向右發出幾條邊，就知道它被幾類人看到；看一個觀測者收進幾條邊，就知道它的能見度覆蓋多寬。</strong></p>
+<pre class="mermaid">flowchart LR
+    subgraph LC[&quot;影響力行動生命週期&quot;]
+        direction TB
+        L1[&quot;① 規劃&lt;br/&gt;教條·目標·受眾&quot;]
+        L2[&quot;② 生產&lt;br/&gt;批次產內容&quot;]
+        L3[&quot;③ 基礎設施建置&lt;br/&gt;假帳號·假站·儀表板&quot;]
+        L4[&quot;④ 分發&lt;br/&gt;上線·播出·轉發&quot;]
+        L5[&quot;⑤ 擴散&lt;br/&gt;真人轉發·媒體引用&quot;]
+        L6[&quot;⑥ 影響&lt;br/&gt;信念·行為·政策&quot;]
+    end
+    AI([&quot;AI 公司（上游）&lt;br/&gt;行為指紋 / 上游偵測&quot;]):::ai
+    PF([&quot;社群平台（下游）&lt;br/&gt;CIB 偵測（附錄C）&quot;]):::pf
+    OS([&quot;OSINT / 事實查核&lt;br/&gt;Breakout 證據（附錄E）&quot;]):::os
+    GV([&quot;政府 / 選委會&lt;br/&gt;唯一能碰「影響」&quot;]):::gv
+
+    L1 --&gt; AI
+    L2 --&gt; AI
+    L3 --&gt; AI
+    L3 --&gt; PF
+    L3 --&gt; OS
+    L4 --&gt; PF
+    L4 --&gt; OS
+    L4 -.-&gt;|&quot;偶爾（被通報）&quot;| GV
+    L5 --&gt; PF
+    L5 --&gt; OS
+    L5 -.-&gt;|&quot;偶爾&quot;| GV
+    L6 --&gt; GV
+
+    classDef ai fill:#dae8fc,stroke:#4472c4,color:#1f3864;
+    classDef pf fill:#d5e8d4,stroke:#82b366,color:#274e13;
+    classDef os fill:#ffe6cc,stroke:#d79b00,color:#7f4f00;
+    classDef gv fill:#f8cecc,stroke:#b85450,color:#660000;
+</pre>
+<p><strong>矩陣讀出的三個結論（與第 3.2 節一致，此處用圖強化）：</strong><br />
+1. <strong>規劃與生產（①②）只有一條邊——都指向 AI 公司。</strong> 這是上游偵測的<strong>獨佔優勢</strong>：在行動成形前就看得到。但也意味著若行為者不用商用模型，這兩格就<strong>完全沒有觀測者</strong>（第 3.4 節局限四、第 10.4.2 解釋 A）。<br />
+2. <strong>基礎設施到擴散（③④⑤）是 CIB 偵測與 OSINT 的主場</strong>——附錄 C 的整套技術作用在這三格。這裡邊最密，是跨組織協作最有價值的區間。<br />
+3. <strong>影響（⑥）只有政府收得到一條邊，而且來得最晚。</strong> 這用圖證明了第 10.1 要點三與演練 B 的核心：<strong>沒有任何單一觀測者能獨力完成一次完整評估</strong>；三套框架（行為指紋→CIB→Breakout）必須沿著這條生命週期接力。</p>
+<p><strong>把三套工具疊上這張矩陣：</strong><br />
+- <strong>①②</strong>（AI 公司）→ 上游行為指紋（第 3.3 節七類訊號）。<br />
+- <strong>③④⑤</strong>（平台/OSINT）→ <strong>CIB 偵測 pipeline（附錄 C）</strong>。<br />
+- <strong>④⑤</strong>（OSINT）→ <strong>Breakout Scale 量化（附錄 E）</strong>。<br />
+- <strong>全生命週期</strong> → 用 <strong>DISARM（附錄 D）</strong> 標成同一張 TTP 地圖，用 <strong>DISARM-STIX</strong> 跨組織交換。</p>
+<hr />
+<h2 id="g-pass">附錄 G：本次技術深化 pass 新增的第三方技術來源</h2>
+<blockquote>
+<p>第一階段因 WebSearch 額度用盡未能取得的技術方法來源，本次（新 session、新配額）補齊。分級規則同第 9 節：標明「獨立一手」／「引述」與用途。<strong>IOC 安全紅線不變。</strong></p>
+</blockquote>
+<h3 id="g1-cib-c">G.1 CIB／協同偵測方法（新增，對應附錄 C）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>性質</th>
+<th>附錄用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G1</td>
+<td><strong>Detection and Characterization of Coordinated Online Behavior: A Survey</strong>（arXiv 2408.01257）</td>
+<td><code>https://arxiv.org/abs/2408.01257</code></td>
+<td>學界一手綜述（獨立）</td>
+<td>附錄 C 的四階段 pipeline、co-action 型別、相似度函數、disparity filter、Louvain、characterization——<strong>本附錄 C 的主幹來源</strong></td>
+</tr>
+<tr>
+<td>G2</td>
+<td><strong>Uncovering Coordinated Networks on Social Media: Methods and Case Studies</strong>（Pacheco et al., arXiv 2001.05658）</td>
+<td><code>https://arxiv.org/abs/2001.05658</code></td>
+<td>學界一手（獨立）</td>
+<td>二分圖→投影、co-action 網路、TF-IDF 加權的原始方法脈絡</td>
+</tr>
+<tr>
+<td>G3</td>
+<td><strong>Coordinated Inauthentic Behavior on TikTok</strong>（ICWSM 2025, arXiv 2505.10867）</td>
+<td><code>https://arxiv.org/abs/2505.10867</code></td>
+<td>學界一手（獨立）</td>
+<td>多語句嵌入 + FAISS + 滑動一天窗 + 門檻 0.7 的實作參數（C.4）</td>
+</tr>
+<tr>
+<td>G4</td>
+<td><strong>EU DisinfoLab — CIB Detection Tree</strong></td>
+<td><code>https://www.disinfo.eu/publications/cib-detection-tree1/</code></td>
+<td>NGO 一手方法（獨立）</td>
+<td>協同判定的決策流程，佐證 C.1 的「先抓協同、再驗不真實」</td>
+</tr>
+<tr>
+<td>G5</td>
+<td><strong>Graphika + Stanford Internet Observatory,《Unheard Voice》</strong></td>
+<td><code>https://public-assets.graphika.com/reports/graphika_stanford_internet_observatory_report_unheard_voice.pdf</code>（副本 <code>https://purl.stanford.edu/nj914nx9540</code>）</td>
+<td>業界+學界聯合一手調查（獨立）</td>
+<td>平台下架資料的叢集分析方法：同步改頭像、共用連結、工具指紋切換（Twitterfeed→Web Client）——C.5/C.6 的實證方法</td>
+</tr>
+<tr>
+<td>G6</td>
+<td><strong>Graphika + Stanford,《Stoking Conflict by Keystroke》</strong>（法俄在中非共和國的 CIB）</td>
+<td><code>https://www.graphika.com/reports/</code></td>
+<td>業界+學界一手（獨立）</td>
+<td><strong>與 GTG-04001 同一戰場（CAR）的獨立方法學先例</strong>；示範跨平台叢集歸因</td>
+</tr>
+<tr>
+<td>G7</td>
+<td><strong>Nizzoli et al., Coordinated Behavior on Twitter</strong> / <strong>More-Troll Kombat（Graphika）</strong></td>
+<td><code>https://www.graphika.com/reports/more-troll-kombat</code></td>
+<td>學界/業界一手（獨立）</td>
+<td>co-retweet 網路 + 相似度門檻 + 社群偵測的經典操作</td>
+</tr>
+</tbody>
+</table>
+<h3 id="g2-disarm-cti-d">G.2 DISARM 官方與 CTI 互通（新增，對應附錄 D）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>性質</th>
+<th>附錄用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G8</td>
+<td><strong>DISARM Foundation — Framework</strong></td>
+<td><code>https://www.disarm.foundation/framework</code></td>
+<td>框架官方一手</td>
+<td>確認 CC-BY-SA-4.0、Prototype v2.0、Navigator/Tagger 工具</td>
+</tr>
+<tr>
+<td>G9</td>
+<td><strong>DISARM Frameworks（官方 GitHub，generated_pages）</strong></td>
+<td><code>https://github.com/DISARMFoundation/DISARMframeworks</code>（<code>generated_pages/tactics_index.md</code>、<code>disarm_red_framework.md</code>、<code>techniques_index.md</code>）</td>
+<td>框架官方一手（機器可讀）</td>
+<td><strong>附錄 D 的 16 戰術×4 階段、TA 編號、Txxxx 技術 ID 全部逐一取自此</strong>——非二手轉述</td>
+</tr>
+<tr>
+<td>G10</td>
+<td><strong>AMITT（DISARM 前身，cogsec-collaborative）</strong></td>
+<td><code>https://github.com/cogsec-collaborative/AMITT</code></td>
+<td>一手（歷史沿革）</td>
+<td>D.1 的 AMITT→DISARM 沿革</td>
+</tr>
+<tr>
+<td>G11</td>
+<td><strong>Toward interoperable representation and sharing of disinformation incidents in CTI</strong>（arXiv 2502.20997）</td>
+<td><code>https://arxiv.org/abs/2502.20997</code></td>
+<td>學界一手（獨立）</td>
+<td>DISARM-STIX 互通、把影響力 TTP 塞進資安 CTI 管道（第 10.4.6 建議二的學理依據）</td>
+</tr>
+<tr>
+<td>G12</td>
+<td><strong>EDMO — Introduction to DISARM Framework（訓練）</strong></td>
+<td><code>https://edmo.eu/training/an-introduction-to-disarm-framework-on-disinformation-tactics-techniques-and-procedures-first-session/</code></td>
+<td>官方訓練（引述 DISARM）</td>
+<td>教學設計參考（演練 D 的擴充）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="g3-ai-5793">G.3 同業 AI 公司 / 平台的偵測方法（新增，補第 5.7、9.3 節）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>性質</th>
+<th>要點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G13</td>
+<td><strong>OpenAI / Nimmo &amp; Flossman,《Influence and cyber operations: an update, October 2024》</strong></td>
+<td><code>https://cdn.openai.com/threat-intelligence-reports/influence-and-cyber-operations-an-update_October-2024.pdf</code></td>
+<td>同業一手（本次取得 PDF 直連）</td>
+<td>OpenAI 偵測法＝模型使用訊號 + 開源網路分析 + <strong>Breakout Scale 評估影響</strong>；由 Breakout Scale 作者 Nimmo 領導。<strong>補上第 9.3 節先前只有二手的缺口</strong></td>
+</tr>
+<tr>
+<td>G14</td>
+<td><strong>OpenAI 情報團隊（累計 40+ 網路被瓦解，2024-02 起）</strong></td>
+<td><code>https://openai.com/global-affairs/</code></td>
+<td>同業一手（引述綜整）</td>
+<td>自首份報告以來已瓦解 40+ 惡意網路；近三期瓦解 10 起（4 起疑似源自中國）——佐證 5.7 節「兩家 AI 公司都用 Breakout Scale」</td>
+</tr>
+<tr>
+<td>G15</td>
+<td><strong>Meta,《Adversarial Threat Report, H2 2026》（2026-08）</strong></td>
+<td><code>https://transparency.meta.com/sr/H2-2026-adversarial-threat-report</code></td>
+<td>平台一手</td>
+<td>偵測法＝<strong>行為與協同、非內容</strong>；「behavioral detection, coordination analysis, network-level enforcement」不受 AI 內容層精緻化影響——<strong>這正是附錄 C 的政策背書</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="g4-95104">G.4 台灣認知作戰技術分析（新增，補第 9.5、10.4 節）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>性質</th>
+<th>要點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G16</td>
+<td><strong>Doublethink Lab,《Artificial Multiverse: FIMI in Taiwan's 2024 National Elections》</strong></td>
+<td><code>https://medium.com/doublethinklab/artificial-multiverse-foreign-information-manipulation-and-interference-in-taiwans-2024-national-f3e22ac95fe7</code></td>
+<td>台灣獨立研究一手</td>
+<td>2024 大選期間對台 FIMI 的鑑識分析——台灣版的「用附錄 C 方法抓協同」實例</td>
+</tr>
+<tr>
+<td>G17</td>
+<td><strong>Doublethink Lab,《The Chinese Infodemic in Taiwan》 / 《Deafening Whispers》</strong></td>
+<td><code>https://medium.com/doublethinklab/the-chinese-infodemic-in-taiwan-25e9ac3d941e</code></td>
+<td>台灣獨立研究一手</td>
+<td>PRC 認知作戰結構：宣傳部/PLA/統戰部定調 → <strong>內容農場與在地代理放大</strong>（少直接發布）；技術指紋＝同步發文、view-botting、大陸用語</td>
+</tr>
+<tr>
+<td>G18</td>
+<td><strong>Doublethink Lab, GoLaxy 文件分析（AI in PRC IO）</strong></td>
+<td><code>https://medium.com/doublethinklab/</code>（GoLaxy 系列，2026-04）</td>
+<td>台灣獨立研究一手（第一階段 403，本次確認主題）</td>
+<td>PRC 影響力行動中 AI 商業供應商的角色——對照本報告「influence-as-a-service」（第 4.4 節趨勢 1）</td>
+</tr>
+<tr>
+<td>G19</td>
+<td><strong>FPRI,《Inside China's Cognitive Warfare Playbook Against Taiwan》（2026-08）</strong></td>
+<td><code>https://www.fpri.org/article/2026/08/inside-chinas-cognitive-warfare-playbook-against-taiwan/</code></td>
+<td>智庫一手分析（獨立）</td>
+<td>對台認知作戰的戰術總覽，補第 10.4 的威脅圖像</td>
+</tr>
+<tr>
+<td>G20</td>
+<td><strong>Sasakawa Peace Foundation,《Assessing China's Cognitive Warfare against Taiwan on TikTok》</strong></td>
+<td><code>https://www.spf.org/spf-china-observer/en/document-detail064.html</code></td>
+<td>智庫一手分析（獨立）</td>
+<td>平台特定（TikTok）的認知作戰量化：活躍用戶「疑美」比例顯著高於非活躍用戶——對照本報告「AI as newsdesk 餵養在地放大」（第 10.4.3）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="g5-122">G.5 本次仍未能完全取得者（誠實標註，補第 12.2 節）</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>狀況</th>
+<th>影響</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DISARM 技術總數精確值</td>
+<td>官方 GitHub 確認 16 戰術；技術（Txxxx）數量<strong>隨版本增長</strong>，本檔不敢報單一精確數，僅稱「數以百計、以官方倉庫為準」</td>
+<td>附錄 D.3 只列<strong>已逐一驗證</strong>的技術 ID，未逐一驗證者不列</td>
+</tr>
+<tr>
+<td>Meta H2 2026 / OpenAI 2025-10 全文</td>
+<td>檔案過大 / 403（同第一階段）</td>
+<td>方法論要點取自可取得的 2024-10 OpenAI PDF（G13）與 Meta 索引頁摘要；細節數字仍標為待覆核</td>
+</tr>
+<tr>
+<td>Doublethink Lab GoLaxy 全文</td>
+<td>仍 403</td>
+<td>只用於「存在此研究」與主題對照，未引用其內部數據</td>
+</tr>
+<tr>
+<td>台灣機構對本報告的直接分析</td>
+<td><strong>仍不存在</strong>（第 9.4 節結論不變）</td>
+<td>附錄 D/E 的台灣應用仍屬<strong>方法論遷移</strong>，非案例延伸</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="h-pass-mermaid">附錄 H：技術深化 pass 的 Mermaid 圖索引</h2>
+<p>本次增補共新增 <strong>8 張 Mermaid 圖</strong>（全部符合第二階段規範：以 mermaid 圍籬、節點特殊字元加引號、取代框線）：</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>圖</th>
+<th>位置</th>
+<th>主題</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>CIB 偵測四階段 pipeline</td>
+<td>附錄 C.2</td>
+<td>學界標準管線</td>
+</tr>
+<tr>
+<td>2</td>
+<td>二分圖 → 投影</td>
+<td>附錄 C.3.1</td>
+<td>co-action 網路建構</td>
+</tr>
+<tr>
+<td>3</td>
+<td>過濾 + 社群偵測（Louvain）</td>
+<td>附錄 C.7</td>
+<td>disparity filter → Louvain</td>
+</tr>
+<tr>
+<td>4</td>
+<td>端到端可操作偵測 pipeline</td>
+<td>附錄 C.9</td>
+<td>資料→特徵→叢集→評分→覆核→分享</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Viktor 網路：AI 時代協調基質</td>
+<td>附錄 C.10</td>
+<td>新舊 CIB 指紋對比（重繪 Figure 15 要旨）</td>
+</tr>
+<tr>
+<td>6</td>
+<td>DISARM Red 16 戰術 × 4 階段</td>
+<td>附錄 D.2</td>
+<td>影響力行動的殺傷鏈</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Breakout Scale 量化評級流程</td>
+<td>附錄 E.3</td>
+<td>可計算門檻決策樹</td>
+</tr>
+<tr>
+<td>8</td>
+<td>上游／下游能見度矩陣</td>
+<td>附錄 F</td>
+<td>生命週期 × 觀測者</td>
+</tr>
+</tbody>
+</table>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script>
+(function(){
+  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (window.mermaid) {
+    mermaid.initialize({startOnLoad:true, theme: dark ? 'dark' : 'default', securityLevel:'loose', flowchart:{useMaxWidth:true}});
+  }
+})();
+</script>
+</body></html>

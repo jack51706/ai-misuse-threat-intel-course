@@ -1,0 +1,1753 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GTG-34007-iran-surveillance</title>
+<style>
+:root{--fg:#1a1a1a;--bg:#fff;--muted:#666;--line:#e2e2e2;--link:#0b5cad;--code-bg:#f5f5f5;--accent:#0b5cad}
+@media(prefers-color-scheme:dark){:root{--fg:#e6e6e6;--bg:#141414;--muted:#9a9a9a;--line:#333;--link:#6cb6ff;--code-bg:#1e1e1e;--accent:#6cb6ff}}
+*{box-sizing:border-box}
+body{max-width:900px;margin:0 auto;padding:2rem 1.2rem 6rem;font-family:"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;line-height:1.75;color:var(--fg);background:var(--bg);font-size:16px}
+h1,h2,h3,h4{line-height:1.3;margin-top:1.8em}
+h1{font-size:1.7rem;border-bottom:2px solid var(--accent);padding-bottom:.3em}
+h2{font-size:1.35rem;border-bottom:1px solid var(--line);padding-bottom:.2em}
+h3{font-size:1.12rem}
+a{color:var(--link)}
+code{background:var(--code-bg);padding:.1em .35em;border-radius:4px;font-family:"Cascadia Code",Consolas,"Courier New",monospace;font-size:.9em}
+pre{background:var(--code-bg);padding:1em;border-radius:8px;overflow-x:auto;font-size:.86em;line-height:1.5}
+pre code{background:none;padding:0}
+pre.mermaid{background:transparent;text-align:center}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.92em;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:.5em .7em;text-align:left;vertical-align:top}
+th{background:var(--code-bg)}
+blockquote{border-left:4px solid var(--accent);margin:1em 0;padding:.4em 1em;color:var(--muted);background:var(--code-bg)}
+img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;margin:.5em 0}
+.figgallery{margin-top:2em;border-top:2px solid var(--accent);padding-top:1em}
+.figgallery figure{margin:1.5em 0}
+.figgallery figcaption{color:var(--muted);font-size:.9em;margin-top:.3em}
+.topbar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:.6em 0;margin:-2rem -1.2rem 1.5rem;padding-left:1.2rem;font-size:.9em}
+.topbar a{text-decoration:none;margin-right:1em}
+hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+</style></head>
+<body><div class="topbar"><a href="../index.html">◀ 課程索引</a></div><h1 id="gtg-34007-nexus-claude-firefox">GTG-34007：兩個伊朗 nexus 單位——用 Claude 建置監控系統與偽裝成禱告工具的惡意 Firefox 擴充套件</h1>
+<blockquote>
+<p>課程模組：03 監控行動（Surveillance operations） ｜ 一手來源：PDF p.101–103（本案自 p.101 標題起；p.103 上半結束後轉入 GTG-50027 馬利案） ｜ 整理日期：2026-09-13</p>
+<p>一手文件：《Detecting and countering misuse of AI: September 2026》，Anthropic，2026-09-10 發布，共 154 頁。</p>
+<p>安全備註：本案在報告內<strong>沒有任何網域／IP／雜湊／Telegram 帳號等網路型 IOC</strong>，因此沒有需要 defang 的連線指標；下文出現的 <code>Arman</code>、<code>al-Najm al-thāqib</code> 皆為系統／軟體「名稱」而非可連線的位址，研究時亦不需、也不應對其做任何主動連線或解析。</p>
+</blockquote>
+<hr />
+<h2 id="0">0. 給講師的閱讀指引（如何用這一章）</h2>
+<p>這一案在整份報告裡篇幅很短——只有兩頁半的正文、<strong>沒有一張專屬圖表、沒有一張 IOC 表</strong>。但它是整個「監控行動」模組裡<strong>教學價值最高</strong>的案例之一，原因有三：</p>
+<ol>
+<li>它是報告中極少數 Anthropic <strong>主動坦承「我們的防護沒擋下來」</strong>的案例。多數案例強調「我們偵測到並封鎖」；本案卻白紙黑字寫下「Claude 拒絕了明確的側寫與宣傳請求，但我們的防護並未拒絕許多監控軟體工具的請求」。這句話是整個 AI 安全防線設計的<strong>根本難題</strong>縮影，值得用一整堂課討論。</li>
+<li>它把「監控」從抽象概念，具體化成一條<strong>行政流水線</strong>：從「資料收割工具」→「去匿名／身分解析」→「社群網路分析點名」→「案件管理系統 Arman 立案派工」→「行動（action）」。學員會看到監控不是單一駭客行為，而是一套<strong>可長期運轉的官僚體系</strong>，而 AI 在其中扮演「工程部門」與「分析師」。</li>
+<li>它示範了<strong>以宗教／生活工具偽裝的監控軟體</strong>這個精準手法：一個偽裝成「禱告時間」的 Firefox 擴充套件，名字取自古蘭經。這對台灣（假冒實用 App、輸入法、瀏覽器擴充的供應鏈風險）有直接對應。</li>
+</ol>
+<p><strong>因為本案沒有圖表，第 6 節不會有真正的「Figure 判讀」</strong>——我把它改成「頁面版面與唯一表格的判讀」，並老實說明報告為何把這個案子寫得這麼「薄」，以及這件事本身透露的情報意涵。請不要期待這一章有像 ShinyHunters 案（Figure 1–19）或中國輿情案（Figure 1–8）那樣豐富的視覺素材；本案的價值在文字與概念，不在圖。</p>
+<hr />
+<h2 id="1-tldr">1. 一頁速覽（TL;DR）</h2>
+<ul>
+<li><strong>一句話</strong>：Anthropic 封鎖了 <strong>16 個 Claude 帳號</strong>，這些帳號由<strong>兩個彼此相連、隸屬伊朗準軍事與國內安全機關的單位</strong>操作；兩個單位「跑不同的劇本，卻餵養同一套中央基礎設施」——一個名為 <strong>「Arman」</strong> 的境內監控<strong>案件管理系統</strong>。</li>
+<li><strong>單位 A（跨省份的七部門組織）</strong>：宣稱維護一個伊朗國民的「身分紀錄資料庫」，並宣稱<strong>一年內監控／側寫 6,388 名伊朗人</strong>；用 Claude 當「分析師與製作工坊（analyst and production studio）」，替 Arman 打造前端，並對 <strong>155,216 則推文</strong>做社群網路分析，<strong>點名 39 個伊朗反對派與離散社群（diaspora）帳號</strong>。</li>
+<li><strong>單位 B（Qom 省級單位）</strong>：把 Claude 當成自己的<strong>「工程部門（engineering department）」</strong>，量產監控工具。其旗艦產品是一個<strong>已上線量產（shipped to production）</strong>、偽裝成<strong>禱告時間工具（prayer-times utility）</strong>的惡意 <strong>Firefox 擴充套件「al-Najm al-thāqib」</strong>，被單位成員用來<strong>從主要社群平台大規模收割使用者身分</strong>。</li>
+<li><strong>監控體系的細節</strong>：Arman 中每一個「對象檔案（subject's file）」包含此人的<strong>國民身分證號、信仰、犯罪紀錄、社群帳號，以及一個「行動（action）」分頁</strong>。這是本案最令人不安的一句——它把「監控」變成「可派案的行動」。</li>
+<li><strong>Anthropic 自曝的防線缺口（本案核心）</strong>：<code>Claude refused explicit profiling and propaganda requests, but our safeguards did not refuse many of the surveillance software tooling requests.</code>（Claude 拒絕了明確的側寫與宣傳請求，但我們的防護並未拒絕許多監控軟體工具的請求。）——<strong>明顯的側寫請求會被拒，但「工具開發」請求看似中性而被放行</strong>。</li>
+<li><strong>一個額外的第三行為者</strong>：一個與其中一個單位<strong>同址（co-located）</strong>的獨立行為者，把 Claude 的 <strong>custom-skills（自訂技能）</strong> 功能變成一座<strong>語音克隆宣傳工廠</strong>，克隆了<strong>三位伊朗作家</strong>的聲音，並<strong>預先</strong>為<strong>最高領袖的接班（Supreme Leader's succession）</strong>準備敘事。</li>
+<li><strong>歸因</strong>：Anthropic 以 <strong>high confidence（高信度）</strong> 評估這些單位與伊朗準軍事國內安全實體有關；並掌握證據顯示行為者<strong>回應來自伊朗政府高層官員的任務指派（taskings）</strong>，甚至替政府<strong>審查官方職位的候選人</strong>。</li>
+<li><strong>處置</strong>：封鎖全部 16 個帳號與關聯組織，理由是違反《使用政策》對<strong>非自願監控與側寫</strong>、<strong>不實資訊</strong>的禁令，以及 <strong>Supported Regions Policy（伊朗屬不支援地區）</strong>。</li>
+</ul>
+<blockquote>
+<p><strong>這個案例在課程裡要教什麼（一句話）</strong>：教學員看懂「監控」是一條把零散資料變成可派案行政流程的流水線，並且理解 AI 安全防線最難的一關不是「拒絕壞人做壞事」，而是「當壞事被拆解成一個個看似中性的『工具開發』請求時，分類器該如何判斷最終用途」。</p>
+</blockquote>
+<hr />
+<h2 id="2">2. 行為者側寫與歸因</h2>
+<h3 id="21">2.1 兩個單位的分工（務必分清楚）</h3>
+<p>報告開宗明義：「我們辨識並封鎖了 16 個 Claude 帳號，由兩個相連的單位操作……這兩個單位在 Claude 上跑不同的劇本，卻餵養同一套中央基礎設施。」（p.101）接著在 p.102 的 Key findings 用「One unit … The other unit …」把兩者的分工講清楚。整理如下：</p>
+<table>
+<thead>
+<tr>
+<th>維度</th>
+<th>單位 A：七部門組織</th>
+<th>單位 B：Qom 省級單位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>報告原始描述</td>
+<td>「a seven-department organization with offices across Iran's provinces」（p.101）</td>
+<td>「a Qom-based provincial unit」（p.102）</td>
+</tr>
+<tr>
+<td>Claude 的角色</td>
+<td>「analyst and production studio」（分析師＋製作工坊）</td>
+<td>「engineering department」（工程部門）</td>
+</tr>
+<tr>
+<td>主要產出</td>
+<td>替 Arman 打造<strong>web 前端</strong>（從系統自己的後端原始碼）；跑<strong>社群網路分析管線</strong></td>
+<td>量產一整套<strong>監控工具</strong>（見下）</td>
+</tr>
+<tr>
+<td>標誌性成果</td>
+<td>對 <strong>155,216 則推文</strong>分析、<strong>點名 39 個反對派／離散帳號</strong>；宣稱一年側寫 <strong>6,388 人</strong></td>
+<td>旗艦是偽裝成禱告工具的 Firefox 擴充套件 <strong>al-Najm al-thāqib</strong>，用來<strong>大規模收割身分</strong></td>
+</tr>
+<tr>
+<td>在 Key findings 的稱呼</td>
+<td>「The other unit」</td>
+<td>「One unit」</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>判讀重點（給學員）</strong>：注意兩個單位的 Claude 用法在「認知層級」上不同。單位 A 用 Claude 做<strong>判斷與分析</strong>（誰是反對派、輿情傾向），這正是 Claude 的安全防護<strong>比較容易攔截</strong>的地方（明確的「側寫」意圖）。單位 B 用 Claude 做<strong>工程</strong>（寫擴充套件、寫解析器、寫釣魚頁），請求看起來是「幫我寫一個瀏覽器擴充套件收集社群資料」——<strong>沒有明說要拿去監控誰</strong>，於是防護比較容易放行。這個「認知層 vs. 工程層」的落差，就是第 8 節「防線失效模式」的伏筆。</p>
+</blockquote>
+<h3 id="22-b">2.2 單位 B 打造的工具清單（逐項拆解）</h3>
+<p>Key findings 第一點逐字列出單位 B（"One unit"）用 Claude 打造、除錯、上線（build, debug, and ship）的工具：</p>
+<ol>
+<li><strong>messenger de-anonymizer（通訊軟體去匿名器）</strong>：把匿名／化名的通訊帳號還原成真實身分。針對 Telegram、Signal 等異議者常用的加密通訊。</li>
+<li><strong>phone-number-to-identity resolver（電話號碼轉身分解析器）</strong>：輸入手機號碼，回推出姓名、身分。伊朗手機門號採實名制，這類工具威力極大。</li>
+<li><strong>national-ID phishing page（國民身分證釣魚頁）</strong>：誘騙受害者交出身分證號等資料——注意這是<strong>主動釣魚</strong>，不只是被動收集。</li>
+<li><strong>Telegram mass-report bot（Telegram 大量檢舉機器人）</strong>：自動化地對目標帳號發動大量檢舉，逼平台把異議者帳號停權。這是一種<strong>平台濫用型的言論壓制</strong>，也是最難用傳統資安框架描述的行為（見第 5 節框架缺口）。</li>
+<li><strong>Firefox identity harvester disguised as a prayer-times utility（偽裝成禱告時間工具的 Firefox 身分收割器）</strong>：即 al-Najm al-thāqib（見 §2.4、§4、§10）。</li>
+</ol>
+<p>報告特別註明：「這些工具被下游操作員（downstream operators）用來<strong>便利對伊朗人的監控與側寫</strong>。」——也就是說，寫工具的單位 B 未必親自監控，它是<strong>替整個監控體系供應工具</strong>的「軍火商／工程承包商」。這個「工具供應者 vs. 使用者」的分離，正是後面討論偵測難題的關鍵。</p>
+<h3 id="23">2.3 第三個行為者：語音克隆宣傳工廠（不要漏掉）</h3>
+<p>Key findings 第三點提到一個<strong>不屬於上述兩個單位、但與其中一個單位「同址（co-located）」</strong>的獨立行為者：</p>
+<blockquote>
+<p>「A separate actor co-located with one unit turned Claude's custom-skills feature into a voice-cloning propaganda factory, cloning the voices of three Iranian writers and preparing narratives in advance for the Supreme Leader's succession.」（p.102）</p>
+</blockquote>
+<p>拆解：<br />
+- <strong>手法</strong>：把 Claude 的 <strong>custom-skills（自訂技能）</strong>功能——一個讓使用者把「一組指令／流程」存起來重複呼叫的合法生產力功能——濫用成「語音克隆宣傳工廠」。<br />
+- <strong>標的</strong>：克隆<strong>三位伊朗作家</strong>的聲音（冒用其公信力）。<br />
+- <strong>時機</strong>：<strong>預先（in advance）</strong>為<strong>最高領袖接班</strong>準備敘事。這一點在情報上很關鍵：這是<strong>針對可預期政治事件（最高領袖高齡、接班未定）預先囤積宣傳彈藥</strong>的行為。<br />
+- <strong>對照第三方報導</strong>：多家媒體（Iran International、Siasat）把這一段與同報告中另一起伊朗影響力行動連結——後者曾用 Claude「完成」某最高領袖國葬的「組織規劃」、並冒充真實運動人士（克隆其 Telegram 帳號、讀取其約 8,400 則貼文以模仿文風）。<strong>注意：那些是報告中的其他案例（影響力行動），不是 GTG-34007 本身</strong>；本案只提到「語音克隆＋接班敘事」這一句。教學時要幫學員區分「本案原文」與「第三方把多案混在一起講」。</p>
+<blockquote>
+<p><strong>給學員的情報思維</strong>：這個第三行為者為什麼被放進 GTG-34007 的 Key findings？因為<strong>物理同址</strong>——它與監控單位共用場地。這暗示伊朗的監控／宣傳生態是<strong>多個小團隊擠在同一空間、共用基礎設施</strong>的樣態。情報分析裡，「co-located」是很強的<strong>關聯訊號（link）</strong>，但<strong>同址不等於同一組織</strong>，Anthropic 用字很小心（"a separate actor"）。</p>
+</blockquote>
+<h3 id="24-al-najm-al-thaqib-qom">2.4 名字裡的線索：al-Najm al-thāqib 與 Qom</h3>
+<ul>
+<li><strong>al-Najm al-thāqib（النجم الثاقب）</strong>：這不是隨便取的名字。它出自<strong>古蘭經第 86 章《At-Tariq（劃破夜空者）》第 3 節</strong>：「（那）是劃破黑暗的星（the piercing star / the star of piercing brightness）」。<code>najm</code>＝星，<code>thāqib</code>＝穿透、劃破黑暗的光芒。傳統經注（如 Ma'arif al-Qur'an）把這顆星詮釋為「真主的知識能穿透一切秘密、其守護無所不在」的象徵。<strong>行為者選這個名字，等於把監控工具包裝成「宗教信仰的守護之光」</strong>——既是偽裝，也是一種黑色反諷。（來源：Quran.com Tafsir At-Tariq、Wikipedia At-Tariq，見第 9 節。）</li>
+<li><strong>Qom（庫姆）</strong>：伊朗什葉派<strong>最重要的宗教神學重鎮</strong>，Qom 神學院（Qom Seminary）被視為全球最具影響力的什葉派教育機構，形塑伊朗的宗教菁英與神權體制；何梅尼（Khomeini）革命的思想與政治動員即以此為核心。近年 Qom 神學院與 IRGC（革命衛隊）在權力上有拉扯，但整體仍在國家（最高領袖任命的神學院最高委員會）框架下運作。（來源：Iran International、Wikipedia Qom Seminary、Al-Monitor，見第 9 節。）</li>
+<li><strong>為什麼「Qom 的單位」＋「禱告工具＋古蘭經名字的擴充套件」是有意義的組合</strong>：把監控能力的工程部門設在什葉派聖城、用宗教語彙包裝監控軟體，精準命中<strong>虔誠、會去下載禱告時間工具的目標社群</strong>。這不是技術巧合，是<strong>社會工程學（把工具鑲進目標的日常宗教生活）</strong>。</li>
+</ul>
+<h3 id="25">2.5 歸因：措辭與信度（情報學重點）</h3>
+<p>報告的歸因語言必須逐字讀，因為每個字都有情報學上的份量：</p>
+<table>
+<thead>
+<tr>
+<th>報告原文（p.101–102）</th>
+<th>情報學意義</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>「two linked units <strong>associated with</strong> Iranian paramilitary and domestic security agencies」</td>
+<td>「associated with」＝<strong>有關聯</strong>，比「隸屬（part of）」弱；表示證據支持關聯，但不宣稱直接建制隸屬。</td>
+</tr>
+<tr>
+<td>「We <strong>assess with high confidence</strong> that the units were associated with Iranian paramilitary domestic security entities」</td>
+<td><strong>high confidence（高信度）</strong>＝Anthropic 情報判斷的最高等級之一，通常代表有多個獨立、可信的證據來源交叉支持，且沒有重大矛盾證據。</td>
+</tr>
+<tr>
+<td>「we identified <strong>evidence</strong> the actors <strong>responded to taskings</strong> from senior Iranian government officials」</td>
+<td>掌握到「回應政府高層任務指派」的<strong>證據</strong>——這是把單位與國家意志連起來的關鍵，語氣是「我們看到證據」而非「我們推測」。</td>
+</tr>
+<tr>
+<td>「the units <strong>vetted candidates for official positions</strong> on behalf of the Iranian government」</td>
+<td>這些單位替政府<strong>審查官方職位候選人</strong>——這是一個超出「監控異議者」的功能，顯示它們被政府信任到參與<strong>人事忠誠審查</strong>，強化「國家 nexus」的判斷。</td>
+</tr>
+<tr>
+<td>「building a front end to <strong>what is likely</strong> a government-controlled surveillance case-management system」</td>
+<td>「what is likely」＝<strong>很可能是</strong>政府控制的系統——對 Arman 的政府屬性，Anthropic 用的是「likely」而非「high confidence」，代表這一點的證據較 Arman 的存在本身更間接。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>教學要點：信度分級為什麼重要。</strong> 情報產品（intelligence product）不是「真／假」二元，而是<strong>帶信度的判斷</strong>。Anthropic 對「單位與伊朗安全機關有關」給 high confidence，但對「Arman 是政府控制的系統」只給 likely。這種<strong>分層下注</strong>正是專業情報寫作的標誌——它讓讀者知道<strong>哪些結論最禁得起挑戰、哪些還需要更多證據</strong>。課堂上可讓學員練習：把同一份證據，分別用 "possible / likely / high confidence" 三種措辭改寫，體會語氣差異。</p>
+<p><strong>歸因的獨立佐證（外部）</strong>：本案「單位與伊朗安全機關的關聯」在<strong>具體層面是單一來源（只有 Anthropic）</strong>，但<strong>在體系層面高度可信</strong>——因為伊朗確實長期經營一套龐大的境內數位監控機器（MOIS 情報部、IRGC 情報組織、FATA 網路警察），這有大量獨立研究佐證（見第 9 節）。也就是說：<strong>「伊朗政府會做這種事」有堅實的外部證據；「這 16 個帳號就是這兩個單位」只有 Anthropic 說了算</strong>。這個區分要在課堂上講清楚。</p>
+<hr />
+<h2 id="3">3. 受害者與目標清單</h2>
+<h3 id="31">3.1 數字（逐字核對，全部對得上原文）</h3>
+<table>
+<thead>
+<tr>
+<th>指標</th>
+<th>數字</th>
+<th>報告原文與頁碼</th>
+<th>語氣（宣稱 vs. 查證）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>被封鎖的 Claude 帳號</td>
+<td><strong>16</strong></td>
+<td>「banned 16 Claude accounts」（p.101）；「banned all 16 accounts」（p.103）</td>
+<td>Anthropic 的行動事實</td>
+</tr>
+<tr>
+<td>一年內被監控／側寫的伊朗人</td>
+<td><strong>6,388</strong></td>
+<td>「claimed to … surveil and profile 6,388 Iranians in a single year」（p.101）</td>
+<td><strong>單位自己的「宣稱（claimed）」</strong>，經 Anthropic 轉述</td>
+</tr>
+<tr>
+<td>被做社群網路分析的推文</td>
+<td><strong>155,216</strong></td>
+<td>「running social-network analysis over 155,216 tweets」（p.101）</td>
+<td>陳述為事實（Claude 被用於此）</td>
+</tr>
+<tr>
+<td>被點名的反對派／離散帳號</td>
+<td><strong>39</strong></td>
+<td>「named 39 Iranian opposition and diaspora accounts」（p.102）</td>
+<td>陳述為事實</td>
+</tr>
+<tr>
+<td>被克隆聲音的伊朗作家</td>
+<td><strong>3</strong></td>
+<td>「cloning the voices of three Iranian writers」（p.102）</td>
+<td>陳述為事實（第三行為者）</td>
+</tr>
+<tr>
+<td>部門數（單位 A）</td>
+<td><strong>7</strong></td>
+<td>「a seven-department organization」（p.101）</td>
+<td>陳述為事實</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>細節但重要</strong>：<code>6,388</code> 前面有 <strong>claimed（宣稱）</strong>。這是<strong>單位自己在 Claude 對話中誇口的數字</strong>，Anthropic 忠實標註為「宣稱」而非背書。教學上要提醒學員：<strong>攻擊者自述的績效數字，情報上要打折看待</strong>——它可能灌水（向上級邀功），也可能是真的。無論真假，<strong>光是「一個單位以側寫 6,388 人為 KPI」這件事本身，就足以說明監控的工業化規模</strong>。</p>
+</blockquote>
+<h3 id="32">3.2 目標群體與對他們的實體風險</h3>
+<p>報告點名的目標是「<strong>Iranian opposition and diaspora accounts</strong>」（伊朗反對派與離散社群帳號）以及廣義的「伊朗人（Iranians）」。這些人面對的<strong>不是資料外洩，而是人身安全</strong>：</p>
+<ul>
+<li><strong>點名 39 個帳號 = 產出一份「打擊名單」</strong>。社群網路分析的產出是「誰是意見領袖、誰連著誰」。在一個會<strong>拘捕、失蹤、境外暗殺</strong>異議者的體制裡（伊朗 MOIS 與 IRGC 有數十年跨國鎮壓紀錄，見第 9 節），被「點名」可能意味著：本人或<strong>在伊朗境內的家人</strong>被約談、被扣押、被施壓噤聲。</li>
+<li><strong>6,388 份側寫檔案 = 6,388 個潛在的行動對象</strong>。對照 Arman 檔案結構（國民身分證號、信仰、犯罪紀錄、社群帳號、<strong>行動（action）分頁</strong>），每一份檔案都是一個可以「立案 → 派工 → 執行」的行政單元。</li>
+<li><strong>離散社群（diaspora）尤其脆弱</strong>：海外異議者常誤以為離開伊朗就安全，但他們<strong>在境內的親屬</strong>是槓桿。跨國鎮壓（transnational repression）的典型手法就是「你在海外發聲，我約談你在德黑蘭的母親」。</li>
+</ul>
+<blockquote>
+<p><strong>課程的倫理紅線</strong>：本教材<strong>不列出、不重建、不推測任何受害者的身分或個資</strong>。我們談的是「39」「6,388」這些<strong>數量級與體系</strong>，不是具體的人。研究監控案時，研究者本身不能變成二次加害者——<strong>尊重受害者、不放大其暴露面</strong>，是這一章的職業倫理。</p>
+</blockquote>
+<h3 id="33">3.3 一個容易被忽略的受害面向：被冒用的「三位作家」</h3>
+<p>第三行為者克隆了三位伊朗作家的聲音。他們也是受害者——<strong>聲音與公信力被盜用</strong>，未來若那些「接班敘事」音檔流出，公眾可能誤以為是這些作家的真實立場。這是<strong>生成式 AI 特有的傷害類型</strong>：受害者不是被監控，而是<strong>被「數位分身」冒名</strong>，且往往<strong>不知情、無從澄清</strong>。</p>
+<hr />
+<h2 id="4-ai">4. AI 濫用的攻擊生命週期（逐階段拆解）</h2>
+<p>報告在 p.103「Attack lifecycle and AI usage」段落對本案的描述其實很簡短，只給了兩個具體例子。我把它與 p.101–102 的敘述合併，重建成完整的監控流水線，並在每一階段標示<strong>自主程度</strong>（依共用簡報定義：對話式協助／人類逐步指揮／AI 編排多代理自主執行）。</p>
+<p><strong>報告 p.103 原文（兩個具體例子）</strong>：</p>
+<blockquote>
+<p>「The actor used Claude to maintain some of their existing code and build new tooling for their daily operations. In one case, it asked Claude to build a malicious browser extension for bulk collection of social media data in support of its surveillance work. In another, it fed Claude a large volume of social media posts and asked it to assess what the actor regarded as opposition sentiment.」</p>
+</blockquote>
+<h3 id="41">4.1 重建的監控生命週期</h3>
+<table>
+<thead>
+<tr>
+<th>階段</th>
+<th>人類（操作員）做什麼</th>
+<th>Claude 做什麼</th>
+<th>自主程度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>① 工具開發（Tooling）</strong></td>
+<td>提出「幫我寫一個瀏覽器擴充套件，批次收集社群資料」「維護我現有的程式碼」等工程需求</td>
+<td>產出／除錯／維護程式碼：Firefox 擴充套件、去匿名器、電話→身分解析器、國民身分證釣魚頁、Telegram 檢舉機器人</td>
+<td><strong>對話式協助</strong>（人類逐步下工程指令，Claude 逐段產碼）</td>
+</tr>
+<tr>
+<td><strong>② 收割（Collection）</strong></td>
+<td>把上線的 al-Najm al-thāqib 擴充套件散布給目標（偽裝成禱告工具）；下游操作員部署工具</td>
+<td>（不直接參與部署；工具是 Claude 產出的）</td>
+<td>無 AI（部署由人／工具執行）</td>
+</tr>
+<tr>
+<td><strong>③ 去匿名／身分解析（Resolve）</strong></td>
+<td>把收集到的匿名帳號、手機號丟進解析工具</td>
+<td>（工具本身由 Claude 寫成；此階段是工具在跑）</td>
+<td>無 AI 於當下（AI 的貢獻在①）</td>
+</tr>
+<tr>
+<td><strong>④ 分析／點名（Analysis）</strong></td>
+<td>餵給 Claude 大量社群貼文，要它「評估行為者所認定的反對派情緒（opposition sentiment）」；跑社群網路分析</td>
+<td>對 <strong>155,216 則推文</strong>做<strong>社群網路分析</strong>、情緒／立場評估，產出<strong>39 個反對派／離散帳號</strong>的名單</td>
+<td><strong>對話式協助 → 分析引擎</strong>（Claude 直接做判斷，這是最接近「側寫」的一步）</td>
+</tr>
+<tr>
+<td><strong>⑤ 立案／派工（Case management）</strong></td>
+<td>把監控收集登錄進 Arman；建立對象檔案（身分證號、信仰、犯罪紀錄、社群帳號、<strong>action</strong>）</td>
+<td>替 Arman 打造 <strong>web 前端</strong>（從系統後端原始碼）、打造各種介面</td>
+<td><strong>對話式協助</strong>（Claude 是前端工程師）</td>
+</tr>
+<tr>
+<td><strong>⑥ 行動（Action）</strong></td>
+<td>依 Arman 檔案的「action 分頁」對對象採取措施（約談、施壓、檢舉停權、境內親屬施壓等——報告未細列具體行動）</td>
+<td>（不參與；action 由人與體制執行）</td>
+<td>無 AI</td>
+</tr>
+<tr>
+<td><strong>（旁支）宣傳</strong></td>
+<td>第三行為者把 Claude custom-skills 變語音克隆工廠，克隆三位作家聲音、預備接班敘事</td>
+<td>生成克隆語音／敘事內容</td>
+<td><strong>對話式協助 → 半自動內容工廠</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="42">4.2 這條生命週期的三個教學觀察</h3>
+<ol>
+<li><strong>AI 的貢獻集中在「工程」與「分析」兩端，中間的「部署／行動」仍是人與體制。</strong> 這說明現階段 AI 不是「自主監控機器人」，而是<strong>大幅降低了建立監控能力的技術門檻與人力成本</strong>。用 Anthropic 威脅情報主管 Jacob Klein 的話（見第 9 節 implicator.ai）：AI「等於把情報機關內部的部分工作自動化了」。過去要養一組工程師才能做的事，現在一個操作員配 Claude 就能做。</li>
+<li><strong>本案沒有出現「AI 編排多代理自主執行」</strong>（不像報告裡 ShinyHunters 那種十三個自主收集代理排程跑的案例）。本案的自主程度停在「對話式協助／人類逐步指揮」。這是重要的<strong>分級</strong>：不要把每個 AI 濫用案都講成「AI 自己在攻擊」——本案更像「AI 當外包工程師」。</li>
+<li><strong>「情緒評估」是側寫的灰色地帶。</strong> 「餵一堆貼文，問這是不是反對派情緒」——這個請求<strong>表面上像中性的文本分類任務（sentiment analysis）</strong>，但<strong>用途是找出異議者</strong>。這正是第 8 節要深談的分類器困境：同一個 prompt，用在市場輿情分析是合法商業，用在境內鎮壓就是迫害。</li>
+</ol>
+<hr />
+<h2 id="5-ttp-mitre-attck">5. TTP 與 MITRE ATT&amp;CK 對應（含框架缺口）</h2>
+<p><strong>先講結論</strong>：本案<strong>大部分行為在 MITRE ATT&amp;CK（企業版）找不到乾淨對應</strong>，因為 ATT&amp;CK 是為「入侵企業網路」設計的，而本案是「<strong>開發監控軟體 + 情報分析 + 行政派案</strong>」——它更接近<strong>國家監控供應鏈</strong>，不是一次網路入侵。這本身就是課程要教的<strong>框架缺口</strong>。我另外補上 <strong>MITRE ATLAS</strong>（專為 AI 系統對抗行為設計）作為互補視角。</p>
+<h3 id="51">5.1 能對應的部分</h3>
+<table>
+<thead>
+<tr>
+<th>戰術（Tactic）</th>
+<th>技術 ID</th>
+<th>本案的具體作法</th>
+<th>偵測構想</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Resource Development</td>
+<td><strong>T1587.001</strong>（Develop Capabilities: Malware）</td>
+<td>用 Claude 開發惡意 Firefox 擴充套件與各式監控工具</td>
+<td>於 AI 平台側偵測「開發資料收割型瀏覽器擴充」的請求叢集；於擴充商店側掃描權限異常</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td><strong>T1585 / T1585.001</strong>（Establish Accounts / Social Media）</td>
+<td>為散布與 mass-report 建立／操作帳號</td>
+<td>平台端關聯分析：同基礎設施、同時段、同行為模式的帳號叢集</td>
+</tr>
+<tr>
+<td>Reconnaissance</td>
+<td><strong>T1589</strong>（Gather Victim Identity Information）</td>
+<td>電話→身分解析器、去匿名器把帳號還原成真人</td>
+<td>異常的大量身分查詢；電信門號查詢的異常存取</td>
+</tr>
+<tr>
+<td>Reconnaissance</td>
+<td><strong>T1593.001</strong>（Search Open Websites/Domains: Social Media）</td>
+<td>對 155,216 則推文做社群網路分析</td>
+<td>大量、系統化的社群平台抓取（scraping）樣態</td>
+</tr>
+<tr>
+<td>Initial Access / Persistence</td>
+<td><strong>T1176.001</strong>（Browser Extensions）</td>
+<td>偽裝成禱告工具的 Firefox 擴充套件收割身分</td>
+<td>端點：非商店來源的擴充、過高權限、對社群站點的背景請求</td>
+</tr>
+<tr>
+<td>Phishing</td>
+<td><strong>T1566</strong>（Phishing）／<strong>T1598</strong>（Phishing for Information）</td>
+<td>國民身分證釣魚頁誘騙受害者交出身分資料</td>
+<td>相似網域監控、釣魚頁指紋、憑證回傳偵測</td>
+</tr>
+<tr>
+<td>Impact / Impersonation</td>
+<td><strong>T1656</strong>（Impersonation）</td>
+<td>語音克隆三位作家、克隆帳號冒充</td>
+<td>合成語音偵測（反深偽）；帳號行為突變偵測</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52">5.2 找不到乾淨對應的部分（框架缺口——課程重點）</h3>
+<table>
+<thead>
+<tr>
+<th>本案行為</th>
+<th>為什麼 ATT&amp;CK 對不上</th>
+<th>情報／偵測上該怎麼描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Telegram mass-report bot</strong>（大量檢舉逼停權）</td>
+<td>ATT&amp;CK 沒有「濫用平台檢舉機制壓制言論」的技術；這不是入侵，是<strong>平台治理濫用</strong></td>
+<td>屬「平台完整性（platform integrity）」威脅；偵測靠平台端的協同檢舉異常偵測</td>
+</tr>
+<tr>
+<td><strong>社群網路分析 → 點名 39 帳號</strong></td>
+<td>ATT&amp;CK 沒有「情報分析／目標鎖定（targeting）」這一類；這是<strong>分析產出</strong>不是攻擊技術</td>
+<td>用<strong>情報循環（intelligence cycle）</strong>或<strong>聯合目標循環（joint targeting cycle）</strong>描述更貼切</td>
+</tr>
+<tr>
+<td><strong>Arman 案件管理系統（立案／派工／action）</strong></td>
+<td>ATT&amp;CK 沒有「建立監控行政體系」的概念</td>
+<td>這是<strong>國家監控基礎設施</strong>，屬治理／人權框架（如聯合國商業與人權原則）而非資安框架</td>
+</tr>
+<tr>
+<td><strong>用 AI 當「工程部門／分析師」本身</strong></td>
+<td>ATT&amp;CK 不描述「誰寫了工具」，只描述「工具被如何使用」</td>
+<td>需要 <strong>MITRE ATLAS</strong> 或 AI 專屬濫用分類法</td>
+</tr>
+<tr>
+<td><strong>替政府審查官職候選人（vetting）</strong></td>
+<td>與資安完全無關</td>
+<td>屬國家忠誠審查／人事監控，超出任何資安框架</td>
+</tr>
+</tbody>
+</table>
+<h3 id="53-mitre-atlas-ai">5.3 MITRE ATLAS 視角（AI 濫用的互補框架）</h3>
+<p>ATLAS 關注「針對／利用 AI 系統的對抗行為」。本案對應：<br />
+- <strong>LLM 濫用於惡意程式開發</strong>：把通用模型當程式碼產出引擎（對應 ATLAS 的 "LLM-enabled malicious code generation" 概念）。<br />
+- <strong>安全防護規避 / 意圖偽裝</strong>：把「監控」需求拆解成一連串<strong>看似中性的工程子任務</strong>，繞過模型對「明確側寫請求」的拒絕（對應 ATLAS 的 "Jailbreak / prompt-level evasion" 家族，但本案更微妙——它<strong>不需要越獄，只需要換個問法</strong>）。<br />
+- <strong>濫用合法功能（custom-skills）</strong>：把生產力功能轉為語音克隆工廠（對應「濫用模型合法能力」）。</p>
+<blockquote>
+<p><strong>教學結論</strong>：當你分析一個「AI 被用來建監控體系」的案子，<strong>單靠 ATT&amp;CK 會漏掉一半以上的行為</strong>。正確做法是<strong>多框架併用</strong>：ATT&amp;CK 描述「工具怎麼打人」、ATLAS 描述「AI 怎麼被濫用」、情報循環／目標循環描述「分析與鎖定」、人權框架描述「監控體系的危害」。這種「沒有單一框架能涵蓋」的體認，本身就是進階威脅分析師的必修課。</p>
+</blockquote>
+<hr />
+<h2 id="6">6. 頁面版面與唯一表格的判讀（本案無專屬圖表）</h2>
+<h3 id="60-figure">6.0 先講清楚：為什麼這一節不是「Figure 判讀」</h3>
+<p><strong>GTG-34007 在報告 p.101–103 內沒有任何專屬的圖、流程圖、截圖或長條圖。</strong> 我核對過報告的圖表清單（figures.txt）：這個頁段附近唯一的正式圖是 <strong>Figure 8（p.100）</strong>，標題是「The public opinion briefing pipeline …」——那屬於<strong>前一個案子（中國輿情監控案）</strong>，不是本案。course/figures 目錄裡對應這一段也只有 <code>page-100.png</code>（同屬前案），<strong>沒有 page-101/102/103 的圖檔</strong>，因為這幾頁沒有被標為含圖表。</p>
+<p>這件事本身值得對學員講：</p>
+<blockquote>
+<p><strong>「情報產品的視覺豐儉，反映的是證據型態與可揭露程度，而不是案子的嚴重性。」</strong> 中國輿情案有 Figure 1–8（含儀表板截圖、名單、pipeline 圖），ShinyHunters 案有 Figure 1–19，因為那些案子 Anthropic 掌握了<strong>可截圖的產物</strong>（儀表板、貼文、名單）。本案 Anthropic 選擇<strong>幾乎不放任何視覺證據</strong>——可能因為證據多是<strong>原始碼與對話</strong>（不適合直接截圖公開，涉及受害者個資與敏感手法），也可能因為要<strong>保護偵測方法</strong>。所以「圖少」不代表「案子小」，反而可能代表「證據太敏感」。這是判讀情報產品的一個 meta 技巧。</p>
+</blockquote>
+<p>下面我逐頁判讀我親自用 Read 工具開啟的三張頁面圖（page-101/102/103.png），重點放在<strong>版面結構</strong>與<strong>那張不屬於本案的表格</strong>。</p>
+<h3 id="61-page-101png">6.1 page-101.png（版面：前案收尾表 + 本案開場）</h3>
+<ul>
+<li><strong>圖片類型</strong>：純文字排版頁，上半是一個<strong>兩欄表格（Category / Indicator）</strong>，下半是本案的大標題與兩段正文。</li>
+<li><strong>上半的表格（務必說明歸屬）</strong>：這是一張 <strong>Category / Indicator 摘要表</strong>，但它<strong>屬於前一個案子（中國「輿情監控」案，PRC public opinion monitoring）</strong>，不是 GTG-34007。我怎麼判斷的？看內容——<strong>simplified Chinese、zh-CN locale、「舆情简报」、Uyghur/Tibetan、Taiwanese political figures</strong>，全部指向中國案。共用簡報要求我「完整抄錄並保留 defang」，所以我照抄如下（此表<strong>無</strong>網路型 IOC，無需 defang）：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Indicator（前案 PRC 輿情案，逐字抄錄）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Actor profile</strong></td>
+<td>A commercial contractor conducting work for PRC government clients (medium confidence), likely connected to the state security or united front and propaganda ecosystem; prompts in simplified Chinese; zh-CN locale; activity during business hours in China; two linked account groups assessed as one actor (high confidence) through shared infrastructure.</td>
+</tr>
+<tr>
+<td><strong>Operation signatures</strong></td>
+<td>An account named "Daily Report 1"; a version-controlled "public opinion monitoring" framework (v2.6) with a master control table and appendices; a prompt instructing the model to act as a public-opinion analyst serving the government; political sensitivity scoring; standardization of terminology and narrative reframing; mandatory adversarial analysis sections; integration of formal psychological, legal, and public opinion warfare doctrine.</td>
+</tr>
+<tr>
+<td><strong>Output</strong></td>
+<td>Government-style "public opinion monitoring" briefings (舆情简报); multiple formatted briefings generated through the code-execution environment on a regular cadence; 15 to 30+ articles processed daily.</td>
+</tr>
+<tr>
+<td><strong>Targets</strong></td>
+<td>Domestic and overseas dissidents and activists; ethnic minority (Uyghur, Tibetan) and religious communities; Taiwanese political figures, labor and student activists; foreign media; prominent global human rights organizations.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>教學價值（對比組）</strong>：把這張表當成<strong>反例對照</strong>很有用——中國案 Anthropic 給了一張結構化的 Category/Indicator 表（有明確的 operation signatures：帳號名「Daily Report 1」、框架版本 v2.6、輸出格式「舆情简报」）。<strong>GTG-34007 完全沒有這種表</strong>。兩案並列，學員立刻看到：<strong>同一份報告，對不同案子的「指標可揭露程度」差很多</strong>。也順帶讓學員注意到：中國案的 Targets 明確包含「<strong>Taiwanese political figures</strong>（台灣政治人物）」——這是本課「對台灣的意涵」在報告裡的直接落點（雖然屬中國案，但與本案同屬監控模組）。</p>
+</blockquote>
+<ul>
+<li><strong>下半（本案開場）</strong>：大標題「<strong>GTG-34007: Disrupting two Iranian nexus actors building surveillance systems and malicious Firefox browsing extension</strong>」，接兩段正文（16 帳號、兩單位、七部門組織、6,388、155,216 tweets、Arman 前端）。版面上<strong>沒有任何插圖</strong>。</li>
+<li><strong>這頁傳達的核心訊息</strong>：一句話定調——「兩個伊朗 nexus 單位，各跑各的劇本，共餵一套中央系統」。</li>
+<li><strong>課堂用法</strong>：把 page-101 當「兩案交界」的教材——上半教學員辨認「這張表不屬於下面的案子」（訓練<strong>版面歸屬判讀</strong>，避免把前案 IOC 誤植到本案），下半導入本案。</li>
+</ul>
+<h3 id="62-page-102png">6.2 page-102.png（版面：本案主體，三個小標題）</h3>
+<ul>
+<li><strong>圖片類型</strong>：純文字排版頁，含三個粗體小標題：一段無標題開場（Qom 單位）、<strong>The end customer</strong>、<strong>Key findings</strong>（三個項目符號）。無插圖。</li>
+<li><strong>頁面上實際看到的結構</strong>：<br />
+  1. 開場段：Qom 省級單位、al-Najm al-thāqib、Arman「federated model」。<br />
+  2. <strong>The end customer（最終客戶）</strong>：high confidence 歸因、回應政府高層 taskings、替政府審查官職候選人、Arman 檔案結構（national ID / beliefs / criminal record / social accounts / <strong>action tab</strong>）。<br />
+  3. <strong>Key findings（三點）</strong>：單位分工、<strong>防線缺口那句</strong>、第三行為者語音克隆。</li>
+<li><strong>這頁傳達的核心訊息</strong>：這是全案<strong>資訊密度最高</strong>的一頁——歸因、Arman 檔案結構、防線缺口、第三行為者，四個最重要的點全在這頁。</li>
+<li><strong>課堂用法</strong>：<strong>把 page-102 當本案的主投影片</strong>。特別把「a subject's file contained their national ID, beliefs, criminal record, social accounts, and an 'action' tab」這句放大——讓學員盯著「<strong>action tab</strong>」思考：一個監控檔案有「行動分頁」意味著什麼？（答案：監控不是為了「知道」，是為了「處置」。）</li>
+</ul>
+<h3 id="63-page-103png">6.3 page-103.png（版面：本案收尾 + 下一案開場）</h3>
+<ul>
+<li><strong>圖片類型</strong>：純文字排版頁，含兩個小標題（<strong>Attack lifecycle and AI usage</strong>、<strong>Disruption and mitigations</strong>），下半是<strong>下一個案子 GTG-50027（馬利案）</strong>的大標題與開場。無插圖。</li>
+<li><strong>頁面上實際看到的</strong>：<br />
+  1. Attack lifecycle：兩個具體例子（建瀏覽器擴充做批次社群資料收集、餵貼文評估反對派情緒）。<br />
+  2. Disruption and mitigations：封鎖全部 16 帳號與關聯組織；違反使用政策（非自願監控與側寫、不實資訊）與 <strong>Supported Regions Policy</strong>；把調查發現納入偵測。<br />
+  3. 下半開始 GTG-50027（馬利國家級大規模攔截與監控平台「Lakana 360」，監控約 2,500 萬張 SIM 卡）——<strong>不屬本案</strong>，但可作為「監控模組」的下一案銜接。</li>
+<li><strong>這頁傳達的核心訊息</strong>：本案的處置理由（三條政策違反）與「把發現回饋進偵測」的閉環。</li>
+<li><strong>課堂用法</strong>：用 page-103 教「<strong>處置的政策依據</strong>」——注意 Anthropic 封鎖的三個理由裡，有一條是 <strong>Supported Regions Policy</strong>（伊朗根本不在支援地區）。這是一個<strong>行政層的攔截點</strong>：就算內容防護沒擋下工具開發請求，「你這個地區本來就不該用我的服務」也是一道防線（雖然可被 VPN 規避）。</li>
+</ul>
+<hr />
+<h2 id="7-ioc">7. IOC 與技術指標</h2>
+<h3 id="71-ioc">7.1 誠實聲明：本案沒有傳統 IOC 表</h3>
+<p>如第 6 節所述，<strong>GTG-34007 在報告中沒有 IOC 表</strong>，正文與附近頁面<strong>沒有列出任何網域、IP 位址、檔案雜湊、Telegram 帳號或憑證</strong>。這與同報告許多案子（例如 ShinyHunters 案 p.33 的 attacker egress IPs 表、俄羅斯影響力行動的 archived URL）形成強烈對比。</p>
+<p><strong>為什麼？</strong> 合理推測（報告未明說）：<br />
+- 本案的產物是<strong>原始碼與監控工具</strong>，公開其雜湊／網域可能<strong>傷害受害者</strong>（例如釣魚頁網域可能仍掛著受害者資料），或<strong>洩漏偵測方法</strong>。<br />
+- Anthropic 的可見性主要在<strong>Claude 平台內的對話與帳號</strong>，而非工具部署後的網路基礎設施，因此它掌握的「指標」多是<strong>行為型</strong>而非<strong>網路型</strong>。</p>
+<h3 id="72">7.2 本案可用的「行為型／名目型」指標（附偵測價值與壽命）</h3>
+<p>雖然沒有網路 IOC，仍可整理出一組<strong>命名指標（named indicators）與行為指標（behavioral indicators）</strong>，這對偵測其實更有長期價值：</p>
+<table>
+<thead>
+<tr>
+<th>指標（類型）</th>
+<th>具體內容</th>
+<th>偵測價值</th>
+<th>壽命</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>系統名（named）</td>
+<td><strong>「Arman」</strong> 案件管理系統</td>
+<td>低—中：<code>Arman</code> 是常見波斯文名（意為「理想／夢想」），也是一款伊朗飛彈系統的名字，<strong>極易撞名</strong>，單獨當關鍵字誤報高</td>
+<td>中：名稱可換，但若在其他情報中再現可交叉關聯</td>
+</tr>
+<tr>
+<td>軟體名（named）</td>
+<td><strong>「al-Najm al-thāqib」</strong> Firefox 擴充套件</td>
+<td>中—高：這是<strong>很特殊的字串</strong>（古蘭經典故），在擴充商店或端點清單掃到幾乎可確診</td>
+<td>短—中：一旦曝光，行為者會改名重上架</td>
+</tr>
+<tr>
+<td>行為型（behavioral）</td>
+<td>偽裝成<strong>禱告時間工具</strong>的擴充套件，卻對主要社群平台做背景請求、要求過高權限</td>
+<td><strong>高</strong>：這種「宣稱用途 vs. 實際權限／流量」的落差是<strong>跨案通用</strong>的偵測邏輯，換名字也躲不掉</td>
+<td><strong>長</strong>：行為特徵比字串耐用得多</td>
+</tr>
+<tr>
+<td>行為型（behavioral）</td>
+<td>對單一模型平台的請求叢集：同帳號群反覆要求「寫社群資料收割擴充」「電話→身分解析」「去匿名器」「批次社群貼文情緒分類」</td>
+<td>高（平台側）：請求的<strong>主題組合</strong>本身就是指紋</td>
+<td>長：意圖不變，換帳號也會露出同樣主題</td>
+</tr>
+<tr>
+<td>工具能力型（capability）</td>
+<td>messenger de-anonymizer、phone-number-to-identity resolver、national-ID phishing page、Telegram mass-report bot</td>
+<td>中：這些工具類型在其他伊朗監控案（如 Domestic Kitten）也出現，可做<strong>跨案關聯</strong></td>
+<td>長：工具類型穩定</td>
+</tr>
+<tr>
+<td>情境型（contextual）</td>
+<td>波斯文／阿拉伯文 prompt、Qom 地理關聯、伊朗商業時段活動、Supported Regions（伊朗）違規</td>
+<td>低—中（易被 VPN/翻譯規避），但可作輔助關聯</td>
+<td>短—中</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>教學要點：命名 IOC vs. 行為 IOC 的壽命差異。</strong> 這張表最值得講的是<strong>壽命欄</strong>。<code>al-Najm al-thāqib</code> 這個字串一旦公開，行為者五分鐘內就能改名——這是<strong>易碎的原子指標（atomic IOC）</strong>。但「<strong>偽裝成生活工具、卻索取與用途不符的權限並回傳社群身分</strong>」這個<strong>行為指標</strong>，是行為者<strong>改名也躲不掉的</strong>，因為那是它的<strong>目的</strong>。這正是 David Bianco「痛苦金字塔（Pyramid of Pain）」的核心：讓對手最痛的，是攻擊他的 <strong>TTP／行為</strong>，不是他的雜湊或網域。本案沒有網路 IOC，反而逼我們直接爬到金字塔頂端思考。</p>
+</blockquote>
+<h3 id="73">7.3 擴充套件商店的審查缺口與偵測構想（深入）</h3>
+<p>本案的擴充套件「<strong>shipped to production</strong>」（已上線量產）——這四個字很重要：它<strong>通過了某個擴充商店（很可能是 Firefox Add-ons/AMO，或以側載方式散布）的審查而上架</strong>，並被實際散布。這暴露出擴充/App 商店審查的結構性缺口，值得單獨拆解，因為它對台灣（§10.4）與整個防禦社群都通用。</p>
+<p><strong>審查缺口在哪（四個結構性弱點）：</strong></p>
+<ol>
+<li><strong>「宣稱用途」與「實際權限」脫鉤。</strong> 一個「禱告時間工具」在功能上只需要「定位（算禮拜時刻）＋通知」。但惡意版本會索取 <code>&lt;all_urls&gt;</code>（讀取所有網站資料）、<code>cookies</code>、<code>webRequest</code>、<code>tabs</code> 等<strong>與宣稱用途完全不成比例</strong>的權限。多數商店的自動審查<strong>檢查權限是否宣告，卻不檢查權限是否與功能相稱</strong>——這正是落差所在。</li>
+<li><strong>上架乾淨、更新變壞（sleeper / rug-pull）。</strong> 擴充可以先以無害版本通過審查、累積使用者與評價，再透過<strong>自動更新</strong>推送惡意程式碼（第 9 節 Malwarebytes 記錄過 Firefox/Chrome 的 sleeper 手法）。審查只發生在「上架那一刻」，<strong>更新未必重審或重審不嚴</strong>。</li>
+<li><strong>惡意行為藏在遠端／混淆程式碼。</strong> 擴充可在執行時<strong>動態抓取遠端腳本</strong>或用重度混淆躲過靜態掃描（第 9 節 arXiv《A Study on Malicious Browser Extensions》指出 Firefox 商店對混淆的抵抗力較弱）。靜態審查看到的是「乾淨的殼」，惡意邏輯在使用者端才組裝。</li>
+<li><strong>側載與非官方管道繞過審查。</strong> 若透過 <code>.xpi</code> 直接安裝、企業政策強推、或非官方站台散布，<strong>根本不經過商店審查</strong>。對一個國家級行為者，散布管道可以是它自己控制的宗教/社群網站。</li>
+</ol>
+<p><strong>偵測構想（分三個防禦層，皆可落地成規則或流程）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>防禦層</th>
+<th>偵測構想</th>
+<th>為何有效 / 侷限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>商店/審查側</strong></td>
+<td><strong>「權限—功能相稱性」評分</strong>：對每個擴充比對「宣稱類別（如宗教工具）應有的權限基線」vs.「實際索取權限」，落差過大者標記人工複審</td>
+<td>有效攻擊 §上述缺口 1；侷限：需維護各類別的權限基線、且擋不住側載</td>
+</tr>
+<tr>
+<td><strong>商店/審查側</strong></td>
+<td><strong>更新差異審查（diff review）</strong>：對已上架擴充的每次更新做<strong>行為差異</strong>比對，新增高風險權限或新增遠端程式碼載入即攔</td>
+<td>攻擊缺口 2（sleeper）；侷限：算力與人力成本高</td>
+</tr>
+<tr>
+<td><strong>端點/瀏覽器側</strong></td>
+<td><strong>執行期行為基線</strong>：一個宣稱「禱告/工具」類的擴充，若對 <code>twitter.com/x.com</code>、<code>instagram.com</code>、<code>t.me</code>、<code>facebook.com</code> 等<strong>社群網域發出背景請求</strong>、讀取社群 cookie、或大量讀取 DOM 中的身分欄位，即告警</td>
+<td>攻擊 §7.2 的「宣稱用途 vs. 實際流量」行為指標；<strong>換名字也躲不掉</strong>（金字塔頂端）</td>
+</tr>
+<tr>
+<td><strong>端點/企業側</strong></td>
+<td><strong>擴充白名單 + 權限落差偵測基線</strong>：公部門/關鍵基礎設施端點只允許白名單擴充，並對「高權限擴充」清單化稽核</td>
+<td>對高價值端點最有效；侷限：對一般消費者端點難強制</td>
+</tr>
+<tr>
+<td><strong>網路側</strong></td>
+<td><strong>外流偵測</strong>：偵測瀏覽器擴充背景將<strong>批次身分/社群資料</strong>外傳到非預期端點（尤其是與宣稱功能無關的第三方）</td>
+<td>抓的是「收割後外傳」這一步；侷限：TLS 加密下需端點側可視性</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>教學收斂</strong>：擴充商店審查的根本困境與第 8 節的 AI 防線困境<strong>同構</strong>——都是「<strong>在『上架/請求』那一刻，很難判斷一個看似中性的東西，最終會被拿去做什麼</strong>」。禱告工具擴充在<strong>上架瞬間</strong>可能真的乾淨（或權限只是「稍微多」），惡意在<strong>部署後、更新後、執行期</strong>才顯現。因此<strong>最耐用的防線不在「入口審查」單點，而在「執行期行為基線 + 持續監看」</strong>。這條原則（entry-time check 不夠、要 runtime behavior monitoring）可以同時套用到擴充套件、App、以及 AI 工具請求——這是本案給偵測工程師最通用的一課。</p>
+</blockquote>
+<hr />
+<h2 id="8-anthropic">8. Anthropic 的偵測、處置與防線缺口（本案最高價值段落）</h2>
+<h3 id="81">8.1 處置（做了什麼）</h3>
+<p>報告 p.103「Disruption and mitigations」逐字：</p>
+<blockquote>
+<p>「We banned all 16 accounts and the associated organizations for violating our Usage Policy's prohibitions on non-consensual surveillance and profiling, and misinformation, and our Supported Regions Policy. We incorporated our investigative findings into our detections to identify and ban future misuse.」</p>
+</blockquote>
+<p>拆解 Anthropic 的三條處置依據：<br />
+1. <strong>非自願監控與側寫（non-consensual surveillance and profiling）</strong>——對應單位 A 的分析／點名與 6,388 側寫。<br />
+2. <strong>不實資訊（misinformation）</strong>——對應第三行為者的語音克隆宣傳。<br />
+3. <strong>Supported Regions Policy</strong>——伊朗不在 Claude 支援地區，帳號本不該存在（多半靠 VPN／跨境規避而混入）。</p>
+<p>並且「把調查發現納入偵測（incorporated … into our detections）」——形成<strong>偵測回饋閉環</strong>。</p>
+<h3 id="82">8.2 防線缺口（哪裡失效）——逐字引用並做成教材</h3>
+<p>這是整個 GTG-34007 最該被放大的一句，出自 p.102 Key findings 第二點：</p>
+<blockquote>
+<p><strong>「Claude refused explicit profiling and propaganda requests, but our safeguards did not refuse many of the surveillance software tooling requests.」</strong></p>
+<p>繁中：Claude 拒絕了<strong>明確的側寫與宣傳請求</strong>，但我們的防護<strong>並未拒絕許多監控軟體工具的請求</strong>。</p>
+</blockquote>
+<p><strong>這句話為什麼是整份報告最重要的自白之一：</strong></p>
+<ol>
+<li>
+<p><strong>它承認防護是不對稱的（asymmetric）。</strong> 面對「幫我側寫這個異議者」「幫我寫這則宣傳」——<strong>意圖明確</strong>，Claude 擋下。面對「幫我寫一個批次收集社群資料的瀏覽器擴充套件」「幫我寫一個電話號碼轉身分的解析器」——<strong>請求看似中性的軟體工程</strong>，Claude 放行。<strong>同一個監控目的，拆成工程子任務就繞過了防線。</strong></p>
+</li>
+<li>
+<p><strong>這不是「越獄（jailbreak）」，這比越獄更難防。</strong> 越獄是用花招騙模型說出它「知道不該說」的東西。本案不需要花招——因為「寫一個瀏覽器擴充套件收集社群資料」<strong>在絕大多數情境下是完全合法的請求</strong>（市場研究、學術、自己的產品都會這樣問）。模型<strong>沒有理由拒絕</strong>，除非它能推斷出<strong>這一次的最終用途是境內鎮壓</strong>。</p>
+</li>
+</ol>
+<h3 id="83-vs">8.3 「防線失效模式」教材：意圖 vs. 工具的分類器困境</h3>
+<p>把這一段獨立出來，做成一張可以直接投影的教學圖（文字版）：</p>
+<pre class="mermaid">flowchart TD
+    A[&quot;同一個「監控異議者」的目的&quot;]
+    A --&gt; B[&quot;【意圖層請求】&lt;br/&gt;「幫我側寫這個反對派帳號」&lt;br/&gt;「幫我寫一則抹黑他的宣傳」&quot;]
+    A --&gt; C[&quot;【工具層請求】&lt;br/&gt;「幫我寫一個批次收集社群資料的 Firefox 擴充套件」&quot;]
+    B --&gt; D[&quot;分類器看得到「意圖」&quot;]
+    C --&gt; E[&quot;分類器只看到「工程任務」&quot;]
+    D --&gt; F[&quot;判為違規 → 拒絕 ✅&quot;]
+    E --&gt; G[&quot;判為中性 → 放行 ❌&quot;]
+</pre>
+<p><strong>為什麼工具層這麼難擋？三個結構性原因：</strong></p>
+<ul>
+<li><strong>雙重用途（dual-use）是本質，不是例外。</strong> 「收集社群資料的擴充套件」「電話→身分解析」「情緒分類」全都有<strong>大量合法用途</strong>。一個把這些請求全擋掉的模型會<strong>對正常開發者不可用</strong>。安全與可用之間是<strong>真實的張力</strong>，不是「加強一下就好」。</li>
+<li><strong>最終用途（end-use）不在請求裡。</strong> 判斷一個工程請求是否邪惡，往往要看<strong>它會被用在哪、對誰</strong>——但這些資訊<strong>不在單一 prompt 裡</strong>。模型看到的是「寫個擴充套件」，看不到「拿去德黑蘭抓人」。</li>
+<li><strong>惡意被切成無害的碎片（decomposition）。</strong> 沒有任何一段對話單獨看是「監控異議者」；每一段都是「寫個解析器」「幫我 debug」「做個前端」。<strong>惡意存在於碎片的總和，而總和跨越多次對話、甚至多個帳號</strong>——單次請求的分類器天生看不見總和。</li>
+</ul>
+<h3 id="84-ai">8.4 AI 公司可能如何改善（給學員的「防禦工程」思路）</h3>
+<p>報告沒有給出解方，但這正是課堂上最好的<strong>開放式工程討論</strong>。可引導的方向（每一個都有代價，沒有免費午餐）：</p>
+<ol>
+<li><strong>最終用途推斷（end-use inference）</strong>：不只看「這是什麼工具」，試著推斷「這工具最可能被拿去做什麼」。例如「批次社群資料收割 + 去匿名 + 電話→身分解析」<strong>同時出現</strong>，其<strong>組合</strong>強烈指向監控用途，即使每一項單獨合法。<strong>難點</strong>：容易誤傷合法的資安／OSINT 從業者；需要極謹慎的門檻。</li>
+<li><strong>跨請求／跨工作階段的關聯（context correlation）</strong>：把同一帳號（或同一基礎設施的帳號群）在<strong>一段時間內</strong>的請求串起來看，偵測「監控工具鏈」的組合，而非只看單次 prompt。<strong>難點</strong>：隱私與長期記憶的取捨；本案行為者用<strong>多帳號分散</strong>（16 個帳號）正是為了打斷這種關聯。</li>
+<li><strong>能力導向的護欄（capability-based guardrails）</strong>：對特定高風險能力（如「大規模去匿名」「電話→身分」「合成語音克隆真實人物」）設更高的摩擦（額外驗證、用途聲明、速率限制），而非只看「內容是否明確違規」。<strong>難點</strong>：定義「高風險能力」的邊界，避免變成對整個開發者社群的稅。</li>
+<li><strong>地區與客戶盡職調查（KYC / Supported Regions）</strong>：把「你是誰、你在哪、你的組織是什麼」納入判斷。本案有一條處置依據就是 Supported Regions Policy。<strong>難點</strong>：VPN／人頭帳號規避；隱私與匿名使用的價值。</li>
+<li><strong>輸出型偵測（output-side detection）</strong>：不只看輸入請求，也看<strong>模型產出了什麼</strong>——如果模型正在產出一個「對社群平台做背景收割、要求過高權限」的擴充套件程式碼，那<strong>產物本身</strong>就是訊號。<strong>難點</strong>：需要對產出做語意層分析，成本高。</li>
+</ol>
+<blockquote>
+<p><strong>給學員的收斂觀點</strong>：這五條沒有一條能單獨解決問題，而且每一條都在「<strong>安全 vs. 隱私 vs. 可用性</strong>」的三角上付出代價。這正是 AI 治理最誠實的樣子——<strong>不是「有沒有做防護」，而是「防護的門檻設在哪、誰承擔誤傷、用什麼證據推斷意圖」</strong>。本案的價值就在於：Anthropic <strong>公開承認自己在這條線上失守了一部分</strong>，給了業界一個真實的、可以拿來教學的失敗案例。</p>
+</blockquote>
+<h3 id="85">8.5 一個容易被忽略的偵測正面點</h3>
+<p>雖然工具層失守，<strong>意圖層守住了</strong>——「Claude refused explicit profiling and propaganda requests」。這說明現有防護<strong>不是全無作用</strong>，它擋下了最直白的濫用（明講要側寫、明講要宣傳）。教學上要<strong>兩面都講</strong>：既不能說「AI 防護沒用」（意圖層有效），也不能說「AI 防護足夠」（工具層失守）。<strong>真相在中間，而中間正是工程與治理要努力的地方。</strong></p>
+<hr />
+<h2 id="9">9. 第三方驗證與外部來源</h2>
+<h3 id="91">9.1 最重要的方法論提醒：本案在「具體事實」層是單一來源</h3>
+<p><strong>關於 GTG-34007 這 16 個帳號、Arman 系統、al-Najm al-thāqib 擴充套件、6,388/155,216/39 這些具體數字，唯一的一手來源是 Anthropic 自己的報告。</strong> 我查到的所有「第三方報導」——Iran International、RFE/RL、IranWire、Axios、Implicator.ai、台灣商傳媒等——<strong>全部是在轉述 Anthropic 的報告</strong>，沒有一家做了獨立查證（沒有人拿到 Arman 的截圖、沒有人獨立確認那 16 個帳號）。因此：</p>
+<blockquote>
+<p><strong>本案在「具體事實」層屬單一來源情報（single-source intelligence）。</strong> 這不代表它假，但代表課堂上必須誠實標註：我們相信它，是因為（a）Anthropic 有平台內的一手可見性，（b）它與伊朗既有的監控 TTP 高度吻合——<strong>而不是因為有第二個獨立來源證實了那 16 個帳號</strong>。</p>
+</blockquote>
+<p>反過來，<strong>在「體系可信度」層，有大量獨立來源</strong>佐證「伊朗政府確實經營這種境內數位監控」。以下把外部來源分成兩類清楚標示。</p>
+<h3 id="92-a-anthropic">9.2 A 類：轉述本案的媒體（＝引述 Anthropic，非獨立查證）</h3>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Iran International（英）「Iran regime used Claude to expand surveillance of dissidents, Anthropic says」</td>
+<td>https://www.iranintl.com/en/202609131676</td>
+<td>2026-09-13</td>
+<td>引述 Anthropic；確認了兩單位、16 帳號、6,388、155,216、39、Arman 檔案結構、al-Najm al-thāqib「disguised as a prayer-times utility」、Qom、語音克隆、high confidence 歸因</td>
+</tr>
+<tr>
+<td>RFE/RL（Frud Bezhan）「Anthropic Disrupts Iran's Use Of Claude…」</td>
+<td>https://www.rferl.org/a/anthropic-claude-iran-propaganda/33852428.html</td>
+<td>2026-09-11</td>
+<td>引述 Anthropic；提到 Firefox 擴充「harvested users' identities」、「chose 39 opposition accounts to monitor」，但<strong>未</strong>複述 6,388／Arman／擴充名稱</td>
+</tr>
+<tr>
+<td>IranWire「Anthropic Suspends Iranian Government Accounts…」</td>
+<td>https://iranwire.com/en/news/157471-...</td>
+<td>2026-09（約）</td>
+<td>引述 Anthropic；聚焦帳號封鎖與宣傳</td>
+</tr>
+<tr>
+<td>Axios「Governments use Claude to spy on people, Anthropic warns」</td>
+<td>https://www.axios.com/2026/09/10/anthropic-claude-government-surveillance-threats</td>
+<td>2026-09-10</td>
+<td>引述 Anthropic；把伊朗案放在「多國政府用 Claude 監控」的框架下（含馬利、中國）</td>
+</tr>
+<tr>
+<td>Implicator.ai（Marcus Schuler）「Anthropic Details Claude's Use in State Surveillance」</td>
+<td>https://www.implicator.ai/anthropic-claude-surveillance-mali-china-iran/</td>
+<td>2026-09-11</td>
+<td><strong>分析型</strong>轉述；點出「safeguards asymmetry」（拒絕明確側寫、卻放行工具請求），並引 Anthropic 威脅情報主管 <strong>Jacob Klein</strong>：AI「等於把情報機關內部的部分工作自動化」</td>
+</tr>
+<tr>
+<td>Eurasia Review / Shabtabnews（轉載 RFE/RL）</td>
+<td>https://www.eurasiareview.com/13092026-anthropic-disrupts-irans-use-of-claude-...</td>
+<td>2026-09-13</td>
+<td>二次轉載</td>
+</tr>
+<tr>
+<td>The Next Web、Metaverse Post、The Statesman、Tom's Hardware、Siasat</td>
+<td>（各見搜尋結果）</td>
+<td>2026-09</td>
+<td>綜述整份報告；伊朗案僅為其中一段</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>注意這幾家的差異，本身就是教材</strong>：RFE/RL 只提「39 opposition accounts」「harvested identities」，<strong>沒有</strong>Arman、6,388、擴充名稱；Iran International 幾乎複述了所有細節。<strong>同一份一手來源，不同媒體擷取的顆粒度差很多</strong>——這是「二手來源會失真、會選擇性擷取」的活教材。研究時<strong>永遠回到一手 PDF</strong>。</p>
+</blockquote>
+<h3 id="93-a">9.3 A 類（台灣）：台媒對本報告的報導</h3>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>性質與備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>商傳媒（葉安庭）「伊朗動用 AI 監控異議帳號 Anthropic Claude 遭濫用」</td>
+<td>https://sunmedia.tw/news/technology/1789275755-...</td>
+<td>2026-09-13</td>
+<td><strong>唯一一篇台媒專講伊朗案</strong>，但為<strong>簡化版</strong>：只說「伊朗準軍事與安全單位監控數千名伊朗民眾」「識別異議人士與流亡反對派帳號」，<strong>未提</strong> 6,388／155,216／Arman／擴充名稱／語音克隆細節；且<strong>把本案（監控）與另一起 MEK（人民聖戰組織）冒充案混在一起講</strong>——是「二手轉述把不同案例混談」的典型失真</td>
+</tr>
+<tr>
+<td>Newtalk「Claude遭濫用！中國監控台灣政要、模擬12軍事目標」</td>
+<td>https://newtalk.tw/news/view/2026-09-12/1059323</td>
+<td>2026-09-12</td>
+<td><strong>聚焦中國案</strong>（監控台灣政要、模擬攻台 12 目標）；伊朗案非重點</td>
+</tr>
+<tr>
+<td>自由時報「鎖定台灣政治人物、軍事目標 Anthropic揭中國利用AI…」</td>
+<td>https://news.ltn.com.tw/news/world/breakingnews/5571099</td>
+<td>2026-09（約）</td>
+<td>聚焦中國案與台灣</td>
+</tr>
+<tr>
+<td>鏈新聞 ABMedia「中共用 Claude 監控台灣宗教、政治人物…」</td>
+<td>https://abmedia.io/anthropic-claude-china-taiwan-surveillance-military-targets</td>
+<td>2026-09</td>
+<td>聚焦中國案與台灣</td>
+</tr>
+<tr>
+<td>新唐人 NTDTV「Anthropic踢爆：中共利用Claude實施跨國鎮壓」</td>
+<td>https://www.ntdtv.com/b5/2026/09/12/a104132493.html</td>
+<td>2026-09-12</td>
+<td>聚焦中共跨國鎮壓</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>台灣視角的觀察</strong>：台媒對這份報告的注意力<strong>幾乎全在「中國監控台灣」</strong>（因為報告的中國輿情案明確點名 Taiwanese political figures），對<strong>伊朗案的報導又少又淺、還混案</strong>。這給台灣讀者一個提醒：<strong>別只讀對自己「有感」的那一案</strong>——伊朗案示範的「工具層防線失守」與「宗教/生活工具偽裝監控」，對台灣的技術與治理啟示，未必比中國案小（見 §10.4）。</p>
+</blockquote>
+<h3 id="94-b">9.4 B 類：伊朗數位監控體系的獨立研究（佐證「體系可信度」，非本案）</h3>
+<p>這些來源<strong>不是在講 GTG-34007</strong>，而是獨立記錄伊朗如何監控自己的人民——它們讓「兩個伊朗安全單位建監控系統」這件事<strong>在體系層變得高度可信</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>主題</th>
+<th>來源</th>
+<th>URL</th>
+<th>重點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>情報機關概覽</td>
+<td>The Washington Institute「Iran's Intelligence Organizations and Transnational Suppression」</td>
+<td>https://www.washingtoninstitute.org/policy-analysis/irans-intelligence-organizations-and-transnational-suppression</td>
+<td>MOIS/IRGC 情報體系與<strong>跨國鎮壓</strong>，數十年拘捕、綁架、境外暗殺異議者的紀錄</td>
+</tr>
+<tr>
+<td>MOIS（情報部）</td>
+<td>多來源綜整（Greydynamics、Caliber.az、CRS）</td>
+<td>https://greydynamics.com/iranian-intelligence-community-an-overview/</td>
+<td>MOIS 約 3 萬人，核心任務是<strong>監控國內敵人（政治異議者、宗教少數）</strong>，並負責訊號情報</td>
+</tr>
+<tr>
+<td>MOIS 網路行動</td>
+<td>Check Point Research「Iranian MOIS Actors &amp; the Cyber Crime Connection」</td>
+<td>https://research.checkpoint.com/2026/iranian-mois-actors-the-cyber-crime-connection/</td>
+<td>MOIS 關聯的網路行為者與犯罪生態</td>
+</tr>
+<tr>
+<td>FATA（網路警察）</td>
+<td>Wikipedia「Iranian Cyber Police」</td>
+<td>https://en.wikipedia.org/wiki/Iranian_Cyber_Police</td>
+<td>FATA 於 2011 成立，<strong>監控線上運動者、ISP、資訊業者</strong></td>
+</tr>
+<tr>
+<td>網路作戰結構</td>
+<td>Recorded Future「Iran Maintains Aggressive Cyber Operations Structure」</td>
+<td>https://www.recordedfuture.com/research/iran-cyber-operations-structure</td>
+<td>儘管內鬥，伊朗維持積極的網路作戰結構</td>
+</tr>
+<tr>
+<td>攻擊能力</td>
+<td>US Congress CRS「Iranian Offensive Cyberattack Capabilities」</td>
+<td>https://www.congress.gov/crs_external_products/IF/HTML/IF11406.web.html</td>
+<td>官方對伊朗攻擊能力的評估</td>
+</tr>
+<tr>
+<td><strong>假 App 監控（關鍵佐證）</strong></td>
+<td>Check Point「Domestic Kitten」（2018、2021）</td>
+<td>https://research.checkpoint.com/2021/domestic-kitten-an-inside-look-at-the-iranian-surveillance-operations/</td>
+<td>伊朗 <strong>APT-C-50</strong> 自 2016 用<strong>偽裝成合法應用（ISIS 桌布、假 Vidogram、假新聞更新）的行動 App</strong> 監控異議者、庫德族、ISIS；10 個行動、目標 <strong>1,200+</strong> 人、成功感染 <strong>600+</strong>；歸因伊朗政府</td>
+</tr>
+<tr>
+<td>假 VPN 監控（近例）</td>
+<td>The Hacker News「Iran-Linked DCHSpy Android Malware Masquerades as VPN Apps」</td>
+<td>https://thehackernews.com/2025/07/iran-linked-dchspy-android-malware.html</td>
+<td>2025 年伊朗關聯 Android 惡意程式<strong>偽裝成 VPN App</strong> 監控異議者</td>
+</tr>
+<tr>
+<td>臉部辨識大規模監控</td>
+<td>Forbidden Stories「Eyes of Iran」（Le Monde、Der Spiegel 等，Alexander Abdelilah &amp; Frédéric Métézeau）</td>
+<td>https://forbiddenstories.org/iran-regime-monitors-citizens/</td>
+<td>2026-03；伊朗 2019 取得俄羅斯 <strong>FindFace（NtechLab）臉部辨識</strong>，由 IRGC 成員主導的實作公司 <strong>Kama（Rasad 後身）</strong>部署於地鐵、大學，<strong>事後</strong>比對抗議影像鎖定參與者</td>
+</tr>
+<tr>
+<td>網路自由</td>
+<td>Freedom House「Freedom on the Net: Iran」（2023/2024）</td>
+<td>https://freedomhouse.org/country/iran/freedom-net/2024</td>
+<td>伊朗長年「不自由」，系統性審查與監控</td>
+</tr>
+<tr>
+<td>內容管控與監控</td>
+<td>ARTICLE 19「Tightening the Net」</td>
+<td>https://www.article19.org/tightening-net-monitoring-internet-freedoms-iran/</td>
+<td>針對抗議者的監控、斷網、關閉翻牆工具</td>
+</tr>
+<tr>
+<td>總覽</td>
+<td>Wikipedia「Mass surveillance in Iran」</td>
+<td>https://en.wikipedia.org/wiki/Mass_surveillance_in_Iran</td>
+<td>伊朗大規模監控的總體圖景（含 SIAM 合法攔截系統等）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>B 類的教學用法</strong>：把 Domestic Kitten（假 App）、DCHSpy（假 VPN）、al-Najm al-thāqib（假禱告工具）<strong>三案並列</strong>，學員會看到一條清楚的<strong>演化線</strong>：伊朗把監控軟體<strong>偽裝成目標的日常剛需</strong>（宗教內容、翻牆工具、禱告時間）已經做了將近十年。<strong>GTG-34007 的新意不在「偽裝手法」（那是老套路），而在「用 Claude 把開發這些工具的門檻降到很低」。</strong> 這是把「AI 的邊際貢獻」與「既有 TTP」分開評估的關鍵——AI 沒有發明監控，但 AI 讓監控<strong>更快、更便宜、更少需要專業工程師</strong>。</p>
+</blockquote>
+<p><strong>三案偽裝手法對比（伊朗「把監控藏進日常剛需」的十年演化）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>維度</th>
+<th>Domestic Kitten / APT-C-50（2016–2021）</th>
+<th>DCHSpy（2025）</th>
+<th>al-Najm al-thāqib（本案 GTG-34007，2026）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>平台</td>
+<td>Android App</td>
+<td>Android App</td>
+<td><strong>Firefox 瀏覽器擴充套件</strong></td>
+</tr>
+<tr>
+<td>偽裝載體</td>
+<td>ISIS 桌布、假 Vidogram、假新聞更新（ANF 庫德新聞）</td>
+<td><strong>假 VPN／翻牆 App</strong></td>
+<td><strong>禱告時間工具</strong>（宗教剛需）</td>
+</tr>
+<tr>
+<td>命中的目標剛需</td>
+<td>政治/宗教認同、通訊</td>
+<td>規避審查的翻牆需求（異議者剛需）</td>
+<td>虔誠穆斯林每日禮拜時刻</td>
+</tr>
+<tr>
+<td>主要竊取</td>
+<td>通訊、位置、檔案等裝置資料</td>
+<td>通訊、位置、憑證</td>
+<td><strong>社群平台身分（mass-harvest identities）</strong></td>
+</tr>
+<tr>
+<td>開發方式</td>
+<td>傳統惡意程式開發團隊</td>
+<td>傳統惡意程式開發</td>
+<td><strong>用 Claude 當工程部門產出</strong>（門檻大降）</td>
+</tr>
+<tr>
+<td>佐證來源</td>
+<td>Check Point（獨立）</td>
+<td>The Hacker News（獨立）</td>
+<td><strong>Anthropic 報告（單一來源）</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>這張表的核心訊息</strong>：偽裝載體從「翻牆/新聞」演化到「翻牆 App」再到「禱告工具」，<strong>越來越貼合目標社群的日常與情感</strong>（宗教是最深的剛需之一）；竊取標的從「裝置資料」聚焦到「<strong>社群身分</strong>」（因為社群身分才是社群網路分析與點名的原料）；而開發方式從「養一組工程師」變成「一個操作員配 AI」。<strong>三條線一起讀，就是一部「監控如何變得更精準、更便宜、更工業化」的縮時影片。</strong></p>
+</blockquote>
+<h3 id="95-arman">9.5 關於「Arman」的特別查證說明</h3>
+<p>我特別針對 <code>Arman</code> 監控系統做了搜尋，結論是：<strong>在 Anthropic 報告之外，查無任何公開來源獨立證實一套名為「Arman」的伊朗監控案件管理系統存在。</strong> 搜尋 <code>Arman</code> 會撞到：（a）一款伊朗<strong>飛彈系統</strong>「Arman」（與本案無關，Wikipedia 有條目），（b）Arman 是常見波斯文人名／字詞（意為「理想、夢想、抱負」）。因此：<br />
+- <strong>本案的「Arman」＝單一來源（Anthropic）</strong>，且名稱普通、極易撞名，<strong>不宜單獨當關鍵字型 IOC 拿去威脅情報平台比對</strong>（誤報會很高）。<br />
+- 這也符合第 7 節的判讀：本案的價值在<strong>行為與體系</strong>，不在這種易碎、易撞名的名目型指標。</p>
+<hr />
+<h2 id="10">10. 課程教學設計</h2>
+<h3 id="101">10.1 核心教學要點</h3>
+<ol>
+<li><strong>監控是一條行政流水線，不是一次駭客攻擊。</strong> 用 Arman 檔案結構（身分證號／信仰／犯罪紀錄／社群帳號／<strong>action</strong>）讓學員理解：監控的終點是「可派案、可長期跟監、可處置」的官僚流程，AI 在其中當「工程部門」與「分析師」。</li>
+<li><strong>AI 防線的根本難題是「意圖 vs. 工具」的不對稱。</strong> 逐字背下那句 <code>Claude refused explicit profiling and propaganda requests, but our safeguards did not refuse many of the surveillance software tooling requests.</code>，並理解為何「工具層」比「意圖層」難擋——雙重用途、最終用途不在請求裡、惡意被切成無害碎片。</li>
+<li><strong>命名 IOC 易碎、行為 IOC 耐用。</strong> 用「痛苦金字塔」框架，示範本案沒有網路 IOC，反而逼我們爬到「行為／TTP」層思考偵測。</li>
+<li><strong>多框架併用。</strong> ATT&amp;CK 描述工具攻擊、ATLAS 描述 AI 濫用、情報／目標循環描述分析鎖定、人權框架描述體系危害——沒有單一框架能涵蓋一個「AI 建監控體系」的案子。</li>
+<li><strong>信度分級是專業情報寫作的標誌。</strong> 對比 high confidence（單位歸因）與 likely（Arman 政府屬性），教學員<strong>分層下注</strong>。</li>
+<li><strong>偽裝成生活／宗教工具的監控軟體是精準社會工程。</strong> al-Najm al-thāqib（古蘭經典故）＋禱告工具偽裝＋Qom 聖城，命中虔誠目標社群的日常剛需。</li>
+<li><strong>AI 沒有發明監控，但降低了門檻。</strong> 用 Domestic Kitten／DCHSpy／本案三案並列，把「AI 的邊際貢獻」與「既有 TTP」分開評估。</li>
+<li><strong>單一來源情報的誠實標註。</strong> 本案具體事實只有 Anthropic 一家，體系可信度靠外部佐證——兩者要分開講。</li>
+</ol>
+<h3 id="102">10.2 課堂討論題（有爭議、無標準答案）</h3>
+<ol>
+<li><strong>「中性工具」的界線該畫在哪？</strong> 如果你是 Anthropic 的安全工程師，你會不會拒絕「幫我寫一個批次收集公開推文的瀏覽器擴充套件」這個請求？拒絕的話，你要怎麼跟<strong>合法的行銷分析師、學術研究者、你自己的競品團隊</strong>交代？不拒絕的話，你怎麼面對它被拿去德黑蘭抓人？<strong>請具體說出你會把門檻設在哪、用什麼證據。</strong></li>
+<li><strong>跨請求關聯 vs. 隱私。</strong> 要偵測「監控工具鏈」的組合，AI 公司需要<strong>把使用者一段時間內的請求串起來看</strong>。這等於對每個使用者做<strong>長期行為畫像</strong>——這本身像不像另一種監控？我們是否在用「監控使用者」來「防止使用者搞監控」？這個矛盾能解嗎？</li>
+<li><strong>AI 公司該為「工具的最終用途」負多少責任？</strong> 一把菜刀廠商不必為兇殺案負責；但 AI「幫你寫了整個監控工具鏈」，比菜刀更接近「共犯」還是更接近「工具」？<strong>責任的分界在哪？</strong>（可引入「軍火商 vs. 使用者」的類比：單位 B 是工具供應者、下游操作員才是使用者。）</li>
+<li><strong>公開揭露的兩難。</strong> Anthropic 公開承認「我們的防護沒擋下工具請求」。這對防禦社群是誠實與貢獻；但<strong>這是否也等於發給全世界的攻擊者一份『怎麼繞過 Claude 防護』的教學</strong>（把監控需求拆成工程子任務）？<strong>透明與 operational security 如何權衡？</strong></li>
+<li><strong>單一來源該信到什麼程度？</strong> 本案的具體事實只有 Anthropic 說了算，沒有第二個獨立來源。作為情報消費者，你<strong>該把它當作已證實、還是待證實</strong>？如果明天有國家依此報告制裁某伊朗單位，這樣的證據基礎夠嗎？</li>
+<li><strong>「宗教/生活工具偽裝」的防禦責任在誰？</strong> 一個偽裝成禱告工具的惡意擴充套件能上架，是<strong>擴充商店審查</strong>的失敗、<strong>使用者素養</strong>的失敗、還是<strong>平台權限模型</strong>的失敗？防禦資源該投在哪一環最有效？</li>
+</ol>
+<h3 id="103">10.3 實作／桌面演練建議（安全、不教攻擊操作）</h3>
+<blockquote>
+<p>所有演練都是<strong>防禦方視角</strong>，不重建任何攻擊工具、不接觸任何真實惡意程式或 IOC。</p>
+</blockquote>
+<ol>
+<li><strong>「意圖 vs. 工具」紅隊分類演練（紙上）</strong>：給學員 15 個 prompt（部分明確違規、部分中性工程、部分灰色），讓他們扮演「內容分類器」逐一判「拒絕／放行／需更多情境」，並寫下判斷理由。然後揭曉哪些其實是監控工具鏈的一環。<strong>目的</strong>：體會工具層的判斷有多難、灰色地帶有多大。</li>
+<li><strong>擴充套件權限審查桌演</strong>：拿一個<strong>假想的</strong>「禱告時間」擴充套件的 manifest（列出它宣稱的用途 vs. 它索取的權限：讀取所有網站資料、背景網路請求、讀取 cookies），讓學員判斷「宣稱用途 vs. 實際權限」的落差，並設計一條偵測規則。<strong>目的</strong>：把第 7 節的「行為型指標」變成可操作的審查清單。</li>
+<li><strong>情報信度改寫練習</strong>：給一段本案事實，讓學員分別用 possible／likely／high confidence 三種措辭改寫，並說明各自需要什麼證據才站得住。<strong>目的</strong>：內化信度分級。</li>
+<li><strong>多框架標註練習</strong>：把本案的 6 個行為（Firefox 收割、去匿名器、mass-report bot、社群網路分析點名、Arman 立案、語音克隆）分給小組，各自嘗試用 ATT&amp;CK／ATLAS／情報循環／人權框架標註，並在找不到對應時<strong>明確標示框架缺口</strong>。<strong>目的</strong>：內化「多框架併用」與「框架缺口」。</li>
+<li><strong>偵測工程 brainstorm</strong>：分組為「AI 平台側」與「端點/瀏覽器側」兩隊，各自設計 3 條偵測本案的規則，然後互相攻擊對方規則的誤報與規避空間。<strong>目的</strong>：體會偵測是攻防拉鋸，沒有一勞永逸。</li>
+</ol>
+<h3 id="104">10.4 對台灣的意涵（必寫）</h3>
+<p>本案有三條線直接打到台灣，且都不是「中國監控台灣」那條大家已經在講的線——是<strong>更技術、更治理層</strong>的啟示。</p>
+<h4 id="1">（1）「偽裝成生活／宗教工具的監控軟體」對台灣的對應風險</h4>
+<p>伊朗用「禱告時間工具」命中虔誠穆斯林的日常剛需。台灣的對應剛需不是禱告，而是<strong>這些</strong>：<br />
+- <strong>假冒的實用 App</strong>：發票對獎、公車/捷運到站、停車繳費、四季線上、健保快易通、颱風/地震速報、宮廟行事曆與求籤、農民曆/擇日、Podcast/追劇工具——<strong>任何「全民都會裝、且會要權限」的工具</strong>都是偽裝載體。伊朗的教訓是：<strong>偽裝要貼合目標社群的文化剛需</strong>，台灣的文化剛需（發票、宮廟、農民曆、選舉/罷免資訊）就是對應的偽裝表面。<br />
+- <strong>瀏覽器擴充套件</strong>：偽裝成「蝦皮/momo 比價」「發票自動對獎」「YouTube 廣告過濾」「政論/新聞聚合」的擴充，一旦取得「讀取所有網站資料」權限，就能收割社群身分與瀏覽行為。<strong>與本案 al-Najm al-thāqib 手法完全同構。</strong><br />
+- <strong>輸入法（IME）</strong>：這是台灣<strong>特別</strong>該警覺的一環。輸入法天生要<strong>攔截每一次按鍵</strong>、常會<strong>連網</strong>（雲端字詞、同步）。一個惡意或後門化的中文輸入法，等於一個合法上市的鍵盤側錄器。歷史上第三方 IME「回傳打字內容」的爭議屢見不鮮——台灣使用者對中文 IME 的依賴，使這成為<strong>高價值、低戒心</strong>的供應鏈攻擊面。</p>
+<h4 id="2_1">（2）台灣的行動與瀏覽器生態的供應鏈審查</h4>
+<ul>
+<li><strong>審查缺口是全球性的</strong>：本案的擴充套件「shipped to production」——它<strong>通過了商店審查上架</strong>。這說明擴充/App 商店的自動審查對「宣稱用途 vs. 實際行為」的落差<strong>偵測不足</strong>（尤其是「上架時乾淨、更新後變壞」的 sleeper 手法，見第 9 節 Malwarebytes 報導）。</li>
+<li><strong>台灣可行的方向</strong>：</li>
+<li>推動<strong>政府/公用類 App 的權限最小化基線</strong>與第三方稽核（發票、健保、稅務、交通類 App 尤應示範）。</li>
+<li>對<strong>公部門與關鍵基礎設施端點</strong>建立「擴充套件白名單 + 權限落差偵測」的基線（第 7 節的行為指標可直接落地成規則）。</li>
+<li>提升<strong>輸入法供應鏈的透明度要求</strong>（連網行為揭露、是否上傳擊鍵/字詞、資料落地位置）——這對政府與國安相關單位尤其關鍵。</li>
+<li>對一般使用者的<strong>素養教育</strong>：教「宣稱用途 vs. 索取權限」的落差判讀（一個禱告工具/農民曆為什麼要讀你所有網站的資料？）。</li>
+</ul>
+<h4 id="3-ai">（3）「工具開發請求看似中性」對台灣自研 AI 應用治理的啟示</h4>
+<p>這是本案對台灣<strong>最深</strong>的一層意涵，且直接關係到台灣正在推的<strong>自主 AI（如國科會 TAIDE、各家繁中大型語言模型、政府/企業內部 LLM 應用）</strong>：</p>
+<ul>
+<li><strong>台灣自研 LLM 會遇到一模一樣的「意圖 vs. 工具」難題。</strong> 只要一個模型夠強、能寫程式碼，它就會收到「幫我寫個社群資料收集工具」「幫我寫個電話→身分比對」這類<strong>看似中性</strong>的請求。<strong>Anthropic 這種資源與紅隊規模都遠超台灣的公司都守不住工具層</strong>——台灣自研模型若沒有對等的防護投資，缺口只會更大。</li>
+<li><strong>治理啟示（給台灣 AI 政策/開發者）</strong>：<br />
+  1. <strong>別只做「關鍵字/明確違規」過濾</strong>（那只擋得住意圖層）；要投資<strong>用途推斷、跨請求關聯、能力導向護欄</strong>（第 8.4 節五條）。這對資源有限的台灣團隊是硬挑戰，需政策/國科會層級的共用安全基礎設施支援。<br />
+  2. <strong>把「監控工具鏈」列為明確的高風險能力類別</strong>（去匿名、電話→身分、大規模社群收割、真人語音克隆），在台灣自研模型的紅線裡寫清楚，並做對應紅隊測試。<br />
+  3. <strong>透明與可課責</strong>：台灣若要「可信任的自主 AI」，應學 Anthropic <strong>公開自曝缺口</strong>的做法（誠實揭露防護的失效模式），而不是只宣傳能力。<br />
+  4. <strong>跨境鎮壓的雙向風險</strong>：報告的中國案已明確監控「台灣政治人物」；本案示範的「AI 降低監控門檻」意味著<strong>任何有意監控台灣異議/政治/宗教（如長老教會、法輪功、維吾爾/西藏在台社群）的行為者，工具成本都在下降</strong>。台灣的防禦要同時想「別人用 AI 監控我們」與「我們自研的 AI 別被拿去監控別人」兩個方向。</li>
+</ul>
+<hr />
+<h2 id="11">11. 關鍵原文引文（逐字 + 繁中，供講義引用）</h2>
+<blockquote>
+<p>以下引文均逐字取自報告 PDF，頁碼標註於後。彎引號、破折號依原文保留。</p>
+</blockquote>
+<ol>
+<li>
+<p><strong>（兩單位定調，p.101）</strong></p>
+<blockquote>
+<p>"We identified and banned 16 Claude accounts operated by two linked units associated with Iranian paramilitary and domestic security agencies. The two units ran distinct playbooks on Claude, but fed the same central infrastructure."</p>
+<p>繁中：我們辨識並封鎖了 16 個由兩個相連單位操作的 Claude 帳號，這兩個單位與伊朗準軍事及國內安全機關有關。兩個單位在 Claude 上跑不同的劇本，卻餵養同一套中央基礎設施。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（單位 A 的規模與數字，p.101）</strong></p>
+<blockquote>
+<p>"We identified a seven-department organization with offices across Iran's provinces that claimed to maintain an identity-record database of Iranian nationals, and to surveil and profile 6,388 Iranians in a single year. The operators used Claude as an analyst and production studio, building a front end to what is likely a government-controlled surveillance case-management system, and running social-network analysis over 155,216 tweets."</p>
+<p>繁中：我們辨識出一個橫跨伊朗各省設有辦公室的七部門組織，它宣稱維護一個伊朗國民的身分紀錄資料庫，並宣稱一年內監控、側寫了 6,388 名伊朗人。操作者把 Claude 當成分析師與製作工坊，替一套很可能由政府控制的監控案件管理系統打造前端，並對 155,216 則推文進行社群網路分析。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（Qom 單位與禱告工具擴充、Arman，p.102）</strong></p>
+<blockquote>
+<p>"We also identified a Qom-based provincial unit that used Claude as its engineering department to build domestic surveillance capabilities. The unit's flagship was a malicious Firefox extension—shipped to production—named 'al-Najm al-thāqib' that a unit member used to mass-harvest user identities from major social network platforms. Both units built extensions and interfaces to the same centralized system named 'Arman,' a federated model with provincial units feeding central infrastructure."</p>
+<p>繁中：我們也辨識出一個位於 Qom 的省級單位，它把 Claude 當成自己的工程部門，用來建置境內監控能力。該單位的旗艦產品是一個已上線量產的惡意 Firefox 擴充套件，名為「al-Najm al-thāqib」，一名單位成員用它從主要社群網路平台大規模收割使用者身分。兩個單位都替同一套名為「Arman」的中央系統打造擴充套件與介面——一種由省級單位餵養中央基礎設施的聯邦式模型。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（Arman 檔案結構——監控變處置，p.102）</strong></p>
+<blockquote>
+<p>"Both units logged their surveillance collection into 'Arman,' a shared case-management system in which a subject's file contained their national ID, beliefs, criminal record, social accounts, and an 'action' tab."</p>
+<p>繁中：兩個單位都把監控收集登錄進「Arman」這套共用的案件管理系統，其中每一個對象的檔案都包含其國民身分證號、信仰、犯罪紀錄、社群帳號，以及一個「行動」分頁。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（本案核心：防線失效，p.102）</strong></p>
+<blockquote>
+<p>"Claude refused explicit profiling and propaganda requests, but our safeguards did not refuse many of the surveillance software tooling requests."</p>
+<p>繁中：Claude 拒絕了明確的側寫與宣傳請求，但我們的防護並未拒絕許多監控軟體工具的請求。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（歸因與政府任務，p.102）</strong></p>
+<blockquote>
+<p>"We assess with high confidence that the units were associated with Iranian paramilitary domestic security entities. The actors used Claude to generate outputs for state-security customers, and we identified evidence the actors responded to taskings from senior Iranian government officials. We also found evidence that the units vetted candidates for official positions on behalf of the Iranian government."</p>
+<p>繁中：我們以高信度評估這些單位與伊朗準軍事的國內安全實體有關。行為者用 Claude 為國安客戶產出成果，我們也掌握到證據顯示行為者回應來自伊朗政府高層官員的任務指派。我們還發現證據顯示這些單位代表伊朗政府審查官方職位的候選人。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（第三行為者：語音克隆與接班敘事，p.102）</strong></p>
+<blockquote>
+<p>"A separate actor co-located with one unit turned Claude's custom-skills feature into a voice-cloning propaganda factory, cloning the voices of three Iranian writers and preparing narratives in advance for the Supreme Leader's succession."</p>
+<p>繁中：一個與其中一個單位同址的獨立行為者，把 Claude 的自訂技能（custom-skills）功能變成一座語音克隆宣傳工廠，克隆了三位伊朗作家的聲音，並預先為最高領袖的接班準備敘事。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>（處置與政策依據，p.103）</strong></p>
+<blockquote>
+<p>"We banned all 16 accounts and the associated organizations for violating our Usage Policy's prohibitions on non-consensual surveillance and profiling, and misinformation, and our Supported Regions Policy."</p>
+<p>繁中：我們封鎖了全部 16 個帳號及其關聯組織，理由是違反我們《使用政策》對非自願監控與側寫、不實資訊的禁令，以及我們的支援地區政策。</p>
+</blockquote>
+</li>
+</ol>
+<hr />
+<h2 id="12">12. 未能驗證之處與研究限制</h2>
+<ol>
+<li><strong>具體事實為單一來源。</strong> GTG-34007 的 16 個帳號、Arman 系統、al-Najm al-thāqib 擴充套件、6,388／155,216／39 等數字，<strong>唯一一手來源是 Anthropic 報告</strong>。所有第三方報導皆為轉述，無獨立查證。本案應標註為<strong>單一來源情報</strong>。</li>
+<li><strong>「Arman」無外部佐證且易撞名。</strong> 除 Anthropic 外查無公開資料證實此監控系統存在；<code>Arman</code> 另為伊朗飛彈系統名與常見波斯文字詞，<strong>不宜單獨當 IOC</strong>。</li>
+<li><strong>「6,388」是攻擊者自述（claimed）。</strong> 報告明白標為單位「宣稱」的績效，非 Anthropic 獨立核實的受害人數；可能灌水或不足。</li>
+<li><strong>兩單位的建制隸屬未定。</strong> 報告用「associated with」（有關聯）而非「隸屬」，且對 Arman 的政府屬性只給 likely。單位與伊朗機關的<strong>確切組織關係、屬 MOIS 或 IRGC 或 FATA 哪一支，報告未指明</strong>——本教材第 9.4 節的 MOIS/IRGC/FATA 說明是<strong>體系背景</strong>，不是本案的確定歸屬。</li>
+<li><strong>本案無圖表、無 IOC 表。</strong> 第 6 節判讀的是頁面版面與<strong>前一個案子（中國輿情案）</strong>的 Category/Indicator 表；本案本身沒有專屬視覺素材。若讀者期待像其他案子那樣的 pipeline 圖或截圖，本案沒有。</li>
+<li><strong>「downstream operators」「action tab 的具體行動」未展開。</strong> 報告未細述工具部署後，下游操作員對 6,388 人或 39 個帳號實際採取了哪些「行動」（拘捕？約談？停權？境內親屬施壓？），因此本教材第 3 節談的是<strong>風險意義</strong>而非<strong>已證實的後果</strong>。</li>
+<li><strong>第三行為者的歸屬邊界模糊。</strong> 「co-located with one unit」只給了物理同址的關聯，其與兩單位的正式關係、是否同一指揮鏈，報告未明。</li>
+<li><strong>台媒佐證薄弱且有混案。</strong> 唯一專講伊朗案的台媒（商傳媒）為簡化版且把監控案與 MEK 冒充案混談；台灣中文語境下對本案幾乎沒有獨立、細緻的報導。</li>
+<li><strong>al-Najm al-thāqib 的古蘭經典故為研究者補充。</strong> 「劃破黑暗之星」出自《At-Tariq》86:3 是<strong>我方查證的宗教文本背景</strong>（Quran.com、Wikipedia），<strong>報告本身並未解釋命名寓意</strong>——此為輔助詮釋，非報告主張。</li>
+<li><strong>未做、也不應做的查證</strong>：依安全紅線，未對 <code>Arman</code>、<code>al-Najm al-thāqib</code> 或任何相關字串做主動連線、DNS 解析或互動式服務查詢；本案亦無網路 IOC 需要（或可以）如此處理。</li>
+</ol>
+<hr />
+<p><em>（本教材依《00-agent-brief.md》產出規格撰寫；全文主張均可追溯至 PDF p.101–103 或第 9 節所列外部 URL。一手事實與外部佐證已分層標示，單一來源之處均已於第 9、12 節誠實註記。）</em></p>
+<hr />
+<h1 id="pass2026-09-14">技術附錄（第二階段技術深化 pass，2026-09-14 增補）</h1>
+<blockquote>
+<p>本附錄是對前 12 節的<strong>增補</strong>，不取代任何既有內容。它把本案最有防禦教學價值的四塊——(A) 偽裝禱告工具的惡意 Firefox 擴充套件、(B)「工具請求看似中性」的防線缺口、(C) Arman 監控案件管理系統、(D) 社群網路分析——深化到「技術高手能據以理解與防禦」的程度，並補上 (E) 伊朗數位監控體系的技術組織、(F) 本階段新增的外部技術來源。</p>
+<p><strong>安全紅線重申</strong>：本案在報告中<strong>無任何網路型 IOC</strong>（無網域／IP／雜湊／Telegram 帳號）。本附錄中出現的 <code>harvest-c2[.]example</code> 等字串為<strong>虛構教學占位符並已 defang</strong>，不可連線；出現的 <code>twitter.com</code>／<code>x.com</code>／<code>instagram.com</code>／<code>t.me</code>／<code>facebook.com</code> 等是<strong>偵測規則要比對的合法平台網域</strong>（收割標的），不是惡意 IOC。本附錄<strong>不重建任何可運作的攻擊工具、不轉錄任何受害者個資</strong>；所有程式片段皆為<strong>防禦用的權限宣告樣本與偵測規則</strong>，非收割邏輯。</p>
+</blockquote>
+<hr />
+<h2 id="a-firefox-al-najm-al-thaqib">附錄 A：偽裝禱告工具的惡意 Firefox 擴充套件 al-Najm al-thāqib——權限濫用與身分收割的技術剖析（防禦角度）</h2>
+<p>本節把 §2.4、§4、§7.3 提到的「Firefox identity harvester disguised as a prayer-times utility」拆到 WebExtension API 層級。<strong>目的不是教怎麼寫收割器，而是教偵測工程師與審查者「一個宣稱是禱告工具的擴充，在技術上如何有能力收割社群身分，以及我們能在哪幾層攔它」。</strong></p>
+<h3 id="a1-webextension">A.1 WebExtension 架構速成（先建立防禦者的心智模型）</h3>
+<p>一個 Firefox（或 Chromium）擴充套件由三種可執行元件構成，防禦者必須先分清楚它們各自能做什麼：</p>
+<table>
+<thead>
+<tr>
+<th>元件</th>
+<th>執行環境</th>
+<th>能碰到什麼</th>
+<th>對收割的意義</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>manifest.json</strong></td>
+<td>宣告檔（不執行）</td>
+<td>宣告權限、比對規則、元件入口</td>
+<td><strong>審查的第一現場</strong>：權限意圖全寫在這裡</td>
+</tr>
+<tr>
+<td><strong>content script（內容腳本）</strong></td>
+<td>注入到<strong>網頁</strong>的隔離環境</td>
+<td>用標準 Web API <strong>讀寫該頁 DOM</strong>（顯示名稱、handle、貼文、追蹤關係都在 DOM 裡）</td>
+<td>收割的「<strong>手</strong>」：直接從社群頁面抓身分欄位</td>
+</tr>
+<tr>
+<td><strong>background / service worker（背景腳本）</strong></td>
+<td>擴充自己的背景環境</td>
+<td>完整 WebExtension API（<code>cookies</code>、<code>webRequest</code>、<code>tabs</code>、<code>fetch</code> 外連）</td>
+<td>收割的「<strong>倉庫與貨運</strong>」：彙整並外傳</td>
+</tr>
+</tbody>
+</table>
+<p><strong>關鍵限制（也是防禦切入點）</strong>：content script <strong>不能</strong>直接呼叫大部分 WebExtension API，也<strong>不能</strong>直接對任意來源發跨域請求（Manifest V3 下 host permissions 在 content script 內不生效，跨域要靠目標伺服器 CORS opt-in）。所以收割器的典型結構是：<strong>content script 讀 DOM → 用 <code>runtime.sendMessage()</code> 把資料傳給 background → background 用擴充特權（含 <code>fetch</code>）外傳</strong>。這條「內容腳本→訊息傳遞→背景外傳」的鏈路，就是 A.4 那張 Mermaid 圖，也是偵測要盯的行為序列。（來源：MDN Content scripts、host_permissions；見附錄 F。）</p>
+<h3 id="a2-vs">A.2 「權限—功能相稱性」：一個禱告工具該有 vs. 惡意版索取的權限</h3>
+<p>這是本案<strong>最實用的一堂偵測課</strong>，也把 §7.3 缺口 1 落地成可操作的檢查。一個<strong>真的</strong>「禱告時間」工具，功能只需要「取得所在位置（算禮拜時刻）＋跳通知」，它<strong>合理的權限基線</strong>是：</p>
+<pre><code class="language-jsonc">// 合理的禱告工具權限基線（最小權限）
+{
+  &quot;manifest_version&quot;: 3,
+  &quot;name&quot;: &quot;Prayer Times&quot;,
+  &quot;permissions&quot;: [&quot;alarms&quot;, &quot;notifications&quot;, &quot;storage&quot;],
+  &quot;host_permissions&quot;: [&quot;https://api.aladhan.com/*&quot;],   // 只連禱告時刻 API
+  &quot;optional_permissions&quot;: [&quot;geolocation&quot;]               // 算 qibla/時刻才要，且可設為選用
+}
+</code></pre>
+<p>而一個<strong>有能力大規模收割社群身分</strong>的惡意版，其 manifest 會出現與「禱告」完全不成比例的權限（以下為<strong>教學用的相稱性對照樣本</strong>，非惡意程式碼）：</p>
+<pre><code class="language-jsonc">// 惡意/高風險版：權限與宣稱功能嚴重不相稱（紅旗全亮）
+{
+  &quot;manifest_version&quot;: 3,
+  &quot;name&quot;: &quot;al-Najm al-thāqib — Prayer Times&quot;,   // 宗教偽裝表面
+  &quot;permissions&quot;: [
+    &quot;cookies&quot;,        // 讀社群平台 session/cookie —— 禱告工具零需求
+    &quot;webRequest&quot;,     // 觀察/攔截網路請求
+    &quot;tabs&quot;,           // 讀所有分頁 URL 與標題
+    &quot;scripting&quot;,      // 動態注入任意腳本到任意分頁
+    &quot;history&quot;,        // 讀瀏覽歷史
+    &quot;storage&quot;
+  ],
+  &quot;host_permissions&quot;: [&quot;&lt;all_urls&gt;&quot;],             // 讀所有網站資料 —— 最大紅旗
+  &quot;content_scripts&quot;: [{
+    &quot;matches&quot;: [&quot;*://*.twitter.com/*&quot;,&quot;*://*.x.com/*&quot;,
+                &quot;*://*.instagram.com/*&quot;,&quot;*://*.facebook.com/*&quot;,&quot;*://web.telegram.org/*&quot;],
+    &quot;js&quot;: [&quot;cs.js&quot;]                               // 只在社群平台注入 —— 與「禱告」無關
+  }]
+}
+</code></pre>
+<blockquote>
+<p><strong>偵測邏輯（一句話）</strong>：<code>宣稱類別（宗教/工具）應有的權限基線</code> 與 <code>實際索取的權限</code> <strong>落差過大</strong>，就是最耐用的訊號——因為那是攻擊者的<strong>目的</strong>，改名字也躲不掉（見 §7.2 痛苦金字塔）。特別注意三組「身分收割特徵權限」同時出現：<strong><code>&lt;all_urls&gt;</code>（讀所有站）＋ <code>cookies</code>（偷 session）＋ 只對社群平台注入的 <code>content_scripts</code>（挑身分最多的地方下手）</strong>。學術研究（arXiv 2503.04292、Socket 對 40+ 惡意 Firefox 擴充的分析）都指出：<code>searchProvider</code>／<code>tabs</code>／<code>webRequest</code>／<code>webRequestBlocking</code>／跨站 <code>cookies</code>／<code>history</code> 的組合，是收割型擴充的共同指紋。</p>
+</blockquote>
+<p><strong>一個 Firefox 特有的使用者側好消息</strong>：自 <strong>Firefox 127</strong> 起，<code>host_permissions</code> 與 <code>content_scripts</code> 宣告的主機權限<strong>會顯示在安裝提示</strong>（127 之前不顯示）。所以教使用者「安裝時看清楚它要讀哪些網站」在新版 Firefox 上<strong>才真正可行</strong>——這是可直接寫進資安素養教材的一條。（來源：MDN、Firefox Extension Workshop；見附錄 F。）</p>
+<h3 id="a3">A.3 身分收割的資料流（概念層，不含收割程式碼）</h3>
+<p>把 §4 生命週期的「① 工具開發／② 收割」放大到資料流層次（<strong>僅描述資料如何流動，不提供擷取或外傳的實作</strong>）：</p>
+<ol>
+<li>使用者從<strong>宗教／社群網站或側載</strong>安裝擴充（偽裝成禱告工具，命中虔誠目標社群的日常剛需）。</li>
+<li>content script 依 <code>matches</code> 在使用者登入的<strong>社群平台頁面</strong>啟動，透過標準 DOM API 讀取頁面上<strong>已渲染的公開身分欄位</strong>（顯示名稱、handle、user id、個人簡介、追蹤／被追蹤關係、貼文）。</li>
+<li>content script 以 <code>runtime.sendMessage()</code> 把資料交給 background。</li>
+<li>background 憑擴充特權彙整，並以 <code>fetch()</code> <strong>外傳到收割端點</strong>（虛構占位：<code>harvest-c2[.]example</code>）。</li>
+<li>下游：收割到的身分被餵入<strong>去匿名器／電話→身分解析器</strong>（§2.2），再寫進 <strong>Arman</strong> 立案（附錄 C）。</li>
+</ol>
+<blockquote>
+<p><strong>教學重點</strong>：注意收割器<strong>不需要越獄、不需要漏洞</strong>——它用的全是<strong>擴充平台正常提供的合法 API</strong>。惡意不在「用了什麼 API」，而在「<strong>一個宣稱禱告的東西，為什麼要用這些 API、去這些網站、傳到那個端點</strong>」。這與附錄 B 的 AI 防線困境<strong>同構</strong>：能力本身中性，惡意在<strong>用途組合</strong>。</p>
+</blockquote>
+<h3 id="a4-mermaid">A.4 Mermaid：權限濫用 → 身分收割鏈</h3>
+<pre class="mermaid">flowchart TD
+    A[&quot;使用者從宗教/社群網站或側載安裝&lt;br/&gt;al-Najm al-thaqib（偽裝禱告時間工具）&quot;] --&gt; B{&quot;安裝管道&quot;}
+    B --&gt;|&quot;AMO 上架（shipped to production）&quot;| C[&quot;通過商店審查（審查缺口見 A.5）&quot;]
+    B --&gt;|&quot;側載 .xpi / 企業政策 / 自控網站&quot;| D[&quot;完全繞過商店審查&quot;]
+    C --&gt; E[&quot;manifest 宣告過廣權限&lt;br/&gt;host_permissions: &amp;lt;all_urls&amp;gt;&lt;br/&gt;permissions: cookies, webRequest, tabs, scripting, history&quot;]
+    D --&gt; E
+    E --&gt; F[&quot;content script 只在社群平台注入&lt;br/&gt;matches: twitter/x/instagram/facebook/telegram&quot;]
+    F --&gt; G[&quot;讀取頁面 DOM 身分欄位&lt;br/&gt;顯示名稱 / handle / user id / 追蹤關係 / 貼文&quot;]
+    F --&gt; H[&quot;讀取社群平台 cookie / session&quot;]
+    G --&gt; I[&quot;runtime.sendMessage 傳給 background&quot;]
+    H --&gt; I
+    I --&gt; J[&quot;background 以 fetch 外傳收割資料&lt;br/&gt;harvest-c2[.]example（虛構占位, 已 defang）&quot;]
+    J --&gt; K[&quot;下游：去匿名器 / 電話→身分解析 → Arman 立案 → action&quot;]
+    K -.-&gt;|&quot;偵測介入點見 A.6&quot;| L[&quot;偵測層：商店 / 端點 / 網路&quot;]
+</pre>
+<h3 id="a5-73">A.5 擴充商店審查缺口的技術根因（把 §7.3 的四個弱點對到真實審查機制）</h3>
+<p>報告說這個擴充「<strong>shipped to production</strong>」（已上線量產）——意味著它<strong>通過了審查上架</strong>（AMO）或以側載散布。搭配本階段查到的資料，審查缺口的<strong>技術根因</strong>如下：</p>
+<table>
+<thead>
+<tr>
+<th>§7.3 缺口</th>
+<th>對到真實的 AMO 審查機制</th>
+<th>為何會漏</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 宣稱用途 vs. 實際權限脫鉤</td>
+<td>AMO 的<strong>自動風險評分</strong>（ML 看程式結構、權限請求、網路型態、metadata 一致性）＋越過門檻才轉<strong>人工複審</strong></td>
+<td>自動評分<strong>檢查權限有沒有宣告</strong>，但「權限是否與<strong>宣稱功能相稱</strong>」需要語意理解，機器不易判、人工看不完</td>
+</tr>
+<tr>
+<td>② 上架乾淨、更新變壞（sleeper / rug-pull）</td>
+<td>審查主要發生在<strong>送審那一刻</strong>；更新未必等強度重審</td>
+<td>先以無害版通過、養使用者與評價，再靠<strong>自動更新</strong>推惡意碼（Mozilla 曾整批下架 23 個偷窺 add-on；GhostPoster 把惡意 JS 藏在 add-on logo）</td>
+</tr>
+<tr>
+<td>③ 惡意藏在遠端／混淆碼</td>
+<td>AMO 政策<strong>明文禁止混淆碼</strong>，並有行為式偵測；但研究實測 <strong>Firefox 對混淆的抵抗力較弱</strong>，尤其惡意行為<strong>偽裝成生產力工具</strong>時</td>
+<td>靜態掃描看到「乾淨的殼」，惡意邏輯<strong>執行期才組裝</strong>或<strong>跨多檔分散</strong>（arXiv 2503.04292；Dan Stillman「掃描是 security theater」）</td>
+</tr>
+<tr>
+<td>④ 側載繞過審查</td>
+<td><code>.xpi</code> 直裝、企業 <code>policies.json</code> 強推、非官方站散布</td>
+<td><strong>根本不經 AMO</strong>；對國家級行為者，散布管道可以是它自己控制的宗教／社群網站</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>收斂（與 §7.3 同一結論、技術化版本）</strong>：擴充審查是<strong>入口時點（entry-time）</strong>的檢查，而惡意在<strong>部署後、更新後、執行期</strong>才顯現。所以<strong>最耐用的防線不在單點入口審查，而在「執行期行為基線＋持續監看」</strong>。這條原則同時適用於擴充、App、與 AI 工具請求（附錄 B）。Mozilla 近年新增<strong>行為式自動偵測</strong>（對已上架擴充按行為特徵算風險、越線由人複審）正是往「持續監看」方向補，但仍追不上更新與側載。</p>
+</blockquote>
+<h3 id="a6">A.6 三層偵測（可直接落地成規則）</h3>
+<p>以下規則為<strong>防禦起手式</strong>，需依環境調參；標為 experimental，勿未經測試直接上線告警。</p>
+<p><strong>（1）商店／審查側——「權限—功能相稱性」YARA 啟發式（比對 manifest.json）</strong></p>
+<pre><code class="language-yara">rule Susp_BrowserExt_PrayerLure_OverbroadPerms
+{
+    meta:
+        description = &quot;Heuristic: extension manifest claims prayer/utility purpose yet requests identity-harvesting permissions (permission-function mismatch). Defensive teaching heuristic; expect tuning/FPs.&quot;
+        reference   = &quot;GTG-34007 al-Najm al-thaqib; Anthropic Sep 2026 report p.102&quot;
+        author      = &quot;course/03-surveillance&quot;
+        date        = &quot;2026-09-14&quot;
+    strings:
+        $mf = &quot;manifest_version&quot;
+        // 宣稱用途誘餌（依語系擴充：波斯文/阿拉伯文同義詞另加）
+        $p1 = &quot;prayer&quot; nocase
+        $p2 = &quot;salah&quot;  nocase
+        $p3 = &quot;adhan&quot;  nocase
+        $p4 = &quot;azan&quot;   nocase
+        $p5 = &quot;qibla&quot;  nocase
+        $p6 = &quot;namaz&quot;  nocase
+        // 身分收割特徵權限
+        $q1 = &quot;&lt;all_urls&gt;&quot;
+        $q2 = &quot;\&quot;cookies\&quot;&quot;
+        $q3 = &quot;\&quot;webRequest\&quot;&quot;
+        $q4 = &quot;\&quot;tabs\&quot;&quot;
+        $q5 = &quot;\&quot;scripting\&quot;&quot;
+        $q6 = &quot;\&quot;history\&quot;&quot;
+    condition:
+        $mf and any of ($p*) and 3 of ($q*)
+}
+</code></pre>
+<p><strong>（2）端點／企業側——Microsoft Defender 進階獵捕（KQL）</strong></p>
+<pre><code class="language-kql">// 2a) 高風險或宗教誘餌命名的擴充（Defender TVM 清單）
+DeviceTvmBrowserExtensions
+| where ExtensionRisk in (&quot;High&quot;,&quot;Critical&quot;)
+    or ExtensionName has_any (&quot;prayer&quot;,&quot;salah&quot;,&quot;adhan&quot;,&quot;azan&quot;,&quot;qibla&quot;,&quot;namaz&quot;,&quot;al-najm&quot;,&quot;thaqib&quot;)
+| project DeviceName, BrowserName, ExtensionName, ExtensionId, ExtensionRisk, ExtensionPermissions
+
+// 2b) 側載 .xpi 落地（繞過 AMO 的安裝跡象）
+DeviceFileEvents
+| where FileName endswith &quot;.xpi&quot;
+| where FolderPath has_any (@&quot;\Mozilla\Firefox\Profiles&quot;, @&quot;\extensions&quot;)
+| where InitiatingProcessFileName !in~ (&quot;firefox.exe&quot;,&quot;updater.exe&quot;)
+| project Timestamp, DeviceName, FileName, FolderPath,
+          InitiatingProcessFileName, InitiatingProcessCommandLine
+</code></pre>
+<p><strong>（3）端點／檔案側——側載偵測 Sigma</strong></p>
+<pre><code class="language-yaml">title: Suspicious Firefox Extension (.xpi) Sideload into Profile
+id: 4c1f9b7e-0d2a-4f5c-9a3e-7b6d1e2f8a90   # placeholder, regenerate before use
+status: experimental
+description: &gt;
+  Detects a .xpi dropped into a Firefox profile/extensions folder by a non-Firefox
+  process — a sideload pattern that bypasses AMO review (cf. GTG-34007).
+references:
+  - Anthropic &quot;Detecting and countering misuse of AI: September 2026&quot; p.101-103
+logsource:
+  category: file_event
+  product: windows
+detection:
+  selection:
+    TargetFilename|endswith: '.xpi'
+    TargetFilename|contains:
+      - '\Mozilla\Firefox\Profiles\'
+      - '\extensions\'
+  filter_legit:
+    Image|endswith:
+      - '\firefox.exe'
+      - '\updater.exe'
+  condition: selection and not filter_legit
+level: medium
+tags:
+  - attack.persistence
+  - attack.t1176.001
+</code></pre>
+<p><strong>（4）網路／代理側——外流行為分析（誠實標註限制）</strong></p>
+<p>TLS 之下，Suricata 這類<strong>負載比對</strong>規則看不到收割內容，只剩 <strong>SNI／JA3／JA4</strong> 可用。因此外流偵測要靠<strong>端點或已解密的企業代理</strong>，抓的是<strong>行為</strong>而非字串：</p>
+<ul>
+<li>一個「禱告／工具」類擴充的 background，<strong>在讀取社群平台 DOM/cookie 之後</strong>，對<strong>與禱告時刻 API 無關</strong>的端點發出<strong>批次 POST</strong>（尤其資料量與「查禮拜時刻」不成比例）。</li>
+<li>代理日誌分析（KQL/SIEM 概念式）：<code>擴充 UA/來源</code> × <code>目的端點不在允許清單</code> × <code>POST body 體積異常</code> × <code>緊接社群平台存取</code>。</li>
+<li><strong>限制</strong>：需端點側可視性；行為者可把外傳偽裝成對合法 CDN／表單服務的請求。故此層是<strong>輔助</strong>，主力仍在 (1)(2)(3)。</li>
+</ul>
+<blockquote>
+<p><strong>給商店與平台的一條結構性建議</strong>：把「<strong>宣稱類別的權限基線</strong>」制度化——每個類別（宗教、記事、比價、翻牆…）維護一份合理權限白名單，送審時<strong>自動比對落差</strong>、落差大者強制人工複審與<strong>用途聲明</strong>；並對<strong>每次更新做行為 diff</strong>（新增高風險權限或新增遠端腳本載入即攔）。這正面打 §7.3 缺口 ① 與 ②。</p>
+</blockquote>
+<hr />
+<h2 id="b">附錄 B：「工具請求看似中性」防線缺口的偵測工程剖析</h2>
+<p>本節把 §8.2–§8.4 那句自白——<code>our safeguards did not refuse many of the surveillance software tooling requests</code>——<strong>做成一道偵測工程難題</strong>，並給出可討論的技術路徑。這是本案對「做 AI 安全／自研 LLM 治理」的人最重要的一節。</p>
+<h3 id="b1">B.1 為什麼這比越獄更難防（技術定性）</h3>
+<p>把三種「模型被濫用」的情境分清楚，才知道本案難在哪：</p>
+<table>
+<thead>
+<tr>
+<th>情境</th>
+<th>機制</th>
+<th>偵測著力點</th>
+<th>本案是不是</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>越獄（jailbreak）</strong></td>
+<td>用花招騙模型說出它「知道不該說」的內容</td>
+<td>輸入護欄／jailbreak 偵測（偵測覆寫系統指令、角色扮演誘導）</td>
+<td><strong>否</strong></td>
+</tr>
+<tr>
+<td><strong>明確違規意圖</strong></td>
+<td>直接說「幫我側寫這個異議者」「寫這則抹黑宣傳」</td>
+<td>內容分類器（意圖可見）</td>
+<td>這部分<strong>Claude 擋住了</strong> ✅</td>
+</tr>
+<tr>
+<td><strong>中性工具請求（本案缺口）</strong></td>
+<td>「幫我寫個批次收集社群資料的擴充」——<strong>在絕大多數情境下完全合法</strong></td>
+<td><strong>單一 prompt 無從判斷</strong>；要靠用途推斷／跨請求關聯／能力護欄／輸出偵測</td>
+<td><strong>是，且失守</strong> ❌</td>
+</tr>
+</tbody>
+</table>
+<p><strong>技術定性</strong>：本案的難不是「模型被騙」，而是「<strong>請求本身在單點上真的無法區分善惡</strong>」。市場研究、學術、資安 OSINT、你自己的產品，都會問一模一樣的問題。把這類請求全擋掉的模型會<strong>對正常開發者不可用</strong>——這是<strong>安全 vs. 可用性</strong>的真實張力，不是「分類器再加強一點」能解的（NIST AI 800-1 對 dual-use 基礎模型的 misuse risk 管理，正是承認這種張力後在談流程治理，見附錄 F）。</p>
+<h3 id="b2">B.2 從「寫個收集社群資料的工具」推斷惡意最終用途——用途推斷的技術路徑</h3>
+<p>單點無法判，就得往「<strong>組合</strong>」與「<strong>情境</strong>」要訊號。可操作的技術路徑有四條（每條都有代價）：</p>
+<ol>
+<li><strong>能力組合指紋（capability co-occurrence）</strong>：單看「寫社群收集擴充」是中性；但<strong>同一主體在一段時間內同時要</strong>「社群收割 ＋ 去匿名 ＋ 電話→身分 ＋ 國民身分證釣魚頁 ＋ 大量檢舉 bot」，這個<strong>組合</strong>強烈指向監控工具鏈。技術上是把請求映射到<strong>能力向量</strong>，對向量的<strong>共現模式</strong>打分，而非對單一 prompt 分類。</li>
+<li><strong>跨請求／跨工作階段關聯（context correlation）</strong>：把同帳號、同基礎設施帳號群的請求<strong>串成時間線</strong>看。<strong>本案行為者用 16 個帳號分散</strong>，正是為了打斷這種關聯——所以關聯要做在<strong>基礎設施層</strong>（共用 IP／付款／裝置指紋／行為節律），不能只靠單帳號。</li>
+<li><strong>能力導向護欄（capability-based guardrails）</strong>：對<strong>高風險能力</strong>本身設更高摩擦（額外驗證、用途聲明、速率限制、人工複核），而不是只看「內容是否明確違規」。候選高風險能力清單見 B.3。</li>
+<li><strong>輸出側語意偵測（output-side detection）</strong>：不只看輸入，看<strong>產物</strong>。若模型正在產出「對社群平台做背景收割、索取 <code>&lt;all_urls&gt;</code>＋<code>cookies</code>、只對社群站注入 content script」的擴充碼——<strong>產物本身就是訊號</strong>（可直接套附錄 A 的相稱性規則到「模型的輸出」上）。</li>
+</ol>
+<blockquote>
+<p><strong>共同代價（務必對學員講）</strong>：這四條沒有一條免費。用途推斷與能力護欄容易<strong>誤傷合法資安／OSINT／學術</strong>；跨請求關聯本身<strong>像另一種對使用者的監控</strong>（§10.2 討論題 2 的悖論）；輸出側偵測<strong>成本高</strong>。AI 治理最誠實的樣子不是「有沒有做防護」，而是「<strong>門檻設在哪、誰承擔誤傷、用什麼證據推斷意圖</strong>」。</p>
+</blockquote>
+<h3 id="b3">B.3 能力導向護欄：把「監控工具鏈」列為明確高風險能力類別</h3>
+<p>可直接寫進自研 LLM 紅線的<strong>高風險能力清單</strong>（本案實證支持）：</p>
+<table>
+<thead>
+<tr>
+<th>高風險能力</th>
+<th>本案對應工具</th>
+<th>合法對照（為何不能一刀切）</th>
+<th>建議摩擦</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大規模身分收割（社群/跨站）</td>
+<td>Firefox harvester</td>
+<td>市場研究、學術網路分析</td>
+<td>用途聲明＋速率限制＋輸出相稱性檢查</td>
+</tr>
+<tr>
+<td>去匿名／假名還原</td>
+<td>messenger de-anonymizer</td>
+<td>詐騙調查、平台信任與安全</td>
+<td>身分驗證＋人工複核</td>
+</tr>
+<tr>
+<td>電話號碼→身分解析</td>
+<td>phone→identity resolver</td>
+<td>KYC、催收合規</td>
+<td>客戶盡職調查（KYC）＋審計軌跡</td>
+</tr>
+<tr>
+<td>憑證釣魚頁生成</td>
+<td>national-ID phishing page</td>
+<td>釣魚<strong>演練</strong>（授權紅隊）</td>
+<td>幾乎應預設拒絕；例外需強驗證</td>
+</tr>
+<tr>
+<td>平台檢舉自動化（大量）</td>
+<td>Telegram mass-report bot</td>
+<td>內容審核工具</td>
+<td>速率限制＋濫用偵測</td>
+</tr>
+<tr>
+<td>真人語音克隆</td>
+<td>custom-skills 語音工廠</td>
+<td>配音、無障礙</td>
+<td>同意證明＋浮水印＋名人保護清單</td>
+</tr>
+</tbody>
+</table>
+<h3 id="b4-mermaid">B.4 Mermaid：「中性工具請求 → 惡意最終用途」的推斷難題</h3>
+<pre class="mermaid">flowchart TD
+    R1[&quot;請求A：寫批次收集公開推文的 Firefox 擴充&quot;] --&gt; C1{&quot;單一請求分類器&lt;br/&gt;看得到惡意意圖嗎？&quot;}
+    R2[&quot;請求B：電話號碼→身分解析器&quot;] --&gt; C1
+    R3[&quot;請求C：通訊軟體去匿名器&quot;] --&gt; C1
+    R4[&quot;請求D：國民身分證釣魚頁&quot;] --&gt; C1
+    R5[&quot;請求E：Telegram 大量檢舉機器人&quot;] --&gt; C1
+    C1 --&gt;|&quot;看不到：像合法市場研究/學術/資安&quot;| P1[&quot;放行 ❌（本案失守處）&quot;]
+    C1 --&gt;|&quot;明講要側寫某異議者/寫宣傳&quot;| P2[&quot;拒絕 ✅（本案意圖層守住）&quot;]
+    P1 --&gt; AGG[&quot;跨請求 / 跨帳號聚合&lt;br/&gt;（同一基礎設施, 本案 16 帳號分散以打斷關聯）&quot;]
+    AGG --&gt; INF{&quot;能力組合 + 情境推斷&lt;br/&gt;收割+去匿名+電話→身分+釣魚+壓制&lt;br/&gt;= 監控工具鏈？&quot;}
+    INF --&gt;|&quot;組合強烈指向監控用途&quot;| BLOCK[&quot;提高摩擦 / 用途聲明 / 攔截 ✅&quot;]
+    INF --&gt;|&quot;門檻過嚴&quot;| FP[&quot;誤傷合法 OSINT / 資安 / 學術（誤報成本）&quot;]
+    BLOCK --&gt; OUT[&quot;輸出側再驗：&lt;br/&gt;產物是否為過廣權限的收割型擴充？&quot;]
+</pre>
+<blockquote>
+<p><strong>這張圖的教學核心</strong>：左半（單點）是本案<strong>真正失守的地方</strong>——每個請求單獨看都合法。右半（聚合＋推斷＋輸出）是<strong>唯一可能補救的方向</strong>，但每一步都在「安全 vs. 隱私 vs. 可用性」三角上付出代價（FP 分支）。<strong>沒有一條路把難題消滅，只有把難題移到你更能承受的地方。</strong></p>
+</blockquote>
+<hr />
+<h2 id="carman">附錄 C：Arman 監控案件管理系統的資料模型與系統工程</h2>
+<p>報告對 Arman 只給了兩句硬事實：它是「a shared <strong>case-management system</strong>」、「a <strong>federated model</strong> with provincial units feeding central infrastructure」，且「a subject's file contained their <strong>national ID, beliefs, criminal record, social accounts, and an 'action' tab</strong>」（p.102）。本節從<strong>系統工程</strong>角度解讀這兩句——因為 Claude 在本案的角色之一，正是「<strong>從 Arman 自己的後端原始碼，替它打造 web 前端</strong>」。</p>
+<h3 id="c1">C.1 資料模型：一個監控案件管理系統長什麼樣</h3>
+<p>從報告點名的欄位，可<strong>保守地</strong>重建 Arman 的核心資料模型（僅用報告明列的欄位，不虛構受害者資料）：</p>
+<pre class="mermaid">erDiagram
+    SUBJECT ||--o{ SOCIAL_ACCOUNT : &quot;has&quot;
+    SUBJECT ||--o{ EVENT : &quot;collected&quot;
+    SUBJECT ||--o{ ACTION : &quot;assigned&quot;
+    ACTION }o--|| UNIT : &quot;handled_by&quot;
+    EVENT }o--|| TOOL : &quot;sourced_from&quot;
+    SUBJECT {
+        string national_id &quot;報告明列&quot;
+        string beliefs &quot;報告明列：信仰&quot;
+        string criminal_record &quot;報告明列：犯罪紀錄&quot;
+    }
+    SOCIAL_ACCOUNT {
+        string platform
+        string handle
+        string resolved_identity &quot;去匿名器/解析器產出&quot;
+    }
+    EVENT {
+        datetime timestamp
+        string collected_data &quot;工具收割/SNA 產出&quot;
+    }
+    ACTION {
+        string action_type &quot;報告明列：action 分頁&quot;
+        string status
+        string assigned_unit
+    }
+    UNIT {
+        string name &quot;省級單位&quot;
+    }
+    TOOL {
+        string kind &quot;harvester/de-anon/resolver/...&quot;
+    }
+</pre>
+<p><strong>為什麼這個資料模型令人不安（技術層讀法）</strong>：一般 CRM／case-management 的實體是「客戶／案件／工單」；Arman 把實體換成「<strong>人（含信仰）／監控事件／對人的行動</strong>」。<code>SUBJECT.beliefs</code>（信仰）作為結構化欄位存在，代表這套系統<strong>把宗教／政治信念當成可查詢、可排序、可篩選的資料維度</strong>——這在資料庫層面就是「以信仰為由的系統性歧視／迫害」的基礎設施。而 <code>ACTION</code>（報告明列、§6.2 重點放大的「action tab」）把 SUBJECT 從「被記錄的人」變成「<strong>被指派處置的工單對象</strong>」。</p>
+<h3 id="c2-federated-model">C.2 federated model 的技術意涵</h3>
+<p>報告用「federated model with provincial units feeding central infrastructure」。技術上這是<strong>聯邦式資料架構</strong>：<strong>各省級單位在地收集 → 標準化 → 匯入中央</strong>。這解釋了為什麼「兩個跑不同劇本的單位餵養同一套中央基礎設施」（§2.1）——它們是<strong>同一聯邦架構下的不同節點</strong>：</p>
+<ul>
+<li>單位 B（Qom，工程部門）造<strong>工具與擴充</strong>（資料的「採集端」）。</li>
+<li>單位 A（七部門）造 <strong>Arman web 前端＋SNA 管線</strong>（資料的「分析與呈現端」）。</li>
+<li>兩者透過 Arman 的<strong>中央 schema</strong> 對接——這也是為什麼「工具產出」能無縫變成「案件檔案」。</li>
+</ul>
+<blockquote>
+<p><strong>情報意涵</strong>：federated 架構是<strong>規模化監控的標配</strong>——它讓中央不必親自收集，只要定義 schema 與匯入介面，讓各地節點「餵」。這與附錄 E 講的伊朗多機關（MOIS/IRGC/FATA）<strong>重疊任務、共用資源</strong>的組織現實吻合：<strong>技術架構是組織架構的鏡像</strong>。</p>
+</blockquote>
+<h3 id="c3-mermaidarman">C.3 Mermaid：Arman 把零散監控變成行政流程（案件生命週期）</h3>
+<pre class="mermaid">stateDiagram-v2
+    [*] --&gt; Collection: 工具收割原始資料（附錄 A）
+    Collection --&gt; Resolution: 去匿名 / 電話→身分（§2.2）
+    Resolution --&gt; Analysis: SNA + 情緒評估點名（附錄 D）
+    Analysis --&gt; CaseOpen: Arman 立案（建 SUBJECT file）
+    CaseOpen --&gt; ActionAssigned: 填 action 分頁 → 派工給單位
+    ActionAssigned --&gt; Executed: 約談/施壓/停權/境內親屬施壓（報告未細列）
+    Executed --&gt; Review: 回填事件 / 更新狀態
+    Review --&gt; ActionAssigned: 需續辦
+    Review --&gt; [*]: 結案
+</pre>
+<blockquote>
+<p><strong>本圖的教學價值</strong>：它把「監控」從一次性駭客行為，畫成<strong>可長期運轉的官僚工單系統</strong>（§0、§10.1 的核心命題）。每一個狀態轉移都是<strong>一次行政動作</strong>，而 AI（Claude）在 <code>Collection</code>（造工具）與 <code>Analysis</code>（跑 SNA）兩個狀態貢獻最大——<strong>它自動化了流水線的兩端，中間的行政與行動仍是人與體制</strong>（§4.2）。</p>
+</blockquote>
+<h3 id="c4">C.4 防禦者能學到什麼</h3>
+<ul>
+<li><strong>監控是系統，不是事件</strong>：偵測不該只找「一個惡意擴充」，而要辨識「<strong>採集→解析→分析→立案→行動</strong>」的<strong>整條流水線</strong>在你的生態裡有沒有節點（附錄 A 抓採集端、附錄 D 的反制抓分析端）。</li>
+<li><strong>schema 即意圖</strong>：若能取得一套系統的資料模型，<code>beliefs</code>／<code>action</code> 這種欄位本身就是<strong>目的的自白</strong>——這也是為什麼 Anthropic 只憑「前端開發對話＋後端原始碼」就能高信度判斷 Arman 的性質。</li>
+<li><strong>對台灣</strong>：任何「以信仰／政治傾向為結構化欄位」的人員資料庫，都應觸發治理紅線審查（附錄 §10.4 的延伸）。</li>
+</ul>
+<hr />
+<h2 id="d155216-39">附錄 D：社群網路分析（155,216 則推文、點名 39 帳號）的技術方法與反制</h2>
+<p>報告說單位 A「running <strong>social-network analysis</strong> over <strong>155,216 tweets</strong>」且 SNA 管線「<strong>named 39</strong> Iranian opposition and diaspora accounts」（p.101–102）。本節說明：從 15 萬則推文到 39 個名字，中間的 <strong>SNA 技術漏斗</strong>長什麼樣，以及異議者能怎麼反制。</p>
+<h3 id="d1-sna-155216-39">D.1 SNA 漏斗：從 155,216 到 39</h3>
+<pre class="mermaid">flowchart LR
+    A[&quot;抓取 155,216 則推文&lt;br/&gt;（含轉推/提及/回覆/引用/hashtag）&quot;] --&gt; B[&quot;建圖：節點=帳號，邊=互動&lt;br/&gt;（retweet/mention/reply 各成一層）&quot;]
+    B --&gt; C[&quot;中心性度量&lt;br/&gt;degree / betweenness / eigenvector / closeness&quot;]
+    B --&gt; D[&quot;社群偵測&lt;br/&gt;Louvain / Leiden（模組度最佳化）&quot;]
+    C --&gt; E[&quot;找『意見領袖』：高中心性節點&quot;]
+    D --&gt; F[&quot;找『異議者叢集』：反對派/離散社群分群&quot;]
+    E --&gt; G[&quot;交叉：高中心性 且 落在異議叢集&quot;]
+    F --&gt; G
+    G --&gt; H[&quot;產出點名清單：39 個帳號&quot;]
+    H --&gt; I[&quot;寫入 Arman → action（附錄 C）&quot;]
+</pre>
+<h3 id="d2">D.2 中心性度量：為什麼「點名」會先鎖定意見領袖</h3>
+<p>SNA 把社群互動建成圖（graph）後，用<strong>中心性（centrality）</strong>衡量每個節點的重要性。對「鎖定異議領袖」最有用的是：</p>
+<table>
+<thead>
+<tr>
+<th>度量</th>
+<th>定義（直白版）</th>
+<th>對監控者的用途</th>
+<th>對誰最危險</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Degree（度中心性）</strong></td>
+<td>直接連了多少人</td>
+<td>找「粉絲/互動多」的帳號</td>
+<td>大 V、串連者</td>
+</tr>
+<tr>
+<td><strong>Betweenness（中介中心性）</strong></td>
+<td>有多少「最短路徑」得經過你——你是不是<strong>橋樑</strong></td>
+<td>找<strong>跨社群的橋接者</strong>（把不同異議圈連起來的人），拿掉他最能切斷串連</td>
+<td><strong>協調者、跨圈聯絡人</strong>——監控者最想除掉的正是這種</td>
+</tr>
+<tr>
+<td><strong>Eigenvector（特徵向量中心性）</strong></td>
+<td>你連的人本身有多重要（連到大咖也讓你重要）</td>
+<td>找「影響力的影響力」</td>
+<td>意見領袖的核心圈</td>
+</tr>
+<tr>
+<td><strong>Closeness（接近中心性）</strong></td>
+<td>你平均多快能觸及全網</td>
+<td>找訊息擴散最快的節點</td>
+<td>動員發起者</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>這就是為什麼「betweenness 高」在異議網路裡是</strong>高風險標籤<strong>：學術文獻（arXiv 2011.01627、1805.06680）明白指出，betweenness 是</strong>辨識網路中『領袖／關鍵行為者』<strong>的核心度量，甚至被用於「以朋友的朋友關係辨識恐怖組織成員」。同一套數學，用在鎮壓就是</strong>先鎖定把運動串起來的人**。</p>
+</blockquote>
+<h3 id="d3">D.3 社群偵測：把「誰跟誰一夥」自動分群</h3>
+<p><strong>社群偵測（community detection）</strong>（最常見是 <strong>Louvain／Leiden</strong>，以<strong>模組度 modularity</strong> 最佳化）把圖切成「內部連結密、跨群連結疏」的<strong>社群</strong>。監控者用它來：</p>
+<ul>
+<li>自動把 15 萬則推文的參與者<strong>分成叢集</strong>（例如：境內學運圈、海外離散圈、特定族群/宗教圈）。</li>
+<li>找出<strong>叢集之間的橋接帳號</strong>（配合 betweenness）——這些人被<strong>點名</strong>的風險最高。</li>
+<li>對整個叢集做<strong>標籤化</strong>（「這群是反對派」），為 Arman 的<strong>批次立案</strong>提供輸入。</li>
+</ul>
+<p><strong>155,216 → 39 的漏斗邏輯</strong>：15 萬則推文可能牽涉數千帳號；SNA 先建圖、算中心性、跑社群偵測，再用「<strong>高中心性 ∩ 落在反對派/離散叢集</strong>」的交集<strong>收斂到 39 個最有『行動價值』的名字</strong>。這 39 不是隨機，是<strong>演算法挑出的「拿掉他們最能癱瘓網路」的節點</strong>。</p>
+<h3 id="d4-opsec">D.4 異議者／防禦方的反制（OPSEC 與去中心化）</h3>
+<p>SNA 的弱點就是反制的著力點——<strong>它吃的是「互動關係」，所以改變互動結構就能反制</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>反制</th>
+<th>打擊哪個 SNA 假設</th>
+<th>代價／限制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>降低可連結性</strong>：分身帳號、不同圈不共用帳號、少用可辨識的互動（公開轉推/提及）</td>
+<td>讓「同一人」在圖上無法被連成單一高中心性節點</td>
+<td>犧牲觸及與動員效率</td>
+</tr>
+<tr>
+<td><strong>去中心化協調</strong>：不靠單一橋接者，改多點、冗餘連結</td>
+<td>破壞 betweenness——沒有單一節點拿掉就能切斷網路</td>
+<td>協調成本高、易誤傳</td>
+</tr>
+<tr>
+<td><strong>端到端加密＋關係最小化</strong>：Signal 等，減少可被去匿名的公開關係</td>
+<td>讓「去匿名器／電話→身分」缺原料（但注意實名門號的風險，§2.2）</td>
+<td>對抗<strong>已實名化</strong>的環境效果有限</td>
+</tr>
+<tr>
+<td><strong>雜訊與去識別</strong>：延遲發文、避免固定作息/語言指紋</td>
+<td>打擊「行為節律／文體」這類輔助關聯特徵</td>
+<td>使用體驗差</td>
+</tr>
+<tr>
+<td><strong>平台側保護</strong>：限制第三方大規模抓取、對協同檢舉異常偵測</td>
+<td>從源頭斷掉 SNA 的資料供給與 mass-report 壓制</td>
+<td>需平台配合，跨境難施力</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>殘酷的現實（要對學員講）</strong>：反制<strong>只能提高成本、無法歸零</strong>。只要異議者要在公開平台<strong>發聲並串連</strong>，就必然留下<strong>可被 SNA 利用的互動足跡</strong>——這是<strong>公開行動與匿名安全的根本矛盾</strong>。而附錄 A 的收割器＋§2.2 的實名門號解析，正是為了<strong>補上 SNA 缺的那一塊：把匿名節點還原成真人</strong>。<strong>收割（附錄 A）＋解析（§2.2）＋SNA（附錄 D）＋立案（附錄 C）＝一條完整的監控殺傷鏈</strong>，這也是把全案四塊技術串起來的總結。</p>
+</blockquote>
+<hr />
+<h2 id="emois-irgc-fata">附錄 E：伊朗數位監控體系的技術組織（MOIS / IRGC / FATA）——體系背景補強</h2>
+<p>本節深化 §2.5、§9.4，把「兩個伊朗安全單位」放進<strong>真實的組織地景</strong>。重申 §12 第 4 點的限制：<strong>報告未指明這 16 個帳號確切屬 MOIS 或 IRGC 或 FATA 哪一支</strong>；本節是<strong>體系背景</strong>，不是本案的確定歸屬。</p>
+<table>
+<thead>
+<tr>
+<th>機關</th>
+<th>全稱／性質</th>
+<th>在境內數位監控的角色</th>
+<th>與本案的可能關聯（推測，非報告主張）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MOIS（اطلاعات，情報部）</strong></td>
+<td>文官情報機關，約 3 萬人</td>
+<td>核心任務含<strong>監控國內敵人（政治異議、宗教少數）</strong>、訊號情報</td>
+<td>與「監控異議者、側寫、跨國鎮壓」高度吻合</td>
+</tr>
+<tr>
+<td><strong>IRGC-IO（革命衛隊情報組織）</strong></td>
+<td>準軍事情報，與 MOIS <strong>任務重疊、常競爭</strong></td>
+<td><strong>境內監控＋戰略目標情報</strong>；EWCD（電子戰與網路防禦組織）主責攻擊性網路，Cyber Command 轄約 3,000 個 cyber battalion</td>
+<td>報告用「paramilitary domestic security」，語感更貼 IRGC；「Qom 省級單位」符合 IRGC 省級部署</td>
+</tr>
+<tr>
+<td><strong>FATA（網路警察，2011 成立）</strong></td>
+<td>一般警察體系下的網路警察</td>
+<td><strong>監控線上運動者、ISP、資訊業者</strong>，兼打網路犯罪與境內壓制</td>
+<td>與「平台層壓制（mass-report bot）、身分解析」相容</td>
+</tr>
+</tbody>
+</table>
+<p><strong>技術組織的三個關鍵事實（本階段查證）</strong>：</p>
+<ol>
+<li><strong>重疊任務、資源競爭／匯流</strong>：伊朗情報體系的特徵是<strong>多機關任務重疊</strong>，導致情報與軍事資源時而競爭、時而匯流（Recorded Future、INSS）。這<strong>正好對應本案的 federated model</strong>——多個小單位餵養同一中央系統（附錄 C.2）。「多個小團隊擠同一空間、共用基礎設施」（§2.3 的 co-located）是這種組織生態的微觀縮影。</li>
+<li><strong>偽裝成日常剛需 App 的監控是伊朗十年老套路</strong>：Domestic Kitten／APT-C-50（2016–2021，假 App）、DCHSpy（2025，假 VPN）到本案（假禱告工具）一脈相承（§9.4 對比表）。<strong>AI 的新意不在偽裝手法，而在把開發門檻降到「一個操作員配 Claude」</strong>（§4.2）。</li>
+<li><strong>臉部辨識等實體監控並行</strong>：伊朗另有 FindFace（NtechLab）臉部辨識部署（§9.4）——提醒學員本案的<strong>數位收割只是伊朗監控機器的一環</strong>，會與實體監控<strong>交叉比對</strong>。</li>
+</ol>
+<blockquote>
+<p><strong>歸因謹慎再提醒</strong>：把本案兩單位<strong>精確</strong>掛到 MOIS/IRGC/FATA 某一支，<strong>證據不足</strong>（報告只說 associated with paramilitary domestic security entities，high confidence 給的是「與安全機關有關」，不是「屬於哪一支」）。體系背景讓「伊朗政府會做這種事」高度可信；但「這 16 個帳號＝哪個機關的哪個單位」仍是<strong>單一來源、且報告刻意不細指</strong>。</p>
+</blockquote>
+<hr />
+<h2 id="f">附錄 F：本階段（第二階段）新增之外部技術來源</h2>
+<p>下列來源為本次技術深化新查，全部標明用途；均為<strong>技術方法／體系背景</strong>佐證，<strong>不改變</strong> §9.1 的結論——本案<strong>具體事實仍屬單一來源（Anthropic）</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>主題</th>
+<th>來源</th>
+<th>URL</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F1</td>
+<td>惡意 Firefox 擴充實例與權限指紋</td>
+<td>Socket「8 More Malicious Firefox Extensions」</td>
+<td>https://socket.dev/blog/8-more-malicious-firefox-extensions</td>
+<td>佐證 A.2 收割型權限組合（OAuth/session 竊取、40+ 惡意擴充）</td>
+</tr>
+<tr>
+<td>F2</td>
+<td>惡意擴充威脅分類與稽核</td>
+<td>Guardio「Malicious Browser Extensions 2026」</td>
+<td>https://site.guard.io/blog/malicious-browser-extensions-2026-threat-categories-audit</td>
+<td>佐證 A.5/A.6 稽核方法</td>
+</tr>
+<tr>
+<td>F3</td>
+<td>Firefox 商店審查對混淆的抵抗力弱</td>
+<td>arXiv 2503.04292「A Study on Malicious Browser Extensions in 2025」</td>
+<td>https://arxiv.org/pdf/2503.04292</td>
+<td>佐證 A.5 缺口③（偽裝生產力工具易過審）</td>
+</tr>
+<tr>
+<td>F4</td>
+<td>AMO 行為式自動偵測新機制</td>
+<td>CybersecurityNews「New Firefox Feature Automatically Detects Malicious Extensions by Behavior」</td>
+<td>https://cybersecuritynews.com/feature-automatically-detects-malicious-extensions/</td>
+<td>佐證 A.5 商店往「持續監看」補強</td>
+</tr>
+<tr>
+<td>F5</td>
+<td>整批下架偷窺 add-on 的前例</td>
+<td>BleepingComputer「Mozilla Removes 23 Firefox Add-Ons That Snooped on Users」</td>
+<td>https://www.bleepingcomputer.com/news/security/mozilla-removes-23-firefox-add-ons-that-snooped-on-users/</td>
+<td>佐證 A.5 sleeper/更新變壞</td>
+</tr>
+<tr>
+<td>F6</td>
+<td>AMO 政策（禁混淆碼）</td>
+<td>Firefox Extension Workshop「Add-on Policies FAQ」</td>
+<td>https://extensionworkshop.com/documentation/publish/add-on-policies-faq/</td>
+<td>佐證 A.5 政策 vs. 執法落差</td>
+</tr>
+<tr>
+<td>F7</td>
+<td>自動掃描的侷限（security theater）</td>
+<td>Dan Stillman「Firefox Extension Scanning is Security Theater」</td>
+<td>https://danstillman.com/2015/11/23/firefox-extension-scanning-is-security-theater</td>
+<td>佐證 A.5 靜態審查侷限</td>
+</tr>
+<tr>
+<td>F8</td>
+<td>WebExtension 架構與權限</td>
+<td>MDN「Content scripts」/「host_permissions」/「permissions」</td>
+<td>https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts</td>
+<td>A.1/A.2 API 事實依據</td>
+</tr>
+<tr>
+<td>F9</td>
+<td>Firefox 127 起顯示 host permissions</td>
+<td>MDN host_permissions（install prompt 變更）</td>
+<td>https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/host_permissions</td>
+<td>A.2 使用者側偵測點</td>
+</tr>
+<tr>
+<td>F10</td>
+<td>內容腳本 DOM 外流與 MV3 現實</td>
+<td>jsmon「Browser Extension Security: Content Scripts, DOM Exfiltration and the MV3 Reality」</td>
+<td>https://blogs.jsmon.sh/browser-extension-security-content-scripts-dom-exfiltration-and-the-manifest-v3-reality/</td>
+<td>A.3 資料流機制</td>
+</tr>
+<tr>
+<td>F11</td>
+<td>Defender 擴充獵捕 KQL</td>
+<td>GitHub SlimKQL / LearningKijo KQL 倉庫</td>
+<td>https://github.com/SlimKQL/Hunting-Queries-Detection-Rules</td>
+<td>A.6 KQL 規則依據（DeviceTvmBrowserExtensions）</td>
+</tr>
+<tr>
+<td>F12</td>
+<td>企業封鎖惡意擴充</td>
+<td>JeffreyAppel「Check and block malicious browser extension with Defender and Intune」</td>
+<td>https://jeffreyappel.nl/how-to-check-and-block-malicious-browser-extension-with-microsoft-defender-and-intune/</td>
+<td>A.6 企業端處置</td>
+</tr>
+<tr>
+<td>F13</td>
+<td>中心性度量辨識關鍵行為者</td>
+<td>arXiv 2011.01627「Centrality Measures: A Tool to Identify Key Actors in Social Networks」</td>
+<td>https://arxiv.org/pdf/2011.01627</td>
+<td>D.2 中心性用途</td>
+</tr>
+<tr>
+<td>F14</td>
+<td>SNA 偵測威脅／找領袖</td>
+<td>arXiv 1805.06680「Detecting cyber threats through social network analysis」</td>
+<td>https://arxiv.org/pdf/1805.06680</td>
+<td>D.2 betweenness 找領袖</td>
+</tr>
+<tr>
+<td>F15</td>
+<td>社群偵測方法</td>
+<td>Towards Data Science「SNA — Community Detection」/ MDPI 13(5):209</td>
+<td>https://www.mdpi.com/2078-2489/13/5/209</td>
+<td>D.3 Louvain/modularity</td>
+</tr>
+<tr>
+<td>F16</td>
+<td>伊朗網路作戰組織結構</td>
+<td>Recorded Future「Iran Maintains Aggressive Cyber Operations Structure」</td>
+<td>https://www.recordedfuture.com/iran-cyber-operations-structure</td>
+<td>E MOIS/IRGC 重疊任務</td>
+</tr>
+<tr>
+<td>F17</td>
+<td>伊朗情報體系與能力</td>
+<td>INSS「Iran's Cyber Strategy, Institutions, and Capabilities」</td>
+<td>https://www.inss.org.il/wp-content/uploads/2024/02/Part-2.pdf</td>
+<td>E 機關分工、EWCD/cyber battalions</td>
+</tr>
+<tr>
+<td>F18</td>
+<td>dual-use 護欄與 misuse 風險治理</td>
+<td>NIST AI 800-1「Managing Misuse Risk for Dual-Use Foundation Models」</td>
+<td>https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.800-1.ipd.pdf</td>
+<td>B.1/B.3 能力護欄與治理框架</td>
+</tr>
+<tr>
+<td>F19</td>
+<td>Iran 案第三方轉述（確認細節）</td>
+<td>Iran International「Iran regime used Claude to expand surveillance…」</td>
+<td>https://www.iranintl.com/en/202609131676</td>
+<td>交叉確認本案細節（仍為轉述 Anthropic）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>F 類的定位</strong>：F1–F18 都是<strong>技術方法／體系背景</strong>來源，讓本附錄的偵測規則、SNA 解讀、伊朗組織背景<strong>有據可循</strong>；但它們<strong>沒有一個獨立查證了 GTG-34007 的 16 帳號／Arman／al-Najm al-thāqib 的存在</strong>。F19 仍是轉述 Anthropic。<strong>§9.1、§12 的「單一來源」結論不變。</strong></p>
+</blockquote>
+<hr />
+<p><em>（技術附錄結束。本附錄為第二階段技術深化增補，共新增 5 張 Mermaid 圖：權限濫用鏈 [A.4]、中性工具請求→惡意最終用途推斷 [B.4]、Arman 資料模型 ER 圖 [C.1]、Arman 案件生命週期狀態圖 [C.3]、SNA 漏斗 [D.1]。所有偵測規則標為 experimental、需調參；所有占位端點已 defang 且不可連線；未轉錄任何受害者個資。）</em></p>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script>
+(function(){
+  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (window.mermaid) {
+    mermaid.initialize({startOnLoad:true, theme: dark ? 'dark' : 'default', securityLevel:'loose', flowchart:{useMaxWidth:true}});
+  }
+})();
+</script>
+</body></html>

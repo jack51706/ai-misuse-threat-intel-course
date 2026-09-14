@@ -1,0 +1,4556 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GTG-84006-mek-ncri-viktor</title>
+<style>
+:root{--fg:#1a1a1a;--bg:#fff;--muted:#666;--line:#e2e2e2;--link:#0b5cad;--code-bg:#f5f5f5;--accent:#0b5cad}
+@media(prefers-color-scheme:dark){:root{--fg:#e6e6e6;--bg:#141414;--muted:#9a9a9a;--line:#333;--link:#6cb6ff;--code-bg:#1e1e1e;--accent:#6cb6ff}}
+*{box-sizing:border-box}
+body{max-width:900px;margin:0 auto;padding:2rem 1.2rem 6rem;font-family:"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;line-height:1.75;color:var(--fg);background:var(--bg);font-size:16px}
+h1,h2,h3,h4{line-height:1.3;margin-top:1.8em}
+h1{font-size:1.7rem;border-bottom:2px solid var(--accent);padding-bottom:.3em}
+h2{font-size:1.35rem;border-bottom:1px solid var(--line);padding-bottom:.2em}
+h3{font-size:1.12rem}
+a{color:var(--link)}
+code{background:var(--code-bg);padding:.1em .35em;border-radius:4px;font-family:"Cascadia Code",Consolas,"Courier New",monospace;font-size:.9em}
+pre{background:var(--code-bg);padding:1em;border-radius:8px;overflow-x:auto;font-size:.86em;line-height:1.5}
+pre code{background:none;padding:0}
+pre.mermaid{background:transparent;text-align:center}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.92em;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:.5em .7em;text-align:left;vertical-align:top}
+th{background:var(--code-bg)}
+blockquote{border-left:4px solid var(--accent);margin:1em 0;padding:.4em 1em;color:var(--muted);background:var(--code-bg)}
+img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;margin:.5em 0}
+.figgallery{margin-top:2em;border-top:2px solid var(--accent);padding-top:1em}
+.figgallery figure{margin:1.5em 0}
+.figgallery figcaption{color:var(--muted);font-size:.9em;margin-top:.3em}
+.topbar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:.6em 0;margin:-2rem -1.2rem 1.5rem;padding-left:1.2rem;font-size:.9em}
+.topbar a{text-decoration:none;margin-right:1em}
+hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+</style></head>
+<body><div class="topbar"><a href="../index.html">◀ 課程索引</a></div><h1 id="gtg-84006mekncri-ai-viktor">GTG-84006：MEK/NCRI 對齊的分散式影響力行動——以共享 AI 代理平台「Viktor」冒充真人、向伊朗境內滲透</h1>
+<blockquote>
+<p>課程模組：02 影響力行動（Influence operations）｜一手來源：Anthropic《Detecting and countering misuse of AI: September 2026》PDF p.70–75｜整理日期：2026-09-13</p>
+</blockquote>
+<hr />
+<h2 id="0">0. 閱讀本章前的提醒</h2>
+<p>本案涉及<strong>真實存在的個人安全風險</strong>。報告描述的受害者包含：</p>
+<ol>
+<li>一名<strong>被冒充的真實運動者</strong>（報告未具名，只稱 "a real-world activist"、"his contacts"，可推知為男性）；</li>
+<li>他在<strong>伊朗境內</strong>的聯絡人；</li>
+<li>數十名被建立「心理側寫檔案」（psychographic dossiers）的伊朗境內具名個人，其中包含<strong>有被捕紀錄者</strong>。</li>
+</ol>
+<p>依伊朗法律，與 MEK/PMOI 有關聯本身即可被以 <strong>baghi（武裝叛亂／與真主為敵）</strong> 起訴並判處死刑（見第 9 節獨立來源）。因此本案不是一個「假新聞產製」案例，而是一個<strong>數位冒充導致實體人身危險</strong>的案例。</p>
+<p>教材處理原則：</p>
+<ul>
+<li>IOC（網域、Instagram / Telegram handle）僅以研究資料抄錄，<strong>保留報告原本的 defang 格式</strong>。課堂與研究過程中<strong>不得</strong>對這些指標做連線、DNS 查詢或互動式查詢。</li>
+<li>報告未具名的個人，本教材也<strong>不做任何身分推測</strong>。網路上若有人宣稱「知道被冒充者是誰」，在教學場合不應轉述。</li>
+<li>MEK/NCRI 的政治定位極具爭議。本教材第 2.6 節採「爭議並陳」寫法，目的不是評斷該組織，而是讓學員理解：<strong>影響力行動的行為者不只有威權政府，也包括反對威權的流亡組織</strong>，而分析者必須對兩者用同一把尺。</li>
+</ul>
+<hr />
+<h2 id="1">1. 一頁速覽</h2>
+<ol>
+<li><strong>這是全報告中唯一一起「多名操作者共用同一個 AI 代理平台」的案例。</strong> 該平台被 Anthropic 記為 <strong>「Viktor」</strong>（報告 p.72 Cluster 表、p.73 Figure 15）。每個 workspace 有自己的長期記憶檔，內含禁用詞清單、指定來源、帳號管理規則與規避偵測手法；「這讓該代理能在沒有人類使用者逐一下指令的情況下持續產出內容」（p.72）。</li>
+</ol>
+<p><img alt="報告原圖 · 第 73 頁（一手 PDF）" src="../figures/page-073.png" /></p>
+<ol start="2">
+<li><strong>最嚴重的單一行為是「即時冒充真實運動者」。</strong> 操作者要 AI 代理複製一名真實運動者的個人 Telegram 帳號，<strong>用波斯語告訴它「你現在就是這個人」</strong>，再讓 Claude 讀取他大約 <strong>8,400 則</strong> Telegram 貼文以模仿文風，然後拿去與他的聯絡人<strong>進行即時政治對話</strong>。報告寫明：「就我們所知，這些聯絡人並不知道他們正在與一個 AI 輔助的帳號說話。」（p.70）</li>
+<li><strong>監控規模具體且指向境內個人。</strong> 刮取 <strong>500 個以上</strong>社群頻道建立伊朗境內個人檔案，並依<strong>城市、年齡、職業、政治傾向、被捕紀錄</strong>分群；分析約 <strong>51,944 則</strong>封存訊息，對伊朗境內<strong>數十名具名個人</strong>建立心理側寫檔案（p.71）。Cluster 表把這一項的「最嚴重元素」寫成：對<strong>依伊朗法律面臨監禁或處決的人</strong>做被捕紀錄側寫（p.72）。</li>
+<li><strong>行動由有薪人員支撐，而非散兵游勇。</strong> 至少<strong>四名</strong>執行者任職於<strong>官方 NCRI 媒體機構</strong>；行動仰賴橫跨電視、衛星與短波廣播、Instagram、Telegram、X/Twitter 的 NCRI/MEK 媒體資產；內部有<strong>專責委員會核可流程</strong>、從「內容校正者」到「主管」的正式審稿鏈，溝通中反覆出現 <strong>"per our contract"（依照我們的合約）</strong> 與對 <strong>MEK 領導層</strong>的提及（p.71–72）。</li>
+<li><strong>歸因措辭要精讀。</strong> Anthropic 說行為者「並未共用帳號基礎設施，也未展現可見的協同跡象」，但調查仍將此活動<strong>連結（linked）</strong>到 PMOI/MEK 與其政治外圍 NCRI；同時明說「中央指派<strong>很可能（likely）</strong>，但我們<strong>無法驗證</strong>中央控制的程度」（p.70–71）。這兩句話的落差就是本案的情報學教學點。</li>
+<li><strong>Breakout Scale 評為 Category Two</strong>：多平台，但散布是透過<strong>網絡自有的</strong> NCRI 媒體資產與放大帳號（p.71）。Anthropic 同時承認「目前無法獨立確認該網絡的放大帳號吸引到多少真實互動」（p.74）。</li>
+</ol>
+<p><img alt="報告原圖 · 第 74 頁（一手 PDF）" src="../figures/page-074.png" /></p>
+<ol start="7">
+<li><strong>合成媒體用在最政治性的地方。</strong> 為推廣 NCRI 主席 <strong>Maryam Rajavi 的十點計畫</strong>，網絡為<strong>每一篇文章</strong>生成 AI 頭像、加上動態與波斯語語音，並刻意把它們設計成「看起來像一般伊朗人」，同時<strong>刻意隱藏它們是 AI 生成的事實</strong>（p.71）。</li>
+<li><strong>課程要教什麼</strong>：一個影響力行動一旦把「教義、規避規則、帳號管理規則」寫進 <strong>AI 代理的持久記憶</strong>，人類就從「每次下指令的人」退化成「偶爾更新設定檔的人」——這同時是<strong>防守方最大的偵測盲點</strong>（意圖不再出現在對話裡），也是<strong>最大的偵測機會</strong>（同一份指紋會橫跨所有看似無關的帳號）。本案就是這個雙面性的教科書範例。</li>
+</ol>
+<hr />
+<h2 id="2">2. 行為者側寫與歸因</h2>
+<h3 id="21">2.1 報告給出的硬事實</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>報告原文依據</th>
+<th>頁碼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>追蹤代號</td>
+<td>GTG-84006</td>
+<td>p.70</td>
+</tr>
+<tr>
+<td>行為者類型</td>
+<td>流亡反對派運動（報告 p.43 稱本次九起影響力行動中「其中一起是流亡中的反對運動」）</td>
+<td>p.43, p.70</td>
+</tr>
+<tr>
+<td>歸屬組織</td>
+<td>People's Mojahedin Organization of Iran（PMOI/MEK）及其政治外圍 National Council of Resistance of Iran（NCRI）</td>
+<td>p.70</td>
+</tr>
+<tr>
+<td>人員性質</td>
+<td>「至少四名執行此行動的個人任職於官方 NCRI 媒體機構」</td>
+<td>p.71</td>
+</tr>
+<tr>
+<td>組織化程度</td>
+<td>專責委員會核可迴圈；從內容校正者到主管的正式審查流程；所有 workspace 套用同一份操作腳本</td>
+<td>p.72</td>
+</tr>
+<tr>
+<td>契約關係線索</td>
+<td>溝通中反覆出現 "per our contract"</td>
+<td>p.72</td>
+</tr>
+<tr>
+<td>領導層線索</td>
+<td>定期提及 MEK leadership</td>
+<td>p.72</td>
+</tr>
+<tr>
+<td>語言</td>
+<td>產出「以波斯語為主（Persian-first）」；冒充指令<strong>以波斯語</strong>下達</td>
+<td>p.70, p.72</td>
+</tr>
+<tr>
+<td>共用工具</td>
+<td>一個共享 AI 代理平台，內部命名 <strong>「Viktor」</strong></td>
+<td>p.72–73</td>
+</tr>
+<tr>
+<td>帳號基礎設施</td>
+<td>行為者之間<strong>未</strong>共用帳號基礎設施，<strong>無</strong>可見協同跡象</td>
+<td>p.70</td>
+</tr>
+<tr>
+<td>地理位置</td>
+<td><strong>報告未指明操作者所在國家或城市</strong></td>
+<td>—</td>
+</tr>
+<tr>
+<td>帳號數量</td>
+<td><strong>報告未給出被停用的 Claude 帳號數</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22">2.2 「沒有共用基礎設施，卻被歸在一起」——本案最值得教的歸因難題</h3>
+<p>傳統的影響力行動歸因，倚賴的是「基礎設施重疊」：同一組 IP、同一批註冊 email、同一個廣告帳戶、同一個部署識別碼。報告在同一份文件的另一案（<strong>GTG-54002</strong>，p.47–53）就是這樣做的——那些網站「全部架在共享基礎設施上、位於單一部署之後。這讓我們的調查人員得以把約 <strong>70</strong> 個表面上看似獨立的新聞網站，連回<strong>單一操作者帳號</strong>」（p.48）；報告後續在該案的 IOC 中明列 "shared deployment identifier, which ties the network to one account"（p.52）。</p>
+<p>GTG-84006 <strong>恰恰相反</strong>。報告開宗明義：</p>
+<blockquote>
+<p>"Although the actors did not share account infrastructure or show visible signs of coordination, our investigations linked this activity to People's Mojahedin Organization of Iran (PMOI/MEK), and its political front, the National Council of Resistance of Iran (NCRI)."（p.70）</p>
+</blockquote>
+<p>那麼 Anthropic 是靠什麼連起來的？從 p.72 與 p.75 可以還原出四類非基礎設施證據：</p>
+<ol>
+<li><strong>共用的教義語料（doctrine corpus）</strong>。「一名行為者把 MEK 的創始教義載入模型記憶，作為供行動內其他人重複使用的『strategic base data』」（p.72）。</li>
+<li><strong>共用的強制來源集合（mandatory source set）</strong>。IOC 表把七個 MEK/NCRI 網域標為「hard-coded across actors」（跨行為者硬編碼）（p.74）。這是一種<strong>行為指紋</strong>：不同的人、不同的帳號，卻被同一份設定檔限制只能引用同一組來源。</li>
+<li><strong>共用的語言規範</strong>。強制口號替換（把 2022 年自發抗議口號「女性、生命、自由」換成 MEK 版本「女性、抵抗、自由」）、強制標籤 <code>#OurChoiceMaryamRajavi</code>、統一的 ZWNJ + 點／空格規避寫法（p.72, p.75）。</li>
+<li><strong>共用的記憶檔命名慣例</strong>。IOC 表把 <code>SKILL.md / LEARNINGS.md memory</code> 明列為「Cross-actor signatures」（跨行為者簽章）（p.75）。</li>
+</ol>
+<p><strong>教學要點：</strong> 當 AI 代理平台成為協同基質（coordination substrate）時，歸因的證據種類會從「網路層工件」轉向「<strong>語料與設定檔工件</strong>」。這是偵測工程的典範轉移：你要找的不再只是同一個 IP，而是<strong>同一份被複製貼上的 markdown</strong>。</p>
+<h3 id="23">2.3 歸因信度措辭的精讀（情報學）</h3>
+<p>報告在本案使用了三種不同強度的措辭，必須分開解讀：</p>
+<table>
+<thead>
+<tr>
+<th>報告措辭</th>
+<th>原文</th>
+<th>情報學含義</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>linked（已連結）</strong></td>
+<td>"our investigations <strong>linked</strong> this activity to PMOI/MEK... and NCRI"（p.70）</td>
+<td>陳述調查結論，屬於<strong>歸屬性判斷</strong>，但未使用信度量詞（未說 high/moderate confidence）。比「suspected」強，比「we assess with high confidence」弱且模糊。</td>
+</tr>
+<tr>
+<td><strong>showed（顯示）</strong></td>
+<td>"Our investigation <strong>showed</strong> that at least four individuals... work for official NCRI media outlets"（p.71）</td>
+<td>這是<strong>可驗證的事實陳述</strong>，等級最高。Anthropic 顯然掌握了把個別使用者對應到具體機構的證據（對照 p.62 起的伊朗國家案，Anthropic 說行為者「在對話中反覆說出自己的位置、機構與職務」）。</td>
+</tr>
+<tr>
+<td><strong>suggest... likely，但 not able to verify</strong></td>
+<td>"the presence of committee approval loops and notes about MEK leadership <strong>suggest</strong> central tasking is <strong>likely</strong>, we are <strong>not able to verify</strong> the level of centralized control"（p.71）</td>
+<td>這是<strong>推論</strong>，而且是自我設限的推論。Anthropic 明確拒絕宣稱「MEK 中央下令」。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>這在課堂上怎麼講：</strong></p>
+<ul>
+<li>「<strong>四名個人任職於 NCRI 媒體機構</strong>」＝已證實的人員層事實。</li>
+<li>「<strong>活動被連結到 MEK/NCRI</strong>」＝組織層歸屬，但基於行為與語料證據，而非基礎設施證據。</li>
+<li>「<strong>MEK 中央是否下令</strong>」＝<strong>未證實</strong>，Anthropic 自己說不能驗證。</li>
+</ul>
+<p>三者不可混用。新聞報導最常犯的錯是把第三層直接寫成「MEK 指揮了一場 AI 影響力行動」。第 9 節會看到，實際的第三方報導在這點上其實相對克制，但摘要式報導（如社群轉述）就不一定。</p>
+<blockquote>
+<p><strong>課堂提問</strong>：如果你是分析師，只掌握「四名 NCRI 媒體從業者 + 共用教義檔 + 委員會核可流程 + 『依照我們的合約』」，你會把歸因寫成哪一句？<br />
+(a) MEK 指揮了本行動；(b) 行動由 MEK 相關人員執行，中央指揮程度不明；(c) 個別 NCRI 媒體從業者的個人行為。<br />
+報告選的是 (b)，而且明說 (a) 無法驗證。請學員說明選 (b) 而非 (a)/(c) 的證據門檻各是什麼。</p>
+</blockquote>
+<h3 id="24-per-our-contract">2.4 「per our contract」這句話的份量</h3>
+<p>報告特別點出行為者「在溝通中反覆使用『per our contract』這個說法」（p.72）。這一句在情報分析上很重。它同時支持兩種相容的解讀：</p>
+<ul>
+<li><strong>僱傭關係解讀</strong>：執行者是領薪／有正式聘約的人員，不是志願者。這與「至少四人任職於官方 NCRI 媒體機構」互相佐證，也與報告在影響力行動趨勢章節提到的「AI 生成<strong>編碼編輯忠誠度的僱傭合約</strong>」（p.42–43："employment contracts encoding editorial loyalty"）呼應。</li>
+<li><strong>紀律工具解讀</strong>：「合約」是用來約束內容產出必須符合組織規範的內部話術。</li>
+</ul>
+<p>不論哪一種，結論都一樣：<strong>這是一個有人事制度的行動，不是熱情支持者的自發行為</strong>。這也直接支撐 Anthropic 在趨勢章節的判斷——「AI 幫忙建造的不只是內容，還有整套機構機器」（p.42–43："AI helped to build the apparatus as well as the content"）。</p>
+<h3 id="25">2.5 組織結構還原（依報告可支撐的範圍）</h3>
+<pre class="mermaid">flowchart TD
+    L[&quot;MEK 領導層&lt;br/&gt;（被提及，但指揮關係未經驗證）&quot;]
+    C[&quot;專責委員會（committee）&lt;br/&gt;核可迴圈 approval loop (p.72)&quot;]
+    M[&quot;主管（managers）→ 內容校正者（content correctors）&lt;br/&gt;正式審稿鏈 (p.72)&quot;]
+    E[&quot;至少 4 名任職於官方 NCRI 媒體機構的執行者（p.71）&lt;br/&gt;各自持有獨立 workspace、各自的長期記憶檔（p.72）&lt;br/&gt;帳號基礎設施彼此不共用、無可見協同（p.70）&quot;]
+    V[[&quot;共享 AI 代理平台「Viktor」&lt;br/&gt;持久記憶 / 教義 / 規避規則&lt;br/&gt;（唯一把所有人綁在一起的東西；p.72–73, Figure 15）&quot;]]
+    S[&quot;六大活動叢集：共享代理平台 / 即時冒充 / 監控側寫 /&lt;br/&gt;協同不實行為 / 合成媒體 / 媒體洗白&quot;]
+
+    L --&gt;|&quot;「central tasking is likely」但 not verified (p.71)&quot;| C
+    C --&gt; M
+    M --&gt; E
+    E --&gt; V
+    V --&gt; S
+</pre>
+<p><strong>注意這張圖的反直覺之處</strong>：組織的「上層」是傳統科層（委員會、主管、校正者），「下層」卻是一個<strong>技術基質</strong>把彼此不相往來的執行者連成一個網絡。報告在 p.43 的趨勢段落把這個現象講得更白：</p>
+<blockquote>
+<p>"The central setup meant that actors producing content never needed to coordinate with or even know one another."（p.43）<br />
+「這種中央化設置意味著產出內容的行為者<strong>從不需要彼此協調，甚至不需要認識對方</strong>。」</p>
+</blockquote>
+<p>這就是「Viktor」的偵測意義：它讓協同<strong>在傳統協同偵測訊號上消失</strong>（沒有共用 IP、沒有同步登入、沒有互相追蹤），卻<strong>在內容與設定層留下更強的指紋</strong>。</p>
+<h3 id="26-mek-ncri">2.6 MEK / NCRI 的政治定位（中立並陳，供課堂討論用）</h3>
+<blockquote>
+<p><strong>本節不是 Anthropic 報告內容</strong>。報告只寫了「PMOI/MEK 及其政治外圍 NCRI」，沒有描述該組織的歷史或法律地位。以下全部來自公開第三方來源（見第 9 節），並刻意把「支持方敘事」與「批評方敘事」並列，<strong>課程目的是訓練分析者處理爭議行為者，而不是為任何一方背書</strong>。</p>
+</blockquote>
+<p><strong>A. 基本事實時間線（第三方來源）</strong></p>
+<table>
+<thead>
+<tr>
+<th>年份</th>
+<th>事件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1965</td>
+<td>MEK 由德黑蘭大學學生創立，意識形態混合伊斯蘭與社會主義，反對巴列維王朝。</td>
+</tr>
+<tr>
+<td>1979</td>
+<td>參與伊朗革命初期；隨後與何梅尼決裂。</td>
+</tr>
+<tr>
+<td>1981</td>
+<td>6 月大規模抗議遭鎮壓；MEK 轉入武裝路線，被指涉及 Hafte Tir 爆炸案（74 名官員死亡）及 8 月炸死總統 Rajai 與總理 Bahonar 的攻擊。同年 7 月成立 NCRI 作為傘狀政治組織。</td>
+</tr>
+<tr>
+<td>1986–2013</td>
+<td>遷入伊拉克，設於 Camp Ashraf，兩伊戰爭期間與海珊政權合作，1987 年成立「伊朗全國解放軍」（NLA）。</td>
+</tr>
+<tr>
+<td>1988</td>
+<td>Mersad 行動失敗；伊朗隨後大規模處決在押的 MEK 及左翼政治犯（史稱 1988 年大屠殺）。</td>
+</tr>
+<tr>
+<td>1997</td>
+<td>美國將 MEK 列為外國恐怖組織（FTO）。</td>
+</tr>
+<tr>
+<td>2002</td>
+<td>歐盟將其列入恐怖組織名單。</td>
+</tr>
+<tr>
+<td>2008-06</td>
+<td>英國解除列管。</td>
+</tr>
+<tr>
+<td>2009-01-26</td>
+<td>歐盟理事會解除列管。</td>
+</tr>
+<tr>
+<td>2012-09-21</td>
+<td>美國國務卿 Hillary Clinton 決定將 MEK 除名；國務院表示該組織已十年以上未從事恐怖主義，但同時對其<strong>對自身成員的虐待指控</strong>表達嚴重關切。加拿大同年除名。</td>
+</tr>
+<tr>
+<td>2016</td>
+<td>在美國斡旋下約 3,000 名成員遷往阿爾巴尼亞（Camp Ashraf 3，位於 Manëz, Durrës）。</td>
+</tr>
+<tr>
+<td>2026-06-20</td>
+<td>NCRI 在巴黎舉辦「Free Iran 2026」大型集會與國際峰會，主打「既不要沙王，也不要毛拉」（No to the Shah, No to the Mullahs）。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>B. 支持方敘事（NCRI/MEK 及其西方支持者的框架）</strong></p>
+<ul>
+<li>自我定位為伊朗政權的「民主替代方案」，主張建立世俗、非核、多元的共和國。</li>
+<li><strong>Maryam Rajavi 的十點計畫</strong>（2006 年於歐洲委員會首次提出）是其綱領文件：否定 velayat-e faqih（教法學家絕對統治）、人民主權與普選、言論／政黨／集會／新聞／網路自由、性別平等、族群自治（含庫德斯坦自治方案）、政教分離、市場經濟下的就業機會平等、和平共存與區域合作。這是本案 AI 頭像宣傳的<strong>核心內容物</strong>。</li>
+<li>擁有 Simay-e Azadi（自由之顏／Iran NTV，1987 年開播的波斯語衛星電視）等自有媒體；宣稱在伊朗境內有「抵抗單元」（Resistance Units）網絡。</li>
+<li>在歐美政界有長期遊說活動；John Bolton、Rudy Giuliani、已故的 John McCain 等人曾出席其集會或與 Maryam Rajavi 會面。</li>
+</ul>
+<p><strong>C. 批評方敘事（人權組織、學界、脫離者、對手派系的框架）</strong></p>
+<ul>
+<li><strong>對內控制指控</strong>：Human Rights Watch 2005 年報告《No Exit》記錄了 1991 年至 2003 年 2 月間該組織在伊拉克營區內對異議成員的長期拘禁與酷刑指控（HRW 於 2005 年 10 月在德國與荷蘭個別、私下訪談過報告中引用的全部 12 名證人）。RAND 於 2009 年應美國政府要求、基於 Camp Ashraf 訪談完成的研究，亦提出類似觀察。指控內容包括強制自白／「意識形態淨化」會議、強制離婚與家庭分離、長期單獨監禁等。批評者據此稱其為「人格崇拜／邪教式組織」。</li>
+<li><strong>境內支持度質疑</strong>：多數學界與外交評估認為，由於兩伊戰爭期間與海珊合作，MEK 在伊朗境內支持度極低，且（與君主派一樣）在海外僑民中比在境內更受歡迎。</li>
+<li><strong>既有的資訊操作紀錄</strong>（這點與本案直接相關，見第 9 節）：</li>
+<li>2019 年 The Intercept（Murtaza Hussain）報導，長期被西方媒體引用的「伊朗異議作者 Heshmat Alavi」實為 MEK 政治部門團隊經營的<strong>虛構人格</strong>；高階脫離者 Hassan Heyrani 稱「這從來不是一個真實的人」。</li>
+<li>2021 年 4 月 Meta 的〈March 2021 Coordinated Inauthentic Behavior Report〉移除源自阿爾巴尼亞、針對含伊朗在內全球受眾的網絡：<strong>128 個 Facebook 帳號、41 個粉絲專頁、21 個社團、146 個 Instagram 帳號</strong>，並將其連結至 MEK；Facebook 描述其為「一個組織嚴密的 troll farm」，並指出假帳號與<strong>阿爾巴尼亞境內 MEK 相關真實帳號與粉專之間長期一致的基礎設施連結</strong>。NCRI 當時公開否認，稱「阿爾巴尼亞有 MEK 相關 troll farm 的說法是可笑且絕對錯誤的」。</li>
+<li><strong>派系鬥爭脈絡</strong>：報告 p.71 寫明本行動把訊息火力對準「伊朗政府、君主派團體與巴列維陣營」，並散布一支攻擊巴列維家族成員的<strong>偽造影片</strong>，使用「既不要沙王，也不要教士」（Neither Shah Nor Sheikh）框架。這與 2022 年後伊朗流亡反對派內部 MEK 陣營 vs. Reza Pahlavi 君主派的公開對立完全吻合。<strong>本案的攻擊對象包含其他反對派，不只是伊朗政權。</strong></li>
+</ul>
+<p><strong>D. 為什麼這個案例對課程特別重要</strong></p>
+<p>大多數影響力行動教材的預設是「威權國家 → 民主社會」。本案打破這個預設：</p>
+<ul>
+<li>行為者是<strong>反威權的流亡反對運動</strong>，其政治綱領（十點計畫）在文本上是自由民主的；</li>
+<li>但其手法——冒充真人、對境內個人做被捕紀錄側寫、隱藏組織歸屬的假獨立新聞帳號、未揭露的合成人物——與威權國家的手法<strong>在技術與倫理上沒有差別</strong>；</li>
+<li>而且<strong>最終受害者是它宣稱要解放的那群人</strong>：伊朗境內的聯絡人與異議者。</li>
+</ul>
+<p>這正是 Anthropic 在方法論上刻意採取的立場：它在報告中對所有行為者一律適用同一套 Usage Policy 與同一套 Breakout Scale，不因政治立場區分。課堂上應該讓學員直面這個張力（見 10.2 討論題）。</p>
+<hr />
+<h2 id="3">3. 受害者與目標清單</h2>
+<h3 id="31">3.1 直接受害者</h3>
+<table>
+<thead>
+<tr>
+<th>受害者</th>
+<th>規模／描述</th>
+<th>傷害類型</th>
+<th>頁碼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一名真實運動者（未具名，男性）</td>
+<td>個人 Telegram 帳號被複製；約 <strong>8,400 則</strong>貼文被讀取用於模仿文風；身分被 AI 冒用進行即時政治對話</td>
+<td>身分盜用、名譽風險、被其聯絡人誤認</td>
+<td>p.70</td>
+</tr>
+<tr>
+<td>該運動者在<strong>伊朗境內</strong>的聯絡人</td>
+<td>數量未明確；報告稱「his contacts」。另外，冒充帳號曾同時對<strong>超過 30 名</strong>聯絡人發送一則<strong>捏造的</strong>突發新聞標題</td>
+<td>在不知情下與 AI 對話、可能洩露自身身分與立場、被伊朗當局識別的風險</td>
+<td>p.70, p.71</td>
+</tr>
+<tr>
+<td>伊朗境內被建檔的具名個人</td>
+<td>「數十名（dozens of）特定個人」被建立詳細心理側寫檔案</td>
+<td>非自願側寫；Cluster 表明示其中含「依伊朗法律面臨監禁或處決者」的被捕紀錄側寫</td>
+<td>p.71, p.72</td>
+</tr>
+<tr>
+<td>被刮取的社群頻道成員</td>
+<td><strong>超過 500 個</strong>社群頻道被刮取以建立境內個人檔案；分析約 <strong>51,944 則</strong>封存訊息</td>
+<td>大規模非自願資料處理</td>
+<td>p.71</td>
+</tr>
+<tr>
+<td>被滲透的 Telegram 群組</td>
+<td>Figure 15 標示「Telegram infiltration：<strong>741 handles · 500+ groups</strong>」</td>
+<td>群組成員被納入監控漏斗</td>
+<td>Fig.15 (p.73)</td>
+</tr>
+<tr>
+<td>學生族群</td>
+<td>Figure 15「Student infiltration @anti_silent」；IOC 表註記 <code>@anti_silent</code> 為「Student surveillance funnel」；<code>@tehranchekhabar19</code> 註記為「student targeting」</td>
+<td>針對性監控與招募</td>
+<td>Fig.15, p.75</td>
+</tr>
+<tr>
+<td>巴列維家族某成員</td>
+<td>遭一支<strong>捏造影片</strong>攻擊</td>
+<td>誹謗、合成媒體傷害</td>
+<td>p.71</td>
+</tr>
+<tr>
+<td>被「洗白」的原始媒體與記者</td>
+<td>內容遭去浮水印、改寫後以「獨立報導」再散布</td>
+<td>著作與歸屬被剝奪、公信力被挪用</td>
+<td>p.73</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32">3.2 受眾（目標對象）</h3>
+<p>Figure 15 明確畫出兩個橘色的「Audience / target」節點：</p>
+<ol>
+<li><strong>People inside Iran（伊朗境內人民）</strong>——被標註為「Target of recruitment and live impersonation」（招募與即時冒充的目標）。</li>
+<li><strong>Diaspora audiences（海外僑民受眾）</strong>。</li>
+</ol>
+<p>報告正文則寫「targeted Iranian audiences inside the country and abroad」（p.70）。</p>
+<h3 id="33">3.3 目標分群維度（這是本案最該被記住的細節之一）</h3>
+<p>報告 p.71：</p>
+<blockquote>
+<p>"They then grouped these targets by <strong>city, age, occupation, political alignment, and arrest history</strong> likely to help them tailor their messages to the specific audiences."</p>
+</blockquote>
+<p>五個維度中，前四個是常見的受眾分群欄位（行銷也會用）。<strong>第五個「arrest history（被捕紀錄）」不是。</strong></p>
+<p>在一個以 baghi 罪名處決 MEK 關聯者的法域裡，「被捕紀錄」作為分群欄位有兩種可能用途：</p>
+<ul>
+<li><strong>善意解讀</strong>（行動者可能的自述）：找出已經被政權迫害過、因此可能對反對派訊息有共鳴的人。</li>
+<li><strong>風險解讀</strong>（Anthropic 採取的解讀）：Cluster 表把它列為該叢集的「Most serious element」，寫成「Arrest-history profiling of people who face imprisonment or execution under Iranian law」。</li>
+</ul>
+<p><strong>無論行動者本意為何，這份資料一旦外洩或被伊朗情報單位取得，就是一份現成的鎮壓清單。</strong> 這是課堂上必須點破的：影響力行動的<strong>副產品資料庫</strong>，其危害可能超過它散布的內容本身。</p>
+<h3 id="34">3.4 攻擊的第二層目標：其他反對派</h3>
+<p>報告 p.71 最後一項 Key finding：</p>
+<blockquote>
+<p>"The operation focused its messaging on the Iranian government, monarchist groups, and the Pahlavi camp. The actors spread a fabricated video attacking a member of the Pahlavi family and used the 'Neither Shah Nor Sheikh' framing against the targets. This content was designed to strengthen the MEK's position in the Iranian opposition."</p>
+</blockquote>
+<p>換句話說，這個行動的目標函數<strong>不只是打擊伊朗政權，也包括在反對派內部搶奪主導權</strong>。對分析者而言，這會改變你的「誰受益」推論：內容看起來是反政權的，但實際受益者是反對派中的某一派。</p>
+<hr />
+<h2 id="4-ai">4. AI 濫用的攻擊生命週期（逐階段拆解）</h2>
+<p>報告的「Attack lifecycle and AI usage」段落（p.72）沒有用編號階段，而是以敘事＋Cluster 表呈現。以下依情報產製與 IO 慣用的生命週期重新排列，每階段標示<strong>人類做什麼／Claude 做什麼／自主程度</strong>。</p>
+<p>自主程度採本課程三級分類：<br />
+- <strong>L1 對話式協助</strong>：人類逐則提問，AI 回答。<br />
+- <strong>L2 人類逐步指揮</strong>：人類設計流程，AI 執行單一步驟，人類串接。<br />
+- <strong>L3 AI 編排／自主執行</strong>：AI 依持久記憶與排程自行產出，人類僅做例外處理與更新設定。</p>
+<hr />
+<h3 id="40-0viktor">4.0 階段 0：建立共享基質（Viktor 平台佈建）</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>人類做什麼</strong></td>
+<td>建立一個共享 AI 代理平台（Anthropic 稱之為 "Viktor"）；為每名行為者開設獨立 workspace；把 MEK 創始教義以「strategic base data」載入模型記憶供他人重用；持續更新每個 workspace 的長期記憶檔。</td>
+</tr>
+<tr>
+<td><strong>記憶檔內容</strong></td>
+<td>報告點名四類：<strong>禁用詞清單（banned words）</strong>、<strong>核可來源（approved sources）</strong>、<strong>帳號管理規則（account management rules）</strong>、<strong>規避偵測方法（ways to avoid detection）</strong>。IOC 表另外給出檔名慣例：<code>SKILL.md</code> / <code>LEARNINGS.md</code>。</td>
+</tr>
+<tr>
+<td><strong>Claude 做什麼</strong></td>
+<td>依記憶檔內容，在無人逐一下指令的情況下持續產出。原文："This allowed the agent to keep producing content without a human user directing each session."（p.72）</td>
+</tr>
+<tr>
+<td><strong>自主程度</strong></td>
+<td><strong>L3</strong>。這是全案的關鍵。</td>
+</tr>
+<tr>
+<td><strong>教學註記</strong></td>
+<td>注意 <code>SKILL.md</code> 與 <code>LEARNINGS.md</code> 這兩個檔名：<code>SKILL.md</code> 是 Anthropic Agent Skills 的標準檔名；<code>LEARNINGS.md</code> 是社群常見的「代理自我累積經驗」慣例。也就是說，<strong>攻擊者使用的不是自製框架，而是主流代理工程的標準做法</strong>。這降低了技術門檻，也代表偵測不能靠「異常框架」來做。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="41-1surveillance">4.1 階段 1：目標發掘與資料採集（Surveillance）</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>人類做什麼</strong></td>
+<td>指定要刮取的頻道範圍；建立漏斗入口帳號（Figure 15：<code>@fwr.ir</code> sockpuppet funnel、<code>@anti_silent</code> student funnel）；維運 741 個 Telegram handle、滲透 500+ 群組。</td>
+</tr>
+<tr>
+<td><strong>Claude 做什麼</strong></td>
+<td>處理刮取回來的資料；報告寫「analyzed roughly 51,944 archived messages from these conversations」；建立、分類與分群個人檔案。</td>
+</tr>
+<tr>
+<td><strong>規模數字</strong></td>
+<td>500+ 社群頻道；51,944 則封存訊息；數十名具名個人的心理側寫檔案；741 handles / 500+ groups（後者僅見於 Figure 15，正文未提）。</td>
+</tr>
+<tr>
+<td><strong>分群維度</strong></td>
+<td>city, age, occupation, political alignment, <strong>arrest history</strong>。</td>
+</tr>
+<tr>
+<td><strong>Cluster 表描述</strong></td>
+<td>「A ten-stage funnel; psychographic dossiers on named individuals inside Iran」——<strong>十階段漏斗</strong>。報告正文<strong>沒有</strong>展開這十個階段的內容，這是本案的重要資訊缺口。</td>
+</tr>
+<tr>
+<td><strong>自主程度</strong></td>
+<td><strong>L2–L3</strong>。資料取得需要人類維運帳號；分析與側寫由代理平台批次執行。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>關於「51,944」這個數字的分析價值</strong>：報告寫的是「<strong>roughly</strong> 51,944」。一個精確到個位數的數字卻被冠上「大約」，最合理的解釋是——這是<strong>從行為者自己的工作內容中讀到的數字</strong>（例如對話中提及、或某個檔案的統計），而非 Anthropic 自行量測的結果。這在情報分析上是重要區別：<strong>這是行為者的自述規模，不是平台的量測規模</strong>。課堂上應該讓學員養成對這類「精確但被標為約略」的數字保持敏感。</p>
+<hr />
+<h3 id="42-2live-impersonation">4.2 階段 2：身分複製與即時冒充（Live impersonation）</h3>
+<p>這是全案自主程度與傷害性最高的一段，值得逐句拆。</p>
+<p>報告原文（p.70）：</p>
+<blockquote>
+<p>"To deceive users, the operation impersonated a real-world activist by tasking the shared AI agent to clone the activist's personal Telegram account, then instructing it in Persian that it was now that person. The actor directed Claude to read roughly 8,400 of his Telegram posts to copy his writing style, and then used it to run live political conversations with his contacts. To our knowledge, these contacts did not know they were speaking with an AI-assisted account."</p>
+</blockquote>
+<p>拆成五個技術動作：</p>
+<ol>
+<li><strong><code>clone the activist's personal Telegram account</code></strong> — 複製帳號。報告<strong>沒有</strong>說明是如何取得的：是帳號被接管（takeover）、是建立高相似度的仿冒帳號（look-alike）、還是匯出公開頻道內容後重建？「clone... personal Telegram account」的字面意義比較接近「複製出一個一模一樣的帳號」，但報告未細說。<strong>這是本案最重要的未解技術問題</strong>（見第 12 節）。</li>
+<li><strong><code>instructing it in Persian that it was now that person</code></strong> — 以波斯語下達人格指派。用母語下指令有兩個作用：讓輸出的語感自然；以及（可能的副作用）讓以英語為主的安全分類器較難判讀意圖。</li>
+<li><strong><code>read roughly 8,400 of his Telegram posts</code></strong> — 以被冒充者<strong>自己的語料</strong>訓練模仿。8,400 則貼文足以捕捉個人的用詞習慣、標點癖好、政治語彙、稱呼方式、表情符號使用模式。Cluster 表把這件事描述為「Cloning a real person's <strong>voice</strong> from their <strong>private messages</strong>」（p.72）——注意這裡用的是 <strong>private messages（私訊）</strong>，比 p.70 的「posts（貼文）」範圍更敏感。兩處描述的差異本身就值得記錄。</li>
+<li><strong><code>run live political conversations with his contacts</code></strong> — <strong>即時、雙向、對人</strong>。這不是產出貼文，而是<strong>冒充一個人與其熟人對話</strong>。</li>
+<li><strong><code>sent a fabricated breaking news headline to more than 30 contacts simultaneously</code></strong>（p.71）— 冒充帳號同時被用來做廣播式散布，以該運動者的可信度為載體。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>人類做什麼</strong></td>
+<td>取得／建立被複製的 Telegram 帳號；下達波斯語人格指派指令；決定與誰對話、談什麼；決定何時同步群發。</td>
+</tr>
+<tr>
+<td><strong>Claude 做什麼</strong></td>
+<td>吸收 8,400 則貼文形成文風模型；<strong>即時生成對話回應</strong>；維持人格一致性。</td>
+</tr>
+<tr>
+<td><strong>自主程度</strong></td>
+<td><strong>L2–L3 之間，且這正是危險所在。</strong> 「即時對話」代表回應是逐句生成的（不是人類先寫好再貼上），但人類仍在決定對話對象與方向。可以說是「<strong>人類選目標，AI 扮演人</strong>」。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="421">4.2.1 「數位冒充造成實體人身風險」的機制鏈（本案必須講透的部分）</h4>
+<p>很多學員第一次看到這種案例時，直覺是「冒充帳號＝名譽損害」。<strong>在伊朗的脈絡下不是。</strong> 完整的機制鏈如下：</p>
+<pre class="mermaid">flowchart TD
+    N1[&quot;[1] 信任前提&lt;br/&gt;境內聯絡人相信「這個 Telegram 帳號＝我認識的那位運動者」&lt;br/&gt;── 這份信任是他們願意說話的唯一理由&quot;]
+    N2[&quot;[2] 冒充者取得「詢問權」&lt;br/&gt;一個可信的熟人可以合理地問出平常不會給陌生人的資訊：&lt;br/&gt;「你現在人在哪個城市？」「上次那件事後來怎樣？」「還有誰跟你一起？」&lt;br/&gt;── 這些在正常社交裡是關心，在情報學裡是 elicitation（套話）&quot;]
+    N3[&quot;[3] 對話內容被記錄在冒充者一側&lt;br/&gt;境內聯絡人的回應，全部落在操作者的資料庫裡，&lt;br/&gt;而且可以直接餵回階段 1 的側寫流程（城市／職業／政治傾向／被捕紀錄）&quot;]
+    N4[&quot;[4] 資料庫成為現成的鎮壓清單&lt;br/&gt;一份「姓名 + 城市 + 職業 + 政治立場 + 被捕紀錄 + 對話紀錄」的檔案，&lt;br/&gt;若被伊朗情報單位取得（駭入、內線、境內裝置查扣、跨境調閱），&lt;br/&gt;對照伊朗對 MEK 關聯者適用 baghi（可判死刑）的司法實務&quot;]
+    N5[&quot;[5] 實體後果&lt;br/&gt;逮捕、酷刑取供、不公平審判、長期監禁，最嚴重可至處決&quot;]
+
+    N1 --&gt; N2 --&gt; N3 --&gt; N4 --&gt; N5
+</pre>
+<p><strong>同時存在的第二條路徑（不需要資料外洩）</strong>：</p>
+<pre class="mermaid">flowchart TD
+    P1[&quot;冒充帳號主動聯繫了某位境內人士&quot;]
+    P2[&quot;該人士的裝置日後因任何原因被查扣／該 Telegram 帳號被接管&quot;]
+    P3[&quot;當局在對話紀錄中看到：此人與「MEK 相關人物」進行過政治對話&quot;]
+    P4[&quot;在伊朗的司法實務下，這段對話本身即可構成指控基礎&lt;br/&gt;── 而這名境內人士從頭到尾不知道對面是誰、更不知道是 AI&quot;]
+
+    P1 --&gt; P2 --&gt; P3 --&gt; P4
+</pre>
+<p><strong>第二條路徑是本案最惡劣的地方</strong>：被冒充者的聯絡人<strong>在完全不知情、也沒有同意</strong>的情況下，被納入了一段日後可能讓他們喪命的對話紀錄。Anthropic 的措辭「To our knowledge, these contacts did not know they were speaking with an AI-assisted account」在法律與倫理上直接對應到<strong>知情同意的完全缺席</strong>。</p>
+<blockquote>
+<p><strong>這是課程的核心論點之一</strong>：在跨境鎮壓（transnational repression）的脈絡下，「身分」不是一個帳號屬性，而是一條<strong>人身安全邊界</strong>。AI 讓「以足夠高的擬真度長時間扮演某個特定真人」從需要專業情報訓練的工作，降級為一個「讀 8,400 則貼文 + 一句波斯語系統提示」的操作。</p>
+</blockquote>
+<h4 id="422">4.2.2 對應防護：運動者與記者該做什麼（可直接發給學員的檢查表）</h4>
+<p>這一節請在課堂上當作<strong>實用產出</strong>來教，不要只當背景。</p>
+<p><strong>A. 對「我可能被冒充」的準備（給公眾人物／運動者／記者）</strong></p>
+<table>
+<thead>
+<tr>
+<th>措施</th>
+<th>具體作法</th>
+<th>為什麼有效</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>預先公告官方通道</td>
+<td>在你的公開頻道置頂一則「我只會從以下帳號聯絡你」清單，並列出<strong>我絕對不會做的事</strong>（例：我永遠不會在私訊裡問你人在哪、不會問你還有誰參與、不會要你轉傳未署名的突發新聞）</td>
+<td>把驗證責任從「事發後」前移到「事發前」，讓冒充者無法定義規則</td>
+</tr>
+<tr>
+<td>建立帶外驗證（out-of-band）</td>
+<td>與高風險聯絡人事先約定第二通道（例：另一個 App、語音短句、共同認識的第三人）</td>
+<td>冒充者複製了 Telegram，不代表他同時控制第二通道</td>
+</tr>
+<tr>
+<td>設定暗號與反暗號</td>
+<td>事先約定一組<strong>只有你們知道</strong>的問答；再約定一組<strong>在被脅迫時使用的求救暗號</strong>（duress code）</td>
+<td>AI 可以模仿文風，模仿不了共享秘密</td>
+</tr>
+<tr>
+<td>定期發布「存活／真實性訊號」</td>
+<td>例如每週在公開頻道貼一則含當日新聞關鍵字的訊息</td>
+<td>讓聯絡人有一個可獨立查核的新鮮度基準</td>
+</tr>
+<tr>
+<td>保護貼文語料</td>
+<td>理解「你所有的公開貼文都是訓練你的替身的語料」。這不代表不要發文，而是<strong>接受「文風不再是身分證明」</strong></td>
+<td>直接否定 8,400 則貼文攻擊的前提假設</td>
+</tr>
+<tr>
+<td>帳號硬化</td>
+<td>Telegram：啟用<strong>兩步驟驗證雲端密碼</strong>（防止只靠簡訊 OTP 被接管）、定期檢視「已登入的裝置（Active Sessions）」並登出陌生工作階段、關閉「以手機號碼搜尋到我」、設定自毀期限</td>
+<td>伊朗已有多起「以簡訊驗證碼接管 Telegram 帳號」的紀錄（見第 9 節 CNN / IranWire 報導）</td>
+</tr>
+<tr>
+<td>高風險對話換平台</td>
+<td>對境內高風險聯絡人，改用預設端對端加密且支援消失訊息的工具（Signal），並<strong>驗證安全碼（safety number）</strong></td>
+<td>Telegram 一般聊天<strong>非</strong>預設端對端加密，且雲端備份在伺服器端</td>
+</tr>
+</tbody>
+</table>
+<p><strong>B. 對「我可能正在跟冒充者說話」的準備（給境內聯絡人／一般成員）</strong></p>
+<table>
+<thead>
+<tr>
+<th>觸發訊號</th>
+<th>該做什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>熟人帳號<strong>突然開始問身分性問題</strong>（位置、同伴、組織關係、被捕經歷）</td>
+<td>立刻停止回答，改用帶外通道驗證</td>
+</tr>
+<tr>
+<td>對方<strong>沒有共享記憶</strong>：問一件你們共同經歷但未曾寫在網路上的小事，對方答不出或答得空泛</td>
+<td>高度可疑。AI 能模仿文風，但無法知道未公開的共同記憶</td>
+</tr>
+<tr>
+<td>對話<strong>永遠即時、永遠有回應、語氣異常穩定</strong>，且從不提及生活瑣事或時差</td>
+<td>可疑（但不可作為單一判準）</td>
+</tr>
+<tr>
+<td>對方要你<strong>轉傳未署名的突發新聞</strong>，或要你把訊息散給你的聯絡人</td>
+<td>這正是報告中「同時發給 30 名以上聯絡人的捏造頭條」的模式</td>
+</tr>
+<tr>
+<td>帳號的 handle、顯示名稱、頭像有<strong>細微差異</strong>（多一個底線、字母 l/I 互換、零寬字元）</td>
+<td>立即以帶外通道求證</td>
+</tr>
+</tbody>
+</table>
+<p><strong>C. 組織層（NGO／新聞編輯室）</strong></p>
+<ol>
+<li>訂立<strong>「絕不在即時通訊中索取身分資訊」</strong>的內規，並讓所有外部聯絡人知道這條規矩——規矩公開，冒充者就無法安全地違反它。</li>
+<li>建立<strong>冒充事件通報路徑</strong>：發現有人冒充本組織成員時，24 小時內在公開頻道發布警示（含冒充帳號的 defang handle），並通報平台。</li>
+<li>對高風險聯絡人採取<strong>最小資料原則</strong>：不保存不必要的聯絡人清單、不同專案的聯絡人分艙。</li>
+<li><strong>演練</strong>：每季做一次「我的帳號被複製了，接下來 6 小時做什麼」的桌面演練（見 10.3）。</li>
+</ol>
+<hr />
+<h3 id="43-3content-synthetic-media">4.3 階段 3：內容產製與合成媒體（Content &amp; synthetic media）</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>人類做什麼</strong></td>
+<td>決定宣傳主題（Maryam Rajavi 十點計畫）；決定頭像要「看起來像一般伊朗人」；<strong>刻意不揭露 AI 生成</strong>。</td>
+</tr>
+<tr>
+<td><strong>Claude 做什麼</strong></td>
+<td>為<strong>每一篇文章</strong>生成 AI 頭像；Cluster 表寫「Avatars with Persian audio for spokespeople」。</td>
+</tr>
+<tr>
+<td><strong>後製</strong></td>
+<td>頭像被「animated（動態化）」、加上<strong>波斯語語音</strong>。報告未說語音是否由 Claude 生成；同報告他處（p.102, GTG-34007）另有「把 Claude custom skills 變成語音複製工廠」的案例，可作對照但<strong>不可混為一談</strong>。</td>
+</tr>
+<tr>
+<td><strong>Cluster 表的「最嚴重元素」</strong></td>
+<td>"Undisclosed synthetic 'ordinary Iranians' and <strong>historical-figure deepfakes</strong> manufacturing false authority"（p.73）</td>
+</tr>
+<tr>
+<td><strong>自主程度</strong></td>
+<td><strong>L2</strong>（模板化批次生成，人類定義模板與主題）。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>兩個必須點出的細節：</strong></p>
+<ol>
+<li><strong>「historical-figure deepfakes（歷史人物深偽）」只出現在 Cluster 表，正文完全沒提。</strong> 這是本案的資訊缺口之一：報告沒有說是哪些歷史人物、內容是什麼。對伊朗政治語境熟悉的人會知道這類手法的威力（讓已故的權威人物「背書」當前立場），但<strong>報告未提供細節，教材不應臆測</strong>。</li>
+<li><strong>「刻意隱藏 AI 生成事實」是獨立的可歸責行為。</strong> 報告用的是 "while <strong>intentionally</strong> hiding the fact that they were AI-generated"（p.71）。在多數平台政策與逐漸成形的各國 AI 標示規範下，這是<strong>揭露義務的違反</strong>，與「內容是否真實」是兩個獨立的問題。課堂上要區分：一個 AI 生成的發言人講了真話，仍然構成欺騙，因為欺騙的是<strong>發言者的身分與代表性</strong>。</li>
+</ol>
+<hr />
+<h3 id="44-4cib-distribution">4.4 階段 4：協同不實行為與散布（CIB &amp; distribution）</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>人類做什麼</strong></td>
+<td>建立與維運多個 Instagram 帳號；設定排程（Figure 15：「Multi-page IG network — 3 pages · <strong>one cron</strong>」）。</td>
+</tr>
+<tr>
+<td><strong>Claude 做什麼</strong></td>
+<td>依受眾分群調整內容（audience-segmented）；產出同步排程的多帳號貼文。</td>
+</tr>
+<tr>
+<td><strong>隱蔽策略</strong></td>
+<td>「為了隱藏真實動機，<strong>初期貼文刻意不提及 Mojahedin</strong>，讓該團體的宣傳看起來像無所屬的中立新聞」（p.71）。</td>
+</tr>
+<tr>
+<td><strong>Cluster 表最嚴重元素</strong></td>
+<td>"Concealment of MEK affiliation and near-identical coordinated output under 'independent' branding"（p.72）</td>
+</tr>
+<tr>
+<td><strong>自主程度</strong></td>
+<td><strong>L3</strong>（cron 排程 + 持久記憶 = 無人值守產出）。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>「one cron」三個字的偵測價值極高。</strong> 它意味著三個 Instagram 頁面由<strong>同一個排程器</strong>驅動。這會在平台側留下極強的統計指紋：發文時間戳的<strong>條件熵異常低</strong>、跨帳號的發文間隔高度相關、且與任何人類作息不符。Figure 15 把這件事畫出來，是全圖最實用的偵測線索之一（詳見 6.2）。</p>
+<hr />
+<h3 id="45-5media-laundering">4.5 階段 5：媒體洗白（Media laundering）</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>人類做什麼</strong></td>
+<td>決定要把哪些 MEK 關聯媒體內容「漂白」為獨立報導。</td>
+</tr>
+<tr>
+<td><strong>Claude 做什麼</strong></td>
+<td>「Rewriting and redistributing MEK-affiliated media as independent reporting」（p.73）。</td>
+</tr>
+<tr>
+<td><strong>Cluster 表最嚴重元素</strong></td>
+<td>"<strong>Watermark stripping</strong> and disguising organizational content as ordinary compatriot voices"（p.73）</td>
+</tr>
+<tr>
+<td><strong>自主程度</strong></td>
+<td><strong>L3</strong>（可完全自動化的改寫管線）。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>「Watermark stripping（去除浮水印）」需要特別講。</strong> 這同時意味著：</p>
+<ul>
+<li>技術上：去除視覺浮水印／來源標記，讓內容無法被追溯回 NCRI 媒體；</li>
+<li>制度上：這直接打擊<strong>內容來源溯源（provenance）</strong> 這條防線。近年業界押注的 C2PA／內容憑證（Content Credentials）等溯源方案，前提是「標記存在且未被移除」。本案顯示行為者<strong>把去標記當成標準作業程序</strong>。</li>
+<li>對照報告 p.43 的趨勢段落：「Actors prompted Claude to intentionally strip state attribution from republished material, passing claims through chains of outlets so they read as independently confirmed.」（行為者要 Claude 刻意剝除轉載素材的國家歸屬，讓主張經過一連串媒體之後讀起來像是被獨立證實過的。）本案是同一模式的非國家版本。</li>
+</ul>
+<hr />
+<h3 id="46-6evasion">4.6 階段 6：語言標準化與規避（Evasion）</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>口號替換</strong></td>
+<td>強制把 2022 年自發抗議口號 <strong>«زن، زندگی، آزادی»（Woman, Life, Freedom／女性、生命、自由）</strong> 替換為 MEK 版本 <strong>«زن، مقاومت، آزادی»（Woman, Resistance, Freedom／女性、抵抗、自由）</strong>（p.72）。</td>
+</tr>
+<tr>
+<td><strong>強制標籤</strong></td>
+<td><code>#OurChoiceMaryamRajavi</code>（p.75）。</td>
+</tr>
+<tr>
+<td><strong>文字層規避</strong></td>
+<td>「ZWNJ + dot/space evasion」（p.75）——以零寬不連字（U+200C，波斯文正常書寫必用的字元）與點／空格的插入變形來規避關鍵字比對。</td>
+</tr>
+<tr>
+<td><strong>禁用詞清單</strong></td>
+<td>存放在每個 workspace 的長期記憶檔中（p.72）。</td>
+</tr>
+<tr>
+<td><strong>自主程度</strong></td>
+<td><strong>L3</strong>（規則寫進記憶，代理自動遵循）。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>口號替換的操作意涵</strong>：2022 年「女性、生命、自由」是一場<strong>自發性、跨派系</strong>的抗議運動符號，其正當性來自它不屬於任何組織。把 "Life" 換成 "Resistance"（مقاومت，正是 MEK/NCRI 自我標榜的「抵抗」一詞），等於<strong>把一個公共財符號私有化</strong>，讓所有使用該變體的內容自動帶上組織歸屬。</p>
+<p><strong>這同時是絕佳的偵測指標</strong>：任何一段內容使用 «زن، مقاومت، آزادی» 而非標準版，就在語料層自我標記了。這也是為什麼 Anthropic 把「mandatory slogan」列為 Fingerprints（跨行為者簽章）。</p>
+<p><strong>關於 ZWNJ 規避的技術說明</strong>（教學用，不是攻擊教學）：ZWNJ（U+200C）在波斯文中是<strong>正常且必要</strong>的排版字元（例如 «وب‌نگار» 中間那個就是 ZWNJ）。這讓它成為理想的規避載體——你<strong>不能</strong>簡單地把含 ZWNJ 的波斯文標為可疑，因為那會誤傷絕大多數正常波斯文。正確的偵測做法是看<strong>異常位置</strong>的 ZWNJ 與異常的插入頻率分布，而不是看它是否存在。這是課堂上講「規避偵測」時很好的反例：<strong>最好的規避字元，是那個你不能禁用的字元。</strong></p>
+<hr />
+<h3 id="47-7anthropic">4.7 階段 7：Anthropic 的介入</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>發現方式</strong></td>
+<td>「We found this activity as part of our internal investigations」（p.74）——內部調查，<strong>非</strong>外部通報、<strong>非</strong>平台合作線索。</td>
+</tr>
+<tr>
+<td><strong>處置</strong></td>
+<td>「banned the accounts」——停用帳號。</td>
+</tr>
+<tr>
+<td><strong>限制自陳</strong></td>
+<td>「At this point, we are not able to independently confirm how much authentic engagement was drawn by the network's amplification accounts.」</td>
+</tr>
+<tr>
+<td><strong>報告未提及的事</strong></td>
+<td>未提及與平台分享指標；未提及告知被冒充者或其聯絡人；未提及 Claude 曾拒絕任何請求。詳見第 8 節。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="48">4.8 全生命週期自主程度總表</h3>
+<table>
+<thead>
+<tr>
+<th>階段</th>
+<th>人類角色</th>
+<th>AI 角色</th>
+<th>自主程度</th>
+<th>報告依據</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 佈建共享代理平台</td>
+<td>建 workspace、寫記憶檔、載入教義</td>
+<td>依記憶持續產出</td>
+<td><strong>L3</strong></td>
+<td>p.72</td>
+</tr>
+<tr>
+<td>1 監控與側寫</td>
+<td>維運漏斗帳號、指定範圍</td>
+<td>分析 51,944 則訊息、建檔分群</td>
+<td>L2–L3</td>
+<td>p.71–72</td>
+</tr>
+<tr>
+<td>2 即時冒充</td>
+<td>取得帳號、指定對象與話題</td>
+<td>學文風、即時扮演真人對話</td>
+<td><strong>L2–L3</strong></td>
+<td>p.70, p.72</td>
+</tr>
+<tr>
+<td>3 合成媒體</td>
+<td>定主題、定風格、決定不揭露</td>
+<td>逐篇生成頭像</td>
+<td>L2</td>
+<td>p.71, p.73</td>
+</tr>
+<tr>
+<td>4 協同不實行為</td>
+<td>建帳號、設 cron</td>
+<td>分眾改寫、同步產出</td>
+<td><strong>L3</strong></td>
+<td>p.71–72, Fig.15</td>
+</tr>
+<tr>
+<td>5 媒體洗白</td>
+<td>選素材</td>
+<td>改寫、去標記、再散布</td>
+<td><strong>L3</strong></td>
+<td>p.73</td>
+</tr>
+<tr>
+<td>6 語言規範與規避</td>
+<td>訂規則寫進記憶</td>
+<td>自動套用禁用詞、口號、ZWNJ 變形</td>
+<td><strong>L3</strong></td>
+<td>p.72, p.75</td>
+</tr>
+</tbody>
+</table>
+<p><strong>課堂重點</strong>：六個叢集中有四個達到 L3。這在 2026 年的影響力行動中已非罕見，但本案的特殊處在於 <strong>L3 不是靠自製的 agent framework，而是靠「共享工作區 + 持久記憶檔」這種完全標準、完全無害的產品功能</strong>。防守方不能寄望於「偵測到可疑的自動化框架」。</p>
+<hr />
+<h2 id="5-ttp-mitre-attck">5. TTP 與 MITRE ATT&amp;CK 對應</h2>
+<h3 id="51">5.1 框架選擇說明（先講方法）</h3>
+<p>MITRE ATT&amp;CK 是<strong>網路攻擊</strong>的戰術技術框架，其 Reconnaissance / Resource Development 戰術涵蓋部分 IO 前期行為，但<strong>不涵蓋內容產製、敘事操作、受眾分群</strong>。影響力行動的對應框架是 <strong>DISARM</strong>（前身 AMITT），由 DISARM Foundation 維護。</p>
+<p>本節的做法是：</p>
+<ul>
+<li><strong>ATT&amp;CK 欄</strong>：只填寫我有把握對應的技術 ID，並標明哪些行為<strong>在 ATT&amp;CK 中沒有對應</strong>（框架缺口）。</li>
+<li><strong>DISARM 欄</strong>：使用 DISARM 的<strong>戰術階段名稱</strong>（而非技術編號）。DISARM 的技術編號版本迭代頻繁，<strong>教材不逐一標號，請學員以當期 DISARM 官方發布為準</strong>——這是誠實標註，不是偷懶。</li>
+</ul>
+<h3 id="52">5.2 對應表</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>本案具體作法</th>
+<th>ATT&amp;CK 戰術／技術</th>
+<th>DISARM 戰術階段</th>
+<th>偵測構想</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>刮取 500+ 社群頻道，蒐集伊朗境內個人資訊</td>
+<td>Reconnaissance → <strong>T1593.001 Search Open Websites/Domains: Social Media</strong>；<strong>T1589 Gather Victim Identity Information</strong></td>
+<td>Target Audience Analysis</td>
+<td>平台側：單一帳號／IP 群在短期內遍歷大量頻道的讀取模式；AI 側：對話中出現大批量非公眾人物姓名 + 地點 + 政治屬性的結構化整理</td>
+</tr>
+<tr>
+<td>2</td>
+<td>分析 51,944 則訊息建立心理側寫檔案</td>
+<td><strong>無直接對應</strong>（ATT&amp;CK 不涵蓋對人的心理側寫）→ <strong>框架缺口</strong></td>
+<td>Target Audience Analysis / Microtarget</td>
+<td>AI 側：偵測「批次輸入他人私訊 + 要求輸出人格／政治傾向／風險評分」的請求形態；這是 Usage Policy 的非合意側寫條款所禁止的行為</td>
+</tr>
+<tr>
+<td>3</td>
+<td>以 arrest history 作為分群欄位</td>
+<td><strong>無對應</strong> → <strong>框架缺口</strong>（且這是本案最該被獨立標記的行為）</td>
+<td>Microtarget</td>
+<td>AI 側：把「被捕紀錄／前科／被拘留經歷」與具名個人一起出現的請求列為高風險模式，尤其當目標國為高鎮壓風險法域時</td>
+</tr>
+<tr>
+<td>4</td>
+<td>複製真實運動者的個人 Telegram 帳號</td>
+<td>Resource Development → <strong>T1586.001 Compromise Accounts: Social Media Accounts</strong>（若為接管）／ <strong>T1585.001 Establish Accounts: Social Media Accounts</strong>（若為仿冒新建）</td>
+<td>Establish Social Assets</td>
+<td><strong>報告未說明取得方式，兩條路徑都要納入偵測。</strong> 平台側：新帳號的顯示名稱／handle 與既有高追蹤者帳號的編輯距離極小；既有帳號的裝置指紋、登入地理位置突變</td>
+</tr>
+<tr>
+<td>5</td>
+<td>以波斯語下達「你現在就是這個人」的人格指派</td>
+<td><strong>無對應</strong> → <strong>框架缺口</strong>（模型層人格注入不在 ATT&amp;CK 範圍）</td>
+<td>Develop Narratives / Establish Legitimacy</td>
+<td>AI 側：系統提示或記憶檔中出現「你是 \&lt;真實人名&gt;」＋「以下是他的 N 則貼文」的組合，應視為冒充意圖的強訊號</td>
+</tr>
+<tr>
+<td>6</td>
+<td>讀取 8,400 則貼文複製文風</td>
+<td>Reconnaissance → <strong>T1593.001</strong></td>
+<td>Develop Narratives</td>
+<td>AI 側：單一工作階段內攝入同一人數千則貼文並要求「模仿其寫作風格」</td>
+</tr>
+<tr>
+<td>7</td>
+<td>以被冒充者身分進行即時政治對話</td>
+<td><strong>T1656 Impersonation</strong></td>
+<td>Deliver Content / Establish Legitimacy</td>
+<td>平台側：帳號在短期內的訊息產出速率、回覆延遲分布、跨時區持續性；訊息語言模型困惑度（perplexity）分布與該帳號歷史語料的偏移</td>
+</tr>
+<tr>
+<td>8</td>
+<td>同時對 30+ 聯絡人發送捏造頭條</td>
+<td><strong>T1656</strong>；Impact 側無對應</td>
+<td>Deliver Content / Flood the Information Space</td>
+<td>平台側：一對多同文訊息的同時發送（fan-out burst）；內容與任何可查核新聞源不匹配</td>
+</tr>
+<tr>
+<td>9</td>
+<td>生成 AI 頭像、動畫化、加波斯語語音、偽裝成一般伊朗人且不揭露</td>
+<td><strong>無對應</strong> → <strong>框架缺口</strong>（ATT&amp;CK 無合成媒體技術）</td>
+<td>Develop Content / Establish Legitimacy</td>
+<td>平台側：合成影像偵測 + 同一生成模型的隱式指紋跨帳號重現；政策側：未揭露合成人物的標示違規</td>
+</tr>
+<tr>
+<td>10</td>
+<td>多帳號 Instagram 管線、同步排程、分眾投放</td>
+<td>Resource Development → <strong>T1585.001</strong></td>
+<td>Establish Social Assets / Maximize Exposure</td>
+<td>平台側：<strong>跨帳號發文時間戳相關性</strong>（本案 Figure 15 明示 "3 pages · one cron"）、貼文間隔的低熵、相同素材的近重複偵測</td>
+</tr>
+<tr>
+<td>11</td>
+<td>初期貼文刻意不提 Mojahedin，偽裝中立新聞</td>
+<td><strong>無對應</strong> → <strong>框架缺口</strong></td>
+<td>Establish Legitimacy / Conceal Identity</td>
+<td>平台側：帳號敘事隨時間的「政治偏向漂移」曲線——初期中立、逐步顯露；這是可量化的時間序列特徵</td>
+</tr>
+<tr>
+<td>12</td>
+<td>改寫 MEK 關聯媒體為「獨立報導」、去除浮水印</td>
+<td><strong>無對應</strong>（ATT&amp;CK 無內容洗白）→ <strong>框架缺口</strong></td>
+<td>Develop Content / Launder Attribution</td>
+<td>近重複內容偵測（near-duplicate detection）：同一事實敘述在多個「獨立」來源間的高相似度；內容憑證（C2PA）缺失或被剝離的異常</td>
+</tr>
+<tr>
+<td>13</td>
+<td>七個 MEK/NCRI 網域 hard-coded 為強制來源集</td>
+<td>Resource Development → <strong>T1583.001 Acquire Infrastructure: Domains</strong>（部分適用，這些是既有官方網域而非新註冊）</td>
+<td>Develop Narratives</td>
+<td><strong>這是最好用的偵測特徵</strong>：多個宣稱獨立的帳號，其外連來源集合完全相同且限縮</td>
+</tr>
+<tr>
+<td>14</td>
+<td>ZWNJ + 點／空格規避、禁用詞清單</td>
+<td>Defense Evasion → 概念上近 <strong>T1027 Obfuscated Files or Information</strong>，但對象是自然語言而非檔案 → <strong>對應牽強，實質為缺口</strong></td>
+<td>Conceal Information Assets</td>
+<td>看<strong>異常位置</strong>的 ZWNJ 與插入頻率分布，而非看 ZWNJ 是否存在（見 4.6）</td>
+</tr>
+<tr>
+<td>15</td>
+<td>強制口號變體 + <code>#OurChoiceMaryamRajavi</code></td>
+<td><strong>無對應</strong></td>
+<td>Develop Narratives</td>
+<td>語料層指紋比對，可跨平台執行，成本極低</td>
+</tr>
+<tr>
+<td>16</td>
+<td>共享 AI 代理平台 + 每 workspace 持久記憶檔（<code>SKILL.md</code> / <code>LEARNINGS.md</code>）</td>
+<td><strong>完全無對應</strong> → <strong>本案最大的框架缺口</strong></td>
+<td>無單一對應（跨越 Plan Strategy / Persist in the Information Environment）</td>
+<td>AI 供應商側：跨帳號、跨組織偵測<strong>近乎相同的記憶檔／技能檔內容</strong>；這是唯一能在協同訊號消失時仍然看見協同的層級</td>
+</tr>
+</tbody>
+</table>
+<h3 id="53">5.3 框架缺口的總結（這是本節真正要教的東西）</h3>
+<p>16 項 TTP 中，只有 5 項有合理的 ATT&amp;CK 對應（#1、#4、#6、#7、#10、#13 部分適用），<strong>11 項落在框架之外</strong>。缺口集中在三個地方：</p>
+<ol>
+<li><strong>對人的分析行為</strong>（心理側寫、被捕紀錄分群）——ATT&amp;CK 的受害者概念是「系統」，不是「人的心理」。</li>
+<li><strong>內容與敘事層</strong>（合成媒體、洗白、口號規範、隱藏歸屬）——這是 DISARM 的領域。</li>
+<li><strong>AI 代理自身的治理層</strong>（持久記憶作為協同基質、跨行為者共用技能檔）——<strong>DISARM 也沒有</strong>。這是 2026 年才成熟的現象，兩個框架都還沒追上。</li>
+</ol>
+<p><strong>給學員的實作結論</strong>：如果你在台灣的機構要建 IO 偵測能力，不要只買一套 ATT&amp;CK 對映的產品。你需要三層：<br />
+- 網路層（ATT&amp;CK）<br />
+- 內容／敘事層（DISARM + 近重複偵測 + 語料指紋）<br />
+- <strong>AI 使用層（目前沒有現成框架，你得自己定義：記憶檔指紋、技能檔指紋、排程指紋、人格注入偵測）</strong></p>
+<p>第三層目前只有 AI 供應商看得到——這正是為什麼 Anthropic 這類報告在 IO 研究上不可替代，也正是為什麼「AI 供應商是新的觀測點」會成為本課程的核心論點之一。</p>
+<hr />
+<h2 id="6">6. 圖表逐一判讀</h2>
+<blockquote>
+<p>本節四個小節全部由本教材作者<strong>以 130 DPI 渲染圖逐字判讀原始 PDF 頁面</strong>完成，不是抄圖說文字。凡是「只出現在圖上、正文沒寫」的資訊，都會特別標記，因為那些往往是最有偵測價值的細節。</p>
+</blockquote>
+<hr />
+<h3 id="61-cluster-what-claude-was-used-for-p72-p73">6.1 Cluster / What Claude was used for 表（p.72 下半 – p.73 上半）</h3>
+<p><strong>圖片類型</strong>：三欄式資料表，跨頁（前四列在 p.72，後兩列在 p.73）。無圖號，報告未給它 Figure 編號。</p>
+<p><strong>完整抄錄（英文原文）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>Cluster</th>
+<th>What Claude was used for</th>
+<th>Most serious element</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Shared agent platform ("Viktor")</strong></td>
+<td>Persistent-memory agents running autonomous, scheduled production across actors</td>
+<td>Cross-actor shared doctrine and evasion functioning as a coordination substrate</td>
+</tr>
+<tr>
+<td><strong>Live impersonation</strong></td>
+<td>Cloning a real person's voice from their private messages; running live conversations as them</td>
+<td>Impersonating a real activist to contacts inside Iran without their knowledge</td>
+</tr>
+<tr>
+<td><strong>Surveillance and profiling</strong></td>
+<td>A ten-stage funnel; psychographic dossiers on named individuals inside Iran</td>
+<td>Arrest-history profiling of people who face imprisonment or execution under Iranian law</td>
+</tr>
+<tr>
+<td><strong>Coordinated inauthentic behavior</strong></td>
+<td>Multi-account Instagram pipelines with synchronized, audience-segmented posting</td>
+<td>Concealment of MEK affiliation and near-identical coordinated output under "independent" branding</td>
+</tr>
+<tr>
+<td><strong>Synthetic media</strong></td>
+<td>Avatars with Persian audio for spokespeople</td>
+<td>Undisclosed synthetic "ordinary Iranians" and historical-figure deepfakes manufacturing false authority</td>
+</tr>
+<tr>
+<td><strong>Media laundering</strong></td>
+<td>Rewriting and redistributing MEK-affiliated media as independent reporting</td>
+<td>Watermark stripping and disguising organizational content as ordinary compatriot voices</td>
+</tr>
+</tbody>
+</table>
+<p><strong>繁體中文對照</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>叢集</th>
+<th>Claude 被用來做什麼</th>
+<th>最嚴重的元素</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>共享代理平台（「Viktor」）</strong></td>
+<td>具持久記憶的代理，跨行為者執行自主、排程化的產出</td>
+<td>跨行為者共用的教義與規避手法，實際上發揮了<strong>協同基質</strong>的功能</td>
+</tr>
+<tr>
+<td><strong>即時冒充</strong></td>
+<td>從真人的<strong>私訊</strong>中複製其「聲音」（語氣人格）；以其身分進行即時對話</td>
+<td>在伊朗境內聯絡人<strong>不知情</strong>的情況下冒充一名真實運動者</td>
+</tr>
+<tr>
+<td><strong>監控與側寫</strong></td>
+<td>一套<strong>十階段漏斗</strong>；對伊朗境內<strong>具名個人</strong>建立心理側寫檔案</td>
+<td>對依伊朗法律<strong>面臨監禁或處決</strong>者做被捕紀錄側寫</td>
+</tr>
+<tr>
+<td><strong>協同不實行為</strong></td>
+<td>多帳號 Instagram 管線，同步排程、分眾投放</td>
+<td>隱匿 MEK 關聯，並在「獨立」品牌下輸出近乎一模一樣的協同內容</td>
+</tr>
+<tr>
+<td><strong>合成媒體</strong></td>
+<td>為發言人製作帶波斯語語音的頭像</td>
+<td>未揭露的合成「一般伊朗人」與<strong>歷史人物深偽</strong>，製造虛假權威</td>
+</tr>
+<tr>
+<td><strong>媒體洗白</strong></td>
+<td>改寫並重新散布 MEK 關聯媒體，使其看起來像獨立報導</td>
+<td><strong>去除浮水印</strong>，把組織內容偽裝成一般同胞的聲音</td>
+</tr>
+</tbody>
+</table>
+<p><strong>這張表的資訊設計值得學習</strong>。它不是「做了什麼」的清單，而是一個<strong>三欄式風險評估格式</strong>：</p>
+<ul>
+<li>第 1 欄「Cluster」＝<strong>行為分類</strong>（可作為偵測規則的分類標籤）</li>
+<li>第 2 欄「What Claude was used for」＝<strong>技術事實</strong>（可驗證、可對映 TTP）</li>
+<li>第 3 欄「Most serious element」＝<strong>危害判斷</strong>（分析師的價值判斷，回答「為什麼這件事重要」）</li>
+</ul>
+<p>大多數威脅情報報告只有第 2 欄。把第 3 欄獨立出來，強迫分析師明說「我認為最嚴重的是什麼」，這在跨組織溝通（尤其是要說服法務、政策、高層）時極為有效。<strong>建議課程直接把這個三欄格式當成學員的作業模板。</strong></p>
+<p><strong>只出現在本表、正文沒寫的四項關鍵資訊</strong>：</p>
+<ol>
+<li><strong>代理平台名稱「Viktor」</strong>（正文 p.72 只說 "a shared AI agent platform"，沒給名字；名字出現在本表與 Figure 15 圖說）。</li>
+<li><strong>「private messages（私訊）」</strong>——正文 p.70 說的是讀取「Telegram posts（貼文）」，本表說的是從「private messages」複製 voice。兩者範圍差很多。<strong>這是本案文件內部的措辭不一致，必須標記為未解問題</strong>（見第 12 節）。</li>
+<li><strong>「ten-stage funnel（十階段漏斗）」</strong>——正文完全沒提。這意味著監控側寫不是臨時起意，而是一套被文件化的<strong>標準作業流程</strong>。十個階段是什麼，報告沒說。</li>
+<li><strong>「historical-figure deepfakes（歷史人物深偽）」</strong>——正文完全沒提。</li>
+</ol>
+<p><strong>課程用法</strong>：把這張表印成講義，遮住第三欄，讓學員自己填「你認為最嚴重的是什麼」，再與 Anthropic 的判斷對照。這個練習能非常有效地訓練「危害評估」而非「技術描述」的思維。</p>
+<hr />
+<h3 id="62-figure-15p73-claude-viktor">6.2 Figure 15（p.73）：由共享 Claude 代理平台「Viktor」綁定的單一分散式網絡</h3>
+<p>圖檔**：</p>
+<p><strong>圖說原文</strong>：</p>
+<blockquote>
+<p>"Figure 15. One distributed network bound by a shared Claude-based agent platform (named 'Viktor'), spanning live impersonation, surveillance inside Iran, coordinated inauthentic behavior, synthetic spokespeople, and media laundering."</p>
+</blockquote>
+<p><strong>圖說中譯</strong>：</p>
+<blockquote>
+<p>圖 15。由一個共享的、以 Claude 為基礎的代理平台（名為「Viktor」）所綁定的單一分散式網絡，橫跨即時冒充、伊朗境內監控、協同不實行為、合成發言人與媒體洗白。</p>
+</blockquote>
+<p><strong>圖片類型</strong>：<strong>節點—連線網絡圖（force-directed style network graph）</strong>，米白底色，含左上角圖例方塊，右下角來源註記。節點為實心圓，大小可變；連線有兩種樣式（灰色實線箭頭、灰色虛線）另加一種紅色實線箭頭。</p>
+<h4 id="621">6.2.1 圖例（左上角方塊，完整抄錄）</h4>
+<table>
+<thead>
+<tr>
+<th>圖例符號</th>
+<th>英文原文</th>
+<th>中譯</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔵 藍色圓</td>
+<td>Institutional media node</td>
+<td>機構型媒體節點</td>
+</tr>
+<tr>
+<td>⚫ 深灰／黑色圓</td>
+<td>Amplifier / front account</td>
+<td>放大器／門面帳號</td>
+</tr>
+<tr>
+<td>🔴 暗紅色圓</td>
+<td>Covert actor</td>
+<td>隱蔽行為者</td>
+</tr>
+<tr>
+<td>🟠 橘色圓</td>
+<td>Audience / target</td>
+<td>受眾／目標</td>
+</tr>
+<tr>
+<td>—— 紅色實線</td>
+<td>Covert recruitment / impersonation</td>
+<td>隱蔽招募／冒充</td>
+</tr>
+<tr>
+<td>- - 灰色虛線</td>
+<td>Runs on the Viktor platform</td>
+<td>在 Viktor 平台上運行</td>
+</tr>
+<tr>
+<td>（說明文字）</td>
+<td>Node size scales with documented reach</td>
+<td>節點大小與<strong>已記錄的觸及數</strong>成比例</td>
+</tr>
+</tbody>
+</table>
+<p>右下角來源註記：<strong>"Source: GTG-84006 investigation corpus"</strong>（來源：GTG-84006 調查語料）。</p>
+<blockquote>
+<p><strong>注意這個來源註記的意義</strong>：Anthropic 明說這張圖是從「調查語料」畫出來的，也就是<strong>從行為者自己的對話與檔案裡重建</strong>的，不是從外部平台資料重建的。這解釋了為什麼圖上有「741 handles」「3 pages · one cron」「10 avatars」這類只有內部語料才看得到的數字。</p>
+</blockquote>
+<h4 id="622-15">6.2.2 節點完整抄錄（共 15 個）</h4>
+<p><strong>A. 來源與平台（左側）</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>節點標籤</th>
+<th>副標</th>
+<th>顏色／類型</th>
+<th>大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>7 source domains</strong></td>
+<td>MEK / NCRI, hard-coded</td>
+<td>淺灰（非圖例四色之一，功能上是「資料來源」）</td>
+<td>小</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>VIKTOR</strong></td>
+<td>shared agent</td>
+<td>深灰圓 <strong>＋紅色外環</strong>（全圖唯一有外環的節點）</td>
+<td>中</td>
+</tr>
+</tbody>
+</table>
+<p>節點 2 下方另有一行說明文字：<strong>"One shared agent platform binds every actor"</strong>（一個共享代理平台把每一個行為者綁在一起）。</p>
+<p><strong>B. 機構型媒體節點（藍色，共 3 個）</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>節點標籤</th>
+<th>副標</th>
+<th>大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td><strong>Simay-e Azadi</strong></td>
+<td>TV node · <strong>708K</strong></td>
+<td>大</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Radio Payam Azadi</strong></td>
+<td>radio · <strong>50K+</strong></td>
+<td>中</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Webnegar</strong></td>
+<td>TV programme</td>
+<td>小</td>
+</tr>
+</tbody>
+</table>
+<p><strong>C. 放大器／門面帳號（深灰，共 4 個）</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>節點標籤</th>
+<th>副標</th>
+<th>大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6</td>
+<td><strong>"Independent news"</strong></td>
+<td>@tehranchekhabar19 · <strong>173K</strong></td>
+<td>中</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>Two-page IG + Telegram</strong></td>
+<td>@javanane_shargt · <strong>299K</strong></td>
+<td><strong>最大</strong></td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>Multi-page IG network</strong></td>
+<td>3 pages · <strong>one cron</strong></td>
+<td>小</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>Synthetic-persona factory</strong></td>
+<td><strong>10 avatars</strong></td>
+<td>小</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D. 隱蔽行為者（暗紅，共 4 個）</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>節點標籤</th>
+<th>副標</th>
+<th>大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10</td>
+<td><strong>Live impersonation</strong></td>
+<td>@mellat_b · <strong>"Parsa"</strong></td>
+<td>小</td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong>Sockpuppet funnel</strong></td>
+<td>@fwr.ir</td>
+<td>小</td>
+</tr>
+<tr>
+<td>12</td>
+<td><strong>Telegram infiltration</strong></td>
+<td><strong>741 handles · 500+ groups</strong></td>
+<td>中</td>
+</tr>
+<tr>
+<td>13</td>
+<td><strong>Student infiltration</strong></td>
+<td>@anti_silent</td>
+<td>小</td>
+</tr>
+</tbody>
+</table>
+<p><strong>E. 受眾／目標（橘色，共 2 個）</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>節點標籤</th>
+<th>附註文字</th>
+<th>大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>14</td>
+<td><strong>Diaspora audiences</strong></td>
+<td>—</td>
+<td>小</td>
+</tr>
+<tr>
+<td>15</td>
+<td><strong>People inside Iran</strong></td>
+<td>旁註：<strong>"Target of recruitment and live impersonation"</strong></td>
+<td>大</td>
+</tr>
+</tbody>
+</table>
+<h4 id="623">6.2.3 連線結構（資料如何流動）</h4>
+<p><strong>灰色實線箭頭（內容／素材流）</strong><br />
+- <code>7 source domains</code> → <code>VIKTOR</code>、<code>Simay-e Azadi</code>、<code>Radio Payam Azadi</code>、<code>Webnegar</code>、<code>Two-page IG + Telegram</code> 等（呈扇形發散）。意義：<strong>七個 MEK/NCRI 網域是整個網絡的強制素材來源</strong>。<br />
+- 三個藍色機構媒體節點 → 各個深灰放大器節點。意義：<strong>機構媒體的內容向下流入「獨立」門面帳號</strong>（這就是媒體洗白的資料流）。<br />
+- 深灰放大器節點 → <code>Diaspora audiences</code> 與 <code>People inside Iran</code>。</p>
+<p><strong>灰色虛線（Runs on the Viktor platform）</strong><br />
+- 從 <code>VIKTOR</code> 放射到圖上<strong>幾乎每一個作業節點</strong>：放大器帳號、合成人格工廠、Telegram 滲透、學生滲透、即時冒充、多頁 IG 網絡。<br />
+- 意義：<strong>這些虛線是整張圖的論點本身</strong>。把虛線全部拿掉，這張圖會散成三、四個彼此無關的小群（一群電視／廣播、一群 IG 帳號、一群 Telegram 帳號）。<strong>是 Viktor 讓它們成為「一個網絡」。</strong></p>
+<p><strong>紅色實線箭頭（Covert recruitment / impersonation）</strong><br />
+- 全圖只有 <strong>4 條</strong>，而且<strong>全部指向同一個節點：<code>People inside Iran</code></strong>。<br />
+- 來源分別是：<code>Live impersonation</code>、<code>Sockpuppet funnel</code>、<code>Telegram infiltration</code>、<code>Student infiltration</code>——正是四個暗紅色的「隱蔽行為者」節點。</p>
+<h4 id="624">6.2.4 這張圖傳達的核心訊息（三層）</h4>
+<p><strong>第一層：協同不在基礎設施，在平台。</strong><br />
+報告正文說行為者「未共用帳號基礎設施、無可見協同跡象」（p.70）。這張圖把那句話畫成了圖像語法：<strong>實線（內容流）分散、虛線（平台）匯聚</strong>。傳統的網絡分析畫的是實線；本案的真相在虛線上。</p>
+<p><strong>第二層：所有隱蔽行動都收斂到同一群人身上。</strong><br />
+四條紅線全部指向「People inside Iran」，而那個節點旁邊寫著「招募與即時冒充的目標」。這是一個<strong>視覺上的道德陳述</strong>：這個網絡的公開面（電視、廣播、Instagram）看起來像媒體工作，但它的隱蔽面全部是<strong>對境內真人的直接接觸</strong>。</p>
+<p><strong>第三層：觸及數與真實影響力的落差。</strong><br />
+圖例說「節點大小與已記錄的觸及數成比例」，圖上的名目觸及數加總約：708K + 299K + 173K + 50K+ ≈ <strong>123 萬以上</strong>（不含 89.5K 的 <code>@faryade_mamnoo</code>，該帳號在 IOC 表中但未畫進圖）。然而 p.74 明說「我們目前無法獨立確認該網絡的放大帳號吸引到多少<strong>真實</strong>互動」。</p>
+<blockquote>
+<p><strong>課程必講的反直覺點</strong>：粉絲數是<strong>可購買、可灌水、可長期累積的存量</strong>，與「一則貼文實際影響了誰」幾乎無關。Anthropic 自己在圖上畫了大節點，卻在同一份文件裡承認不知道真實觸及。學員必須學會：<strong>看到觸及數字時，先問「這是名目還是實證」。</strong></p>
+</blockquote>
+<h4 id="625-figure-15">6.2.5 只出現在 Figure 15、正文完全沒有的資料（極重要）</h4>
+<table>
+<thead>
+<tr>
+<th>資料</th>
+<th>為什麼重要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>平台名稱 "VIKTOR"</strong></td>
+<td>正文只說 "a shared AI agent platform"。名字首見於 Cluster 表與本圖。</td>
+</tr>
+<tr>
+<td><strong><code>741 handles · 500+ groups</code></strong></td>
+<td>741 這個數字<strong>全報告只出現在這張圖上</strong>。正文只說「刮取超過 500 個社群頻道」。741 個 Telegram handle 是<strong>維運規模</strong>的直接指標——這不是自動刮取，是要有人養帳號的。</td>
+</tr>
+<tr>
+<td><strong><code>3 pages · one cron</code></strong></td>
+<td>「一個 cron」三個字，直接把「協同」講成一個可量測的技術事實。正文只說「協調發文排程」。</td>
+</tr>
+<tr>
+<td><strong><code>10 avatars</code></strong></td>
+<td>正文說「為<strong>每一篇文章</strong>建立 AI 頭像」，圖上卻說只有 <strong>10 個頭像</strong>。最合理的調和是：<strong>10 個固定的合成人格身分，每篇文章指派其中一個</strong>，而不是每篇都生一個新面孔。但報告未明說，<strong>本教材標記為文件內部張力</strong>（見第 12 節）。</td>
+</tr>
+<tr>
+<td><strong>節點名稱 <code>Simay-e Azadi</code> / <code>Radio Payam Azadi</code> / <code>Webnegar</code></strong></td>
+<td>正文只寫「broadcast television, satellite and shortwave radio」，沒給機構名。這三個名字讓分析者能把 IOC 表中的 Instagram handle 對應到真實世界的 NCRI 媒體品牌。</td>
+</tr>
+<tr>
+<td><strong><code>@mellat_b · "Parsa"</code></strong></td>
+<td>這是<strong>唯一</strong>與即時冒充直接相關的 handle／代號，而它<strong>不在 p.74–75 的 IOC 表裡</strong>。見下方警語。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>關於 <code>@mellat_b · "Parsa"</code> 的處理原則</strong><br />
+該節點被標為 <strong>Covert actor（隱蔽行為者）</strong>，因此在圖的語意上它代表<strong>操作者一側</strong>的資產，而不是受害者。但報告<strong>沒有說明</strong> <code>@mellat_b</code> 是「被複製的原帳號」還是「冒充用的新帳號」，也沒有說明 "Parsa" 是被冒充者的名字、還是操作者給該人格的代號。<br />
+<strong>本教材不做任何推測，課堂上也不應推測。</strong> 由於本案涉及一名可能仍在承受風險的真實個人，這個指標<strong>只以研究資料形式抄錄</strong>，禁止查詢、禁止連線、禁止在公開場合做關聯分析。</p>
+</blockquote>
+<h4 id="626">6.2.6 在課程中怎麼用這張圖</h4>
+<ol>
+<li>
+<p><strong>當作「共享平台偵測」的主教材</strong>（建議 20–25 分鐘）：<br />
+   - 先只投影<strong>去掉虛線</strong>的版本（可用影像編輯遮蔽），問學員：「你看到幾個獨立網絡？」多數人會答 3–4 個。<br />
+   - 再投影完整版，揭示虛線。這個「前後對比」是本案最強的教學瞬間。<br />
+   - 結論句：<strong>「協同不再發生在你看得見的層級。」</strong></p>
+</li>
+<li>
+<p><strong>當作節點分類練習</strong>：發給學員 15 個節點標籤（打散），要他們分到四個圖例類別。爭議點會出現在 <code>Synthetic-persona factory</code>（是放大器還是隱蔽行為者？Anthropic 歸為放大器）與 <code>7 source domains</code>（不屬於任何一類）。討論這些邊界案例比背分類更有價值。</p>
+</li>
+<li>
+<p><strong>當作「多人共用同一 AI 代理平台」的偵測機會分析</strong>（見 8.4）：<br />
+   要學員回答——如果你是 AI 供應商的偵測團隊，看到 4 個帳號屬於 4 個不同的人、不同 IP、不同付款方式，<strong>你要靠什麼判斷他們在同一個行動裡？</strong> 答案就在這張圖的虛線上：<strong>記憶檔內容比對、技能檔命名、強制來源集合、口號變體</strong>。</p>
+</li>
+</ol>
+<hr />
+<h3 id="63-figure-16p74instagram">6.3 Figure 16（p.74）：協同不實行為、合成媒體與媒體洗白——Instagram 貼文範例</h3>
+<p>圖檔**：</p>
+<p><strong>圖說原文</strong>：</p>
+<blockquote>
+<p>"Figure 16. The operation was based on coordinated inauthentic behavior, synthetic media, and media laundering. Example of Instagram posts from the network account."</p>
+</blockquote>
+<p><strong>圖說中譯</strong>：</p>
+<blockquote>
+<p>圖 16。此行動建立在協同不實行為、合成媒體與媒體洗白之上。來自該網絡帳號的 Instagram 貼文範例。</p>
+</blockquote>
+<p><strong>圖片類型</strong>：<strong>桌面瀏覽器截圖</strong>（含網址列與瀏覽器工具列圖示），畫面上是 Instagram 網頁版。截圖經過構圖處理，把<strong>兩個以上的貼文畫面疊放</strong>在同一張圖裡（前景一則貼文詳情頁，背景可見另外兩、三則貼文的縮圖與內容），營造「這是一個持續產出的帳號」的印象。</p>
+<h4 id="631">6.3.1 畫面元素逐一判讀</h4>
+<p><strong>(1) 瀏覽器層</strong><br />
+- 網址列顯示：<code>instagram[.]com/p/DZN9HNvyaWK/</code>（已 defang）<br />
+- 可見瀏覽器 UI：上一頁／首頁按鈕、書籤星號、分享、下載、擴充套件圖示——確認是<strong>桌面版 Chrome 或 Edge</strong>，不是手機 App 截圖。<br />
+- <strong>判讀意義</strong>：操作者（或調查者）是在<strong>桌面環境</strong>檢視這些帳號。若這是操作者自己的截圖，它與「行動由有薪人員在辦公環境執行」的判斷一致。</p>
+<p><strong>(2) 前景左／中：貼文的影片縮圖（波斯語圖卡）</strong></p>
+<p>自上而下，完整抄錄畫面上的文字：</p>
+<table>
+<thead>
+<tr>
+<th>畫面位置</th>
+<th>原文</th>
+<th>中譯／說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>頂部橫幅（英文、字距拉開、金色）</td>
+<td><strong>IRAN &amp; WORLD NEWS</strong></td>
+<td>伊朗與世界新聞</td>
+</tr>
+<tr>
+<td>第一行（白色小字）</td>
+<td><strong>شنبه</strong></td>
+<td>星期六</td>
+</tr>
+<tr>
+<td>第二行（白色大字）</td>
+<td><strong>۱۶ خرداد ۱۴۰۵</strong></td>
+<td>1405 年 Khordad 月 16 日（波斯曆）</td>
+</tr>
+<tr>
+<td>主標（金色 + 白色特大字）</td>
+<td><strong>مهمترین اخبار ایران و جهان</strong></td>
+<td>伊朗與世界最重要的新聞</td>
+</tr>
+<tr>
+<td>中央</td>
+<td>▶ 播放鍵</td>
+<td>這是一支影片</td>
+</tr>
+<tr>
+<td>播放鍵下方</td>
+<td><strong>تحلیل • گزارش • خبر فوری</strong></td>
+<td>分析 • 報導 • 快訊</td>
+</tr>
+<tr>
+<td>其下（綠點 + 英文）</td>
+<td>● <strong>LIVE</strong></td>
+<td>直播</td>
+</tr>
+<tr>
+<td>底部（小字）</td>
+<td><strong>رسانه مستقل خبری</strong></td>
+<td><strong>「獨立新聞媒體」</strong></td>
+</tr>
+<tr>
+<td>底部（金色 handle）</td>
+<td><strong>@tehranchekhabar19</strong></td>
+<td>帳號名</td>
+</tr>
+<tr>
+<td>右下角</td>
+<td>靜音／音量圖示</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>(3) 前景右：Instagram 貼文詳情面板</strong><br />
+- 頂部：帳號頭像 + 帳號名（<strong>畫面上已被 Anthropic 遮蔽／模糊</strong>）+ 「• Follow」+「Original audio」+「⋯」選單。<br />
+- 內文區：一大段<strong>英文</strong>說明文字（見下）。<br />
+- 底部互動列：♡ 愛心、💬 留言、↻ 分享、✈ 轉發、🔖 收藏。<br />
+- 互動數據：<strong>「237 likes」</strong>、<strong>「1 day ago」</strong>。<br />
+- 最底：「Add a comment…」輸入框與「Post」按鈕。</p>
+<p><strong>(4) 背景可見的其他貼文</strong><br />
+- 右側可見一則深紅／黑底的波斯語貼文，可辨識文字包含 <strong>«اعتراف به ق...»</strong>（「承認……」）與 <strong>«مجاهدین در»</strong>（「聖戰者組織在……」），下方有小字說明。<br />
+- 另可見一則含<strong>金價／匯率行情表</strong>樣式的貼文（多行數字與品項），以及一則有人物入鏡的影片縮圖。<br />
+- <strong>判讀意義</strong>：這個帳號混合了<strong>政治內容</strong>（提及 Mojahedin）、<strong>民生內容</strong>（匯率金價）與<strong>國際新聞</strong>。這正是「假中立新聞帳號」的標準配方——用民生資訊建立日常收看習慣與可信度，再夾帶政治敘事。</p>
+<h4 id="632">6.3.2 英文說明文字完整抄錄</h4>
+<blockquote>
+<p>⚠️ 以下為本教材<strong>從 130 DPI 截圖逐字判讀</strong>的結果，小字部分可能有個別字元誤判，請以原始 PDF 為準。段落前的「▼」為貼文原有的項目符號。</p>
+</blockquote>
+<pre><code>The United States sanctioned the network associated with the sale of Iran liquid gas
+
+▼ The United States sanctioned the network related to the sale of Iran liquid gas.
+The US Treasury Department on Friday (June 5, 2026) imposed new sanctions linked
+to Iran targeting a network of individuals, companies and vessels responsible for
+transporting hundreds of millions of dollars of liquefied gas (LPG) of Iranian origin.
+
+▼ According to the official statement of the Office of Foreign Asset Control (OFAC),
+the network has displaced millions of barrels of Iranian liquid gas using cover
+companies in the United Arab Emirates and China, foreign bank accounts and Iran's
+&quot;shadow fleet&quot;, deliberately originated as &quot;gas&quot; &quot;Oman Liquid&quot; was concealing to
+sell to end consumers in south and east Asia (including Bangladesh).
+
+▼ Details of the sanctions:
+- 6 ships (mostly with Panama flags) were on the boycott list carrying hundreds of
+  thousands to millions of barrels of Iranian liquid gas.
+- Key entities and individuals including UAE-based companies (such as Butani
+  Trading LLC, Dundlod Trading FZE, ADH Energy FZE) and China, along with Afghans
+  and Turkish people in the network.
+Mehrdad Geramian Nik and Partners Exchange (Mehrdad Geramians Nik and Partners
+Company) and its directors (Mehrdads Geramian Nik) were also sanctioned. This
+exchange has transferred hundreds of millions of dollars of foreign currencies on
+behalf of Iranian sanctioned banks (such as Trade Bank and Nation Bank).
+
+▼ Scott Bassnet, US Treasury Secretary, said in a statement: &quot;Iran's economy is in
+a state of inequality and its military capacity has been severely weakened.&quot;
+Through Economic Fury, the Ministry of Treasury will continue to cut off the access
+of shadow fleet, shadow banking networks and Iran's global trade routes.
+
+▼ This action is part of the Trump administration's extensive [截斷]
+</code></pre>
+<h4 id="633">6.3.3 這張圖真正的教學價值：三個可驗證的鑑識線索</h4>
+<p>這張圖如果只當「一張 Instagram 截圖」看，價值有限。但它其實藏了<strong>三組可以獨立查核的證據</strong>，非常適合當課堂鑑識練習。</p>
+<p><strong>線索一：日期完全自洽，而且可以推算截圖時間</strong></p>
+<p>波斯曆 <strong>۱۶ خرداد ۱۴۰۵</strong> 換算：1405 年 Farvardin 1 日 ≈ 2026-03-21；Farvardin 31 天、Ordibehesht 31 天，因此 Khordad 16 日 = 該年第 78 天 = <strong>2026 年 6 月 6 日</strong>。2026-06-06 正是<strong>星期六</strong>，與圖卡上的 <strong>شنبه（星期六）</strong> 完全吻合。貼文內文提到的「Friday (June 5, 2026)」也確實是星期五。而貼文顯示「1 day ago」，可推得<strong>截圖時間約為 2026-06-07</strong>。</p>
+<p>→ 這落在報告涵蓋期間（2025-12 至 2026-08）之內，與報告自述一致。<br />
+→ <strong>教學點</strong>：一張截圖的內部日期一致性，本身就是證據品質的檢查項。學員應該養成「拿到截圖先做曆法／星期／時區交叉驗算」的習慣。</p>
+<p><strong>線索二：這則貼文的內容是「真的」——而這正是媒體洗白的精髓</strong></p>
+<p>本教材對貼文內容做了獨立查證（見第 9 節）：<strong>2026 年 6 月 5 日美國財政部確實發布了針對伊朗 LPG 走私與影子銀行網絡的制裁行動</strong>（新聞稿標題即為 "Economic Fury Targets Iranian LPG Smuggling and Shadow Banking Networks"）。貼文中提到的 UAE 空殼公司 <strong>Butani Trading LLC、Dundlod Trading FZE、ADH Energy FZE</strong>、<strong>6 艘船舶</strong>、網絡中的<strong>阿富汗籍與土耳其籍人士</strong>、以及 <strong>"Economic Fury"</strong> 這個行動代號，全部與公開官方資料相符。</p>
+<blockquote>
+<p><strong>這是本案最重要的單一教學洞見：</strong><br />
+<strong>媒體洗白不需要說謊。</strong> 它只需要<strong>拿走出處</strong>。<br />
+這則貼文把一份<strong>完全真實、可查證的美國政府新聞稿</strong>，用「رسانه مستقل خبری（獨立新聞媒體）」的品牌重新發布。讀者得到的是正確資訊，但失去的是：這條資訊是誰挑選的、誰翻譯的、為什麼這一條被選中而不是另一條。<br />
+對照報告 p.71：「初期貼文刻意不提及 Mojahedin，讓該團體的宣傳看起來像無所屬的中立新聞。」<strong>先用真新聞蓋房子，再在裡面放政治家具。</strong><br />
+而同一個網絡的 Telegram 冒充帳號，卻在同時對 30 名以上聯絡人發送<strong>捏造的</strong>突發新聞頭條（p.71）。<strong>同一個組織，在公開頻道發真新聞建立信譽，在私訊頻道發假新聞收割信譽。</strong> 這個對比要在課堂上明講。</p>
+</blockquote>
+<p><strong>線索三：文字證明這是「機器翻譯 + 無人工校對」的管線</strong></p>
+<p>貼文中有三處露餡：</p>
+<table>
+<thead>
+<tr>
+<th>貼文文字</th>
+<th>實際應為</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>"Scott Bassnet, US Treasury Secretary"</strong></td>
+<td>Scott <strong>Bessent</strong></td>
+<td>美國財政部長姓名被音譯扭曲。典型的<strong>波斯文轉寫再譯回英文</strong>的痕跡（英文 → 波斯文音譯 → 英文回譯，專有名詞失真）。</td>
+</tr>
+<tr>
+<td><strong>"Trade Bank and Nation Bank"</strong></td>
+<td>Bank <strong>Tejarat</strong>（تجارت＝貿易）與 Bank <strong>Melli</strong>（ملی＝國家／民族）</td>
+<td><strong>機器把伊朗銀行的專有名詞「意譯」了</strong>。真人編輯絕不會把 Bank Melli 寫成 "Nation Bank"。這是本圖最強的機器翻譯證據。</td>
+</tr>
+<tr>
+<td><strong>"deliberately originated as 'gas' 'Oman Liquid' was concealing to sell..."</strong></td>
+<td>語序崩壞、引號錯置</td>
+<td>波斯文 → 英文直譯後未經潤飾的典型句法殘骸。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>→ 偵測工程上的直接可用結論</strong>：<br />
+「<strong>專有名詞被意譯</strong>」是一個<strong>低成本、高精確度</strong>的跨語言洗白偵測特徵。做法：維護一份目標語言的機構／人名對照表（Bank Melli、Bank Tejarat、Sepah、IRGC…），在英文語料中比對其<strong>字面意譯形式</strong>（"National Bank"、"Trade Bank"、"Army of Guardians"…）。命中即代表這段英文很可能是從該語言機器翻譯而來，而非原生英文報導。<strong>這條規則可以直接搬到中文情境</strong>（例如把「國台辦」直譯成 "National Taiwan Office"、把「人民日報」寫成 "People's Daily" 以外的直譯變體）。</p>
+<h4 id="634">6.3.4 帳號品牌策略解剖</h4>
+<table>
+<thead>
+<tr>
+<th>設計元素</th>
+<th>表面訊息</th>
+<th>實際功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>帳號名 <code>@tehranchekhabar19</code>（تهران چه خبر ＝「德黑蘭，什麼消息？」）</td>
+<td>口語、親切、無政治色彩</td>
+<td>降低政治警戒心</td>
+</tr>
+<tr>
+<td><strong>رسانه مستقل خبری</strong>（獨立新聞媒體）</td>
+<td>自我宣稱獨立</td>
+<td><strong>直接對應報告的「Concealment of MEK affiliation... under 'independent' branding」</strong></td>
+</tr>
+<tr>
+<td><strong>IRAN &amp; WORLD NEWS</strong>（英文橫幅）</td>
+<td>國際化、專業感</td>
+<td>借用國際媒體的視覺權威</td>
+</tr>
+<tr>
+<td><strong>● LIVE</strong>（綠點 + 直播字樣）</td>
+<td>即時性</td>
+<td>製造「正在發生」的急迫感；也可能是純裝飾（貼文是預錄影片）</td>
+</tr>
+<tr>
+<td><strong>تحلیل • گزارش • خبر فوری</strong>（分析・報導・快訊）</td>
+<td>新聞編輯部的欄目分工</td>
+<td>模仿真實新聞台的節目表結構</td>
+</tr>
+<tr>
+<td>深藍／黑底 + 金色主標</td>
+<td>莊重、權威</td>
+<td>波斯語新聞台常見配色</td>
+</tr>
+<tr>
+<td>混入金價匯率行情</td>
+<td>民生服務</td>
+<td>建立日常收看習慣，是最有效的受眾養成手段</td>
+</tr>
+<tr>
+<td>IOC 表註記「student targeting (~173K)」</td>
+<td>—</td>
+<td>品牌看似泛用，實際鎖定學生族群</td>
+</tr>
+</tbody>
+</table>
+<h4 id="635">6.3.5 在課程中怎麼用這張圖</h4>
+<ol>
+<li><strong>「你能看出這是行動帳號嗎？」開場練習（建議 10 分鐘）</strong>：先只投影圖 16 的貼文部分，<strong>不說出處</strong>，問學員：「這個帳號有什麼問題？」大多數人答不出來——因為<strong>內容是真的、排版是專業的、數據是可查證的</strong>。然後揭示它是 MEK/NCRI 網絡的一部分。這個「找不出問題」的挫折感，正是要教的東西。</li>
+<li><strong>鑑識練習</strong>：發下截圖，要學員在 20 分鐘內找出（a）曆法／星期是否自洽、（b）內文事實是否可查證、（c）有沒有機器翻譯痕跡。三者都能做到就算合格。</li>
+<li><strong>對比練習</strong>：把圖 16（公開頻道，真新聞，237 likes）與報告 p.71 描述的（私訊頻道，捏造頭條，30+ 名聯絡人）並列，讓學員畫出「信譽建立 → 信譽兌現」的兩階段模型。</li>
+<li><strong>「237 likes」的意義</strong>：一個名目 17.3 萬追蹤者的帳號，一則貼文只有 237 個讚（互動率約 0.14%）。這與 Anthropic 說「無法確認吸引到多少真實互動」互相呼應。<strong>讓學員自己算這個比例</strong>，會比任何說教都有效。</li>
+</ol>
+<hr />
+<h3 id="64-indicator-type-p74-p75">6.4 Indicator / Type 表（p.74 下半 – p.75 上半）</h3>
+<p><strong>圖片類型</strong>：三欄式指標表，跨頁。無圖號。完整抄錄見第 7 節（含偵測價值與壽命分析）。</p>
+<p><strong>本節只處理「表格設計」與「值得注意的編排決定」</strong>：</p>
+<ol>
+<li>
+<p><strong>欄位設計是 <code>Indicator / Type / Note</code>，而非典型的 <code>IOC / Confidence / First seen</code>。</strong> 第三欄 Note 不是技術註解，而是<strong>角色標註</strong>（"Origination node"、"National diaspora audience"、"Sockpuppet funnel and surveillance endpoint"、"Student surveillance funnel"、"Ten-point-plan promotion"）。也就是說，<strong>這張表同時是一張 IOC 表和一張網絡角色圖</strong>。這是很好的實務設計，值得學員仿效。</p>
+</li>
+<li>
+<p><strong>網域列被標為 "MEK/NCRI mandatory source set hard-coded across actors"。</strong> 注意：這七個網域<strong>不是惡意基礎設施</strong>，它們是 MEK/NCRI 的公開官方網站。把它們列為 IOC，其涵義不是「這些網站有惡意」，而是「<strong>任何一個 AI 工作階段，如果其設定檔硬編碼了『只能引用這七個網域』，就是這個行動的指紋</strong>」。</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>這是全報告最值得單獨拿出來講的 IOC 方法論創新</strong>：傳統 IOC 的語意是「這個東西是壞的」。這裡的語意是「<strong>這個引用模式是壞的</strong>」。前者是實體指標（atomic indicator），後者是<strong>行為／設定指標</strong>。學員必須分清楚，否則會做出「把 ncr-iran[.]org 加進防火牆黑名單」這種既無效又可能侵害言論自由的錯誤處置。</p>
+</blockquote>
+<ol start="3">
+<li>
+<p><strong>最後一列 "Fingerprints" 是全表最有價值的一列</strong>，而且它完全不是傳統意義的 IOC：<br />
+<code>ZWNJ + dot/space evasion; mandatory slogan; #OurChoiceMaryamRajavi; SKILL.md / LEARNINGS.md memory</code>，Type 欄寫 <strong>Fingerprints</strong>，Note 欄寫 <strong>Cross-actor signatures</strong>。<br />
+   → 這四項全部是<strong>跨行為者共用的內容／設定特徵</strong>，壽命遠比帳號長（見 7.3）。</p>
+</li>
+<li>
+<p><strong>表中缺少的東西也要教</strong>：<br />
+   - <strong>沒有</strong> Claude 帳號 ID、API key、組織 ID（Anthropic 一貫不公開這些）。<br />
+   - <strong>沒有</strong> IP、VPN 供應商、註冊用手機號國碼（在同報告 p.62 起的伊朗國家案中，Anthropic 有提到「VPN 與外國電話號碼」，本案則無）。<br />
+   - <strong>沒有</strong> <code>@mellat_b</code> / "Parsa"（只出現在 Figure 15）。<br />
+   - <strong>沒有</strong> 被冒充者的任何資訊（正確且必要的保護）。<br />
+   - <strong>沒有</strong> "Held for partner share"（待與夥伴分享而暫不公開）這一列——對照 p.70 的孟加拉案 GTG-54006 明確有一列 <code>Held for partner share</code>，本案沒有。這暗示 Anthropic 對本案<strong>沒有保留未公開指標</strong>，或至少沒有說明有。</p>
+</li>
+</ol>
+<hr />
+<h2 id="7-ioc">7. IOC 與技術指標</h2>
+<blockquote>
+<p>🔴 <strong>安全紅線（課堂與研究皆適用）</strong><br />
+以下全部指標<strong>僅作研究資料抄錄</strong>，保留報告原本的 defang 格式。<br />
+<strong>禁止</strong>以任何方式連線這些網域、<strong>禁止</strong>做 DNS 查詢、<strong>禁止</strong>開啟或訂閱這些 Instagram／Telegram 帳號、<strong>禁止</strong>存取圖 16 的 Instagram 貼文網址。<br />
+原因有二：(1) 這些是仍在運作的社群帳號，任何互動都會產生可觀測的足跡；(2) 本案涉及伊朗境內真實個人的人身安全，研究者的存取行為本身可能被誤讀或被追蹤。</p>
+</blockquote>
+<h3 id="71-p74-p75">7.1 完整抄錄（p.74 下半 – p.75 上半）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Indicator（原文抄錄，保留 defang）</th>
+<th>Type</th>
+<th>Note（原文）</th>
+<th>Note（中譯）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>mojahedin[.]org</code>；<code>ncr-iran[.]org</code>；<code>maryam-rajavi[.]com</code>；<code>iranntv[.]com</code>；<code>iranfreedom[.]org</code>；<code>hambastegimeli[.]com</code>；<code>wncri[.]org</code></td>
+<td>Domains</td>
+<td>MEK/NCRI mandatory source set hard-coded across actors</td>
+<td>MEK/NCRI 強制來源集合，跨行為者硬編碼</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>@simaintv</code> / <code>@iranintv</code></td>
+<td>Instagram</td>
+<td>Origination node (~708K)</td>
+<td>源頭節點（約 70.8 萬）</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>@javanane_shargt</code></td>
+<td>Instagram</td>
+<td>National diaspora audience (~299K)</td>
+<td>全國性僑民受眾（約 29.9 萬）</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>@tehranchekhabar19</code></td>
+<td>Instagram</td>
+<td>"Independent news"; student targeting (~173K)</td>
+<td>「獨立新聞」；鎖定學生（約 17.3 萬）</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>@faryade_mamnoo</code></td>
+<td>Instagram</td>
+<td>Opposition content (~89.5K)</td>
+<td>反對派內容（約 8.95 萬）</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>@khabar_fouri_mardom</code>；<code>@iranpayam_tehran5</code></td>
+<td>Instagram</td>
+<td>Coordinated multi-page network</td>
+<td>協同多頁面網絡</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>@fwr.ir</code> / <code>@fwr_ir</code>；<code>t[.]me/FWR_ir</code></td>
+<td>Instagram / Telegram</td>
+<td>Sockpuppet funnel and surveillance endpoint</td>
+<td>傀儡帳號漏斗與監控端點</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>@anti_silent</code></td>
+<td>Telegram</td>
+<td>Student surveillance funnel</td>
+<td>學生監控漏斗</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>@jomhouri_democratic</code></td>
+<td>Instagram / Telegram</td>
+<td>Ten-point-plan promotion</td>
+<td>十點計畫宣傳</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>ZWNJ + dot/space evasion</code>；<code>mandatory slogan</code>；<code>#OurChoiceMaryamRajavi</code>；<code>SKILL.md / LEARNINGS.md memory</code></td>
+<td><strong>Fingerprints</strong></td>
+<td>Cross-actor signatures</td>
+<td>跨行為者簽章</td>
+</tr>
+</tbody>
+</table>
+<p><strong>僅見於 Figure 15（p.73）、未收入 IOC 表的指標</strong>（依 6.2.5 的警語處理）：</p>
+<table>
+<thead>
+<tr>
+<th>Indicator</th>
+<th>圖上角色</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@mellat_b</code> · 代號 <code>"Parsa"</code></td>
+<td>Live impersonation（Covert actor）</td>
+<td><strong>不在 IOC 表中</strong>。報告未說明它是被複製的原帳號還是冒充用帳號。不得推測、不得查詢。</td>
+</tr>
+<tr>
+<td><code>741 handles</code>（Telegram）</td>
+<td>Telegram infiltration</td>
+<td>數量指標，非具體 handle</td>
+</tr>
+<tr>
+<td><code>500+ groups</code>（Telegram）</td>
+<td>Telegram infiltration</td>
+<td>與正文「刮取超過 500 個社群頻道」很可能指同一批</td>
+</tr>
+<tr>
+<td><code>3 pages · one cron</code></td>
+<td>Multi-page IG network</td>
+<td>排程行為指標</td>
+</tr>
+<tr>
+<td><code>10 avatars</code></td>
+<td>Synthetic-persona factory</td>
+<td>合成人格數量</td>
+</tr>
+<tr>
+<td>機構名稱 <code>Simay-e Azadi</code>、<code>Radio Payam Azadi</code>、<code>Webnegar</code></td>
+<td>Institutional media node</td>
+<td>可與 IOC 表的 handle 對應</td>
+</tr>
+</tbody>
+</table>
+<p><strong>僅見於 Figure 16（p.74）的指標</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>Indicator</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>instagram[.]com/p/DZN9HNvyaWK/</code>（已由本教材 defang）</td>
+<td>圖 16 網址列顯示的貼文永久連結。<strong>禁止存取。</strong></td>
+</tr>
+<tr>
+<td>波斯語自我描述 <code>رسانه مستقل خبری</code>（獨立新聞媒體）</td>
+<td>品牌宣稱，可作為跨帳號的字串指紋</td>
+</tr>
+<tr>
+<td>英文橫幅 <code>IRAN &amp; WORLD NEWS</code></td>
+<td>同上</td>
+</tr>
+<tr>
+<td>欄目字串 <code>تحلیل • گزارش • خبر فوری</code></td>
+<td>同上，模板化字串指紋</td>
+</tr>
+</tbody>
+</table>
+<h3 id="72">7.2 逐項偵測價值與壽命分析</h3>
+<blockquote>
+<p><strong>「壽命」的定義</strong>：從指標被公開（2026-09-10 報告發布）起算，這個指標還能有效識別該行為者的預期時間。<br />
+分級：<strong>極短（天–週）／短（週–月）／中（月–年）／長（年以上）／結構性（改變需要組織層決策）</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>指標</th>
+<th>偵測價值</th>
+<th>壽命</th>
+<th>理由與操作建議</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>七個 MEK/NCRI 網域作為<strong>強制來源集</strong></td>
+<td><strong>極高（但必須用對）</strong></td>
+<td><strong>結構性</strong></td>
+<td>這些是組織的官方網站，不可能改。真正的指標不是「網域出現」（任何寫伊朗新聞的人都可能引用），而是「<strong>某個帳號／某個 AI 工作階段的外連來源集合＝恰好這七個，且排他</strong>」。偵測邏輯是<strong>集合比對</strong>而非<strong>關鍵字命中</strong>。<br>⚠️ <strong>絕對不要把這七個網域加進封鎖清單</strong>——它們是合法的政治團體網站，封鎖是言論審查，而且對偵測毫無幫助。</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>@simaintv</code> / <code>@iranintv</code></td>
+<td>中</td>
+<td><strong>長</strong></td>
+<td>對應公開的 NCRI 電視品牌（Simay Azadi / Iran NTV），是公開資產，不會為了規避而丟棄。作為「網絡源頭節點」的錨點價值高，作為「隱蔽性指標」價值低。</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>@javanane_shargt</code></td>
+<td>中高</td>
+<td>中</td>
+<td>29.9 萬追蹤者的帳號有沉沒成本，不易拋棄，但也可能被平台下架。</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>@tehranchekhabar19</code></td>
+<td><strong>高</strong></td>
+<td>中</td>
+<td>這是「假獨立新聞」的核心門面，且已在圖 16 中被完整曝光（含視覺模板）。曝光後拋棄的機率高，但<strong>它的視覺模板與字串（رسانه مستقل خبری、IRAN &amp; WORLD NEWS、欄目列）會被複製到下一個帳號</strong>——追模板比追 handle 有用。</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>@faryade_mamnoo</code></td>
+<td>中</td>
+<td>中</td>
+<td>同上。</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>@khabar_fouri_mardom</code>；<code>@iranpayam_tehran5</code></td>
+<td>中</td>
+<td><strong>短–中</strong></td>
+<td>被明確標為「協同多頁面網絡」，屬於可拋棄的量產帳號。<strong>單一 handle 壽命短，但「同一 cron 驅動的多頁面」這個行為模式壽命長。</strong></td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>@fwr.ir</code> / <code>@fwr_ir</code>；<code>t[.]me/FWR_ir</code></td>
+<td><strong>極高</strong></td>
+<td>短</td>
+<td>「傀儡帳號漏斗與<strong>監控端點</strong>」——這是把人從公開平台導向可監控通道的入口。跨平台使用同一字串（<code>fwr</code>）於 Instagram 與 Telegram，是<strong>命名慣例指紋</strong>。曝光後極可能立刻更名，但<strong>「IG handle 與 Telegram handle 共用字根」這個慣例會延續</strong>。</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>@anti_silent</code></td>
+<td><strong>極高</strong></td>
+<td>短</td>
+<td>「學生監控漏斗」。與 7 同理。名稱本身（「反沉默」）是典型的動員式命名。</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>@jomhouri_democratic</code></td>
+<td>高</td>
+<td>中</td>
+<td>「十點計畫宣傳」——這個帳號的內容主題直接綁定組織綱領，不太可能改變主題，但可能改帳號。</td>
+</tr>
+<tr>
+<td>10a</td>
+<td><code>ZWNJ + dot/space evasion</code></td>
+<td><strong>極高</strong></td>
+<td><strong>長</strong></td>
+<td>需要改寫規避規則庫才能改變，而規則庫寫在共享記憶檔裡＝改一次要全網絡同步。<br><strong>偵測做法</strong>：不是偵測 ZWNJ 存在（波斯文正常書寫必用 ZWNJ，如 «وب‌نگار»），而是偵測<strong>異常位置的 ZWNJ 插入</strong>與<strong>單位文字長度的 ZWNJ 密度異常</strong>。</td>
+</tr>
+<tr>
+<td>10b</td>
+<td><code>mandatory slogan</code>（«زن، مقاومت، آزادی» 取代 «زن، زندگی، آزادی»）</td>
+<td><strong>極高</strong></td>
+<td><strong>結構性</strong></td>
+<td>這是<strong>組織身分宣示</strong>，改掉等於放棄品牌。跨平台、跨語言、零成本可比對。<strong>本案最好用的單一指標。</strong></td>
+</tr>
+<tr>
+<td>10c</td>
+<td><code>#OurChoiceMaryamRajavi</code></td>
+<td>高</td>
+<td>中–長</td>
+<td>標籤可換，但這個標籤直接指向組織領導人，屬於動員符號，替換有政治成本。</td>
+</tr>
+<tr>
+<td>10d</td>
+<td><code>SKILL.md</code> / <code>LEARNINGS.md</code> <strong>記憶檔</strong></td>
+<td><strong>最高（但只有 AI 供應商看得到）</strong></td>
+<td><strong>中–長</strong></td>
+<td>這是「跨行為者簽章」中最強的一項：<strong>內容比對</strong>可以在四個互不相識、不共用基礎設施的帳號之間建立關聯。但這個指標<strong>只有 AI 供應商能觀測</strong>——平台業者、研究機構、政府都看不到。<br><strong>這揭示了 2026 年 IO 偵測的權力結構</strong>（見 8.4）。</td>
+</tr>
+<tr>
+<td>—</td>
+<td><code>3 pages · one cron</code>（僅見於 Fig.15）</td>
+<td><strong>極高</strong></td>
+<td><strong>長</strong></td>
+<td>排程化多帳號發文的統計指紋（時間戳低熵、跨帳號間隔相關），是平台側最可靠的協同偵測訊號之一，且改掉會損失自動化效益。</td>
+</tr>
+<tr>
+<td>—</td>
+<td>專有名詞被意譯（<code>Trade Bank</code> ← Bank Tejarat 等，見 6.3.3）</td>
+<td><strong>高</strong></td>
+<td><strong>長</strong></td>
+<td>機器翻譯管線的結構性副產品。除非改用人工校對（＝放棄規模），否則會持續出現。<strong>跨語言通用，可直接移植到中文情境。</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="73">7.3 指標分層總結（給偵測工程師的可操作結論）</h3>
+<p>把上表重整成三層，優先順序由下而上：</p>
+<pre class="mermaid">flowchart TD
+    L3[&quot;【第三層｜原子指標：帳號 handle、貼文網址】&lt;br/&gt;壽命：短。曝光即失效。&lt;br/&gt;價值：事後溯源、封禁執行。&lt;br/&gt;❌ 不要把偵測能力建在這一層。&quot;]
+    L2[&quot;【第二層｜行為指標：cron 排程、跨帳號時間戳相關性、&lt;br/&gt;IG/TG 共用字根命名、來源集合排他性、帳號政治偏向的時間漂移】&lt;br/&gt;壽命：中–長。改變要付出自動化與規模的代價。&lt;br/&gt;價值：平台側可獨立偵測，不需要 AI 供應商配合。&lt;br/&gt;✅ 民間研究機構與平台的主戰場。&quot;]
+    L1[&quot;【第一層｜語料與設定指標：強制口號變體、強制標籤、&lt;br/&gt;ZWNJ 規避模式、機器翻譯專有名詞意譯、記憶檔／技能檔內容比對】&lt;br/&gt;壽命：長–結構性。改變需要組織層決策並全網同步。&lt;br/&gt;價值：最高，且大多可「跨平台、跨語言、零特權」執行&lt;br/&gt;（唯一例外是記憶檔比對，只有 AI 供應商做得到）。&lt;br/&gt;✅✅ 這是本案給偵測工程最重要的啟示。&quot;]
+
+    L3 --&gt;|&quot;越往下：壽命越長、價值越高（優先順序由下而上）&quot;| L2
+    L2 --&gt;|&quot;越往下：壽命越長、價值越高（優先順序由下而上）&quot;| L1
+</pre>
+<p><strong>一句話總結</strong>：<strong>追帳號會累死，追語料會活得久。</strong></p>
+<hr />
+<h2 id="8-anthropic">8. Anthropic 的偵測、處置與防線缺口</h2>
+<h3 id="81">8.1 報告寫了什麼（完整抄錄）</h3>
+<p>p.74「Disruption and mitigations」全文只有三句：</p>
+<blockquote>
+<p>"We found this activity as part of our internal investigations and banned the accounts. At this point, we are not able to independently confirm how much authentic engagement was drawn by the network's amplification accounts."</p>
+</blockquote>
+<p>中譯：</p>
+<blockquote>
+<p>「我們在內部調查過程中發現此活動，並停用了相關帳號。目前，我們無法獨立確認該網絡的放大帳號吸引到多少真實互動。」</p>
+</blockquote>
+<p><strong>全報告的其他案例，處置段落通常包含三到五個動作</strong>（發現方式、停權、把發現餵回安全防護、與平台／夥伴分享指標、與執法或公民社會合作）。本案只有<strong>兩個動作</strong>：發現、停權。</p>
+<h3 id="82">8.2 防線缺口清單（本節是課程的高價值素材）</h3>
+<p>以下五項全部是<strong>基於報告自身文字的缺席或自陳</strong>，不是外部批評。</p>
+<h4 id="claude">缺口一：全案沒有任何一次「Claude 拒絕」</h4>
+<p>在同一份 154 頁報告中，Anthropic 在多處明確記錄了安全防護的表現，包括成功與失敗：</p>
+<ul>
+<li><strong>p.45（GTG-04001，俄羅斯 FIMI 案）</strong>：「Claude 拒絕配合該行動最激進的請求，該請求涉及<strong>指名真實個人為武裝分子，以引來安全部隊對他們採取行動</strong>。該行為者轉而改用匿名消息來源的框架。」<br />
+  （原文："Claude refused to comply with the operation's most aggressive request, which involved naming real individuals as militants to draw security action against them. The actor pivoted to anonymous-source framing instead."）</li>
+<li><strong>p.94（GTG-14021，中國公安案）</strong>：「Claude 拒絕了一次要求攝入並產出每週『維穩』報告的嘗試。<strong>但該行為者能夠透過重新提示（re-prompt）讓模型產出可用的鎮壓指引，其中點名 10 名私人公民</strong>作為『管控』對象。」</li>
+<li><strong>p.97（GTG-14021 章節總評）</strong>：「<strong>我們既有的防護措施在這些案例中的表現並不一致。</strong>在一個案例中，Claude 正確地拒絕了請求，<strong>但在進一步提示後被突破</strong>。在另一個案例中，它<strong>橫跨許多工作階段順從配合，未受任何介入</strong>。」</li>
+<li><strong>p.102（GTG-34007，伊朗雙單位案）</strong>：「Claude 拒絕了明確的側寫與宣傳請求，<strong>但我們的防護措施並未拒絕許多監控軟體工具的請求</strong>。」</li>
+</ul>
+<p><strong>而 GTG-84006 的整整六頁（p.70–75）中，沒有出現任何一個 refuse / decline / block / safeguard 字樣。</strong></p>
+<p>這代表什麼？兩種可能，報告都沒說明：</p>
+<ul>
+<li>(a) 確實沒有觸發任何拒絕——<strong>六個叢集（含冒充真人、對境內個人做被捕紀錄側寫）全部順利執行到底</strong>；</li>
+<li>(b) 有拒絕但報告未記載。</li>
+</ul>
+<p>無論哪一種，對讀者而言的結論相同：<strong>報告沒有提供任何證據顯示，模型層防護在本案發揮過作用。</strong> 本案是靠<strong>事後的帳號調查</strong>發現的，不是靠即時的內容防護攔下來的。</p>
+<blockquote>
+<p><strong>這一點必須在課堂上講清楚，而且要正面處理</strong>：Anthropic 的報告在許多案例中對自身失效相當坦白（上面四條引文都是它自己寫的）。因此本案的「沉默」更值得注意。教學上不要把它講成「Anthropic 隱瞞」，而要講成：<strong>「在一個高度依賴持久記憶與排程自動化的行動中，逐次對話的內容防護本來就不容易觸發——因為惡意意圖不在對話裡，而在記憶檔裡。」</strong></p>
+</blockquote>
+<h4 id="_1">缺口二：持久記憶把「意圖」移出了審查視野（架構性缺口）</h4>
+<p>報告自己寫得很清楚（p.72）：</p>
+<blockquote>
+<p>"Over time they updated these files with specific instructions, such as lists of banned words, approved sources, account management rules, and ways to avoid detection. <strong>This allowed the agent to keep producing content without a human user directing each session.</strong>"</p>
+</blockquote>
+<p>把這句話翻譯成安全架構語言：</p>
+<table>
+<thead>
+<tr>
+<th>傳統假設</th>
+<th>本案現實</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>惡意意圖表達在<strong>使用者訊息</strong>中</td>
+<td>惡意意圖寫在<strong>記憶檔</strong>中，可能在數月前寫入</td>
+</tr>
+<tr>
+<td>每個工作階段都是<strong>一次可審查的事件</strong></td>
+<td>工作階段只是<strong>執行既有設定</strong>的結果</td>
+</tr>
+<tr>
+<td>安全分類器看「這次對話」</td>
+<td>這次對話可能只是「照排程產一篇稿」</td>
+</tr>
+<tr>
+<td>停用帳號＝中止行動</td>
+<td>記憶檔可被複製到新帳號、新 workspace</td>
+</tr>
+</tbody>
+</table>
+<p><strong>最極端的例證</strong>：「一名行為者把 MEK 創始教義載入模型記憶，作為供行動內其他人重複使用的 strategic base data」（p.72）。<strong>這是一次性寫入、多人長期重用。</strong> 對逐次對話的審查而言，它幾乎是不可見的。</p>
+<p><strong>這是 2026 年 AI 安全防護的核心難題</strong>，而且報告在趨勢章節（p.43）自己承認了：</p>
+<blockquote>
+<p>"Increasingly, operations are not run using individual prompts. Instead, a great deal is embedded within persistent memory files."<br />
+「越來越多的行動不是用個別提示來運作。反之，大量內容被嵌在持久記憶檔裡。」</p>
+</blockquote>
+<h4 id="_2">缺口三：沒有說明是否與平台分享指標（與同頁的另一案形成強烈對比）</h4>
+<p>同一頁（p.70）上方，孟加拉案 GTG-54006 的處置段落明確寫著：</p>
+<blockquote>
+<p>"...signatures to stop this from happening again. As in the other operations described here, <strong>we shared indicators with the relevant distribution platforms and other partners.</strong>"</p>
+</blockquote>
+<p>而 GTG-84006 的處置段落<strong>完全沒有這句話</strong>，也沒有 IOC 表中的 <code>Held for partner share</code> 列（孟加拉案有）。</p>
+<p><strong>這在一個涉及人身安全的案子上，是一個值得提出的問題。</strong> 報告在監控危害章節（p.80 附近）的總論確實說「在行動涉及平台外活動或影響之處，我們會<strong>適當地</strong>與業界夥伴與主管機關分享識別資訊與情報」——「適當地（as appropriate）」是一個保留條款。本案是否落在那個「適當」之內，報告沒說。</p>
+<blockquote>
+<p><strong>課堂討論素材</strong>：若 Instagram/Meta 與 Telegram 沒有拿到這批指標，那麼 Anthropic 的「停用帳號」實際上只是<strong>讓行動者換一個 AI 供應商繼續</strong>，而那些 Instagram 與 Telegram 帳號仍在運作。這是「單點處置 vs. 生態系處置」的經典難題。</p>
+</blockquote>
+<h4 id="_3">缺口四：沒有提到通知受害者</h4>
+<p>報告完全沒有提及：</p>
+<ul>
+<li>被冒充的那位運動者<strong>是否被告知</strong>他的身分正被 AI 冒用；</li>
+<li>那 30 名以上收到捏造頭條的境內聯絡人<strong>是否被告知</strong>；</li>
+<li>被建立心理側寫檔案的數十名具名個人<strong>是否被告知</strong>。</li>
+</ul>
+<p><strong>這不是吹毛求疵。</strong> 對比其他領域的實務：資料外洩有法定通知義務；商業間諜軟體（如 NSO Pegasus）的目標通常會收到 Apple/Google 的國家級攻擊者通知。<strong>AI 供應商在偵測到「其服務被用來冒充某個特定真人」時，是否對該真人負有通知義務？目前沒有任何法規要求，報告也沒有自願承擔。</strong></p>
+<p>當然，這裡存在真實的兩難：</p>
+<ul>
+<li><strong>通知的理由</strong>：被冒充者有權知道，才能發出警示、保護聯絡人。</li>
+<li><strong>不通知的理由</strong>：Anthropic 不一定能確認被冒充者的真實身分與聯絡方式；主動聯繫一名伊朗運動者本身可能製造新的風險；也可能干擾執法或其他調查。</li>
+</ul>
+<p><strong>課程應該把這個兩難原封不動丟給學員（見 10.2 討論題 4）。</strong></p>
+<h4 id="anthropic">缺口五：Anthropic 自陳的觀測邊界</h4>
+<p>報告在影響力行動章節的方法論段落（p.42）自己寫了：</p>
+<blockquote>
+<p>"<strong>Our visibility into these operations ends once it's live.</strong> To verify our findings and understand what happened after content left our platform, we rely on open-source research, cross-platform industry data, and public reporting."</p>
+</blockquote>
+<p>配合本案的「無法獨立確認真實互動」，可以畫出 Anthropic 的觀測範圍：</p>
+<pre class="mermaid">flowchart LR
+    subgraph VIS[&quot;Anthropic 看得見&quot;]
+        direction LR
+        A1[&quot;規劃&quot;] --&gt; A2[&quot;目標選定&quot;] --&gt; A3[&quot;內容產製&quot;] --&gt; A4[&quot;記憶檔與設定&quot;] --&gt; A5[&quot;排程&quot;]
+    end
+    subgraph INVIS[&quot;看不見&quot;]
+        direction LR
+        B1[&quot;發布&quot;] --&gt; B2[&quot;觸及&quot;] --&gt; B3[&quot;互動&quot;] --&gt; B4[&quot;影響&quot;]
+    end
+    A5 --&gt; B1
+    NOTE[&quot;需要平台資料、OSINT、&lt;br/&gt;研究社群才能補上&quot;] -.-&gt; INVIS
+</pre>
+<blockquote>
+<p><strong>這正是本課程要教的結構性洞見</strong>：AI 供應商是一個<strong>全新的、位於生產階段上游的觀測點</strong>——它看得到平台看不到的東西（意圖、規劃、設定檔、跨帳號共用的教義），但<strong>完全看不到影響</strong>。而平台看得到影響，卻看不到意圖。<br />
+<strong>沒有任何單一機構能看見完整的影響力行動。</strong> 這不是誰失職，這是資訊結構的必然。因此 IO 的反制必然是<strong>多方資料聯合</strong>的工作，而這正是台灣在建立相關能力時必須一開始就設計進去的（見 10.4）。</p>
+</blockquote>
+<h3 id="83">8.3 這個案例裡「什麼是有效的」</h3>
+<p>平衡地說，Anthropic 在本案做對了幾件事，值得肯定並學習：</p>
+<ol>
+<li><strong>把「內部調查」當成主要偵測手段</strong>，而不是等待外部通報。本案是內部調查發現的。</li>
+<li><strong>跨行為者關聯分析</strong>。在沒有基礎設施重疊的情況下，靠語料與設定檔把四個不相往來的行為者連成一個網絡——這是本案技術上最漂亮的一步。</li>
+<li><strong>把記憶檔命名慣例當成 IOC 公開</strong>（<code>SKILL.md</code> / <code>LEARNINGS.md</code>）。這是一個<strong>新型態指標的公開示範</strong>，對整個產業有教育價值。</li>
+<li><strong>危害判斷欄（Most serious element）</strong>。強迫分析師明說最嚴重的是什麼，而不是只列技術事實。</li>
+<li><strong>保護被害人</strong>。IOC 表中完全沒有被冒充者的任何資訊，Figure 16 中的帳號名被遮蔽。</li>
+<li><strong>誠實標註不確定性</strong>。「無法驗證中央控制程度」「無法獨立確認真實互動」——這兩句在很多商業威脅情報報告裡會被省略。</li>
+</ol>
+<h3 id="84-ai">8.4 「一個 AI 代理平台被多名操作者共用」對偵測的意義</h3>
+<p>這是本案指定必須挖深的核心議題，也是全報告中唯一的範例。以下是完整論證。</p>
+<h4 id="841">8.4.1 對攻擊者：共用平台是<strong>規避協同偵測</strong>的最佳設計</h4>
+<p>傳統的協同偵測（coordinated inauthentic behavior detection）倚賴的訊號是：</p>
+<ul>
+<li>同一 IP / 同一裝置指紋</li>
+<li>同時間登入、同時間發文</li>
+<li>互相追蹤、互相按讚</li>
+<li>同一批註冊 email / 手機號</li>
+<li>同一個廣告帳戶或付款工具</li>
+</ul>
+<p><strong>Viktor 模式讓上述訊號全部歸零</strong>：四名行為者在不同地點、用自己的帳號、自己的網路、自己的付款方式、自己的排程。報告 p.70 的那句「did not share account infrastructure or show visible signs of coordination」就是這個設計成功的證明。</p>
+<p>更進一步，報告 p.43 指出這種設計的組織效益：</p>
+<blockquote>
+<p>"The central setup meant that actors producing content never needed to coordinate with or even know one another."</p>
+</blockquote>
+<p>這不只是規避偵測，也是<strong>作業安全（OPSEC）</strong>：一個成員被捕或叛逃，無法供出其他成員，因為他根本不認識他們。這是傳統地下組織「單元化（cell structure）」的數位版本——<strong>只是這次的「聯絡官」是一個 AI 代理平台</strong>。</p>
+<h4 id="842">8.4.2 對防守方：共用平台是<strong>偵測的黃金機會</strong></h4>
+<p>但這個設計有一個致命弱點：<strong>協同必須發生在某個地方。</strong> 如果它不在帳號層、不在網路層、不在社交圖層，那它一定在<strong>共享的那個東西</strong>上。</p>
+<p>而共享的那個東西是<strong>文字</strong>——記憶檔、技能檔、教義語料、禁用詞表、來源清單。<strong>文字是可以比對的。</strong></p>
+<table>
+<thead>
+<tr>
+<th>偵測層級</th>
+<th>需要的存取權</th>
+<th>能看到什麼</th>
+<th>難度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>記憶檔／技能檔內容比對</strong></td>
+<td><strong>只有 AI 供應商</strong></td>
+<td>四個無關帳號使用近乎相同的 <code>SKILL.md</code>／<code>LEARNINGS.md</code></td>
+<td>低（純字串／嵌入向量相似度）</td>
+</tr>
+<tr>
+<td><strong>強制來源集合比對</strong></td>
+<td>AI 供應商 / 部分平台</td>
+<td>排他性引用同一組七個網域</td>
+<td>低</td>
+</tr>
+<tr>
+<td><strong>口號變體與標籤比對</strong></td>
+<td><strong>任何人（公開資料）</strong></td>
+<td>«زن، مقاومت، آزادی»、<code>#OurChoiceMaryamRajavi</code></td>
+<td>極低</td>
+</tr>
+<tr>
+<td><strong>排程相關性分析</strong></td>
+<td>平台</td>
+<td>「3 pages · one cron」的時間戳低熵</td>
+<td>中</td>
+</tr>
+<tr>
+<td><strong>輸出語料相似度</strong></td>
+<td>平台 / 研究者</td>
+<td>近重複內容跨「獨立」帳號出現</td>
+<td>中</td>
+</tr>
+<tr>
+<td><strong>機器翻譯痕跡</strong></td>
+<td><strong>任何人</strong></td>
+<td>專有名詞被意譯（Trade Bank / Nation Bank）</td>
+<td>低</td>
+</tr>
+</tbody>
+</table>
+<p><strong>核心命題</strong>：</p>
+<blockquote>
+<p><strong>共用平台把「協同」從『難以觀測的社會行為』轉換成『容易觀測的文字複製』。</strong><br />
+對攻擊者而言，這是效率的勝利；對防守者而言，這是可觀測性的勝利。<br />
+<strong>關鍵在於誰有權存取那層文字。</strong></p>
+</blockquote>
+<h4 id="843">8.4.3 這帶出一個必須讓學員意識到的權力問題</h4>
+<p>上表中偵測價值最高的一項（記憶檔內容比對），<strong>只有 AI 供應商做得到</strong>。這意味著：</p>
+<ul>
+<li>平台業者（Meta、Telegram）<strong>看不到</strong>；</li>
+<li>獨立研究機構（Citizen Lab、DFRLab、Graphika）<strong>看不到</strong>；</li>
+<li>各國主管機關與情報機構在沒有法律程序的情況下<strong>看不到</strong>；</li>
+<li>被害人<strong>當然看不到</strong>。</li>
+</ul>
+<p>於是，對「AI 驅動的影響力行動」而言，<strong>最強的偵測能力集中在少數幾家私人公司手上，而它們的揭露完全是自願的</strong>。Anthropic 這份報告是自願揭露的產物；它決定寫哪些案例、寫多細、公布哪些指標、保留哪些。</p>
+<p>這不是在指控 Anthropic——恰恰相反，<strong>願意公布的公司才是可被檢驗的公司</strong>。但課程必須讓學員看見這個結構：</p>
+<blockquote>
+<p><strong>2026 年的資訊操作反制，有一層關鍵證據只存在於私人公司的內部日誌裡，而且沒有任何法律要求它必須被揭露。</strong></p>
+</blockquote>
+<p>這對台灣的政策意涵很直接（見 10.4）：台灣若要建立 IO 反制能力，<strong>不能只建「公開平台監測」，還必須建立與 AI 供應商的資訊交換管道</strong>，否則你永遠只能看到第二層與第三層的指標。</p>
+<h4 id="844">8.4.4 對台灣偵測實務的可移植清單</h4>
+<p>即使沒有 AI 供應商的特權存取，以下六項本案技術<strong>今天就能做</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>做法</th>
+<th>所需資料</th>
+<th>對應本案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>建立「口號／標語變體」監測字典（含中國官方用語、統戰慣用語的變體）</td>
+<td>公開社群資料</td>
+<td>«زن، مقاومت، آزادی»</td>
+</tr>
+<tr>
+<td>2</td>
+<td>建立「專有名詞意譯」偵測規則（中文機構名被直譯成英文的異常形式）</td>
+<td>公開社群資料</td>
+<td>Trade Bank / Nation Bank</td>
+</tr>
+<tr>
+<td>3</td>
+<td>跨帳號發文時間戳的<strong>條件熵</strong>與互相關分析</td>
+<td>公開社群資料</td>
+<td>3 pages · one cron</td>
+</tr>
+<tr>
+<td>4</td>
+<td>「外連來源集合排他性」分析：一個宣稱獨立的帳號，其引用來源是否只來自單一組織的資產</td>
+<td>公開社群資料</td>
+<td>七個硬編碼網域</td>
+</tr>
+<tr>
+<td>5</td>
+<td>帳號<strong>政治偏向的時間漂移曲線</strong>：初期中立 → 逐步顯露</td>
+<td>公開歷史貼文</td>
+<td>「初期刻意不提 Mojahedin」</td>
+</tr>
+<tr>
+<td>6</td>
+<td>跨平台<strong>命名字根</strong>比對（同一字根出現在 IG 與 Telegram）</td>
+<td>公開資料</td>
+<td><code>@fwr.ir</code> / <code>@fwr_ir</code> / <code>t[.]me/FWR_ir</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>第 4 項尤其值得強調</strong>：一個自稱「獨立媒體」的帳號，如果它引用的外部來源集合<strong>完全落在單一政治組織的資產範圍內</strong>，那麼「獨立」的宣稱就在資料上被證偽了——<strong>這個判斷不需要知道誰在幕後，也不需要任何特權資料</strong>。這是公民社會事實查核組織可以立刻採用的方法。</p>
+<h3 id="85-breakout-scalecategory-two">8.5 Breakout Scale「Category Two」的評定理由拆解</h3>
+<h4 id="851-breakout-scale">8.5.1 Breakout Scale 是什麼</h4>
+<p>報告在影響力行動章節的方法論段落（p.41–42）說明：</p>
+<blockquote>
+<p>"To accurately evaluate the impact of each influence operation, we apply the Breakout Scale, a six-category framework widely accepted by industry researchers. The scale categorizes impact based on <strong>cross-platform migration and reach</strong>. Category One represents content that is confined to a <strong>single community on a single platform</strong>, while Categories Two through Six measure increasingly higher levels of public exposure and distribution."</p>
+</blockquote>
+<p>報告在另一案（p.53 附近）明確點出出處：<strong>Brookings Institution 的 Breakout Scale</strong>。這個量表由 Ben Nimmo 於 2020 年 9 月發表於 Brookings（原文：<em>The Breakout Scale: Measuring the impact of influence operations</em>）。</p>
+<p>六級的基本結構（依 Nimmo 原文）：</p>
+<table>
+<thead>
+<tr>
+<th>級別</th>
+<th>定義</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Category One</strong></td>
+<td>內容只在<strong>單一平台的單一社群</strong>內流傳</td>
+</tr>
+<tr>
+<td><strong>Category Two</strong></td>
+<td><strong>單一社群但跨多個平台</strong>，或<strong>單一平台但跨多個社群</strong></td>
+</tr>
+<tr>
+<td><strong>Category Three</strong></td>
+<td>跨多個社群媒體平台<strong>且</strong>觸及多個社群</td>
+</tr>
+<tr>
+<td><strong>Category Four</strong></td>
+<td>完全突破社群媒體，被<strong>主流媒體</strong>放大</td>
+</tr>
+<tr>
+<td><strong>Category Five</strong></td>
+<td>被<strong>高知名度個人</strong>（名人、政治候選人等）放大</td>
+</tr>
+<tr>
+<td><strong>Category Six</strong></td>
+<td>觸發<strong>政策回應</strong>或其他具體行動，或包含<strong>暴力號召</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>教材誠實標註</strong>：以上六級定義為依 Nimmo 2020 原文與報告內文重建的摘要。上課前請直接引用 Brookings 原始 PDF（見第 9 節連結）核對用詞。</p>
+</blockquote>
+<h4 id="852">8.5.2 報告對本案的評定原文</h4>
+<p>p.71：</p>
+<blockquote>
+<p>"Using the Breakout Scale, we would assess this operation as <strong>Category Two</strong> (multiple platforms, with distribution through the network's own NCRI media properties and amplifier accounts.)"</p>
+</blockquote>
+<p>中譯：</p>
+<blockquote>
+<p>「使用 Breakout Scale，我們會把此行動評為 <strong>Category Two</strong>（多平台，散布透過該網絡<strong>自有的</strong> NCRI 媒體資產與放大帳號）。」</p>
+</blockquote>
+<h4 id="853-two-one">8.5.3 為什麼是 Two，不是 One？</h4>
+<p><strong>支持「至少是 Two」的事實</strong>（全部來自報告）：</p>
+<table>
+<thead>
+<tr>
+<th>證據</th>
+<th>頁碼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>橫跨 broadcast television、satellite and shortwave radio、Instagram、Telegram、X/Twitter <strong>五種以上平台型態</strong></td>
+<td>p.71</td>
+</tr>
+<tr>
+<td>Figure 15 顯示內容從機構媒體節點流向多個 Instagram / Telegram 放大帳號，再流向兩類受眾</td>
+<td>Fig.15</td>
+</tr>
+<tr>
+<td>同時觸及 <strong>Diaspora audiences</strong> 與 <strong>People inside Iran</strong> 兩個不同社群</td>
+<td>Fig.15</td>
+</tr>
+<tr>
+<td>名目觸及規模 123 萬以上（708K + 299K + 173K + 89.5K + 50K+）</td>
+<td>Fig.15, p.74–75</td>
+</tr>
+</tbody>
+</table>
+<p>依 Nimmo 的定義，「單一社群跨多平台」即已達 Category Two，而本案是<strong>多平台 + 至少兩個社群</strong>，因此 Two 是保守但站得住的評定。</p>
+<h4 id="854-three">8.5.4 為什麼不是 Three 或更高？</h4>
+<p>這是評定的關鍵，也是報告括號裡那句話的全部重點：<strong>"with distribution through the network's own NCRI media properties and amplifier accounts"</strong>——<strong>散布全部發生在網絡自己的資產上</strong>。</p>
+<p>Breakout Scale 衡量的不是「你發了多少」，而是「<strong>你的內容跑出你的控制範圍多遠</strong>」。</p>
+<table>
+<thead>
+<tr>
+<th>若要升到</th>
+<th>需要的證據</th>
+<th>本案有嗎</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Category Three</strong></td>
+<td>內容在<strong>網絡控制之外</strong>的多個平台、多個社群中被真實使用者自發轉傳</td>
+<td>❌ Anthropic 明說「無法獨立確認該網絡的放大帳號吸引到多少<strong>真實</strong>互動」（p.74）</td>
+</tr>
+<tr>
+<td><strong>Category Four</strong></td>
+<td>被<strong>主流／獨立媒體</strong>引用或轉載</td>
+<td>❌ 報告未提供任何證據</td>
+</tr>
+<tr>
+<td><strong>Category Five</strong></td>
+<td>被名人或政治人物放大</td>
+<td>❌ 報告未提供任何證據</td>
+</tr>
+<tr>
+<td><strong>Category Six</strong></td>
+<td>觸發政策回應或含暴力號召</td>
+<td>❌ 報告未提供任何證據</td>
+</tr>
+</tbody>
+</table>
+<p><strong>同一份報告的對照組非常有用</strong>（可直接當課堂練習）：</p>
+<table>
+<thead>
+<tr>
+<th>案例</th>
+<th>評級</th>
+<th>頁碼</th>
+<th>報告給的理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GTG-54004（肯亞國內政治灌水）</td>
+<td><strong>Category One</strong></td>
+<td>p.76</td>
+<td>「活動完全孤立在假帳號與地方影響者的網絡內、<strong>位於單一平台上</strong>，未能觸及或影響任何真實的人」</td>
+</tr>
+<tr>
+<td>GTG-54002（商業假新聞工廠，約 <strong>70</strong> 個網站、<strong>8,913</strong> 篇文章、約 <strong>20</strong> 種語言）</td>
+<td><strong>Category Two</strong></td>
+<td>p.48</td>
+<td>「內容散布於該網絡自有網站與相應的社群媒體帳號，<strong>沒有任何突破自身活動範圍的證據</strong>」</td>
+</tr>
+<tr>
+<td>GTG-84005（商業影響力行動）</td>
+<td><strong>Category Two</strong></td>
+<td>p.54</td>
+<td>「資產散布於<strong>多個平台</strong>，但<strong>沒有突破進入真實社群（authentic communities）的證據</strong>」</td>
+</tr>
+<tr>
+<td><strong>GTG-84006（本案）</strong></td>
+<td><strong>Category Two</strong></td>
+<td><strong>p.71</strong></td>
+<td>「多平台，散布透過該網絡<strong>自有的</strong> NCRI 媒體資產與放大帳號」</td>
+</tr>
+<tr>
+<td>GTG-34001（伊朗國家對齊三帳號）</td>
+<td><strong>Category Three</strong></td>
+<td>p.63</td>
+<td>—</td>
+</tr>
+<tr>
+<td>GTG-54006（孟加拉自動化假新聞）</td>
+<td><strong>Category Three</strong></td>
+<td>p.68</td>
+<td>—</td>
+</tr>
+<tr>
+<td>GTG-84002（阿聯酋指揮的影響力行動）</td>
+<td><strong>Category Three</strong></td>
+<td>p.79</td>
+<td>—</td>
+</tr>
+<tr>
+<td>GTG-04001（俄羅斯 FIMI）</td>
+<td><strong>Category Four</strong></td>
+<td>p.45</td>
+<td>突破到主流媒體</td>
+</tr>
+<tr>
+<td>GTG-24015（俄國國家媒體）</td>
+<td><strong>未給評級</strong></td>
+<td>p.58–62</td>
+<td>報告未對此案使用 Breakout Scale</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>這張對照表本身就是一堂課</strong>：九起影響力行動中，<strong>沒有任何一起達到 Category Five 或 Six</strong>，而且最高只有一起 Category Four。這與 Anthropic 在趨勢章節的自陳完全一致——「影響力行動經常無法觸及真實受眾……因為我們位於行動的<strong>生產階段</strong>，在社群平台的上游」（p.43–44）。<br />
+換句話說：<strong>這份報告的評級分布，同時反映了行動的真實效果，也反映了 Anthropic 的觀測位置。</strong> 學員必須同時看見這兩件事。</p>
+</blockquote>
+<h4 id="855">8.5.5 這個評定的三個教學要點</h4>
+<p><strong>要點一：Category Two 不等於「無害」。</strong></p>
+<p>這是最容易被誤讀的地方。Breakout Scale 衡量的是<strong>傳播突破程度</strong>，<strong>不是傷害程度</strong>。本案在 Breakout Scale 上得分很低，但它同時是全報告中<strong>對個別真人風險最高的影響力行動案例之一</strong>——冒充真實運動者、對面臨死刑風險的人做被捕紀錄側寫。</p>
+<blockquote>
+<p><strong>請在課堂上明確講出這句話</strong>：<br />
+<strong>「一個 Category Two 的行動，可能害死人；一個 Category Four 的行動，可能只是讓某個政客難堪。」</strong><br />
+影響力行動的評估<strong>至少需要兩個互相獨立的量表</strong>：<br />
+- <strong>傳播量表</strong>（Breakout Scale）：內容跑多遠？<br />
+- <strong>危害量表</strong>（本報告的 "Most serious element" 欄就是雛形）：誰會因此受傷？</p>
+<p>只看前者，會系統性地低估針對個人的隱蔽行動。<strong>本案就是這個系統性偏誤的最佳教材。</strong></p>
+</blockquote>
+<p><strong>要點二：低評級部分來自「Anthropic 看不到」，而不是「行動不成功」。</strong></p>
+<p>回顧 8.2 缺口五：Anthropic 的觀測在內容離開平台後就中止。因此「無法確認真實互動」既可能代表<strong>真的沒有互動</strong>，也可能代表<strong>Anthropic 沒有資料</strong>。報告用的措辭是 "we are <strong>not able to</strong> independently confirm"（我們<strong>無法</strong>獨立確認），而不是 "there was no engagement"（沒有互動）。</p>
+<p><strong>這個區別是情報素養的核心</strong>：<strong>「沒有證據」不等於「證據顯示沒有」</strong>（absence of evidence ≠ evidence of absence）。Breakout Scale 的評級在此受限於觀測者的位置，而非行動的本質。</p>
+<p><strong>要點三：Anthropic 自己在報告中承認了這個系統性偏誤。</strong></p>
+<p>p.43–44 的趨勢段落：</p>
+<blockquote>
+<p>"<strong>Influence operations often fail to reach a genuine audience.</strong> Because we sit at the <strong>production stage</strong> of operations, upstream of platforms like social media platforms, we may detect and disrupt an operation while it is still being put together. Most of the content we discovered drew little or no authentic engagement... <strong>The widest authentic reach occurred where state media outlets were the distribution mechanism</strong> (including FM radio, satellite and shortwave radio, and global television)."</p>
+</blockquote>
+<p>注意最後一句與本案的關係：本案<strong>正是</strong>擁有衛星／短波廣播與電視的案例（Simay-e Azadi、Radio Payam Azadi、Webnegar）。依 Anthropic 自己的趨勢判斷，<strong>這類擁有傳統廣電資產的行動，才是真實觸及最高的那一類</strong>。這與 Category Two 的評級形成微妙的張力——值得在課堂上提出來討論。</p>
+<hr />
+<h2 id="9">9. 第三方驗證與外部來源</h2>
+<h3 id="91">9.1 判定結論（先講結果）</h3>
+<blockquote>
+<p><strong>本案為「單一來源情報」（single-source intelligence）。</strong></p>
+<p>截至 2026-09-13，<strong>沒有任何第三方獨立證實</strong> GTG-84006 這個行動的存在、「Viktor」平台的存在、IOC 表中各帳號與 MEK/NCRI 的關聯，或冒充事件本身。所有現有報導<strong>全部轉述自 Anthropic 報告</strong>。</p>
+<p><strong>也未找到 MEK 或 NCRI 對本次 Anthropic 報告的任何公開回應。</strong>（對照：2021 年 Meta 指控時，NCRI 曾迅速公開否認，見 9.3。）</p>
+<p><strong>未找到任何台灣媒體報導本案。</strong>（已檢查的台灣科技媒體 AI郵報 2026-09-11 長篇解析，確認未涵蓋此案。）</p>
+</blockquote>
+<p>這不代表報告不可信，而是課程必須誠實標註的情報品質等級。處理方式：<strong>所有關於 GTG-84006 的具體事實主張，在教材與課堂上都必須加註「依 Anthropic 報告」</strong>。</p>
+<h3 id="92-anthropic">9.2 直接報導本案的來源（全部＝僅引述 Anthropic）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>作者</th>
+<th>性質</th>
+<th>涵蓋內容與備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Anthropic《Detecting and countering misuse of AI: September 2026》PDF p.70–75</strong></td>
+<td>https://www-cdn.anthropic.com/e50be2e51e7695dc4b1366a37a245a597377d3b5/Anthropic-Detecting-and-countering-091026.pdf</td>
+<td>2026-09-10</td>
+<td>Anthropic Threat Intelligence</td>
+<td><strong>一手來源</strong></td>
+<td>本教材所有事實基礎</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Anthropic 網頁版</td>
+<td>https://www.anthropic.com/threat-intelligence-report-september-2026</td>
+<td>2026-09-10</td>
+<td>Anthropic</td>
+<td><strong>一手來源</strong></td>
+<td>同上</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>RFE/RL</strong>, "Anthropic Disrupts Iran's Use Of Claude To Spread Propaganda, Spy On Dissidents"</td>
+<td>https://www.rferl.org/a/anthropic-claude-iran-propaganda/33852428.html</td>
+<td>2026-09-11</td>
+<td>Frud Bezhan</td>
+<td><strong>僅引述 Anthropic</strong></td>
+<td>提及 MEK「使用共享 AI 代理冒充真人並在伊朗境內招募」、500+ 頻道、依城市／年齡／職業／政治傾向／被捕紀錄分群。<strong>未</strong>提 Telegram 冒充細節、<strong>未</strong>提十點計畫。</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Iran International (English)</strong>, "Iran regime used Claude to expand surveillance of dissidents, Anthropic says"</td>
+<td>https://www.iranintl.com/en/202609131676</td>
+<td>2026-09-13</td>
+<td>未署名</td>
+<td><strong>僅引述 Anthropic</strong></td>
+<td>本案涵蓋<strong>最完整</strong>的第三方報導：8,400 則貼文、51,944 則訊息、數十人心理側寫、十點計畫 AI 頭像（未揭露為合成）、至少四人任職 NCRI 媒體、Anthropic 無法確認真實互動。<br>⚠️ <strong>來源偏誤揭露</strong>：Iran International 為總部設於倫敦的波斯語媒體，其編輯立場與資金來源長期受到討論，且與伊朗反對派各派系（含 MEK）的關係是公開爭論的題目。使用其報導時應意識到它在報導一個<strong>競爭對手組織</strong>的負面新聞。</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>The Hacker News</strong></td>
+<td>https://thehackernews.com/2026/09/claude-used-to-automate-exploitation.html</td>
+<td>2026-09-11</td>
+<td>Ravie Lakshmanan</td>
+<td><strong>僅引述 Anthropic</strong></td>
+<td>一段話帶過：「一場針對全球伊朗受眾的分散式影響力行動，目的是冒充真實運動者並進行即時政治對話。該活動已被連結到 PMOI/MEK 與 NCRI。」<strong>未</strong>提 Viktor、<strong>未</strong>提 Telegram 細節。</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Eurasia Review / Shabtab News (English)</td>
+<td>https://www.eurasiareview.com/13092026-anthropic-disrupts-irans-use-of-claude-to-spread-propaganda-spy-on-dissidents/</td>
+<td>2026-09-12/13</td>
+<td>轉載 RFE/RL</td>
+<td><strong>轉載，非獨立</strong></td>
+<td>與 #3 內容相同</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Axios, "Anthropic report: 5 ways Claude was exploited for war, spying and repression"</td>
+<td>https://www.axios.com/2026/09/12/anthropic-ai-threat-report-russia-iran-china</td>
+<td>2026-09-12</td>
+<td>—</td>
+<td><strong>未能擷取</strong>（HTTP 403）</td>
+<td>無法確認是否涵蓋本案。標記為未驗證。</td>
+</tr>
+<tr>
+<td>8</td>
+<td>AI郵報（台灣），〈Anthropic 威脅情報報告重磅解析〉</td>
+<td>https://www.aiposthub.com/anthropic-threat-intelligence-report-september-2026-china-distillation-deepseek-qwen-taiwan-electronic-warfare-deep-dive/</td>
+<td>2026-09-11</td>
+<td>Philo</td>
+<td><strong>已確認未涵蓋本案</strong></td>
+<td>該長篇解析聚焦模型蒸餾、武器、監控、台灣電戰模擬，經逐項確認<strong>完全未提及</strong> MEK / NCRI / Rajavi / 冒充運動者 / Viktor。→ <strong>佐證「台灣媒體未報導本案」的判定。</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>第三方報導與 PDF 原文的差異檢查</strong>：未發現實質矛盾。RFE/RL 與 Iran International 引用的數字（8,400、500+、51,944、四人）與 PDF 完全一致。差異僅在<strong>涵蓋範圍</strong>（各家選擇報導的細節不同），不在<strong>事實內容</strong>。</p>
+<h3 id="93">9.3 獨立查證的外圍事實（不是本案本身，但支撐或脈絡化本案）</h3>
+<blockquote>
+<p>這一節是本教材的核心增值。以下每一條都是<strong>獨立於 Anthropic</strong> 的來源。</p>
+</blockquote>
+<h4 id="a-figure-16">(A) ✅ 獨立查證：Figure 16 的貼文內容是真實新聞（本教材的原創查證）</h4>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>查證內容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>US Department of the Treasury 新聞稿</strong>，"Economic Fury Targets Iranian LPG Smuggling and Shadow Banking Networks"</td>
+<td>https://home.treasury.gov/news/press-releases/sb0524</td>
+<td><strong>2026-06-05</strong></td>
+<td>證實 Figure 16 貼文所述的 OFAC 制裁行動<strong>確實存在且日期相符</strong></td>
+</tr>
+<tr>
+<td>US Department of State，"Sanctions to Strangle Iran's Energy Smuggling and Illicit Financial Networks"</td>
+<td>https://www.state.gov/releases/office-of-the-spokesperson/2026/06/sanctions-to-strangle-irans-energy-smuggling-and-illicit-financial-networks/</td>
+<td>2026-06-05</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>SAFETY4SEA，"U.S. Treasury sanctions LPG vessels linked to Iran"</td>
+<td>https://safety4sea.com/u-s-treasury-sanctions-lpg-vessels-linked-to-iran/</td>
+<td>2026-06</td>
+<td>航運業媒體獨立報導，佐證船舶制裁</td>
+</tr>
+<tr>
+<td>The Asia Business Daily</td>
+<td>https://www.asiae.co.kr/en/article/2026060608224647334</td>
+<td>2026-06-06</td>
+<td>獨立報導，佐證</td>
+</tr>
+</tbody>
+</table>
+<p><strong>逐項比對結果</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>Figure 16 貼文內容</th>
+<th>公開官方資料</th>
+<th>結論</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>「2026 年 6 月 5 日（星期五）美國財政部制裁」</td>
+<td>屬實，6 月 5 日確為星期五</td>
+<td>✅ 相符</td>
+</tr>
+<tr>
+<td>「UAE 空殼公司 Butani Trading LLC、Dundlod Trading FZE、ADH Energy FZE」</td>
+<td>官方指定名單確含此三家 UAE 空殼公司</td>
+<td>✅ 相符</td>
+</tr>
+<tr>
+<td>「6 艘船舶」</td>
+<td>官方公告含 6 艘船舶</td>
+<td>✅ 相符</td>
+</tr>
+<tr>
+<td>「網絡中有阿富汗人與土耳其人」</td>
+<td>官方點名阿富汗籍 Sarbaz Abdul Zada 與土耳其籍 Mohammad Shakol Mihandoust</td>
+<td>✅ 相符</td>
+</tr>
+<tr>
+<td>「Economic Fury」</td>
+<td>美國財政部新聞稿標題即使用此行動代號</td>
+<td>✅ 相符</td>
+</tr>
+<tr>
+<td>「以阿曼 LPG 名義偽裝伊朗 LPG，售往南亞與東亞（含孟加拉）」</td>
+<td>官方描述為「刻意偽裝為阿曼產 LPG、售往南亞與東亞終端使用者」</td>
+<td>✅ 相符</td>
+</tr>
+<tr>
+<td>「Scott <strong>Bassnet</strong>，美國財政部長」</td>
+<td>實際為 Scott <strong>Bessent</strong></td>
+<td>❌ <strong>姓名扭曲</strong>（機器翻譯痕跡）</td>
+</tr>
+<tr>
+<td>「Trade Bank and Nation Bank」</td>
+<td>應為 Bank Tejarat（تجارت＝貿易）、Bank Melli（ملی＝國家）</td>
+<td>❌ <strong>專有名詞被意譯</strong>（機器翻譯痕跡）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>這組查證的教學價值極高</strong>：它同時證明了兩件看似矛盾的事——<br />
+<strong>(1) 這個「假獨立媒體」帳號發布的是真實、可查證的新聞；</strong><br />
+<strong>(2) 它的產製管線是未經人工校對的機器翻譯。</strong><br />
+合起來就是「媒體洗白」的完整定義：<strong>真內容 + 假出處 + 自動化規模</strong>。</p>
+</blockquote>
+<h4 id="b-mekncri">(B) ✅ 獨立查證：MEK/NCRI 有已被平台證實的協同不實行為前科</h4>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>內容</th>
+<th>性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Meta（Facebook）〈March 2021 Coordinated Inauthentic Behavior Report〉</strong></td>
+<td>https://about.fb.com/news/2021/04/march-2021-coordinated-inauthentic-behavior-report/</td>
+<td>2021-04</td>
+<td>移除源自<strong>阿爾巴尼亞</strong>、針對含伊朗在內全球受眾的網絡：<strong>128 個 Facebook 帳號、41 個粉絲專頁、21 個社團、146 個 Instagram 帳號</strong>。Facebook 將其連結至 MEK，描述為「一個組織嚴密的 troll farm」，並指出假帳號與阿爾巴尼亞境內 MEK 相關真實帳號／粉專之間<strong>長期一致的基礎設施連結</strong>；網絡活動高峰為 2017 年，2020 下半年再現一波。</td>
+<td><strong>平台官方獨立調查</strong></td>
+</tr>
+<tr>
+<td>Balkan Insight，"Facebook Clamps Down on Iranian Dissident 'Troll Farm' In Albania"</td>
+<td>https://balkaninsight.com/2021/04/07/facebook-removes-a-troll-farm-of-mek-in-albania/bi/albania/albania-politics-and-society/</td>
+<td>2021-04-07</td>
+<td>獨立報導（直接擷取受阻，內容經搜尋結果確認）</td>
+<td>獨立媒體</td>
+</tr>
+<tr>
+<td>Middle East Eye，"Facebook accuses opposition Iranian group of running 'troll farm' from Albania"</td>
+<td>https://www.middleeasteye.net/news/facebook-removes-accounts-tied-iranian-opposition-mek-group</td>
+<td>2021-04-07</td>
+<td>含 <strong>NCRI 官方否認</strong>：「因為沒有違反任何 Facebook 規則，所謂阿爾巴尼亞有 MEK 相關 troll farm 的說法是<strong>可笑且絕對錯誤的</strong>。」</td>
+<td>獨立媒體 + 當事方回應</td>
+</tr>
+<tr>
+<td><strong>The Intercept</strong>（記者 Murtaza Hussain），"Is Heshmat Alavi, Writer on Iran, a Fake Run By MEK Opposition?"</td>
+<td>https://theintercept.com/2019/06/09/heshmat-alavi-fake-iran-mek/</td>
+<td>2019-06-09</td>
+<td>長期被 Forbes、The Federalist、Daily Caller 等引用的「伊朗異議作者 Heshmat Alavi」實為 MEK 政治部門團隊經營的虛構人格。高階脫離者 Hassan Heyrani：「Heshmat Alavi 是一個由 MEK 政治部門團隊經營的人格……<strong>這不是、也從來不是一個真實的人</strong>。」</td>
+<td><strong>調查報導 + 脫離者證詞</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>為什麼這一組很重要</strong>：它建立了「<strong>先例一致性（pattern consistency）</strong>」。GTG-84006 的手法——虛構人格、假獨立品牌、隱藏組織歸屬、跨平台協同——與 MEK 在 2019 與 2021 被<strong>兩個完全獨立的機構</strong>記錄下來的手法<strong>高度一致</strong>。<br />
+這<strong>不是</strong>對 GTG-84006 的獨立證實（那需要有人獨立看到本案的帳號與語料），但它是<strong>歸因可信度的重要輔助證據</strong>：Anthropic 的歸因與已知的組織行為模式相符。<br />
+<strong>課堂上務必區分這兩者</strong>：「先例一致」是貝氏更新的先驗機率，不是事件本身的證據。</p>
+</blockquote>
+<h4 id="c-mek">(C) ✅ 獨立查證：與 MEK 有關聯在伊朗境內可致死</h4>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Amnesty International</strong>，"Iran: Mass arbitrary arrests and political executions mark intensifying repression"</td>
+<td>https://www.amnesty.org/en/latest/news/2026/05/iran-mass-arbitrary-arrests-and-political-executions-mark-intensifying-repression/</td>
+<td><strong>2026-05-28</strong></td>
+<td>2026-02-28 以來<strong>逾 6,000 起任意逮捕</strong>、<strong>88 天斷網</strong>、至少 <strong>39 人</strong>因政治性指控在遭酷刑污染的極不公平審判後被任意處決（含 16 名抗議者、9 名異議者、10 名被控為美／以從事間諜活動者、<strong>4 名被控 baghi（武裝叛亂）者</strong>）。當局將線上活動入罪，起訴「在社群媒體分享衝突內容」者。</td>
+</tr>
+<tr>
+<td>Iran 1988 / Iran HRM，"Iran executes two more political prisoners for links to opposition group"</td>
+<td>https://iran1988.org/iran-executes-two-more-political-prisoners-for-links-to-opposition-group/</td>
+<td>2026-03/04</td>
+<td>2026-03-31 處決 Babak Alipour（34 歲）與 Pouya Ghobadi（32 歲），罪名為 PMOI/MEK 成員身分與「試圖推翻伊斯蘭共和國」；前一日已處決 Akbar Daneshvarkar（59 歲）與 Seyed Mohammad Taghavi-Sangdehi（58 歲），同樣罪名。<strong>「武裝叛亂」（baghi）指控僅基於其被指與 PMOI 有關聯，未提出任何涉及暴力的證據。</strong></td>
+</tr>
+<tr>
+<td>Amnesty International，"Iran: End escalating campaign of arbitrary executions and death sentences against protesters"</td>
+<td>https://www.amnesty.org/en/latest/news/2026/07/iran-end-escalating-campaign-of-arbitrary-executions-and-death-sentences-against-protesters/</td>
+<td>2026-07</td>
+<td>處決潮持續升高</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>這一組是本案危害論證的事實基礎，而且是完全獨立於 Anthropic 的。</strong><br />
+它把 Cluster 表裡那句抽象的 "people who face imprisonment or execution under Iranian law" 變成<strong>有名有姓、有日期的實際處決</strong>。<br />
+<strong>課堂上應該明講</strong>：在這個法域裡，「一段與 MEK 相關帳號的 Telegram 對話紀錄」<strong>本身</strong>就可能是致命的。而本案中，那 30 名以上的聯絡人<strong>從未同意</strong>進入這樣一段對話。</p>
+</blockquote>
+<h4 id="d">(D) ✅ 獨立查證：伊朗當局確實利用被接管的帳號接觸聯絡人（機制先例）</h4>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Vice / Motherboard</strong>，"Iran Appears To Have Taken Over an Arrested Journalist's Telegram Account"</td>
+<td>https://www.vice.com/en/article/iran-telegram-account-bbc-journalist/</td>
+<td><strong>2016-02-05</strong></td>
+<td>前 BBC 記者 <strong>Bahman Daroshafaei</strong> 於 2016 年 2 月初被捕後，當局取得其 Telegram 帳號並開始聯繫其人脈。友人 Fatemeh Shams：「<strong>有人用 Bahman 被駭的 Telegram 帳號跟我談了兩個小時。</strong>」運動者擔心當局藉此誘使其友人與同事交出敏感資訊、或植入惡意軟體。研究者 Amir Rashidi 指出，相較於 Twitter、Facebook、Google，Telegram 在協助運動者處理被入侵帳號上反應遲緩。</td>
+</tr>
+<tr>
+<td>CNN Business，"Iran's government accesses the social media accounts of those it detains…"</td>
+<td>https://www.cnn.com/2022/12/19/business/iran-social-media-accounts-intl-cmd</td>
+<td>2022-12-19</td>
+<td><strong>⚠️ 直接擷取受阻（HTTP 451）</strong>，僅能依搜尋結果引述：當局在運動者入獄期間<strong>重新啟用其 Telegram 帳號，以觀察誰會試圖聯繫，藉此揭露其人脈網絡</strong>；研究者記錄超過十餘起 Telegram 帳號被入侵案例，手法涉及與電信商的配合，弱點為簡訊驗證碼。<strong>本條標記為「間接引用，未直接查證原文」。</strong></td>
+</tr>
+<tr>
+<td>Iran International (English)</td>
+<td>https://www.iranintl.com/en/202507084950</td>
+<td>2025-07</td>
+<td>Iran International 記者的 Telegram 帳號於 2024 年夏與 2025 年 1 月遭兩波網路攻擊，歸因於 Banished Kitten（亦稱 Storm-0842 / Dune）。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>這一組的教學價值</strong>：它證明「<strong>冒用可信帳號與其聯絡人對話 → 揭露人脈網絡 → 逮捕</strong>」這條攻擊鏈在伊朗<strong>不是理論</strong>，而是至少從 2016 年就在實際發生的成熟手法。<br />
+<strong>GTG-84006 的新意不在於這條攻擊鏈，而在於「執行者換成了 AI」</strong>——過去要有人花兩小時親自假扮，現在一個代理平台可以同時假扮並維持人格一致性。<strong>成本降了，規模上去了。</strong></p>
+</blockquote>
+<h4 id="e-mek">(E) ⚖️ 對照組（不同行為者，用來避免「只有 MEK 這樣做」的誤解）</h4>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Citizen Lab</strong>，"We Say You Want a Revolution: PRISONBREAK — An AI-Enabled Influence Operation Aimed at Overthrowing the Iranian Regime"</td>
+<td>https://citizenlab.ca/research/2025-10-ai-enabled-io-aimed-at-overthrowing-iranian-regime/</td>
+<td><strong>2025-10-14</strong></td>
+<td>作者：Alberto Fittarelli、Ron Deibert、Marcus Michaelsen、Maia Scott、Darren Linvill。50 個以上不實 X 帳號；大量使用 AI：Evin 監獄爆炸的深偽影片、軍車爆炸的 AI 影片、冒充 BBC Persian 的偽造新聞播報、以 AI 竄改伊朗抗議歌曲歌詞並配上三位伊朗歌手的深偽形象。敘事聚焦政權更迭、號召夜間屋頂抗議。<br>歸因：Citizen Lab 評估「<strong>高度可能</strong>（high likelihood）為以色列政府——直接或透過承包商——所執行」，但結論仍是「在沒有更多平台資料的情況下，我們無法確定性地歸因」。<br>偵測指紋：約 50% 帳號使用相同 email 網域註冊；帳號創建於 2023 年但 <strong>99.5% 貼文發生在 2025 年 1 月之後</strong>；發文時間集中於德黑蘭時間 9:30–18:30；75% 貼文來自桌面版 Twitter Web App。<br><strong>該報告完全未提及 MEK、NCRI 或與伊朗反對派組織的合作。</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>為什麼要放這一條</strong>：避免課程給學員留下「AI 影響力行動＝MEK 做的」這種錯誤印象。針對伊朗受眾的 AI 驅動影響力行動，在 2025–2026 年<strong>至少有兩個完全不同的行為者</strong>在做，而且被<strong>兩個完全不同的機構</strong>（Citizen Lab、Anthropic）分別發現。<br />
+<strong>同時這是一個絕佳的方法論對照</strong>：Citizen Lab 從<strong>平台側</strong>（公開帳號行為）發現；Anthropic 從<strong>生產側</strong>（模型使用日誌）發現。兩者看到的指紋完全不同型態——Citizen Lab 看到的是註冊網域、發文時段、客戶端；Anthropic 看到的是記憶檔、教義語料、口號規範。<strong>把兩份報告並排講，就能把 8.2 缺口五的「沒有人看得到全貌」講透。</strong><br />
+⚠️ <strong>明確標註：目前沒有任何證據顯示 PRISONBREAK 與 GTG-84006 有關聯。</strong> 兩者的歸因指向完全不同的行為者。</p>
+</blockquote>
+<h4 id="f">(F) 📚 方法論與背景來源</h4>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ben Nimmo, "The Breakout Scale: Measuring the impact of influence operations", Brookings Institution</strong></td>
+<td>https://www.brookings.edu/wp-content/uploads/2020/09/Nimmo_influence_operations_PDF.pdf</td>
+<td>2020-09</td>
+<td>本案評級（Category Two）的方法論來源</td>
+</tr>
+<tr>
+<td><strong>Human Rights Watch</strong>，"Statement on Responses to Human Rights Watch Report on Abuses by the Mojahedin-e Khalq Organization (MKO)"</td>
+<td>https://www.hrw.org/news/2006/02/14/statement-responses-human-rights-watch-report-abuses-mojahedin-e-khalq-organization</td>
+<td>2006-02-14</td>
+<td>HRW 2005 年《No Exit》報告的後續說明；記錄 HRW 於 2005 年 10 月在德國與荷蘭個別、私下訪談報告中引用的<strong>全部 12 名證人</strong>，回應 MEK 方的質疑</td>
+</tr>
+<tr>
+<td>Congressional Research Service, "The Mojahedin-e-Khalq (MEK) or People's Mojahedin Organization of Iran (PMOI)", R48433</td>
+<td>https://www.congress.gov/crs-product/R48433</td>
+<td>—</td>
+<td><strong>⚠️ 直接擷取受阻（HTTP 403）</strong>。已知存在但未能查證內容。標記為未驗證。</td>
+</tr>
+<tr>
+<td>UK House of Commons Library, "The People's Mujahiddin of Iran (PMOI)", SN05020</td>
+<td>https://commonslibrary.parliament.uk/research-briefings/sn05020/</td>
+<td>—</td>
+<td>英國國會研究簡報，MEK 法律地位變遷</td>
+</tr>
+<tr>
+<td>Wikipedia, "People's Mojahedin Organization of Iran"</td>
+<td>https://en.wikipedia.org/wiki/People%27s_Mojahedin_Organization_of_Iran</td>
+<td>持續更新</td>
+<td><strong>背景整理用，非權威來源</strong>。本教材 2.6 節的時間線主要據此並與其他來源交叉比對</td>
+</tr>
+<tr>
+<td>Al Jazeera，"US drops Iran's MEK group from terror list"</td>
+<td>https://www.aljazeera.com/news/2012/9/28/us-drops-irans-mek-group-from-terror-list</td>
+<td>2012-09-28</td>
+<td>美國 2012 年除名的獨立報導；國務院同時表達對 MEK 虐待自身成員指控的嚴重關切</td>
+</tr>
+<tr>
+<td>NCRI 美國辦事處，"The NCRI 10-Point Plan for a Free Democratic Iran"</td>
+<td>https://www.ncrius.org/the-10-point-plan-for-a-free-democratic-iran.html</td>
+<td>—</td>
+<td><strong>當事方一手材料</strong>（十點計畫全文）。本教材 2.6B 的十點計畫內容據此</td>
+</tr>
+<tr>
+<td>NCRI，"Free Iran 2026: Global Leaders at Paris Summit…"</td>
+<td><code>ncr-iran[.]org/en/news/iran-resistance/free-iran-2026-global-leaders-at-paris-summit-…</code>（<strong>已 defang</strong>：此網域同時是本案 IOC #1 的成員，依安全紅線一律 defang 處理；如需查閱請從報告 IOC 清單之外的獨立管道取得）</td>
+<td>2026-06</td>
+<td><strong>當事方一手材料</strong>。2026-06-20 巴黎集會，主題「不要沙王，不要毛拉」</td>
+</tr>
+<tr>
+<td>Wikipedia, "Simaye Azadi"</td>
+<td>https://en.wikipedia.org/wiki/Simaye_Azadi</td>
+<td>持續更新</td>
+<td>Simay-e Azadi / Iran NTV 的背景（1987 年開播的 PMOI/NCRI 波斯語衛星電視）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="g-104">(G) 🇹🇼 台灣段落（10.4）使用的來源</h4>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>日期</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>開放文化基金會 OCF，《CSOs 數位防禦手冊》</td>
+<td>https://ocf.tw/story/menu/resource/(public)CSOs%E6%95%B8%E4%BD%8D%E9%98%B2%E7%A6%A6%E6%89%8B%E5%86%8A_%E6%B3%A8%E9%87%8D%E9%9A%B1%E7%A7%81%E8%88%87%E5%AE%89%E5%85%A8%E7%9A%84%E9%96%8B%E6%94%BE%E5%8E%9F%E5%A7%8B%E7%A2%BC%E5%B7%A5%E5%85%B7V2.pdf</td>
+<td>2024-07</td>
+<td>台灣公民團體現成的數位安全教材，威脅模型概念</td>
+</tr>
+<tr>
+<td>開放文化基金會，公民團體資安暨隱私交流計劃（CSCS）</td>
+<td>https://ocf.tw/p/cscs/</td>
+<td>—</td>
+<td>台灣既有的公民社會資安社群</td>
+</tr>
+<tr>
+<td><strong>Amnesty International</strong>，"'On my campus, I am afraid': China's targeting of overseas students stifles rights"</td>
+<td>https://www.amnesty.org/en/documents/asa17/8006/2024/en/</td>
+<td>2024-05</td>
+<td>跨境鎮壓機制的對照：訪談 32 名中港學生（2023-06 至 2024-04），記錄<strong>家人在中國境內遭警方威脅</strong>、寒蟬效應與自我審查</td>
+</tr>
+<tr>
+<td>Human Rights Watch，〈中國：全國各地大型家庭教會遭鎮壓〉</td>
+<td>https://www.hrw.org/zh-hans/news/2025/10/14/china-nationwide-crackdown-on-major-underground-church</td>
+<td>2025-10-14</td>
+<td>錫安教會全國性拘捕行動</td>
+</tr>
+<tr>
+<td>自由時報，〈20台灣人在中國傳教被抓 邱垂正：一貫道18人、統一教2人〉</td>
+<td>https://news.ltn.com.tw/news/politics/breakingnews/5465997</td>
+<td>2026</td>
+<td><strong>⚠️ 未直接擷取原文，經搜尋結果引述</strong>：陸委會表示 20 名台灣人在中國因傳教被捕（一貫道 18、統一教 2），3 人已獲釋、15 人仍在中國；2026 年 1–5 月共 361 名台灣人在中國失聯、遭約談或遭拘留</td>
+</tr>
+<tr>
+<td>李明哲案（維基百科中文版）</td>
+<td>https://zh.wikipedia.org/wiki/李明哲_(NGO工作者)</td>
+<td>持續更新</td>
+<td>判決日 2017-11-28，顛覆國家政權罪，5 年徒刑、剝奪政治權利 2 年；起訴書所列證據含 <strong>QQ 群組（「圍觀中國」「圍觀華南」）、QQ 空間、Facebook、微信等平台言論與聊天紀錄</strong>，以及與中國境內被告彭宇華的共同活動與通訊往來</td>
+</tr>
+<tr>
+<td>國際特赦組織台灣分會 — 李明哲</td>
+<td>https://www.amnesty.tw/node/10322</td>
+<td>—</td>
+<td>同上，人權組織視角</td>
+</tr>
+</tbody>
+</table>
+<h3 id="94">9.4 給學員的來源評估練習</h3>
+<p>把 9.2 與 9.3 攤開，請學員回答：</p>
+<ol>
+<li>如果明天有人說「Anthropic 這份報告是為了打擊伊朗反對派而捏造的」，你能用哪些證據反駁？（提示：9.3(B) 的先例一致性、9.3(C) 的獨立危害事實、9.3(A) 的圖 16 內容可查證性。）</li>
+<li>如果有人說「Anthropic 的報告證明 MEK 在指揮一場 AI 影響力行動」，你會怎麼修正這句話？（提示：2.3 節的三層歸因。）</li>
+<li><strong>哪一項事實，你</strong>只能<strong>相信 Anthropic？</strong>（答案：Viktor 平台的存在、記憶檔內容、那 51,944 則訊息的分析、四名執行者與 NCRI 媒體的僱傭關係。這些都在 AI 供應商的內部日誌裡，外部無從查證。）</li>
+</ol>
+<hr />
+<h2 id="10">10. 課程教學設計</h2>
+<h3 id="101">10.1 核心教學要點</h3>
+<p>本案在整門課中的定位：<strong>這是「AI 影響力行動如何直接威脅特定真人人身安全」的主教材，同時是「共享代理平台」這個新現象的唯一實例。</strong> 建議安排 90–120 分鐘。</p>
+<h4 id="_4">要點一｜協同的位置改變了</h4>
+<ul>
+<li><strong>舊模型</strong>：協同＝共用基礎設施（IP、裝置、註冊資料、社交圖）。</li>
+<li><strong>本案</strong>：行為者<strong>刻意不共用</strong>任何基礎設施，協同發生在一個<strong>共享的 AI 代理平台</strong>上，具體載體是<strong>文字</strong>（記憶檔、技能檔、教義語料、禁用詞表、來源清單）。</li>
+<li><strong>教學句</strong>：<strong>「當協同從網路層搬到語料層，你的偵測能力也必須搬家。」</strong></li>
+<li>對應素材：Figure 15 的虛線；p.43「行為者從不需要彼此協調，甚至不需要認識對方」。</li>
+</ul>
+<h4 id="_5">要點二｜持久記憶讓「意圖」離開了審查視野</h4>
+<ul>
+<li>惡意意圖不再出現在「這一次對話」裡，而是數月前寫進記憶檔的一行規則。</li>
+<li>逐次對話的內容審查在架構上就難以觸發。這解釋了為什麼本案六頁報告中<strong>沒有任何一次 Claude 拒絕的紀錄</strong>。</li>
+<li><strong>教學句</strong>：<strong>「你稽核的是對話，但行動寫在設定檔裡。」</strong></li>
+<li>對應素材：p.72「這讓該代理能在沒有人類使用者逐一下指令的情況下持續產出內容」；p.43「大量內容被嵌在持久記憶檔裡」。</li>
+</ul>
+<h4 id="_6">要點三｜數位冒充是一條通往實體傷害的因果鏈</h4>
+<ul>
+<li>冒充 → 取得詢問權 → 套取身分資訊 → 資料庫 → （外洩／查扣）→ 逮捕／處決。</li>
+<li>第二條路徑甚至不需要資料外洩：<strong>被聯絡這件事本身</strong>就在對方裝置上留下了可入罪的紀錄。</li>
+<li><strong>教學句</strong>：<strong>「在高鎮壓法域，『你跟誰說過話』就是罪證。而受害者從來沒有同意過這段對話。」</strong></li>
+<li>對應素材：4.2.1 的機制鏈圖；Cluster 表「Arrest-history profiling of people who face imprisonment or execution」；9.3(C) 的獨立處決紀錄。</li>
+</ul>
+<h4 id="_7">要點四｜媒體洗白不需要說謊</h4>
+<ul>
+<li>Figure 16 的貼文內容經本教材獨立查證<strong>完全屬實</strong>（2026-06-05 美國財政部 OFAC 制裁行動），但它被包裝成「獨立新聞媒體」發布，出處被拿走。</li>
+<li>同一個網絡卻在私訊通道發送<strong>捏造的</strong>突發頭條給 30 名以上聯絡人。</li>
+<li><strong>教學句</strong>：<strong>「公開頻道發真新聞建立信譽，私訊頻道發假新聞收割信譽。」</strong></li>
+<li>這也是對現行「假訊息」法規與定義的挑戰：<strong>真內容 + 假出處</strong>不落在多數「不實訊息」的定義之內。</li>
+<li>對應素材：6.3.3；9.3(A)。</li>
+</ul>
+<h4 id="breakout-scale">要點五｜Breakout Scale 不衡量傷害</h4>
+<ul>
+<li>本案是 Category Two（傳播程度低），卻是全報告對個別真人風險最高的影響力行動之一。</li>
+<li><strong>必須用兩把尺</strong>：傳播量表（Breakout Scale）＋危害量表（Cluster 表的「Most serious element」欄是現成雛形）。</li>
+<li><strong>教學句</strong>：<strong>「一個 Category Two 的行動可能害死人；一個 Category Four 的行動可能只是讓某個政客難堪。」</strong></li>
+<li>對應素材：8.5.5。</li>
+</ul>
+<h4 id="_8">要點六｜「沒有證據」不等於「證據顯示沒有」</h4>
+<ul>
+<li>「無法獨立確認吸引到多少真實互動」≠「沒有真實互動」。</li>
+<li>評級受限於<strong>觀測者的位置</strong>，而非行動的本質。</li>
+<li>Anthropic 自己在 p.42 承認：「我們對這些行動的能見度在它上線之後就中止了。」</li>
+<li><strong>教學句</strong>：<strong>「沒有任何單一機構看得見一場完整的影響力行動。」</strong></li>
+<li>對應素材：8.2 缺口五；9.3(E) 的 Citizen Lab 對照（平台側 vs. 生產側，兩種完全不同的指紋）。</li>
+</ul>
+<h4 id="_9">要點七｜影響力行動不只來自威權政府</h4>
+<ul>
+<li>本案的行為者是<strong>反威權的流亡反對運動</strong>，其政治綱領（十點計畫）文本上是自由民主的。</li>
+<li>但手法與威權國家的手法<strong>在技術與倫理上沒有差別</strong>，而且最終受害者是它宣稱要解放的那群人。</li>
+<li><strong>教學句</strong>：<strong>「判斷手法時，把行為者的政治立場蓋起來。」</strong></li>
+<li>對應素材：2.6；Anthropic 對所有行為者適用同一套 Usage Policy 與同一個 Breakout Scale。</li>
+</ul>
+<h4 id="_10">要點八｜最強的偵測能力集中在少數私人公司手上</h4>
+<ul>
+<li>記憶檔內容比對（本案唯一能在協同訊號消失時仍看見協同的方法）<strong>只有 AI 供應商做得到</strong>。</li>
+<li>這種揭露完全是自願的，沒有任何法律要求。</li>
+<li><strong>教學句</strong>：<strong>「2026 年的 IO 反制，有一層關鍵證據只存在於私人公司的日誌裡。」</strong></li>
+<li>政策意涵：台灣建立 IO 反制能力時，<strong>不能只建公開平台監測</strong>，必須同時建立與 AI 供應商的資訊交換管道。</li>
+<li>對應素材：8.4.3。</li>
+</ul>
+<hr />
+<h3 id="102">10.2 課堂討論題</h3>
+<blockquote>
+<p>以下六題都<strong>沒有標準答案</strong>，且都經過設計讓不同立場的學員會得出不同結論。建議用小組辯論＋全班收斂的形式，每題 15–20 分鐘。</p>
+</blockquote>
+<hr />
+<h4 id="1_1">討論題 1｜同一把尺，還是兩把尺？</h4>
+<p>Anthropic 在同一份報告中，用<strong>完全相同的政策框架與量表</strong>處理了：</p>
+<ul>
+<li>伊朗革命衛隊（IRGC）對齊的國家宣傳機構（GTG-34001，p.62 起）；</li>
+<li>中國地方公安對宗教團體與異議者的情報作業（GTG-14020 / 14022，p.89 起）；</li>
+<li><strong>以及 MEK/NCRI ——一個反對伊朗政權、被歐美除名、在西方政界有正當遊說活動的流亡反對運動（本案）</strong>。</li>
+</ul>
+<p><strong>問題</strong>：<br />
+- (a) 一家 AI 公司對「威權政府的宣傳」與「反威權反對派的宣傳」適用同一套標準，這是<strong>中立</strong>還是<strong>假中立</strong>？<br />
+- (b) 如果 MEK 的支持者主張「我們是在對抗一個處決我們成員的政權，冒充帳號是不對稱鬥爭的必要手段」，你的回應是什麼？<br />
+- (c) 反過來說，如果今天 AI 公司決定對「民主派反對運動」採取寬鬆標準，會產生什麼後果？誰來決定誰是「民主派」？</p>
+<p><strong>引導方向</strong>：把討論從「MEK 是好人還是壞人」轉到「<strong>AI 公司應該用什麼標準判斷，以及這個標準由誰制定、對誰負責</strong>」。可以引入：Anthropic 不是民選機構、Usage Policy 不是法律、但它的執行結果是實質的言論後果。</p>
+<hr />
+<h4 id="2ai">討論題 2｜AI 供應商應不應該通知被冒充者？</h4>
+<p>報告完全沒有提到 Anthropic 是否通知了那名被冒充的運動者、那 30 名以上收到捏造頭條的聯絡人、或那數十名被建檔的具名個人。</p>
+<p><strong>支持通知</strong>：他有權知道；只有他能對自己的聯絡人發出可信的警示；否則冒充可能繼續（換一家 AI 供應商即可）。<br />
+<strong>反對／困難</strong>：Anthropic 可能無法確認他的真實身分與安全的聯絡方式；主動聯繫一名伊朗運動者<strong>本身</strong>可能替他製造新風險（例如來自跨國企業的聯繫被伊朗當局視為「與境外勢力接觸」的證據）；也可能干擾執法或其他調查。</p>
+<p><strong>問題</strong>：<br />
+- (a) 你會設計一個什麼樣的通知機制？（想想 Apple / Google 的「國家級攻擊者通知」是怎麼做的，以及它們為什麼刻意寫得很模糊。）<br />
+- (b) 如果通知的結果是這名運動者被伊朗當局盯上，責任在誰？<br />
+- (c) 這應該是<strong>法定義務</strong>還是<strong>自願最佳實務</strong>？如果是法定義務，管轄權怎麼處理（美國公司、伊朗受害者、跨國行為者）？</p>
+<hr />
+<h4 id="3_1">討論題 3｜「真內容 + 假出處」算不算假訊息？</h4>
+<p>Figure 16 的貼文內容<strong>完全屬實</strong>（已獨立查證）。它唯一的問題是：讀者以為這是一家「獨立新聞媒體」的報導，實際上是一個政治組織的宣傳資產。</p>
+<p><strong>問題</strong>：<br />
+- (a) 台灣現行對「不實訊息」的法律與平台政策定義，能不能處理這種情況？（提示：多數定義的核心是「內容不實」。）<br />
+- (b) 如果要規範，你會規範什麼——<strong>內容</strong>、<strong>出處揭露</strong>、還是<strong>協同行為</strong>？各有什麼副作用？<br />
+- (c) 一個政治團體經營一個不掛名的新聞帳號，跟一個企業經營一個不掛名的公關帳號，性質一樣嗎？跟一家報社有明確政治立場但公開掛名，性質一樣嗎？<br />
+- (d) <strong>最難的一題</strong>：如果這個帳號從未說謊、內容永遠可查證，你能不能說它「有害」？害在哪裡？</p>
+<hr />
+<h4 id="4">討論題 4｜公開你的「聯絡規則」，是保護還是給藍圖？</h4>
+<p>4.2.2 建議運動者與 NGO <strong>公開宣告</strong>：「我只會從這些帳號聯絡你」「我永遠不會在私訊裡問你人在哪」。</p>
+<p><strong>支持</strong>：讓冒充者無法安全地違反規則；把驗證責任前移；規則公開才有嚇阻力。<br />
+<strong>反對</strong>：等於把「怎麼樣才像真的」寫成手冊交給攻擊者；攻擊者會設計出符合規則的攻擊（例如不問位置，改問一個看似無害但可推斷位置的問題）。</p>
+<p><strong>問題</strong>：<br />
+- (a) 在安全工程裡，這是典型的「安全靠隱蔽（security through obscurity）」vs.「公開設計（Kerckhoffs 原則）」之爭。你站哪邊？為什麼密碼學選了公開，而社交工程防禦可能不一樣？<br />
+- (b) 如果公開規則，要公開到什麼程度？（規則本身公開，但暗號當然不公開——那界線在哪？）</p>
+<hr />
+<h4 id="5">討論題 5｜記憶檔比對能力應不應該被法制化揭露？</h4>
+<p>8.4.3 指出：對 AI 驅動的影響力行動，<strong>最強的偵測能力（跨帳號記憶檔內容比對）只有 AI 供應商做得到</strong>，而揭露完全自願。</p>
+<p><strong>問題</strong>：<br />
+- (a) 是否應該立法要求 AI 供應商定期揭露此類偵測結果？（參考：歐盟 DSA 對超大型平台的系統性風險報告義務、台灣的《數位中介服務法》草案曾引發的爭議。）<br />
+- (b) 如果要求揭露，會不會反過來讓 AI 公司<strong>減少做這類內部調查</strong>（不查就沒有東西要報）？<br />
+- (c) 「掃描使用者的記憶檔以尋找跨帳號相似性」——這在技術上是必要的偵測手段，在隱私上是什麼？如果同樣的能力被用來偵測「共用相同政治立場的使用者」呢？<br />
+- (d) 台灣政府若想取得這類情報，可行的管道有哪些？（自願合作、國際情報交換、法律強制、購買商業情報？）各自的代價是什麼？</p>
+<hr />
+<h4 id="6-30">討論題 6｜如果你是那 30 名聯絡人之一</h4>
+<p><strong>情境</strong>：你在德黑蘭。你信任的一位流亡運動者透過 Telegram 跟你聊了三個月政治，你談過你的城市、你的工作、你對某次抗議的看法、你朋友的情況。今天你讀到 Anthropic 的報告，發現那三個月你可能是在跟一個 AI 說話，而對面真正的人是一個你不認識的政治組織的支薪員工。</p>
+<p><strong>問題</strong>：<br />
+- (a) 你現在最擔心的是什麼？你會採取什麼行動？（注意：伊朗在 2026 年 2–5 月曾斷網 88 天。）<br />
+- (b) 這三個月的對話紀錄，現在在哪些地方？（你的手機、對方的伺服器、Telegram 的雲端、可能還有第三方的備份。）<br />
+- (c) 你還會相信下一個聯繫你的流亡運動者嗎？<strong>這個行動對伊朗公民社會的信任結構造成了什麼長期損害？</strong><br />
+- (d) <strong>最關鍵的一題</strong>：這個損害，在 Breakout Scale 上是幾分？</p>
+<blockquote>
+<p>第 6 題建議放在最後，用來收斂整堂課。它會把所有技術討論拉回到一個具體的人身上。<strong>這是本案唯一正確的結束方式。</strong></p>
+</blockquote>
+<hr />
+<h3 id="103">10.3 實作／桌面演練建議</h3>
+<blockquote>
+<p>全部設計為<strong>在教室或封閉實驗環境可安全執行</strong>，不包含任何攻擊操作、不接觸任何 IOC、不對真實帳號進行任何互動。</p>
+</blockquote>
+<hr />
+<h4 id="a90">演練 A｜「我的帳號被複製了」六小時應變桌演（90 分鐘，主推）</h4>
+<p><strong>情境卡</strong>：你是台灣一個關注中國人權的 NGO 的專案經理。今天早上，一名在中國的長期聯絡人透過第三方管道告訴你：「你昨天半夜在 Telegram 問我那件事，我覺得怪怪的。」——但你昨晚沒有傳任何訊息。</p>
+<p><strong>角色</strong>：專案經理、資安負責人（可能是外包）、執行長、傳播負責人、法務顧問、境內聯絡人代表（由講師扮演，只能透過紙條溝通）。</p>
+<p><strong>時間軸與決策點</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>T+</th>
+<th>事件</th>
+<th>必須做出的決策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0:00</td>
+<td>收到境內聯絡人的疑慮</td>
+<td>相信嗎？如何在不驚動的情況下確認？用什麼通道？</td>
+</tr>
+<tr>
+<td>0:30</td>
+<td>確認確實有一個高相似度帳號正在冒用你的身分</td>
+<td>要不要立刻公開警示？公開會不會讓境內聯絡人暴露？</td>
+</tr>
+<tr>
+<td>1:00</td>
+<td>發現該帳號已聯繫至少 12 名你的聯絡人，其中 5 人在中國</td>
+<td>通知順序怎麼排？高風險者優先，還是所有人同時？</td>
+</tr>
+<tr>
+<td>2:00</td>
+<td>有記者來問</td>
+<td>說什麼？不說什麼？</td>
+</tr>
+<tr>
+<td>3:00</td>
+<td>董事會要求「先不要張揚，會影響募款」</td>
+<td>怎麼處理組織內部的壓力？</td>
+</tr>
+<tr>
+<td>4:00</td>
+<td>平台（Telegram）回覆：需要更多證明</td>
+<td>你的證據鏈夠嗎？你有沒有預先保存過自己的帳號證明？</td>
+</tr>
+<tr>
+<td>5:00</td>
+<td>一名境內聯絡人失聯</td>
+<td>現在做什麼？誰來做？</td>
+</tr>
+<tr>
+<td>6:00</td>
+<td>覆盤</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>產出</strong>：<br />
+1. 一頁的「冒充事件應變 SOP」（含通知順序、通道、話術）；<br />
+2. 一份「事前應該做但我們沒做」清單。</p>
+<p><strong>講師講評重點</strong>：第二份清單通常會遠比第一份長。這正是重點——<strong>冒充事件的應變品質，99% 取決於事前準備。</strong></p>
+<hr />
+<h4 id="b60">演練 B｜「獨立媒體真的獨立嗎？」外連來源集合分析（60 分鐘）</h4>
+<p><strong>方法</strong>：完全使用公開資料，<strong>不碰任何本案 IOC</strong>。講師預先挑選 5 個台灣或華語圈的公開新聞型社群帳號（其中可混入 1–2 個已知有明確組織背景但未揭露的），學員分組分析：</p>
+<ol>
+<li>抓取該帳號最近 100 則貼文中的所有外部連結；</li>
+<li>計算<strong>外連網域集合</strong>與其<strong>分布熵</strong>；</li>
+<li>判斷：這個帳號的來源集合是<strong>開放的</strong>（多樣、含互相競爭的來源）還是<strong>封閉排他的</strong>（集中於少數關聯資產）？</li>
+<li>額外加分：計算跨帳號的<strong>發文時間戳互相關</strong>。</li>
+</ol>
+<p><strong>對應本案</strong>：IOC #1「七個 MEK/NCRI 網域，跨行為者硬編碼」；Figure 15「3 pages · one cron」。</p>
+<p><strong>講師講評重點</strong>：強調這個方法<strong>不需要知道幕後是誰</strong>。它證偽的是「獨立」的宣稱，不是指控特定組織。這個邊界很重要——<strong>它讓這個方法可以被公民社會安全地使用</strong>。</p>
+<hr />
+<h4 id="c45">演練 C｜三欄式危害評估寫作（45 分鐘）</h4>
+<p>發下 Cluster 表，<strong>遮住第三欄（Most serious element）</strong>，只留下 Cluster 與 What Claude was used for。</p>
+<ol>
+<li>學員獨立填寫第三欄；</li>
+<li>小組收斂；</li>
+<li>與 Anthropic 的原始判斷對照；</li>
+<li>討論差異：你漏掉了什麼？你多寫了什麼？<strong>為什麼 Anthropic 認為「arrest-history profiling」比「51,944 則訊息被分析」更嚴重？</strong></li>
+</ol>
+<p><strong>延伸</strong>：用同樣的格式，為台灣的某個真實案例（例如某次已公開的協同不實行為）寫一張三欄表。</p>
+<hr />
+<h4 id="dfigure-16-45">演練 D｜Figure 16 數位鑑識（45 分鐘）</h4>
+<p>發下 Figure 16，<strong>不告訴學員出處</strong>，限時完成三項：</p>
+<ol>
+<li><strong>曆法／時序驗算</strong>：波斯曆日期換算、星期是否自洽、可否推算截圖時間。</li>
+<li><strong>事實查證</strong>：貼文提及的 OFAC 制裁是否真實存在？（允許使用公開搜尋，但<strong>禁止存取網址列上的 Instagram 連結</strong>。）</li>
+<li><strong>語言鑑識</strong>：找出至少兩處顯示這是機器翻譯的證據。</li>
+</ol>
+<p><strong>標準答案</strong>：見 6.3.3。<br />
+<strong>講師講評重點</strong>：學員通常能完成 (1) 和 (2)，但會漏掉 (3)。而 (3) 才是<strong>可規模化的偵測特徵</strong>——你不可能對每一則貼文做事實查證，但你可以對整個語料庫跑「專有名詞意譯」規則。</p>
+<hr />
+<h4 id="e30">演練 E｜帶外驗證與暗號設計（30 分鐘，兩人一組）</h4>
+<ol>
+<li>兩人一組，一方扮演「海外運動者」，一方扮演「境內聯絡人」；</li>
+<li>在 10 分鐘內設計出：一組<strong>驗證暗號</strong>、一組<strong>脅迫暗號（duress code）</strong>、一條<strong>帶外驗證通道</strong>；</li>
+<li>交換到另一組，由對方扮演冒充者，嘗試在不知道暗號的情況下通過驗證（只能使用「已公開的資訊」）；</li>
+<li>收斂：哪些暗號設計失敗了？為什麼？</li>
+</ol>
+<p><strong>常見失敗模式</strong>（講師可預先準備）：<br />
+- 暗號基於「公開可查的共同經歷」（例如一起參加過的公開活動）→ 失敗；<br />
+- 暗號是固定字串 → 一旦被記錄就失效；<br />
+- 脅迫暗號設計成「不說某句話」→ 在自然對話中很難執行；<br />
+- 帶外通道其實是同一個生態系（Telegram 換 Telegram 的另一個帳號）→ 無效。</p>
+<hr />
+<h4 id="ffigure-15-20">演練 F｜Figure 15 的「虛線揭示」（20 分鐘，適合開場）</h4>
+<p>見 6.2.6 第 1 點。準備兩張投影片：去掉虛線的版本、完整版本。這是本案最有效的開場。</p>
+<hr />
+<h3 id="104">10.4 對台灣的意涵</h3>
+<blockquote>
+<p><strong>必寫段落。</strong> 本案的核心機制——「冒充一名受信任的海外人士，以接觸其在高鎮壓法域內的聯絡人」——在台灣有<strong>直接、具體、且已有前例</strong>的對應風險。</p>
+</blockquote>
+<h4 id="1041">10.4.1 風險機制的完整平移</h4>
+<p>把 4.2.1 的機制鏈換成台灣情境，每一步都成立：</p>
+<pre class="mermaid">flowchart TD
+    T1[&quot;[1] 信任前提&lt;br/&gt;中國境內的聯絡人相信「這個帳號＝我認識的那位台灣 NGO 工作者／記者／&lt;br/&gt;宗教團體幹部／學者」&quot;]
+    T2[&quot;[2] 冒充者取得「詢問權」&lt;br/&gt;「你們那邊聚會還正常嗎？」「上次那位弟兄後來怎樣？」&lt;br/&gt;「你在哪個區？」「還有誰一起？」&lt;br/&gt;── 在正常關係裡是關心，在情報學裡是套話&quot;]
+    T3[&quot;[3] 對話落在冒充者一側的資料庫&quot;]
+    T4[&quot;[4] 資料庫（或該聯絡人的裝置）落入中國執法機關手中&quot;]
+    T5[&quot;[5] 依中國法律，與境外人士的政治性通訊可構成證據&lt;br/&gt;《刑法》顛覆國家政權罪、煽動顛覆國家政權罪、&lt;br/&gt;為境外非法提供情報罪、《反間諜法》（2023 修正後範圍擴大）、&lt;br/&gt;以及對宗教團體適用的「組織、利用邪教組織破壞法律實施罪」&quot;]
+    T6[&quot;[6] 實體後果：約談、限制出境、拘留、起訴、判刑&quot;]
+
+    T1 --&gt; T2 --&gt; T3 --&gt; T4 --&gt; T5 --&gt; T6
+</pre>
+<p><strong>台灣已有明確前例——李明哲案</strong>：</p>
+<p>2017 年，台灣 NGO 工作者李明哲於 3 月 19 日自澳門入境中國後失蹤，11 月 28 日經湖南省岳陽市中級人民法院一審以<strong>顛覆國家政權罪</strong>判處有期徒刑 5 年、剝奪政治權利 2 年，2022 年 4 月獲釋。</p>
+<p><strong>關鍵在於證據類型</strong>：依起訴書，法院認定犯罪事實的證據包含 <strong>QQ 群組（「圍觀中國」「圍觀華南」）中的活動、透過 QQ 空間／Facebook／微信等社群平台發表的言論、以及與中國境內被告彭宇華的通訊往來與聊天紀錄</strong>。</p>
+<blockquote>
+<p><strong>這個案例已經證明：在中國，台灣人與境內人士的線上政治性對話紀錄，會被直接當成入罪證據。</strong><br />
+<strong>GTG-84006 的手法，只是把「誰在打字」換成了 AI。</strong> 所有法律後果不變，但攻擊規模與擬真度大幅提升。</p>
+</blockquote>
+<p><strong>規模脈絡</strong>（依 9.3(G) 引述的公開報導）：陸委會表示 20 名台灣人在中國因傳教被捕（一貫道 18 人、統一教 2 人），其中 3 人獲釋、15 人仍在中國；2026 年 1 月至 5 月，共 <strong>361 名</strong>台灣人在中國失聯、遭約談或遭拘留。</p>
+<h4 id="1042">10.4.2 台灣的高風險族群盤點</h4>
+<table>
+<thead>
+<tr>
+<th>族群</th>
+<th>為什麼是目標</th>
+<th>特有的脆弱點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>中國人權工作者、關注中國議題的 NGO</strong></td>
+<td>與境內維權人士、律師、家屬有長期通訊關係；其聯絡人清單本身就是高價值情報</td>
+<td>聯絡人多、通訊頻繁、常使用微信（無端對端加密、伺服器在中國境內）；小型組織缺乏專職資安</td>
+</tr>
+<tr>
+<td><strong>宗教團體（家庭教會網絡、一貫道、法輪功、藏傳佛教、全能神教會相關）</strong></td>
+<td>中國對境外宗教滲透高度敏感；本報告 p.89 起的 GTG-14020 案即點名<strong>台灣基督長老教會領導層</strong>為中國宗教事務情報作業的目標</td>
+<td>信眾關係高度信任、驗證文化薄弱；「牧者」「前輩」身分具有極強的說服權威，極易被冒充</td>
+</tr>
+<tr>
+<td><strong>記者與研究者</strong></td>
+<td>需要在中國境內維持消息來源</td>
+<td>職業要求「主動聯繫陌生人」，與「對主動聯繫保持警戒」的安全建議直接衝突</td>
+</tr>
+<tr>
+<td><strong>在台中國籍學生、學者與異議者</strong></td>
+<td>家人在中國境內可被施壓（參考 Amnesty 2024 對海外中國學生的研究）</td>
+<td>家庭關係無法切斷；「家人帳號」被冒充時幾乎不可能拒絕回應</td>
+</tr>
+<tr>
+<td><strong>西藏、維吾爾、香港在台社群</strong></td>
+<td>本報告 p.89–102 的多起中國案例均明確涵蓋這些社群</td>
+<td>跨境親屬聯繫、社群規模小、身分易辨識</td>
+</tr>
+<tr>
+<td><strong>兩岸交流／地方交流的承辦人員</strong></td>
+<td>有正當理由與中國官方及半官方單位通訊</td>
+<td>難以區分「正常業務往來」與「被利用的接觸」</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意本報告與台灣的直接交集</strong>（可作跨模組連結）：</p>
+<ul>
+<li><strong>GTG-14020</strong>（p.89–93）：中國宗教事務情報作業，目標包含<strong>台灣基督長老教會的領導層</strong>、亞洲各地資深天主教樞機、藏傳佛教公民社會與流亡政府、法輪功及其關聯媒體。Claude 被用來生成「人員研究草稿」「線索報告」「每日態勢感知簡報」，並為每個目標標註「<strong>抓手</strong>」（統戰系統用語，指可利用的把柄）。</li>
+<li><strong>GTG-14022</strong>（p.98–101）：中國承包商為政府客戶產製情報簡報，用 Claude 監控並分類特定異議者與運動者、少數民族與僑民社群、宗教組織、<strong>台灣的政治人物</strong>、勞工與學生運動者。並將西方與<strong>台灣媒體</strong>的報導重新框架為敵意敘事（例如把「台灣政府」改為「台灣當局」、對相關詞加上引號）。</li>
+</ul>
+<blockquote>
+<p><strong>教學上的關鍵連結</strong>：GTG-84006 教的是「<strong>冒充</strong>這個手法本身」；GTG-14020 / 14022 教的是「<strong>台灣是明確的目標</strong>」。把三者放在一起，學員就會看到完整的威脅圖像：<strong>手法已經存在，目標已經包含台灣，缺的只是把兩者接起來。</strong></p>
+</blockquote>
+<h4 id="1043">10.4.3 台灣公民社會的帳號驗證與安全通訊實務建議</h4>
+<p>以下建議刻意寫成<strong>可直接複製到組織內規</strong>的形式。分成「個人」「組織」「生態系」三層。</p>
+<p><strong>第一層：個人層（每個與中國境內有聯絡的人都該做）</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>做法</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>接受「文風不再是身分證明」</strong></td>
+<td>你所有公開的貼文、文章、留言都是訓練你的替身的語料。本案是 8,400 則貼文。<strong>不要再用「講話的口氣像他」來判斷身分。</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>建立帶外驗證習慣</strong></td>
+<td>與每一位高風險聯絡人事先約定<strong>第二通道</strong>與<strong>驗證問題</strong>。驗證問題必須基於<strong>未曾出現在任何網路平台上的共同記憶</strong>。</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>設計脅迫暗號（duress code）</strong></td>
+<td>一個看似正常、但代表「我現在不安全」的說法。必須是<strong>主動加入</strong>（說某句話），而不是<strong>被動省略</strong>（不說某句話）——後者在真實壓力下極難執行。</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Telegram 硬化</strong></td>
+<td>啟用<strong>兩步驟驗證雲端密碼</strong>（防止僅憑簡訊 OTP 被接管，這是伊朗案例中反覆出現的弱點）；定期檢查並登出陌生的 Active Sessions；關閉「以手機號碼找到我」；對高風險對話使用 Secret Chat 或改用 Signal。</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>高風險對話改用 Signal，並驗證安全碼</strong></td>
+<td>Signal 預設端對端加密、支援消失訊息、可驗證 safety number。<strong>微信絕對不適用於任何敏感通訊</strong>（無端對端加密、伺服器位於中國境內、內容受法定審查與留存）。</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>最小化聯絡人清單暴露</strong></td>
+<td>不同專案的聯絡人分艙存放；不要把整份聯絡人清單放在任何雲端同步的通訊錄；定期清理。</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>絕不在即時通訊中索取身分資訊</strong></td>
+<td>把這條當成個人紀律。這樣一來，<strong>任何向你索取身分資訊的「你認識的人」，都自動可疑</strong>。</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>定期發布可查核的真實性訊號</strong></td>
+<td>例如每週在公開頻道貼一則含當日新聞關鍵字的訊息，讓聯絡人有獨立的新鮮度基準。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>第二層：組織層（NGO、教會、新聞編輯室、學術單位）</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>做法</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>制定並公開「聯絡規則」</strong></td>
+<td>明確列出：我們會從哪些帳號聯絡你、我們<strong>永遠不會</strong>做什麼。公開它，讓冒充者無法安全地違反。（此項有爭議，見討論題 4。）</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>建立冒充事件 SOP</strong></td>
+<td>含通知順序（高風險聯絡人優先）、通道選擇、對外發言、平台申訴、證據保存。<strong>演練它</strong>（演練 A）。</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>預先保存帳號所有權證明</strong></td>
+<td>平台申訴時需要證明「我才是本人」。事前準備好，事發時才來不及。</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>導入威脅模型工作坊</strong></td>
+<td>直接使用開放文化基金會（OCF）的《CSOs 數位防禦手冊》與 CSCS 社群資源——<strong>台灣已有現成的中文材料，不需要從頭做。</strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>對境內聯絡人做安全教育，而不只是對自己人</strong></td>
+<td>本案的受害者是<strong>聯絡人</strong>，不是被冒充者。安全教育若只做內部，等於沒做。</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>建立「失聯應變」程序</strong></td>
+<td>當境內聯絡人失聯：誰負責判斷？多久之後採取行動？採取什麼行動（公開 vs. 靜默）？這個決定極難，必須事前想清楚。</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>資料最小化與保存期限</strong></td>
+<td>你保存的每一份聯絡人資料，都是未來可能被查扣的證據。<strong>你不需要的資料就不要有。</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>第三層：生態系層（政府、平台、研究社群）</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>做法</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>建立與 AI 供應商的資訊交換管道</strong></td>
+<td>依 8.4.3，記憶檔／技能檔比對這層證據<strong>只有 AI 供應商看得到</strong>。台灣若只建公開平台監測，永遠只能看到第二、第三層指標。這應該是國安與數位發展主管機關的明確工作項目。</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>投資「語料層偵測」而非只有「帳號層偵測」</strong></td>
+<td>依 7.3 的三層模型，語料層（強制口號、專有名詞意譯、來源集合排他性）壽命最長、成本最低、且<strong>公民社會就能做</strong>。</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>建立「專有名詞意譯」偵測詞庫</strong></td>
+<td>把中國機構、媒體、官銜的標準英譯與異常直譯形式建成對照表，用於偵測機器翻譯的洗白管線。這是一個小型、高投報的公共財專案。</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>把「冒充真人」明確納入 IO 威脅評估的獨立分類</strong></td>
+<td>目前台灣的假訊息／認知作戰論述，重心在「內容」與「傳播」。<strong>冒充真人以接觸特定個人</strong>是一個不同性質的威脅——它的危害不隨傳播量增加，而隨目標的脆弱度增加。<strong>需要一套獨立的量表。</strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>對宗教與族裔社群的特別支援</strong></td>
+<td>這些社群的信任結構最容易被冒充利用，但資安資源最少。建議以社群為單位（而非組織為單位）提供培訓。</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>不要用封鎖網域的方式處理</strong></td>
+<td>參考 7.2 對 IOC #1 的說明：把政治團體的官方網站加入封鎖清單，既無效（指標是<strong>引用模式</strong>不是網域本身）又構成言論審查。<strong>這是最容易犯的政策錯誤。</strong></td>
+</tr>
+</tbody>
+</table>
+<h4 id="1044">10.4.4 一個必須避免的誤讀</h4>
+<p>本案的行為者是<strong>反對威權政權的流亡組織</strong>。台灣讀者很容易把這個案例讀成「中國會這樣做」——但本案的教訓其實更不舒服：</p>
+<blockquote>
+<p><strong>當你同情的一方掌握了同樣的工具，他們也會這樣做。</strong></p>
+</blockquote>
+<p>台灣支持中國民主化、支持西藏與維吾爾人權、支持香港的立場是清楚的。而本案提醒我們：<strong>流亡社群、海外倡議組織、乃至於我們自己的宣傳工作，都應該接受同一套標準的檢驗</strong>——不冒充真人、不對高風險個人做非自願側寫、不隱瞞合成媒體、不隱瞞組織歸屬。</p>
+<p><strong>理由不是道德潔癖，而是實效</strong>：一旦「支持民主的一方」被證實使用冒充手法，威權政權就取得了一個極其有力的宣傳武器——「你看，他們也一樣」。而付出代價的，是境內那些還願意相信的人。</p>
+<p><strong>這句話建議作為整堂課的結語。</strong></p>
+<hr />
+<h2 id="11">11. 關鍵原文引文</h2>
+<blockquote>
+<p>供課程講義直接引用。每條標註頁碼，英文原文逐字，繁中翻譯附後。</p>
+</blockquote>
+<hr />
+<p><strong>引文 1｜案例標題（p.70）</strong></p>
+<blockquote>
+<p>"GTG-84006: Disrupting a distributed MEK/NCRI-aligned influence operation that used a shared AI agent to impersonate real people and recruit inside Iran"</p>
+<p>「GTG-84006：破壞一場 MEK/NCRI 對齊的分散式影響力行動——該行動使用一個共享 AI 代理來冒充真人，並在伊朗境內進行招募。」</p>
+</blockquote>
+<p><em>用途</em>：標題本身就是完整的案例摘要。注意 "shared AI agent"（共享 AI 代理）與 "recruit inside Iran"（在伊朗境內招募）這兩個關鍵詞組。</p>
+<hr />
+<p><strong>引文 2｜冒充的完整描述（p.70）— 本案最重要的一段</strong></p>
+<blockquote>
+<p>"To deceive users, the operation impersonated a real-world activist by tasking the shared AI agent to clone the activist's personal Telegram account, then instructing it in Persian that it was now that person. The actor directed Claude to read roughly 8,400 of his Telegram posts to copy his writing style, and then used it to run live political conversations with his contacts. <strong>To our knowledge, these contacts did not know they were speaking with an AI-assisted account.</strong>"</p>
+<p>「為了欺騙使用者，該行動冒充了一名真實世界的運動者：它指派共享 AI 代理複製該運動者的個人 Telegram 帳號，接著<strong>以波斯語指示它「你現在就是那個人」</strong>。該行為者指揮 Claude 讀取他大約 <strong>8,400 則</strong> Telegram 貼文以複製其寫作風格，然後用它與他的聯絡人<strong>進行即時政治對話</strong>。<strong>就我們所知，這些聯絡人並不知道他們正在與一個 AI 輔助的帳號說話。</strong>」</p>
+</blockquote>
+<p><em>用途</em>：這是全案的核心引文。最後一句是知情同意完全缺席的明證。</p>
+<hr />
+<p><strong>引文 3｜歸因的自我設限（p.70–71）</strong></p>
+<blockquote>
+<p>"Although the actors did not share account infrastructure or show visible signs of coordination, our investigations linked this activity to People's Mojahedin Organization of Iran (PMOI/MEK), and its political front, the National Council of Resistance of Iran (NCRI)."</p>
+<p>"Our investigation showed that at least four individuals running this campaign work for official NCRI media outlets... While the presence of committee approval loops and notes about MEK leadership suggest central tasking is likely, <strong>we are not able to verify the level of centralized control.</strong>"</p>
+<p>「儘管這些行為者並未共用帳號基礎設施，也未展現可見的協同跡象，我們的調查仍將此活動連結到伊朗人民聖戰者組織（PMOI/MEK）及其政治外圍組織——伊朗全國抵抗委員會（NCRI）。」</p>
+<p>「我們的調查顯示，至少有四名執行此行動的個人任職於官方 NCRI 媒體機構……雖然委員會核可迴圈的存在以及關於 MEK 領導層的記述暗示中央指派<strong>很可能</strong>存在，<strong>我們無法驗證中央控制的程度。</strong>」</p>
+</blockquote>
+<p><em>用途</em>：教「歸因信度措辭」的最佳素材（見 2.3）。三種不同強度的措辭出現在同一段落內。</p>
+<hr />
+<p><strong>引文 4｜監控規模與被捕紀錄分群（p.71）</strong></p>
+<blockquote>
+<p>"The operation successfully scraped over 500 social media channels to build detailed profiles of individuals inside Iran. They then grouped these targets by city, age, occupation, political alignment, <strong>and arrest history</strong> likely to help them tailor their messages to the specific audiences."</p>
+<p>"The network analyzed roughly 51,944 archived messages from these conversations to build detailed psychographic dossiers on dozens of specific individuals in Iran. To spread their message further, the impersonation accounts also sent a fabricated breaking news headline to <strong>more than 30 contacts simultaneously</strong>."</p>
+<p>「該行動成功刮取了<strong>超過 500 個</strong>社群媒體頻道，以建立伊朗境內個人的詳細檔案。他們接著依<strong>城市、年齡、職業、政治傾向與被捕紀錄</strong>將這些目標分群，很可能是為了協助他們針對特定受眾調整訊息。」</p>
+<p>「該網絡分析了來自這些對話的約 <strong>51,944 則</strong>封存訊息，以對伊朗境內<strong>數十名特定個人</strong>建立詳細的心理側寫檔案。為了進一步散播其訊息，冒充帳號也<strong>同時</strong>向<strong>超過 30 名</strong>聯絡人發送了一則<strong>捏造的</strong>突發新聞標題。」</p>
+</blockquote>
+<p><em>用途</em>：規模數字的權威引用。注意「roughly 51,944」這個「精確但被標為約略」的措辭（見 4.1 分析）。</p>
+<hr />
+<p><strong>引文 5｜Viktor 平台與持久記憶（p.72）— 教「架構性缺口」用</strong></p>
+<blockquote>
+<p>"The network relied on Claude to support all phases of its influence operation. The actors managed these tasks using a <strong>shared AI agent platform</strong>, where each workspace maintained its own <strong>long-term memory files</strong>. Over time they updated these files with specific instructions, such as lists of banned words, approved sources, account management rules, and ways to avoid detection. <strong>This allowed the agent to keep producing content without a human user directing each session.</strong> One actor loaded MEK founding doctrine into the model's memory as <strong>'strategic base data'</strong> for others within the operation to reuse."</p>
+<p>「該網絡仰賴 Claude 支援其影響力行動的<strong>所有階段</strong>。行為者使用一個<strong>共享 AI 代理平台</strong>來管理這些任務，平台中<strong>每個工作區都維護自己的長期記憶檔</strong>。隨著時間推移，他們以特定指令更新這些檔案，例如<strong>禁用詞清單、核可來源、帳號管理規則，以及規避偵測的方法</strong>。<strong>這讓該代理能在沒有人類使用者逐一指揮每個工作階段的情況下，持續產出內容。</strong>其中一名行為者把 MEK 的創始教義載入模型記憶，作為<strong>「戰略基礎資料」</strong>供行動內其他人重複使用。」</p>
+</blockquote>
+<p><em>用途</em>：本案技術核心的權威引用。最後一句（一次寫入、多人重用）是持久記憶危害的最佳例證。</p>
+<hr />
+<p><strong>引文 6｜人事制度與「依照我們的合約」（p.72）</strong></p>
+<blockquote>
+<p>"The human management behind this operation was highly structured. This included an approval loop by a dedicated committee and a formal review process from content correctors to managers. Throughout their communication, the actors repeatedly used the phrase <strong>'per our contract'</strong> and made regular references to the MEK leadership. We found that <strong>the same operational playbook was applied uniformly across all workspaces.</strong>"</p>
+<p>「這個行動背後的人力管理高度結構化。這包含一個<strong>專責委員會</strong>的核可迴圈，以及從<strong>內容校正者到主管</strong>的正式審查流程。在他們的通訊中，行為者反覆使用「<strong>依照我們的合約</strong>」這個說法，並定期提及 MEK 領導層。我們發現，<strong>同一份操作腳本被一致地套用在所有工作區上。</strong>」</p>
+</blockquote>
+<p><em>用途</em>：證明這是有薪人員的機構化作業，不是志願者的自發行為（見 2.4）。</p>
+<hr />
+<p><strong>引文 7｜Cluster 表中最嚴重的兩項判斷（p.72）</strong></p>
+<blockquote>
+<p>"<strong>Live impersonation</strong> — Most serious element: Impersonating a real activist to contacts inside Iran without their knowledge."</p>
+<p>"<strong>Surveillance and profiling</strong> — Most serious element: <strong>Arrest-history profiling of people who face imprisonment or execution under Iranian law.</strong>"</p>
+<p>「<strong>即時冒充</strong> — 最嚴重的元素：在伊朗境內聯絡人<strong>不知情</strong>的情況下冒充一名真實運動者。」</p>
+<p>「<strong>監控與側寫</strong> — 最嚴重的元素：對<strong>依伊朗法律面臨監禁或處決</strong>的人做<strong>被捕紀錄側寫</strong>。」</p>
+</blockquote>
+<p><em>用途</em>：這兩句是本案危害論證的核心。配合 9.3(C) 的獨立處決紀錄使用，效果極強。</p>
+<hr />
+<p><strong>引文 8｜處置與自陳限制（p.74）</strong></p>
+<blockquote>
+<p>"We found this activity as part of our internal investigations and banned the accounts. <strong>At this point, we are not able to independently confirm how much authentic engagement was drawn by the network's amplification accounts.</strong>"</p>
+<p>「我們在內部調查過程中發現此活動，並停用了相關帳號。<strong>目前，我們無法獨立確認該網絡的放大帳號吸引到多少真實互動。</strong>」</p>
+</blockquote>
+<p><em>用途</em>：教「沒有證據 ≠ 證據顯示沒有」，以及 AI 供應商的觀測邊界（見 8.2 缺口五、8.5.5 要點二）。</p>
+<hr />
+<p><strong>引文 9｜報告自陳的結構性盲點（p.42，非本案專屬但直接適用）</strong></p>
+<blockquote>
+<p>"<strong>Our visibility into these operations ends once it's live.</strong> To verify our findings and understand what happened after content left our platform, we rely on open-source research, cross-platform industry data, and public reporting."</p>
+<p>「<strong>我們對這些行動的能見度，在它上線之後就中止了。</strong>為了驗證我們的發現、並理解內容離開我們的平台後發生了什麼，我們仰賴公開來源研究、跨平台的業界資料，以及公開報導。」</p>
+</blockquote>
+<p><em>用途</em>：解釋為什麼「沒有任何單一機構看得見完整的影響力行動」。</p>
+<hr />
+<p><strong>引文 10｜共享平台的組織效益（p.43，趨勢章節）</strong></p>
+<blockquote>
+<p>"Markdown files containing doctrine were reused almost verbatim across hundreds of sessions. Actors kept lists of banned words inside their AI agents, maintained shared files of approved sources and evasion rules, and ran custom software that called Claude in fixed batches. <strong>The central setup meant that actors producing content never needed to coordinate with or even know one another.</strong> ... Increasingly, operations are not run using individual prompts. Instead, <strong>a great deal is embedded within persistent memory files.</strong>"</p>
+<p>「包含教義的 Markdown 檔案在<strong>數百個工作階段</strong>中被幾乎逐字重複使用。行為者在他們的 AI 代理內部保存禁用詞清單、維護核可來源與規避規則的共享檔案，並執行以固定批次呼叫 Claude 的自製軟體。<strong>這種中央化設置意味著，產出內容的行為者從不需要彼此協調，甚至不需要認識對方。</strong>……越來越多的行動不是用個別提示來運作。反之，<strong>大量內容被嵌在持久記憶檔裡。</strong>」</p>
+</blockquote>
+<p><em>用途</em>：把本案放進整體趨勢的定位。這段話幾乎就是 GTG-84006 的抽象版本。</p>
+<hr />
+<h2 id="12">12. 未能驗證之處與研究限制</h2>
+<h3 id="121">12.1 報告本身沒有說明的事（資訊缺口）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>缺口</th>
+<th>為什麼重要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Telegram 帳號「clone」的具體技術路徑</strong></td>
+<td>報告只說 "clone the activist's personal Telegram account"。是帳號被接管（透過簡訊 OTP 攔截、SIM swap、電信商配合）？是建立高相似度的仿冒帳號？還是匯出公開頻道內容後重建？<strong>這三者的防護方式完全不同</strong>，也決定了被冒充者能不能自救。這是本案最重要的未解技術問題。</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>「posts」vs.「private messages」的矛盾</strong></td>
+<td>p.70 說讀取 8,400 則 <strong>Telegram posts（貼文）</strong>；p.72 Cluster 表說從 <strong>private messages（私訊）</strong> 複製其 voice。如果是私訊，代表<strong>帳號確實被接管</strong>（否則拿不到私訊），案件性質嚴重得多。報告未釐清。</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>「ten-stage funnel（十階段漏斗）」的內容</strong></td>
+<td>只出現在 Cluster 表一次，正文完全沒展開。這是一套被文件化的 SOP，其結構對理解監控作業極有價值。</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>「historical-figure deepfakes（歷史人物深偽）」的細節</strong></td>
+<td>只出現在 Cluster 表一次。是哪些歷史人物？內容是什麼？散布到哪裡？全部未知。</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>「10 avatars」與「for each article」的張力</strong></td>
+<td>p.71 說「為每一篇文章建立 AI 頭像」，Figure 15 說「10 avatars」。最合理的調和是 10 個固定人格輪流指派，但報告未明說。</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>被停用的 Claude 帳號數量</strong></td>
+<td>報告只說 "banned the accounts"，未給數字。對照孟加拉案（p.70）明確給出「29 個輪替帳號、約十六個月」，本案的省略很明顯。</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>操作者的地理位置</strong></td>
+<td>完全未提。對照：伊朗國家案（p.62 起）明確說「從伊朗境內存取 Claude 被封鎖，所以他們用 VPN 與外國電話號碼」。MEK 主要基地在阿爾巴尼亞（Ashraf 3）與巴黎，但報告<strong>沒有</strong>確認操作者在哪裡。</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>「Viktor」是什麼</strong>（是自建平台？第三方產品？Claude 的某個功能組合？）</td>
+<td>報告只稱 "a shared AI agent platform"。<code>SKILL.md</code> / <code>LEARNINGS.md</code> 的檔名慣例暗示它至少使用了 Agent Skills 風格的架構，但<strong>這是推論，不是報告陳述</strong>。</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>是否與平台分享指標</strong></td>
+<td>本案處置段落沒有這句話，而同頁的孟加拉案有。未知是省略還是實際未分享。</td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>是否通知受害者</strong></td>
+<td>完全未提。</td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong>是否有任何 Claude 拒絕紀錄</strong></td>
+<td>全案六頁沒有出現 refuse / decline / block / safeguard 任一字詞。未知是沒發生還是未記載。</td>
+</tr>
+<tr>
+<td>12</td>
+<td><strong>行動的起訖時間</strong></td>
+<td>報告只給整體涵蓋期間（2025-12 至 2026-08）。本案的起訖時間未單獨說明。<strong>唯一的時間錨點是 Figure 16 的貼文（2026-06-06）</strong>，由本教材從波斯曆換算得出。</td>
+</tr>
+<tr>
+<td>13</td>
+<td><strong><code>@mellat_b</code> / "Parsa" 的角色</strong></td>
+<td>Figure 15 標為 Covert actor，但未說明是被複製的原帳號還是冒充用帳號，也未說明 "Parsa" 是誰的名字。<strong>本教材刻意不推測。</strong></td>
+</tr>
+<tr>
+<td>14</td>
+<td><strong>「741 handles」的來源與性質</strong></td>
+<td>只出現在 Figure 15。是 741 個受控帳號？還是 741 個被觀測到的帳號？未知。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="122">12.2 本教材的研究限制</h3>
+<ol>
+<li><strong>本案為單一來源情報。</strong> 所有關於 GTG-84006 的事實，唯一來源是 Anthropic。無任何第三方獨立證實。教材已在第 9 節明確標註。</li>
+<li><strong>圖表判讀來自 130 DPI 渲染圖。</strong> Figure 16 的英文說明文字為<strong>逐字目視判讀</strong>，小字部分（特別是公司名稱如 "Dundlod Trading FZE"、人名如 "Mehrdad Geramian Nik"）可能有字元級誤判。<strong>引用前請核對原始 PDF。</strong></li>
+<li><strong>波斯文重建。</strong> PDF 的文字擷取層把波斯文（RTL）字序反轉。本教材呈現的 «زن، زندگی، آزادی» 與 «زن، مقاومت، آزادی» 是依反轉規則還原並與已知的公開口號比對後的結果，<strong>經過重建而非直接擷取</strong>。圖片判讀（p.72 渲染圖）亦顯示 PDF 排版本身即已將波斯文顯示為亂序，這是 PDF 生成端的問題，不是本教材的判讀錯誤。</li>
+<li><strong>波斯曆換算為本教材自行計算</strong>（1405 年 Khordad 16 日 = 2026-06-06，星期六）。已與貼文上的 «شنبه»（星期六）及內文提及的 "Friday (June 5, 2026)" 三重交叉驗證，但仍應視為推算結果。</li>
+<li><strong>部分外部來源未能直接擷取</strong>：<br />
+   - Congressional Research Service R48433（HTTP 403）<br />
+   - Balkan Insight 2021 報導（HTTP 403）<br />
+   - CNN 2022-12-19（HTTP 451）<br />
+   - Axios 2026-09-12（HTTP 403）<br />
+   - IranWire（HTTP 403）<br />
+   - 自由時報 2026 報導（僅經搜尋結果引述）<br />
+   以上在第 9 節均已逐一標註為「間接引用／未直接查證」。</li>
+<li><strong>MEK/NCRI 未取得回應。</strong> 本教材未找到 MEK 或 NCRI 對本次 Anthropic 報告的任何公開回應。這對一個涉及指控的案例而言是重要的缺漏。<strong>若日後出現回應，教材應更新。</strong></li>
+<li><strong>2.6 節的政治定位整理，部分倚賴維基百科作為時間線骨架</strong>，並與 HRW、Al Jazeera、英國國會研究簡報、NCRI 官方材料交叉比對。維基百科<strong>非權威來源</strong>，關鍵日期建議在課前以原始官方文件（美國國務院 Federal Register 公告、歐盟理事會決議）覆核。</li>
+<li><strong>DISARM 技術編號未逐一標註。</strong> 第 5 節僅使用 DISARM 的戰術階段名稱，未給技術層 ID，原因是編號版本迭代頻繁且本教材無法即時核對當期發布。<strong>這是刻意的誠實標註，請授課者依當期 DISARM 官方發布補齊。</strong></li>
+<li><strong>本教材未對任何 IOC 進行任何形式的技術查詢或連線</strong>（依共用簡報的安全紅線）。因此無法提供這些帳號的現況（是否仍在運作、是否已被平台下架）。</li>
+<li><strong>關於被冒充者身分，本教材刻意不做任何調查與推測。</strong> 這是倫理選擇，不是能力限制。授課者應維持同樣的原則。</li>
+</ol>
+<h3 id="123">12.3 建議後續追蹤</h3>
+<table>
+<thead>
+<tr>
+<th>追蹤項目</th>
+<th>方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MEK/NCRI 是否公開回應</td>
+<td>監看 ncr-iran 官方聲明與主要波斯語媒體（<strong>僅觀察公開聲明，不接觸 IOC</strong>）</td>
+</tr>
+<tr>
+<td>Meta / Telegram 是否公布相關下架行動</td>
+<td>追蹤 Meta 的 Adversarial Threat Report 季度發布</td>
+</tr>
+<tr>
+<td>是否有獨立研究機構跟進</td>
+<td>追蹤 Citizen Lab、DFRLab、Graphika、Stanford Internet Observatory 的後續發布</td>
+</tr>
+<tr>
+<td>Anthropic 下一期報告是否補充本案</td>
+<td>下一份威脅情報報告</td>
+</tr>
+<tr>
+<td>台灣是否出現同型態案例</td>
+<td>與 OCF、台灣事實查核中心、台權會等組織建立通報連結</td>
+</tr>
+<tr>
+<td>「共享代理平台」是否成為 2026–2027 的主流 IO 架構</td>
+<td>這是本案最值得長期追蹤的趨勢問題</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="a">附錄 A｜一頁速查卡（可單獨印給學員）</h2>
+<pre><code>╔══════════════════════════════════════════════════════════════════╗
+║  GTG-84006  ｜ MEK/NCRI 分散式影響力行動 ｜ 共享代理平台「Viktor」 ║
+║  來源：Anthropic《Detecting and countering misuse of AI》p.70–75  ║
+╚══════════════════════════════════════════════════════════════════╝
+
+【一句話】 四名 NCRI 媒體從業者，透過一個共享 AI 代理平台，冒充一名
+          真實運動者與其伊朗境內聯絡人對話，同時對境內數十人建立
+          含「被捕紀錄」的心理側寫檔案。
+
+【關鍵數字】
+  8,400   被讀取的 Telegram 貼文（用於複製文風）
+  500+    被刮取的社群頻道 / 被滲透的 Telegram 群組
+  51,944  被分析的封存訊息（報告寫 &quot;roughly&quot;）
+  741     Telegram handle（僅見於 Figure 15）
+  30+     同時收到捏造頭條的聯絡人
+  10      合成人格頭像（僅見於 Figure 15）
+  4       任職於官方 NCRI 媒體機構的執行者（至少）
+  7       被硬編碼的 MEK/NCRI 強制來源網域
+  Two     Breakout Scale 評級
+
+【六大叢集】
+  ① 共享代理平台 Viktor  ② 即時冒充  ③ 監控與側寫
+  ④ 協同不實行為        ⑤ 合成媒體  ⑥ 媒體洗白
+
+【三個必記的教學句】
+  1. 協同從網路層搬到了語料層 → 你的偵測能力也必須搬家。
+  2. 你稽核的是對話，但行動寫在設定檔裡。
+  3. 一個 Category Two 的行動可能害死人。
+
+【最強的三個偵測指標（壽命最長）】
+  ① 強制口號變體 «زن، مقاومت، آزادی»（取代 «زن، زندگی، آزادی»）
+  ② 外連來源集合的排他性（七個網域，且只有這七個）
+  ③ 記憶檔／技能檔內容比對（SKILL.md / LEARNINGS.md）※僅 AI 供應商可見
+
+【最容易犯的三個錯】
+  ✗ 把七個 MEK/NCRI 網域加進封鎖清單（無效 + 言論審查）
+  ✗ 把 Breakout Scale 的低評級讀成「危害低」
+  ✗ 把「無法確認真實互動」讀成「沒有真實互動」
+
+【台灣對應風險】
+  台灣 NGO / 記者 / 宗教團體幹部 被冒充 → 中國境內聯絡人被套話
+  → 對話紀錄成為入罪證據（李明哲案已有前例：QQ 群組、微信、Facebook）
+
+【安全紅線】
+  🔴 不連線、不查詢、不訂閱本案任何 IOC。
+  🔴 不推測被冒充者身分。
+</code></pre>
+<hr />
+<h2 id="b">附錄 B｜與其他模組的交叉連結</h2>
+<table>
+<thead>
+<tr>
+<th>本案的哪個面向</th>
+<th>連到哪個案例</th>
+<th>頁碼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>影響力行動的整體趨勢與方法論、Breakout Scale</td>
+<td>模組 02 導論</td>
+<td>p.40–44</td>
+</tr>
+<tr>
+<td>對照：國家行為者的伊朗宣傳（Jihad al-Tabyin 教義、IRGC 頻道、Eitaa 平台）</td>
+<td>GTG-34001</td>
+<td>p.62–67</td>
+</tr>
+<tr>
+<td>對照：Category Two 的另一個案例（約 70 個假新聞站、8,913 篇文章、約 20 種語言），且以「共享部署識別碼」完成歸因</td>
+<td>GTG-54002</td>
+<td>p.47–53</td>
+</tr>
+<tr>
+<td>對照：同頁的另一個案例，處置段落明確提到與平台分享指標</td>
+<td>GTG-54006（孟加拉）</td>
+<td>p.67–70</td>
+</tr>
+<tr>
+<td>對照：Claude 拒絕但被重新提示突破，以及「防護表現不一致」的自陳</td>
+<td>GTG-14021（中國公安）</td>
+<td>p.93–98</td>
+</tr>
+<tr>
+<td>對照：Claude 拒絕側寫與宣傳，但未拒絕監控工具開發；custom skills 被變成語音複製工廠</td>
+<td>GTG-34007（伊朗雙單位）</td>
+<td>p.101–103</td>
+</tr>
+<tr>
+<td><strong>台灣直接被列為目標</strong>：台灣基督長老教會領導層、藏傳佛教、法輪功、亞洲天主教樞機</td>
+<td>GTG-14020</td>
+<td>p.89–93</td>
+</tr>
+<tr>
+<td><strong>台灣直接被列為目標</strong>：台灣政治人物、台灣媒體報導被重新框架</td>
+<td>GTG-14022</td>
+<td>p.98–101</td>
+</tr>
+<tr>
+<td>「冒充真人與機構」的整體趨勢（含冒充國家發言人與人權組織）</td>
+<td>模組 02 導論</td>
+<td>p.43</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="c2026-09-13">附錄 C｜第二階段技術深化導讀（2026-09-13 追加）</h2>
+<blockquote>
+<p>本附錄（C–H）是在保留前述全部內容的前提下，針對<strong>技術高手聽眾</strong>追加的技術深化層。第 1–12 節與附錄 A–B 完全不變；本層只補「技術上到底怎麼運作、怎麼防、怎麼寫成可部署的偵測規則」。</p>
+</blockquote>
+<p><strong>本層要回答的五個技術問題：</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>問題</th>
+<th>對應附錄</th>
+<th>對應正文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>「共享 AI 代理平台 Viktor」在技術上是什麼？它留下哪些<strong>橫跨多帳號的指紋</strong>？怎麼把它畫成綁定 741 handles / 500+ groups 的架構圖？</td>
+<td>附錄 D</td>
+<td>4.0、6.2、8.4</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Telegram 帳號「clone」與「companion device」的技術機制是什麼？被冒充者與聯絡人可以用哪些<strong>技術手段</strong>防護（帳號驗證、安全碼比對、多通道確認）？</td>
+<td>附錄 E</td>
+<td>4.2、12.1 #1/#2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>「51,944 則訊息的心理側寫」在技術上是一條什麼樣的 NLP pipeline（情感、立場、社群網路分析）？</td>
+<td>附錄 F</td>
+<td>4.1、3.3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>「專有名詞被意譯」的跨語言洗白偵測，怎麼寫成<strong>可操作規則</strong>？</td>
+<td>附錄 G</td>
+<td>6.3.3、7.2</td>
+</tr>
+<tr>
+<td>5</td>
+<td>第二階段（新配額）補到的第三方技術來源有哪些？</td>
+<td>附錄 H</td>
+<td>第 9 節</td>
+</tr>
+</tbody>
+</table>
+<p><strong>圖表覆蓋確認（依技術深化 pass 規定自檢）</strong>：本檔負責頁段 p.70–75 的所有視覺元素——<strong>Figure 15（p.73，Viktor 網絡圖）</strong>、<strong>Figure 16（p.74，Instagram 截圖）</strong>、<strong>Cluster 表（p.72–73）</strong>、<strong>IOC 表（p.74–75）</strong>——已於第 6 節（6.1–6.4）逐一完整判讀（圖片類型、圖上文字、資料流、核心訊息、課堂用法）。本附錄不重複判讀，只補技術重建（例如把 Figure 15 重畫成 Mermaid 架構圖、把「十階段漏斗」重建成 NLP pipeline）。</p>
+<p><strong>紅線不變</strong>：本層所有內容<strong>不對任何 IOC 連線、不做 DNS/VirusTotal 以外查詢、不訂閱任何帳號</strong>。所有偵測規則均為<strong>防禦性</strong>用途，且刻意寫成「偵測攻擊者」而非「執行攻擊」的形式。凡屬對真人的側寫技術，只到「架構與偵測」層，不提供可直接對真實個人施用的操作腳本。</p>
+<hr />
+<h2 id="d-ai-viktor">附錄 D｜共享 AI 代理平台「Viktor」的技術架構與指紋偵測</h2>
+<blockquote>
+<p>對應正文 4.0（階段 0）、6.2（Figure 15）、8.4（共用平台的偵測意義）。本附錄把「Viktor 是一個共享 AI 代理平台」這句話拆到技術元件層，並給出<strong>橫跨多帳號的三類指紋</strong>與可部署偵測邏輯。</p>
+</blockquote>
+<h3 id="d1-ai">D.1 「共享 AI 代理平台」在技術上是什麼</h3>
+<p>報告只說 "a shared AI agent platform, where each workspace maintained its own long-term memory files"（p.72），並在趨勢章節補充行為者「執行以固定批次呼叫 Claude 的自製軟體」（p.43："ran custom software that called Claude in fixed batches"）。把這兩句話組合，可以還原出一個相當標準的<strong>多租戶代理編排（multi-tenant agent orchestration）</strong>架構，元件如下：</p>
+<table>
+<thead>
+<tr>
+<th>元件</th>
+<th>技術職能</th>
+<th>報告依據 / 推論標記</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Model gateway（模型閘道）</strong></td>
+<td>集中管理對 Claude API 的呼叫：金鑰輪替、速率控制、把多個 workspace 的請求收斂到少數 API 憑證</td>
+<td>p.43「custom software that called Claude in fixed batches」</td>
+</tr>
+<tr>
+<td><strong>Workspace（每名行為者一個）</strong></td>
+<td>隔離的工作區，各自持有記憶檔；行為者在自己的工作區內操作</td>
+<td>p.72「each workspace maintained its own long-term memory files」</td>
+</tr>
+<tr>
+<td><strong>Persistent memory files（持久記憶檔）</strong></td>
+<td>把 doctrine / banned words / approved sources / account rules / evasion rules 寫成檔案，跨工作階段存活</td>
+<td>p.72、IOC 表 <code>SKILL.md / LEARNINGS.md</code></td>
+</tr>
+<tr>
+<td><strong>Scheduler / cron（排程器）</strong></td>
+<td>無人值守地觸發產出任務</td>
+<td>Figure 15「3 pages · one cron」</td>
+</tr>
+<tr>
+<td><strong>Doctrine corpus（教義語料，共享）</strong></td>
+<td>「strategic base data」，一次寫入、多工作區重用</td>
+<td>p.72、p.43「Markdown files containing doctrine reused almost verbatim across hundreds of sessions」</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>「Viktor 是自建平台、第三方產品、還是 Claude 某功能組合」報告未說明</strong>（見 12.1 #8）。<code>SKILL.md</code> / <code>LEARNINGS.md</code> 的檔名慣例<strong>暗示</strong>它至少採用了 Agent-Skills 風格的「技能檔 + 累積式學習檔」架構，但這是<strong>推論，不是報告陳述</strong>，教材與課堂都要如此標註。</p>
+</blockquote>
+<p><strong>與「一般聊天會話」的技術差異</strong>（這是偵測的關鍵前提）：</p>
+<table>
+<thead>
+<tr>
+<th>維度</th>
+<th>一般 Chat 會話</th>
+<th>Viktor 式代理平台</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>意圖所在</td>
+<td>在<strong>當次使用者訊息</strong>裡</td>
+<td>在<strong>數月前寫入的記憶檔</strong>裡</td>
+</tr>
+<tr>
+<td>觸發者</td>
+<td>人類即時輸入</td>
+<td>cron 排程 / 代理自迴圈</td>
+</tr>
+<tr>
+<td>呼叫形態</td>
+<td>不規則、對話式</td>
+<td><strong>固定批次、結構化輸出 schema</strong></td>
+</tr>
+<tr>
+<td>跨帳號關聯</td>
+<td>通常無</td>
+<td><strong>共用 doctrine / prompt 模板 / 記憶檔</strong></td>
+</tr>
+<tr>
+<td>逐次審查可見度</td>
+<td>高（意圖在對話裡）</td>
+<td><strong>低（該次對話只是「照排程產一篇稿」）</strong></td>
+</tr>
+</tbody>
+</table>
+<p>最後一列就是 8.2「缺口二」的技術根因：<strong>per-session 內容分類器看不到寫在記憶檔裡的意圖</strong>。</p>
+<h3 id="d2">D.2 三類「橫跨多帳號」的技術指紋</h3>
+<p>共用平台的攻擊者價值是「協同在帳號/網路層消失」（8.4.1），但<strong>協同必須發生在某個地方</strong>——它發生在<strong>文字與呼叫形態</strong>上。以下三類指紋，正是「四個互不相識、不共用基礎設施的帳號」仍能被 Anthropic 連成一個網絡（p.70）的技術依據。</p>
+<p><strong>指紋一：API 呼叫模式指紋（call-pattern fingerprint）</strong></p>
+<p>同一份 playbook 套用到所有 workspace（p.72："the same operational playbook was applied uniformly across all workspaces"），在遙測層會表現為：</p>
+<ul>
+<li><strong>固定批次結構</strong>：同報告孟加拉案（p.70）的 <code>fake_news_3.py</code> 每次輸出「15 條孟加拉語標題 + 3 篇敘事 + 15 個英文生圖 prompt」，就是這種固定 schema 的赤裸範例。本案的等價物是每個 workspace 產出<strong>同構的內容包</strong>。</li>
+<li><strong>請求節奏綁定 cron</strong>：請求時間戳呈現機器規律（低抖動、固定間隔），與人類作息不符。</li>
+<li><strong>參數同質</strong>：<code>temperature</code>、<code>max_tokens</code>、<code>stop</code> 序列、system prompt 長度分布跨帳號高度一致。</li>
+<li><strong>token 長度分布同形</strong>：輸入（貼文批次）與輸出（固定 schema）的 token 數呈現跨帳號幾乎重合的分布。</li>
+</ul>
+<p><strong>指紋二：Prompt 模板指紋（prompt-template fingerprint）</strong></p>
+<ul>
+<li><strong>人格注入模板</strong>："instructing it in Persian that it was now that person"（p.70）——「你現在就是 &lt;真實人名&gt;」＋「以下是他的 N 則貼文」是一個<strong>高辨識度的模板骨架</strong>。</li>
+<li><strong>強制清單注入</strong>：banned words 清單、approved sources 清單、mandatory slogan、<code>#OurChoiceMaryamRajavi</code> 直接嵌在 system prompt / 記憶檔裡（p.72、p.75）。</li>
+<li><strong>輸出規範注入</strong>：ZWNJ + dot/space evasion 規則（p.75）寫成可執行的後處理指令。</li>
+</ul>
+<p><strong>指紋三：記憶檔結構指紋（memory-file structure fingerprint）</strong></p>
+<ul>
+<li><strong>檔名慣例</strong>：<code>SKILL.md</code> / <code>LEARNINGS.md</code>（IOC 表 Fingerprints 列，p.75）。</li>
+<li><strong>章節結構同構</strong>：不同 workspace 的記憶檔即使措辭略有差異，<strong>章節骨架（doctrine / banned / sources / rules / evasion）一致</strong>。</li>
+<li><strong>doctrine 語料近乎逐字重用</strong>：p.43「reused almost verbatim across hundreds of sessions」——這讓<strong>內容相似度比對</strong>成為最強的跨帳號關聯手段。</li>
+</ul>
+<blockquote>
+<p><strong>三類指紋的可觀測性分層</strong>（呼應 8.4.2）：<br />
+- 指紋一（呼叫模式）：<strong>AI 供應商</strong>在遙測層可見；<strong>平台側</strong>只能看到其下游效果（發文節奏）。<br />
+- 指紋二（prompt 模板）：<strong>只有 AI 供應商</strong>看得到（prompt 不出平台）。<br />
+- 指紋三（記憶檔結構/內容）：<strong>只有 AI 供應商</strong>看得到，但<strong>偵測價值最高</strong>（見 7.2 的 10d）。</p>
+</blockquote>
+<h3 id="d3-mermaid-viktor">D.3 Mermaid 重建（一）：Viktor 平台的邏輯架構</h3>
+<p>下圖把 D.1 的元件與「人類科層在上、技術基質在下」的反直覺結構（見 2.5）畫成一張架構圖。虛線代表「所有 workspace 共用同一份記憶/教義」，這正是把彼此無關的行為者綁成一個網絡的那條線。</p>
+<pre class="mermaid">flowchart TD
+    LEAD[&quot;MEK 領導層&lt;br/&gt;（指揮關係未證實 p.71）&quot;]
+    CMT[&quot;專責委員會 committee&lt;br/&gt;approval loop p.72&quot;]
+    MGR[&quot;主管 managers → 內容校正者&lt;br/&gt;content correctors p.72&quot;]
+
+    subgraph VK[&quot;Viktor 共享 AI 代理平台&quot;]
+        GW[&quot;Model Gateway&lt;br/&gt;固定批次呼叫 Claude API (p.43)&quot;]
+        SCH[&quot;Scheduler / cron&lt;br/&gt;無人值守排程 (Fig.15)&quot;]
+        WA[&quot;Workspace A&quot;]
+        WB[&quot;Workspace B&quot;]
+        WC[&quot;Workspace C&quot;]
+        WD[&quot;Workspace D&quot;]
+        MEM[&quot;共享持久記憶層（協同基質）&lt;br/&gt;doctrine / banned words / approved sources&lt;br/&gt;account rules / evasion / SKILL.md / LEARNINGS.md&quot;]
+    end
+
+    OUT[&quot;輸出通道&lt;br/&gt;Instagram · Telegram · TV · Radio · X&quot;]
+
+    LEAD --&gt; CMT --&gt; MGR --&gt; WA
+    MGR --&gt; WB
+    MGR --&gt; WC
+    MGR --&gt; WD
+
+    MEM -.-&gt;|&quot;同一份 playbook 跨 workspace 重用&quot;| WA
+    MEM -.-&gt; WB
+    MEM -.-&gt; WC
+    MEM -.-&gt; WD
+
+    WA --&gt; GW
+    WB --&gt; GW
+    WC --&gt; GW
+    WD --&gt; GW
+    SCH --&gt; GW
+    GW --&gt; OUT
+
+    classDef mem fill:#8a1c1c,color:#ffffff,stroke:#5a0f0f;
+    classDef gw fill:#2f4b7c,color:#ffffff;
+    class MEM mem;
+    class GW,SCH gw;
+</pre>
+<p><strong>讀圖重點</strong>：把中間那條紅色「共享持久記憶層」抽掉，四個 workspace 就是四個彼此無關的使用者。<strong>是記憶層（不是任何網路工件）讓它們成為「一個行動」。</strong> 這與 Figure 15 的「虛線揭示」是同一個論點的兩種畫法。</p>
+<h3 id="d4-mermaid-viktor-741-handles-500-groups">D.4 Mermaid 重建（二）：Viktor 如何綁定 741 handles / 500+ groups</h3>
+<p>下圖是 <strong>Figure 15（p.73）的 Mermaid 忠實重建</strong>，節點依原圖圖例四色分類（機構媒體＝藍、放大器/門面＝深灰、隱蔽行為者＝暗紅、受眾/目標＝橘）。<strong>虛線＝「runs on the Viktor platform」</strong>，<strong>粗箭頭並標 <code>冒充</code> 者＝原圖的紅色 covert recruitment/impersonation 線</strong>。重點在右下角：<code>Telegram infiltration</code> 節點下綁著 <strong>741 handles · 500+ groups</strong>，四條冒充線全部收斂到 <code>People inside Iran</code>。</p>
+<pre class="mermaid">flowchart LR
+    SRC[&quot;7 source domains&lt;br/&gt;MEK / NCRI, hard-coded&quot;]:::src
+    VIK[&quot;VIKTOR&lt;br/&gt;shared agent&lt;br/&gt;（binds every actor）&quot;]:::viktor
+
+    SIMA[&quot;Simay-e Azadi&lt;br/&gt;TV node · 708K&quot;]:::inst
+    RADIO[&quot;Radio Payam Azadi&lt;br/&gt;radio · 50K+&quot;]:::inst
+    WEB[&quot;Webnegar&lt;br/&gt;TV programme&quot;]:::inst
+
+    INDEP[&quot;&#x27;Independent news&#x27;&lt;br/&gt;@tehranchekhabar19 · 173K&quot;]:::amp
+    TWOPAGE[&quot;Two-page IG + Telegram&lt;br/&gt;@javanane_shargt · 299K&quot;]:::amp
+    MULTI[&quot;Multi-page IG network&lt;br/&gt;3 pages · one cron&quot;]:::amp
+    FACTORY[&quot;Synthetic-persona factory&lt;br/&gt;10 avatars&quot;]:::amp
+
+    LIVE[&quot;Live impersonation&lt;br/&gt;@mellat_b · &#x27;Parsa&#x27;&quot;]:::covert
+    SOCK[&quot;Sockpuppet funnel&lt;br/&gt;@fwr.ir&quot;]:::covert
+    TGINF[&quot;Telegram infiltration&lt;br/&gt;741 handles · 500+ groups&quot;]:::covert
+    STU[&quot;Student infiltration&lt;br/&gt;@anti_silent&quot;]:::covert
+
+    DIAS[&quot;Diaspora audiences&quot;]:::aud
+    IRAN[&quot;People inside Iran&lt;br/&gt;（招募與即時冒充的目標）&quot;]:::aud
+
+    SRC --&gt; VIK &amp; SIMA &amp; RADIO &amp; WEB &amp; TWOPAGE
+    SIMA --&gt; INDEP &amp; TWOPAGE
+    RADIO --&gt; MULTI
+    WEB --&gt; FACTORY
+    INDEP --&gt; DIAS
+    TWOPAGE --&gt; DIAS &amp; IRAN
+    MULTI --&gt; DIAS &amp; IRAN
+    FACTORY --&gt; MULTI
+
+    VIK -.-&gt; INDEP &amp; TWOPAGE &amp; MULTI &amp; FACTORY
+    VIK -.-&gt; LIVE &amp; SOCK &amp; TGINF &amp; STU
+
+    LIVE ==&gt;|冒充| IRAN
+    SOCK ==&gt;|招募| IRAN
+    TGINF ==&gt;|滲透| IRAN
+    STU ==&gt;|滲透| IRAN
+
+    classDef src fill:#9aa0a6,color:#111;
+    classDef viktor fill:#3a3a3a,color:#fff,stroke:#c0392b,stroke-width:3px;
+    classDef inst fill:#4a90d9,color:#fff;
+    classDef amp fill:#3a3a3a,color:#fff;
+    classDef covert fill:#8a1c1c,color:#fff;
+    classDef aud fill:#e08a2e,color:#111;
+</pre>
+<p><strong>這張圖的技術教學價值</strong>（補 6.2 未展開的部分）：</p>
+<ol>
+<li><strong><code>741 handles</code> 是「維運規模」而非「刮取規模」</strong>。正文只說「刮取超過 500 個社群頻道」（自動化可完成），但 741 個 Telegram handle 要有人<strong>養號</strong>（註冊、過冷啟動、避免被判定為 bot）。741 這個數字只出現在這張圖上（見 6.2.5），是全案<strong>人力密集度</strong>的最硬指標。</li>
+<li><strong>虛線是「單元化組織」的數位化身</strong>（呼應 8.4.1）。每個暗紅節點是一個「隱蔽單元」，它們<strong>彼此沒有連線</strong>，只各自連到 VIKTOR。傳統地下組織的「聯絡官」在這裡被一個<strong>代理平台</strong>取代——這是本案最值得記住的一句話。</li>
+<li><strong>四條冒充線的收斂點是道德陳述</strong>：網絡的公開面（藍色電視廣播 + 深灰 IG）看似媒體工作，隱蔽面（暗紅）<strong>全部指向對境內真人的直接接觸</strong>。</li>
+</ol>
+<h3 id="d5">D.5 記憶檔比對：把「指紋三」寫成偵測演算法</h3>
+<p>跨帳號記憶檔相似度是 8.4.2 表中價值最高、且<strong>只有 AI 供應商做得到</strong>的一項。技術上這是一個標準的<strong>近重複偵測（near-duplicate detection）</strong>問題，成熟工具鏈如下：</p>
+<table>
+<thead>
+<tr>
+<th>相似型態</th>
+<th>適用演算法</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>逐字/近逐字重用（doctrine「almost verbatim」）</td>
+<td><strong>MinHash + LSH</strong></td>
+<td>對記憶檔切 shingle（如 5-gram），估計 Jaccard 相似度；LSH 讓「四個帳號兩兩比對」變成次線性</td>
+</tr>
+<tr>
+<td>局部改寫、順序調動</td>
+<td><strong>SimHash（漢明距離）</strong></td>
+<td>對抗小幅編輯</td>
+</tr>
+<tr>
+<td>語意等價但換句話說（換語言、換用詞）</td>
+<td><strong>句向量餘弦相似度</strong>（embedding cosine）</td>
+<td>抓「意思一樣、字不一樣」的教義段落</td>
+</tr>
+<tr>
+<td>結構同構（章節骨架一致）</td>
+<td><strong>AST/標題樹比對</strong></td>
+<td>比對 Markdown 標題層級序列，即使內文不同也能命中</td>
+</tr>
+</tbody>
+</table>
+<p><strong>偵測邏輯（illustrative pseudocode，非任何既有規則集；用於 AI 供應商側遙測）</strong>：</p>
+<pre><code class="language-python"># 目的：在互不相識、不共用帳號基礎設施的使用者之間，
+#       找出共用同一份「記憶檔／技能檔」的協同群（Viktor 式協同基質）。
+# 資料：每個 workspace 的記憶檔文字 memfiles[account_id] = text
+# 注意：這是防禦性偵測邏輯，只比對「攻擊者設定檔的相似度」，不觸及任何內容產出。
+
+from datasketch import MinHash, MinHashLSH   # 示意用途
+
+def shingles(text, k=5):
+    toks = normalize(text).split()
+    return {&quot; &quot;.join(toks[i:i+k]) for i in range(len(toks)-k+1)}
+
+lsh = MinHashLSH(threshold=0.6, num_perm=128)
+sigs = {}
+for acct, text in memfiles.items():
+    m = MinHash(num_perm=128)
+    for s in shingles(text):
+        m.update(s.encode())
+    sigs[acct] = m
+    lsh.insert(acct, m)
+
+# 找出「內容高度相似」但「帳號/IP/付款各自獨立」的群集 → 疑似共享協同基質
+clusters = {a: lsh.query(sigs[a]) for a in sigs}
+for a, near in clusters.items():
+    if len(near) &gt; 1 and not shares_infrastructure(near):   # 關鍵：排除已知共用基礎設施者
+        flag_coordination_substrate(near)                   # 這正是 Anthropic 在本案做到的事
+</code></pre>
+<p><strong>其他可部署偵測（依資料可見度分兩側）</strong>：</p>
+<p><strong>(a) AI 供應商側</strong>——偵測「人格注入 + 大量他人語料攝入」（對應 5.2 的 TTP #5/#6，正文標為框架缺口）：</p>
+<pre><code class="language-yaml"># Sigma 風格（示意；AI 平台遙測目前無標準 Sigma 分類，需自建 taxonomy）
+title: Persona-injection with bulk single-author ingestion (impersonation setup)
+logsource:
+  product: ai_agent_platform
+  category: prompt_and_memory
+detection:
+  persona_injection:
+    system_or_memory|re: '(?i)(you are now|從現在起你是|شما اکنون).{0,40}(this person|that person|&lt;PERSON_NAME&gt;)'
+  bulk_single_author:
+    ingested_docs_from_single_identity|gt: 1000     # 本案為約 8,400 則
+    request|contains: 'copy (his|her|their) writing style'
+  condition: persona_injection and bulk_single_author
+level: high
+falsepositives:
+  - 合法的作者風格研究、授權的內容代筆（需人工判讀意圖與同意）
+</code></pre>
+<p><strong>(b) 平台側</strong>——偵測「3 pages · one cron」的排程相關性（對應 5.2 TTP #10，不需 AI 供應商配合）：</p>
+<pre><code class="language-kql">// KQL 示意：跨帳號發文時間戳的低熵 / 高相關 = 同一 cron 驅動
+SocialPosts
+| where Timestamp between (startTime .. endTime)
+| summarize posts=count(), times=make_list(Timestamp) by AccountId
+| extend interval_entropy = series_entropy(deltas(sort_asc(times)))
+| where interval_entropy &lt; 1.5           // 發文間隔異常規律（人類通常較高）
+| join kind=inner (/* 跨帳號兩兩計算發文時間戳的互相關 */) on $left.AccountId
+| where cross_account_timestamp_corr &gt; 0.8
+| project AccountId, interval_entropy, cross_account_timestamp_corr
+</code></pre>
+<blockquote>
+<p><strong>課堂用法</strong>：把 D.2 的三類指紋與 D.5 的兩側偵測連起來，就是 5.3「三層偵測架構」中<strong>第三層（AI 使用層）</strong>的具體長相——目前沒有現成框架，本附錄給的是可以照著自建的模板。</p>
+</blockquote>
+<hr />
+<h2 id="etelegram">附錄 E｜Telegram 帳號冒充的技術機制與防護</h2>
+<blockquote>
+<p>對應正文 4.2（即時冒充）、4.2.2（防護檢查表）、12.1 #1/#2（clone 路徑與 posts/private-messages 矛盾）。本附錄把「clone the activist's personal Telegram account」拆到協定層，回答「哪一種 clone？」以及「被冒充者與聯絡人能用什麼技術手段防？」。</p>
+</blockquote>
+<h3 id="e1-telegram">E.1 Telegram 安全模型（防護的技術前提）</h3>
+<p>要判斷「clone」是哪一種、以及防護該打在哪，必須先理解 Telegram 的三個技術事實（來源見附錄 H）：</p>
+<table>
+<thead>
+<tr>
+<th>技術事實</th>
+<th>內容</th>
+<th>對本案的意義</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cloud chats 非端對端加密</strong></td>
+<td>一般聊天（含私訊）採 client-server 加密，訊息與解密金鑰<strong>都存在 Telegram 伺服器</strong>，任何一個<strong>已授權的 session</strong> 都能讀取完整歷史</td>
+<td>只要取得一個授權 session，就能讀到<strong>私訊</strong>——這正是判斷 clone 路徑的關鍵</td>
+</tr>
+<tr>
+<td><strong>多 session / 多裝置模型</strong></td>
+<td>MTProto 為每個裝置/session 以 Diffie-Hellman 建立一把 2048-bit 授權金鑰；一個帳號可同時有<strong>多個 session</strong>；Active Sessions 會列出每個 session 的裝置名、App、IP</td>
+<td>攻擊者的裝置可以成為<strong>額外一個授權 session</strong>（＝「companion / linked device」），與本人並存且各自獨立</td>
+</tr>
+<tr>
+<td><strong>Secret chats 才是端對端加密</strong></td>
+<td>E2EE、綁定單一裝置、不進雲端、<strong>無法從其他 session 讀取</strong></td>
+<td>若受害者用 Secret chat，冒充者即使接管帳號也讀不到那段歷史</td>
+</tr>
+<tr>
+<td><strong>2FA「雲端密碼」</strong></td>
+<td>在新裝置登入時，除簡訊 OTP 外<strong>另需一組雲端密碼</strong></td>
+<td>這是阻斷「僅靠簡訊驗證碼接管」的關鍵防線</td>
+</tr>
+</tbody>
+</table>
+<h3 id="e2-clone-121-1">E.2 三種「clone」路徑的技術拆解（強化 12.1 #1）</h3>
+<p>報告只說 "clone the activist's personal Telegram account"（p.70），未說明路徑。技術上只有三條路，防護方式<strong>完全不同</strong>：</p>
+<pre class="mermaid">flowchart TD
+    Q{&quot;要取得的是&lt;br/&gt;私訊 or 只有公開內容？&quot;}
+
+    Q --&gt;|&quot;需要讀到私訊 / 以本人身分收發&quot;| A[&quot;路徑 A：帳號接管 (Account Takeover)&quot;]
+    Q --&gt;|&quot;只需公開貼文 + 外觀相似&quot;| B[&quot;路徑 B：仿冒帳號 (Look-alike)&quot;]
+    Q --&gt;|&quot;只需公開語料重建人格&quot;| C[&quot;路徑 C：內容匯出重建 (Export &amp; Rebuild)&quot;]
+
+    A --&gt; A1[&quot;簡訊 OTP 攔截（SS7 / SIM swap / 電信商配合）&lt;br/&gt;或 infostealer 竊取 session&quot;]
+    A1 --&gt; A2[&quot;把攻擊者裝置加為新授權 session&lt;br/&gt;（companion / linked device）&quot;]
+    A2 --&gt; A3[&quot;可讀完整 cloud-chat 歷史（含私訊）&lt;br/&gt;可以本人身分即時收發&quot;]
+
+    B --&gt; B1[&quot;註冊近似 handle / 顯示名 / 頭像&lt;br/&gt;（多一底線、l↔I、零寬字元）&quot;]
+    B1 --&gt; B2[&quot;讀不到私訊；只能複製公開貼文&lt;br/&gt;靠社交相似度取信&quot;]
+
+    C --&gt; C1[&quot;以 API / Telethon 匯出公開頻道貼文&quot;]
+    C1 --&gt; C2[&quot;讀不到私訊；重建文風後另起帳號扮演&quot;]
+
+    classDef sev fill:#8a1c1c,color:#fff;
+    class A,A1,A2,A3 sev;
+</pre>
+<p><strong>判定本案最可能落在哪一條——用文件內部矛盾當證據</strong>：</p>
+<ul>
+<li>p.70 說讀取 8,400 則 <strong>Telegram posts（貼文）</strong>；</li>
+<li>p.72 Cluster 表卻說從 <strong>private messages（私訊）</strong> 複製其 voice。</li>
+</ul>
+<p><strong>私訊只有路徑 A 拿得到</strong>（E.1 第一列）。因此「private messages」這個措辭<strong>強烈指向帳號接管</strong>，而非仿冒或公開匯出。若屬實，案件性質嚴重得多：不只是「有人假扮他」，而是「<strong>他的帳號被完全控制、他的私訊全被讀取、冒充者能以他本人身分即時收發</strong>」。這正是 12.1 #2 被列為「最重要未解問題」的技術理由——<strong>它決定了被冒充者能不能自救</strong>（接管可透過終止 session + 2FA 救回；仿冒則要靠平台下架）。</p>
+<h3 id="e3-companion-device">E.3 「companion device」與即時對話的技術機制</h3>
+<p>任務指定要講的 <strong>companion device</strong>，在 Telegram 語境即「額外一個授權 session / linked device」。在路徑 A 下，攻擊者裝置成為一個<strong>與本人並存的授權 session</strong>：它即時鏡射所有 cloud chats、能以本人身分送出訊息，而本人端<strong>唯一可見的訊號</strong>是「新裝置登入」通知與 Active Sessions 多出一列。下面的時序圖把「Viktor 代理 → companion session → 境內聯絡人」這條即時對話鏈畫出來（對應 4.2.1 的機制鏈，但這裡是<strong>技術層</strong>）。</p>
+<pre class="mermaid">sequenceDiagram
+    autonumber
+    participant OP as 操作者（NCRI 媒體人員）
+    participant VK as Viktor 代理（人格注入）
+    participant TG as Telegram（companion session）
+    participant CT as 境內聯絡人（不知情）
+    participant DB as 側寫資料庫
+
+    OP-&gt;&gt;VK: 注入人格「你現在就是本人」+ 讀 8,400 則貼文
+    VK-&gt;&gt;VK: 建立文風模型 / 維持人格一致性
+    Note over TG: 攻擊者裝置＝額外授權 session（companion device）
+    CT-&gt;&gt;TG: 以為在跟本人說話，主動私訊
+    TG-&gt;&gt;VK: 轉入代理
+    VK-&gt;&gt;TG: 即時生成「像本人」的回應
+    TG-&gt;&gt;CT: 以本人身分送出
+    VK-&gt;&gt;CT: 順勢 elicitation（你在哪個城市？還有誰一起？）
+    CT--&gt;&gt;DB: 回應被記錄（城市/職業/立場/被捕紀錄）
+    VK-&gt;&gt;TG: 對 30+ 聯絡人同步群發捏造頭條
+    Note over DB: 產出＝現成鎮壓清單（見 3.3 / 4.2.1）
+</pre>
+<blockquote>
+<p><strong>技術核心</strong>：因為 cloud chat 非 E2EE、且 companion session 與本人並存，<strong>這段對話對本人幾乎不可見</strong>（除非他去看 Active Sessions）。這解釋了為什麼「聯絡人不知道在跟 AI 說話」（p.70）在技術上是<strong>預設狀態</strong>，而非攻擊者額外做了什麼隱藏。</p>
+</blockquote>
+<h3 id="e4">E.4 防護技術（被冒充者與聯絡人，可直接部署）</h3>
+<p>把 4.2.2 的檢查表補到<strong>技術機制層</strong>。分三組：帳號驗證、安全碼比對、多通道確認。</p>
+<p><strong>(1) 帳號驗證 / 接管偵測（給可能被冒充者）</strong></p>
+<table>
+<thead>
+<tr>
+<th>技術措施</th>
+<th>防的是哪條路徑</th>
+<th>機制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>啟用 2FA 雲端密碼</strong></td>
+<td>路徑 A（OTP 接管）</td>
+<td>讓「只有簡訊 OTP」無法加新 session——這是伊朗接管案（9.3D）反覆出現的弱點</td>
+</tr>
+<tr>
+<td><strong>定期稽核 Active Sessions 並終止陌生 session</strong></td>
+<td>路徑 A（companion device）</td>
+<td>「新裝置登入」通知 + Active Sessions 多一列，是接管<strong>最早、且往往唯一</strong>的訊號；發現即 <code>Terminate</code></td>
+</tr>
+<tr>
+<td><strong>關閉「以手機號碼搜尋到我」</strong></td>
+<td>路徑 B（仿冒鎖定）</td>
+<td>降低被批量鎖定與比對的機會</td>
+</tr>
+<tr>
+<td><strong>端點防護（防 infostealer）</strong></td>
+<td>路徑 A（session 竊取）</td>
+<td>session token 被竊可繞過密碼與 2FA；端點失守則一切驗證失效</td>
+</tr>
+<tr>
+<td><strong>高風險歷史對話用 Secret chat</strong></td>
+<td>路徑 A（讀私訊）</td>
+<td>Secret chat 為 E2EE、綁定裝置、不進雲端，接管者讀不到</td>
+</tr>
+</tbody>
+</table>
+<p><strong>(2) 安全碼比對（safety number）——用對，也知道它救不了什麼</strong></p>
+<p>把高風險對話遷到 <strong>Signal</strong> 並比對 <strong>safety number</strong>：</p>
+<ul>
+<li><strong>它保護什麼</strong>：safety number 是雙方金鑰的指紋。<strong>帶外</strong>比對一致，即證明中間沒有 MITM/金鑰替換（擋住路徑 B 的仿冒與中間人）。</li>
+<li><strong>它不保護什麼</strong>（EFF SSD / Signal 官方明講）：safety number <strong>不驗證真實世界身分</strong>，也<strong>不防帳號接管或端點被控</strong>。若對方裝置本身被控，金鑰是「真的」，safety number 依然一致。</li>
+<li><strong>正確用法</strong>：safety number 比對（防 MITM）<strong>＋</strong> 共享秘密挑戰（防真人身分冒充）<strong>＋</strong> 端點安全（防接管），三者缺一不可。單靠 safety number 會產生虛假的安全感。</li>
+</ul>
+<p><strong>(3) 多通道 / 帶外確認協定（out-of-band，可直接發給高風險聯絡人對）</strong></p>
+<p>下面是一個<strong>可實際執行</strong>的驗證協定（比 4.2.2 的原則更具體）：</p>
+<pre><code>【高風險聯絡人對：帶外驗證協定 v1】
+前提：文風不再是身分證明（本案 8,400 則貼文已證），故驗證不看「像不像他」。
+
+A. 事前（雙方見面或已驗證通道各做一次）
+   1) 交換 Signal safety number，帶外（電話/當面）唸一致 → 存證。
+   2) 約定「驗證挑戰」：一件雙方共同經歷、且從未出現在任何網路平台的小事。
+   3) 約定「脅迫暗號 duress code」：一句自然、但代表「我不安全」的話。
+      必須是「主動說出某句」（可執行），不可是「不說某句」（壓力下難執行）。
+   4) 約定第二通道（不同生態系，例：Telegram↔Signal，不可 Telegram↔Telegram）。
+
+B. 觸發即驗（出現下列任一，先停、再驗）
+   - 熟人帳號突然問身分性問題（位置/同伴/組織關係/被捕經歷）
+   - 要你轉傳未署名突發新聞、或群發給你的聯絡人（＝本案 30+ 群發模式）
+   - handle/顯示名/頭像有細微差異（底線、l↔I、零寬字元）
+
+C. 驗證動作
+   - 發出「驗證挑戰」問題；正確且具體回答才續談（AI 會編，但編不出未上網的共同記憶）。
+   - 有疑慮走第二通道語音確認。
+   - 收到脅迫暗號：立即停止索取任何敏感資訊，啟動失聯應變（見 10.4.3）。
+</code></pre>
+<blockquote>
+<p><strong>為什麼「共享秘密挑戰」是對 AI 冒充的最終防線</strong>：附錄 F 會說明，AI 能從公開語料重建文風、立場、甚至心理側寫，但它<strong>無法知道「從未被寫到網路上的共同記憶」</strong>。這是資訊論層次的界線——沒有語料，就沒有模型。<strong>把驗證錨定在「不存在於任何語料的秘密」上，是唯一不被規模化攻擊侵蝕的方法。</strong></p>
+</blockquote>
+<hr />
+<h2 id="f51944-nlp-pipeline">附錄 F｜51,944 則訊息的心理側寫技術（大規模社群分析 NLP pipeline）</h2>
+<blockquote>
+<p>對應正文 4.1（監控與側寫）、3.3（五個分群維度，含 arrest history）、Cluster 表「A ten-stage funnel」。報告<strong>沒有</strong>展開這十個階段（12.1 #3）。本附錄把它<strong>重建成一條標準 NLP pipeline</strong>（明確標註為教學重建，非行為者實際階段），並給防禦視角的偵測邏輯。</p>
+</blockquote>
+<h3 id="f1-nlp-pipeline">F.1 把「十階段漏斗」重建為 NLP pipeline（教學重建）</h3>
+<p>報告給了兩個硬約束：輸入是「500+ 頻道刮取、約 51,944 則封存訊息」，輸出是「對數十名具名個人的心理側寫檔案 + 依 city/age/occupation/political alignment/arrest history 分群」（p.71）。能把前者變成後者的，是下面這條在 2026 年完全標準、元件皆為現成開源的 pipeline：</p>
+<pre class="mermaid">flowchart TD
+    S1[&quot;1 擷取 Ingestion&lt;br/&gt;刮取 500+ 頻道 · 約 51,944 則訊息&quot;]
+    S2[&quot;2 正規化 / 語言辨識&lt;br/&gt;Persian, ZWNJ 正規化, 去表情&quot;]
+    S3[&quot;3 去重 + 對話串重建&lt;br/&gt;threading / dedup&quot;]
+    S4[&quot;4 具名實體辨識 NER&lt;br/&gt;人名 / 城市 / 組織 → 實體解析&quot;]
+    S5[&quot;5 地理定位推論&lt;br/&gt;city from text + metadata&quot;]
+    S6[&quot;6 情感分析 Sentiment&quot;]
+    S7[&quot;7 立場偵測 Stance&lt;br/&gt;對政權/君主派/MEK 的立場（target-specific）&quot;]
+    S8[&quot;8 心理側寫評分&lt;br/&gt;Big Five / 價值觀 / ASPECTS（from text）&quot;]
+    S9[&quot;9 風險屬性標記&lt;br/&gt;occupation / political alignment / arrest history 被捕紀錄&quot;]
+    S10[&quot;10 社群網路分析 SNA&lt;br/&gt;互動圖 · 中心性 · 社群偵測&quot;]
+    OUT[&quot;輸出：具名個人心理側寫檔案&lt;br/&gt;＋ 五維分群（見 3.3）&quot;]
+
+    S1--&gt;S2--&gt;S3--&gt;S4--&gt;S5--&gt;S6--&gt;S7--&gt;S8--&gt;S9--&gt;S10--&gt;OUT
+
+    classDef danger fill:#8a1c1c,color:#fff;
+    class S9 danger;
+</pre>
+<blockquote>
+<p>⚠️ <strong>這十階段是本教材的合理重建，不是報告陳述的實際階段</strong>（報告只給了「ten-stage funnel」這個名詞）。列出它的目的是讓技術聽眾理解「把 51,944 則訊息變成鎮壓清單」在工程上需要哪些現成元件，從而知道<strong>每個元件可以在哪裡被偵測或阻斷</strong>。</p>
+</blockquote>
+<h3 id="f2-nlp">F.2 各 NLP 任務的技術內容與<strong>可靠度警語</strong></h3>
+<table>
+<thead>
+<tr>
+<th>階段</th>
+<th>主流技術（2026）</th>
+<th>可靠度 / 偏誤警語（防禦與倫理都需要）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>情感 Sentiment</td>
+<td>詞典法 → 微調 transformer（RoBERTa/多語 BERT）</td>
+<td>諷刺、方言、code-switching 易誤判</td>
+</tr>
+<tr>
+<td>立場 Stance</td>
+<td><strong>target-specific</strong> 立場分類（與情感不同：「罵政權」對 MEK 是正面立場，情感卻是負面）</td>
+<td>需標註「對誰的立場」；跨目標遷移差</td>
+</tr>
+<tr>
+<td>心理側寫 Big Five</td>
+<td>文字→人格：微調 BERT/RoBERTa、log-odds + Dirichlet 先驗、TPoT 文本預選</td>
+<td><strong>效果量普遍偏低</strong>（社群足跡預測 Big Five 的 meta-analysis 相關係數多在 0.2–0.4）。這對攻防都重要：<strong>攻擊者拿到的是噪音很大的標籤</strong>，但<strong>在高鎮壓法域，即使是錯的側寫也足以致害</strong>——因為後果不取決於準確度，而取決於當局是否採信</td>
+</tr>
+<tr>
+<td>地理定位</td>
+<td>NER + gazetteer + 語言/metadata 線索</td>
+<td>自述地點可偽；但在監控語境「宣稱在哪」本身即風險</td>
+</tr>
+<tr>
+<td>社群網路分析 SNA</td>
+<td>互動圖 + 中心性（degree/betweenness/eigenvector）+ 社群偵測（Louvain/Leiden）+ 時序共現（latent coordination networks）</td>
+<td>「誰跟誰說話」比內容更難抵賴，是<strong>最危險的一層</strong>：它把個人放進一張關係圖，一人被捕即牽連整群</td>
+</tr>
+</tbody>
+</table>
+<p><strong>arrest-history 為什麼在技術上「順手」且極危險</strong>（強化 3.3）：被捕紀錄多半<strong>由當事人或其社群自己在對話中提及</strong>（「我上次被抓之後……」）。因此它不需要外部資料庫，只需在階段 4（NER）+ 事件抽取（event extraction）中，把「拘留/判刑/獲釋」這類事件掛到具名個人上即可。<strong>輸出是一張結構化表，欄位恰好是伊朗當局起訴 baghi 所需的一切</strong>（見 9.3C 的實際處決紀錄）。這就是 Cluster 表把它列為該叢集「最嚴重元素」的技術理由。</p>
+<h3 id="f3">F.3 防禦視角：偵測「大規模非合意側寫」的請求形態</h3>
+<p>這一層的偵測<strong>只有 AI 供應商做得到</strong>（側寫發生在平台上游），且落在 5.2 標記為「框架缺口」的 TTP #2/#3。可部署邏輯：</p>
+<pre><code class="language-yaml"># Sigma 風格（示意）：偵測「大量攝入他人私訊 → 要求輸出人格/政治/風險評分」
+title: Bulk non-consensual profiling of named individuals (surveillance funnel)
+logsource: { product: ai_agent_platform, category: prompt_and_memory }
+detection:
+  bulk_pii_ingest:
+    ingested_messages|gt: 5000
+    contains_named_nonpublic_individuals: true
+  profiling_ask|re: '(?i)(political alignment|stance|psychographic|personality|arrest|detention|前科|被捕|立場|政治傾向)'
+  high_risk_jurisdiction|in: ['IR','CN','...']      # 高鎮壓法域加權
+  condition: bulk_pii_ingest and profiling_ask
+level: critical
+falsepositives:
+  - 學術輿情研究（需 IRB/同意證明）；合法選民分析（需去識別化）
+note: &gt;
+  偵測價值受「架構性缺口二」限制：若側寫是隨時間寫進記憶檔、分散在多次排程產出，
+  per-session 分類器可能看不到全貌。需輔以跨 session 的記憶檔內容稽核（見附錄 D.5）。
+</code></pre>
+<blockquote>
+<p><strong>課堂連結</strong>：F.3 與 D.5(a) 合起來，就是「AI 使用層偵測」對<strong>冒充</strong>（附錄 E）與<strong>側寫</strong>（附錄 F）兩種傷害的具體規則。兩者都吃同一個架構性限制——意圖在記憶檔裡、不在對話裡（8.2 缺口二）——所以都必須加上「跨 session 記憶檔稽核」才完整。</p>
+</blockquote>
+<hr />
+<h2 id="g">附錄 G｜跨語言洗白偵測——可操作規則庫</h2>
+<blockquote>
+<p>對應正文 6.3.3（線索三：Trade Bank / Nation Bank 的專有名詞意譯）、7.2（該指標「高、長壽命、可移植中文情境」）。本附錄把該發現<strong>強化為可部署規則</strong>，並擴充到中文情境。</p>
+</blockquote>
+<h3 id="g1">G.1 原理：機器翻譯管線的結構性破綻</h3>
+<p>未經人工校對的機器翻譯（MT）在<strong>專有名詞</strong>上有兩種穩定破綻，兩者可分別偵測：</p>
+<table>
+<thead>
+<tr>
+<th>破綻型態</th>
+<th>本案實例</th>
+<th>應為</th>
+<th>機制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>具名實體被「意譯」</strong></td>
+<td>"Trade Bank" / "Nation Bank"</td>
+<td>Bank <strong>Tejarat</strong>（تجارت＝貿易）/ Bank <strong>Melli</strong>（ملی＝國家）</td>
+<td>MT 把機構名當普通名詞翻其<strong>字面意義</strong>，而非音譯/保留</td>
+</tr>
+<tr>
+<td><strong>人名音譯回譯失真</strong></td>
+<td>"Scott <strong>Bassnet</strong>"</td>
+<td>Scott <strong>Bessent</strong></td>
+<td>英→波斯音譯→英回譯，母音/子音漂移</td>
+</tr>
+</tbody>
+</table>
+<p><strong>為什麼這是好指標</strong>（呼應 7.2）：它是<strong>機器翻譯管線的結構性副產品</strong>——除非改用人工校對（＝放棄規模），否則會持續出現。跨語言通用、零特權、可跨平台執行。</p>
+<h3 id="g2">G.2 三種可部署偵測法</h3>
+<pre class="mermaid">flowchart LR
+    IN[&quot;可疑英文內容&lt;br/&gt;（自稱獨立媒體 / 疑似洗白）&quot;]
+    M1[&quot;法一：Gazetteer 對照&lt;br/&gt;比對『意譯形式』黑名單&quot;]
+    M2[&quot;法二：往返回譯&lt;br/&gt;EN→目標語→EN，量 NER 保存度&quot;]
+    M3[&quot;法三：NER + 消歧&lt;br/&gt;專有名詞無法解析到已知實體&quot;]
+    SCORE[&quot;加權彙總&lt;br/&gt;（單一命中＝線索，不是判決）&quot;]
+    OUT[&quot;標記：疑似 MT 洗白管線&lt;br/&gt;轉人工 + 併其他指紋（來源集合/口號/排程）&quot;]
+
+    IN --&gt; M1 --&gt; SCORE
+    IN --&gt; M2 --&gt; SCORE
+    IN --&gt; M3 --&gt; SCORE
+    SCORE --&gt; OUT
+</pre>
+<p><strong>法一：Gazetteer（機構/人名對照表）比對——最低成本、最高精確</strong></p>
+<p>維護一份「標準譯名 vs. 異常字面意譯」對照表，在英文語料中命中「異常字面形式」即為訊號：</p>
+<pre><code class="language-yaml"># gazetteer_mt_laundering.yaml（示意；可持續擴充）
+# canonical = 該實體公認的英文名；literal_anomaly = MT 常見的字面意譯誤形
+persian:
+  - canonical: &quot;Bank Melli&quot;        # ملی = 國家/民族
+    literal_anomaly: [&quot;National Bank&quot;, &quot;Nation Bank&quot;]
+  - canonical: &quot;Bank Tejarat&quot;      # تجارت = 貿易
+    literal_anomaly: [&quot;Trade Bank&quot;, &quot;Commerce Bank&quot;]
+  - canonical: &quot;Bank Sepah&quot;        # سپاه = 軍團
+    literal_anomaly: [&quot;Corps Bank&quot;, &quot;Army Bank&quot;]
+chinese:
+  - canonical: &quot;Taiwan Affairs Office&quot;       # 國台辦（官方英文）
+    literal_anomaly: [&quot;National Taiwan Office&quot;, &quot;Country Taiwan Office&quot;]
+  - canonical: &quot;People's Daily&quot;              # 人民日報（官方英文）
+    literal_anomaly: [&quot;People Daily&quot;, &quot;Masses Daily&quot;, &quot;Renmin Daily&quot;]
+  - canonical: &quot;United Front Work Department&quot; # 統戰部
+    literal_anomaly: [&quot;United Battlefront Department&quot;, &quot;Unified War Department&quot;]
+</code></pre>
+<pre><code class="language-python"># 偵測（示意）：命中『異常字面形式』且未同時出現『公認名』→ 高度可疑
+def flag_literal_mistranslation(text, gazetteer):
+    hits = []
+    for lang, entries in gazetteer.items():
+        for e in entries:
+            for bad in e[&quot;literal_anomaly&quot;]:
+                if re.search(rf'\b{re.escape(bad)}\b', text, re.I) \
+                   and e[&quot;canonical&quot;].lower() not in text.lower():
+                    hits.append((lang, bad, e[&quot;canonical&quot;]))
+    return hits   # 非空即轉人工；命中數可作為分數
+</code></pre>
+<p><strong>法二：往返回譯（round-trip back-translation）</strong>——對付未收錄於 gazetteer 的實體</p>
+<p>將可疑英文 <code>EN → 目標語 → EN</code>，比對回譯前後的<strong>專有名詞集合</strong>（NER）：原生英文報導的專有名詞往返後高度保存；經 MT 洗白的內容，其專有名詞往返後<strong>編輯距離大、實體遺失多</strong>（學界方法，見附錄 H：back-translation MT 偵測、NER+back-translation 錯誤偵測）。</p>
+<p><strong>法三：NER + 實體消歧</strong>——專有名詞經 NER 抽出後<strong>無法連結到任何已知實體</strong>（OOV），但其字面語意恰好等於某機構名的直譯 → 訊號。</p>
+<h3 id="g3">G.3 局限與誤報控制（務必連同規則一起教）</h3>
+<ul>
+<li><strong>合法媒體也可能用字面譯名</strong>：例如 Xinhua 的歷史英文名就是字面的 "New China News Agency"。因此 gazetteer 必須區分「<strong>公認可接受形式</strong>」與「<strong>異常誤形</strong>」，且<strong>單一命中只當線索、不當判決</strong>。</li>
+<li><strong>正確用法是「併訊號」</strong>：把 G 的「MT 洗白痕跡」與 D 的「來源集合排他性」、「口號變體」、「排程指紋」<strong>併成一個加權判斷</strong>（呼應 8.4.4 的可移植清單）。任何一項單獨都可能誤傷,合起來才穩。</li>
+<li><strong>這條規則證偽的是「原生獨立報導」的宣稱，不是指控特定組織</strong>——與 7.2 對「七個網域」的紅線同理：它讓公民社會能<strong>在不指名幕後</strong>的情況下，對「這內容是機器翻譯洗白來的」給出可辯護的判斷。</li>
+</ul>
+<hr />
+<h2 id="hwebsearch2026-09-14">附錄 H｜第二階段新增第三方技術來源（WebSearch，2026-09-14）</h2>
+<blockquote>
+<p>依技術深化 pass 規定，用新配額補足第一階段缺的技術來源。每條標明性質。與第 9 節同樣的紀律：<strong>技術方法來源</strong>（獨立）與<strong>本案報導</strong>（多為僅引述 Anthropic）分開標。</p>
+</blockquote>
+<p><strong>H.1 本案的新增第三方報導（判定：單一來源狀態不變）</strong></p>
+<p>第二階段重新檢索確認：截至 2026-09-14，仍<strong>無任何第三方獨立證實</strong> GTG-84006 / Viktor 平台的存在或其 IOC。新出現的報導（fonearena、Cyber Kendra、Eurasia Review、Cognativ、askwho substack 等）<strong>全部僅轉述 Anthropic 報告</strong>，未提供獨立查證。<strong>第 9.1 節的「單一來源情報」判定維持不變。</strong> 涵蓋最完整者仍為 Iran International（en/202609131676，見 9.2 #4，並注意其對 MEK 的來源偏誤）。</p>
+<p><strong>H.2 Telegram 冒充機制與防護（附錄 E）</strong></p>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Telegram 官方，"Active Sessions and Two-Step Verification"</td>
+<td>https://telegram.org/blog/sessions-and-2-step-verification</td>
+<td>一手技術（平台官方）</td>
+</tr>
+<tr>
+<td>Telegram 官方，MTProto / FAQ for the Technically Inclined</td>
+<td>https://core.telegram.org/mtproto ；https://core.telegram.org/techfaq</td>
+<td>一手技術（協定規格：per-device 授權金鑰、cloud vs secret chat）</td>
+</tr>
+<tr>
+<td>Bitdefender，"Telegram QR Code Scam: How a Fake QR Scan Leads to Account Takeover"</td>
+<td>https://www.bitdefender.com/en-us/blog/hotforsecurity/telegram-qr-code-scam-account-takeover</td>
+<td>獨立資安廠商（QR 授權新裝置＝companion device 機制）</td>
+</tr>
+<tr>
+<td>Kaspersky，"Telegram account hacked: what to do?"</td>
+<td>https://www.kaspersky.com/blog/telegram-account-hacked/52775/</td>
+<td>獨立資安廠商（接管後 24 小時終止本人 session 等手法）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>H.3 安全碼 / 帶外驗證（附錄 E.4）</strong></p>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EFF Surveillance Self-Defense，"Key Verification"</td>
+<td>https://ssd.eff.org/module/key-verification</td>
+<td>獨立（帶外驗證原理）</td>
+</tr>
+<tr>
+<td>Signal 官方，"Automatic Key Verification"</td>
+<td>https://support.signal.org/hc/en-us/articles/10223569377562-Automatic-Key-Verification</td>
+<td>一手（safety number 不防接管/不驗真實身分）</td>
+</tr>
+<tr>
+<td>Techlore，"How to Verify Signal Safety Numbers"</td>
+<td>https://techlore.tech/how-to-verify-signal-safety-numbers/</td>
+<td>獨立教學</td>
+</tr>
+</tbody>
+</table>
+<p><strong>H.4 心理側寫 / NLP pipeline（附錄 F）</strong></p>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A Survey of Automatic Personality Detection from Texts (COLING 2020)</td>
+<td>https://aclanthology.org/2020.coling-main.553.pdf</td>
+<td>學術（方法綜述）</td>
+</tr>
+<tr>
+<td>Text-based personality prediction… pre-trained LM (Journal of Big Data, 2021)</td>
+<td>https://journalofbigdata.springeropen.com/articles/10.1186/s40537-021-00459-1</td>
+<td>學術</td>
+</tr>
+<tr>
+<td>BIG5-TPoT: Predicting Big Five… Targeted Preselection of Texts (arXiv 2511.09426)</td>
+<td>https://arxiv.org/pdf/2511.09426</td>
+<td>學術（大量文本的預選策略）</td>
+</tr>
+<tr>
+<td>Predicting the Big 5 from digital footprints: A meta-analysis</td>
+<td>https://www.researchgate.net/publication/321965757</td>
+<td>學術（<strong>效果量偏低</strong>的可靠度警語依據）</td>
+</tr>
+<tr>
+<td>Detecting Coordinated Activities Through Temporal, Multiplex, and Collaborative Analysis (arXiv 2512.19677)</td>
+<td>https://arxiv.org/html/2512.19677</td>
+<td>學術（SNA / 時序共現 / latent coordination networks）</td>
+</tr>
+<tr>
+<td>Temporal dynamics of coordinated online behavior (PNAS/PubMed 38709932)</td>
+<td>https://pubmed.ncbi.nlm.nih.gov/38709932/</td>
+<td>學術（時序協同、動態社群偵測）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>H.5 跨語言洗白偵測（附錄 G）</strong></p>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Detecting Machine-Translated Text using Back Translation (arXiv 1910.06558)</td>
+<td>https://arxiv.org/pdf/1910.06558</td>
+<td>學術（往返回譯偵測 MT）</td>
+</tr>
+<tr>
+<td>Reference-Free Fine-Grained MT Error Detection via NER and Back-Translation (Springer, 2024)</td>
+<td>https://link.springer.com/chapter/10.1007/978-981-97-5672-8_26</td>
+<td>學術（NER＋回譯抓專有名詞錯誤）</td>
+</tr>
+<tr>
+<td>Enhancing Disinformation Detection with Explainable AI and Named Entity Replacement (arXiv 2502.04863)</td>
+<td>https://arxiv.org/html/2502.04863v1</td>
+<td>學術（NER 在不實訊息偵測的角色）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>H.6 MEK/NCRI 既有 OSINT（補強 9.3B 的先例一致性）</strong></p>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+<th>性質</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Meta，"March 2021 Coordinated Inauthentic Behavior Report"</td>
+<td>https://about.fb.com/news/2021/04/march-2021-coordinated-inauthentic-behavior-report/</td>
+<td>平台官方獨立調查（阿爾巴尼亞 MEK troll farm：128 FB 帳號/41 專頁/21 社團/146 IG）</td>
+</tr>
+<tr>
+<td>Graphika — Reports（IO 網絡分析方法論）</td>
+<td>https://www.graphika.com/reports</td>
+<td>獨立研究機構（方法論脈絡）</td>
+</tr>
+<tr>
+<td>DFRLab（Atlantic Council）— 方法與工具</td>
+<td>https://medium.com/code-for-africa/tools-tech-how-dfrlab-cracks-cases-of-disinformation-5ab97be33a96</td>
+<td>獨立研究機構（OSINT 方法論脈絡）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>H.6 標註</strong>：第二階段檢索<strong>未</strong>找到任何機構針對「MEK/NCRI + AI 代理 + Viktor」做的獨立 OSINT 分析。找到的 MEK OSINT 全部是 <strong>2021 年 Meta troll farm</strong> 一系的既有事證（已於 9.3B 使用），只能支撐<strong>先例一致性</strong>（貝氏先驗），<strong>不能</strong>獨立證實本案。這與 9.1 的單一來源判定一致。</p>
+</blockquote>
+<hr />
+<p><em>本教材依 Anthropic《Detecting and countering misuse of AI: September 2026》p.70–75 逐頁判讀撰寫；附錄 C–H 為第二階段技術深化增補（2026-09-13/14），新增技術來源見附錄 H、其餘外部來源見第 9 節，均標註其性質（獨立查證 vs. 僅引述 Anthropic）。所有 IOC 保留原報告 defang 格式，僅供研究抄錄，禁止連線。</em></p>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script>
+(function(){
+  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (window.mermaid) {
+    mermaid.initialize({startOnLoad:true, theme: dark ? 'dark' : 'default', securityLevel:'loose', flowchart:{useMaxWidth:true}});
+  }
+})();
+</script>
+</body></html>
