@@ -1,0 +1,59 @@
+name: Deploy course site to GitHub Pages
+
+# 每次 push 到 main 就重建課程站台並部署到 GitHub Pages。
+# 需求：repo 為 public（或付費方案），且 Settings → Pages → Source 設為「GitHub Actions」。
+on:
+  push:
+    branches: [main]
+    paths:
+      - "course/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同時只跑一個部署；新 push 取消進行中的舊部署
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install markdown
+
+      - name: Build course site
+        working-directory: course
+        run: |
+          python build_html.py
+          python build_site.py
+          python build_pages.py
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: course/_site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
