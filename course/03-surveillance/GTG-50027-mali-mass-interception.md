@@ -956,3 +956,33 @@ DataAccessAudit
 - **技術深度新增點**：ETSI/3GPP LI 標準骨架與三個被拆掉的約束；on-prem 推論棧與 open-weight 不可逆性的技術機制；「移除令狀」拆成五個安全工程反模式並對照應有保障；個人承包化的成本數量級（NSO Pegasus 對照）。
 - **圖表完整性**：p.103–105 無編號 Figure/截圖，唯一能力表已於第 6.2 節完整判讀，本附錄僅延伸引用。
 - **紅線**：全案無 IOC，本附錄無需 defang、未連線任何標的；一切內容為防禦/稽核/治理取向。
+
+---
+
+### A8. 全民級分析層的三項機制深掘：加密/VPN 標記、共址推論會面、跨 SIM 語者辨識（2026-09-15 深化）
+
+> **本節性質與界線**：p.104 能力表第四列「Population-scale analytics」點名了「Cross-SIM voiceprint tracking, **privacy-tool flagging**, watchlists, registry joins」，第 4.2 節已用「最小電信知識」概述聲紋與 geofence；但**加密/VPN 使用者標記**與**推論祕密會面**兩項只在能力表列名、機制未展開（A1 把鄰近的 ETSI/3GPP LI、CDR、聲紋都寫深了，獨跳過這兩項；報告 p.104 明列「flagging of encryption and VPN users, inference of clandestine meetings」）。本節補足這三項的**機制層**，全程以**偵測、公民自由（civil-liberties）分析、防護**為落點，**不提供**任何監控建置步驟。三項各一段。
+
+**A8.1 加密/VPN 使用者標記：核網側 DPI 與加密流量指紋（附 civil-liberties 反轉）**
+報告 p.104 的「flagging of encryption and VPN users」在技術上**不需要解密**——它靠加密流量在**封包外層與時序上仍然外洩的中繼特徵**。核網／電信側可用的辨識手段包括：(1) **協定指紋**——VPN 協定（WireGuard、OpenVPN、IPsec/IKE）的握手樣態、固定埠、封包長度分布各有特徵，OpenVPN over TCP/443 即使包在 TLS 裡也會露出與瀏覽器不同的握手；(2) **TLS 指紋 JA3／JA4**——雜湊 ClientHello 裡的 TLS 版本、cipher suites、extensions、supported groups 等欄位，在**不解密**下辨識「這是哪一支客戶端軟體」（JA3 為 Salesforce 2017 提出、順序敏感；JA4 為 FoxIO／John Althouse 2023 改良，排序並忽略 GREASE，對隨機化更穩健，因此更適合大規模被動辨識）；(3) **SNI 檢視**——TLS ClientHello 的 Server Name Indication 傳統上是明文，即使走 HTTPS 也洩漏目的網域（ECH／加密 ClientHello 可堵，但普及不全，且「使用 ECH」本身又成為一個指紋）；(4) **時序／量體分析（traffic analysis）**——封包到達間隔、突發樣態、總量可在不看內容下指認 app（如某 VPN 隧道）甚至推斷行為（語音通話 vs. 檔案傳輸）。**civil-liberties 反轉（本段核心）**：在民主體制裡，使用加密與 VPN 是**受保護的權利**——保護隱私、通訊自由、記者與消息來源、弱勢族群；本案卻把「**使用隱私工具**」本身當成**可疑指標**，把「加密保護你」倒轉成「加密標記你」。更惡劣的是它的**反常回饋**：專挑加密/VPN 使用者，等於把監控母體自動收斂到**最可能是記者、異議者、維權者**的人身上（他們正因為被盯上才用 VPN）。對防禦者的偵測意義：一套系統若**產出以「隱私工具使用」為鍵的名單**，這件事本身就是紅旗（對映 A5.2 的稽核樣態）；對社群的防護意義是**「人人預設加密」的群體免疫**——若只有異議者用 VPN，則 VPN＝訊號；若全民皆用，則 VPN＝雜訊，標記就失去辨識力。
+
+**A8.2 後設資料共址分析（co-location）：從 CDR／位置推論「祕密會面」**
+報告 p.104 的「inference of clandestine meetings」不需監聽內容，只需**位置後設資料**。機制是**共址分析（co-location analysis）**：把兩個門號的基地台（或更精細的）定位軌跡疊起來，找「**反覆在同時同地共同出現**」的配對。單次同址不算什麼（同搭一班車、同在一家咖啡館）；被判為「推定會面」的，是**規律性重複** ＋ **無法用同住／同事解釋** ＋ 一個關鍵的 tradecraft 訊號——**同步靜默（synchronous silence）**：兩支手機在**同一基地台、同一時段一起關機／進飛航模式**。不想被記錄會面的人會關機，但「兩支手機在同地同時一起消失」這個動作本身，反而成為最強的會面訊號（這正是 NSA CO-TRAVELER 類位置分析被揭露的核心啟發式）。延伸樣態還有「burner 配對」——一支只在某已知目標身邊出現的門號，被推定為該目標的第二支機。**civil-liberties 反轉**：這把「結社／私下會面」本身變成機器可標記的事件——消息來源見記者、律師見當事人、兩名運動者碰面，都成為告警；而「關機」這個正當隱私行為，被倒轉成**對你不利的證據**。且推論是機率性的，必然產生假陽性（剛好通勤路線重疊、同一場所禮拜、同一市場擺攤的人）——這與 A8.3 的基率問題同源。
+
+**A8.3 跨 SIM 語者辨識的機制與 2,500 萬人尺度的基率謬誤**
+第 4.2 節已說明聲紋為何是質變（把「你的聲音」當不可更換的生物鍵，破解換卡自保）；此處補**機制層**與**規模層的誠實反駁**。機制是標準的**語者辨識（speaker recognition）三步**：(1) **母體建檔（enrollment）**——對每個已知身分，從參考語音抽出一枚**語者嵌入向量**；(2) **嵌入技術演進**——從 **i-vector**（Dehak 等 2011，GMM-UBM supervector 上的因子分析）到 DNN 嵌入 **d-vector**（Variani 等 2014，Google，逐框平均）與 **x-vector**（Snyder 等 2018，JHU，TDNN ＋ 統計池化，把不定長語音映成定長向量、在大規模資料上勝過 i-vector，是產業主力），近年多用 ECAPA-TDNN；(3) **1:N 開集識別（open-set identification）**——把新通話的嵌入，用 cosine/PLDA 對**整個母體 N 個身分**逐一比分，回傳超過閾值的最佳匹配。**這裡是本案最該對技術聽眾講的一課——基率謬誤在 population scale 必然壓垮 1:N 識別**：開集語者識別有一個已被 benchmark 記錄的「**假警報問題（false-alarm problem）**」——**母體 N 越大，非目標（out-of-set）分數的分布整體上移，與目標分數的重疊越多，在固定閾值下假陽性率（FPIR）隨 N 升高**（VoxWatch 2023 對 VoxCeleb 的開集基準即量化此效應）。放到本案的 N≈**2,500 萬**：即使每對比較的誤匹配率低到 10⁻⁴，單一查詢對 2,500 萬母體比對，期望就產生 **約 2,500 個假陽性**；而「這個匿名來電＝異議者 X」在人口中是**稀有事件（低先驗）**，由貝氏定理，「被標記者實際為真」的後驗機率被假陽性淹沒。再疊上真實電話通道的劣化（8 kHz 窄頻、編碼壓縮、雜訊、短語音、enrollment 與 test 的跨通道不匹配），準確率遠低於實驗室數字。**這與姊妹案 GTG-54009 §C.2 批判④對文字分類器的基率反駁是同一套數學，只是換成生物特徵**：準確率再高，乘上 2,500 萬母體與稀有基率，產出的仍是大量被錯誤標記、卻要承擔真實後果（約談、拘捕）的無辜者。**且要誠實補一句**：不可靠**不等於**無害——一套會把人標記去「control」的系統，正因為它**被當成可靠來用**，其不可靠反而製造傷害（傷及無辜），比它真的準還糟。
+
+**A8.4 本節新增之第三方技術來源**
+
+| 主題（對應小節） | 來源 | URL | 性質／信賴層級 |
+|---|---|---|---|
+| TLS 指紋 JA3（A8.1） | Salesforce, JA3 TLS fingerprinting（2017 原始專案） | https://github.com/salesforce/ja3 | 技術一手（原始實作）／高 |
+| TLS 指紋 JA4+（A8.1） | FoxIO, JA4+ Network Fingerprinting（John Althouse, 2023） | https://github.com/FoxIO-LLC/ja4 | 技術一手（原始實作）／高 |
+| JA3/JA4 辨識 VPN 客戶端（A8.1） | IPLogs, JA3 and JA4 Fingerprinting Explained: How TLS Reveals Your VPN Client | https://iplogs.com/blog/ja3-ja4-tls-fingerprinting-explained | 技術分析／中 |
+| 加密 ClientHello（ECH）對 SNI 的保護（A8.1） | Cloudflare, Announcing Encrypted Client Hello（ECH） | https://blog.cloudflare.com/announcing-encrypted-client-hello/ | 廠商技術文件／中高 |
+| x-vector 語者嵌入（A8.3） | Snyder et al., X-Vectors: Robust DNN Embeddings for Speaker Recognition, ICASSP 2018 | https://www.danielpovey.com/files/2018_icassp_xvectors.pdf | 學術一手／高 |
+| i-vector（A8.3） | Dehak et al., Front-End Factor Analysis for Speaker Verification, IEEE TASLP 2011 | https://ieeexplore.ieee.org/document/5545402 | 學術一手／高 |
+| 開集 1:N 的規模化假警報問題（A8.3 基率核心） | VoxWatch: An Open-Set Speaker Recognition Benchmark on VoxCeleb（2023） | https://arxiv.org/abs/2307.00169 | 學術／高 |
+| 基率謬誤於大規模監控 | 對齊姊妹案 GTG-54009 §C.2 批判④（同一貝氏論證，換成生物特徵） | （課程內互引） | 課程內一致性 |
+
+> **紅線與單一來源聲明（不變）**：本節為機制／偵測／公民自由分析，**不含任何監控建置步驟**；所有 URL 為技術標準、學術論文與廠商文件，非 IOC、未連線任何惡意標的。GTG-50027 的核心指控（Lakana 360、2,500 萬 SIM、移除令狀、聲紋/加密標記/共址/民籍比對）**仍僅 Anthropic 單一來源**（見第 9、12 節）；本節補的是「這些能力在技術上真實存在且被學界/業界記錄」，不改變單一來源判斷。

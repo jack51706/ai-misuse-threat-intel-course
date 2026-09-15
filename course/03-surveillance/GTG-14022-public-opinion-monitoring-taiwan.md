@@ -935,4 +935,120 @@ flowchart TD
 
 ---
 
-*（技術附錄結束。本附錄僅新增技術縱深與防禦方法，未改動第 1–12 節；所有機制拆解以偵測/分析/OPSEC 為落點，不含任何監控或審查產線的重建步驟。中國輿情廠商 domain 均 defang 且全程未連線；本案無外連 IOC。）*
+## 附錄 G：語言即法律戰——「用語武器化」機制拆解（2026-09-15 深化）
+
+> **本節性質**：第 4.1、6.3、7、10.4.4、11.4 節多次出現「把 'Taiwan government' 改成 'Taiwan authorities'」與「對 'human rights violations' 加恐嚇引號」，但都只當成「用語標準化」的一個**例子**帶過。本節把它**升格成一套完整機制**——**語言即法律戰（lexical warfare）**，並補上第 7 節說「高價值可偵測」卻在附錄缺席的**內容側偵測規則**。全程防禦/分析視角。**本節不含 Mermaid**（依任務界定）。
+
+### G.1 「government → authorities」：一次主權語義降格
+
+**【報告事實／逐字，p.99】**
+> The actor prompted Claude to employ specific terminology (such as converting "Taiwan government" to "Taiwan authorities") and inserted scare quotes around terms critical of the PRC (such as "human rights violations").
+
+這句常被讀成「不過是換個詞」。但在外交與法律語域裡，**government 與 authorities 是兩個不同主權層級的詞**：
+- **government（政府）** 隱含一個**主權國家**及其政府；
+- **authorities（當局）** 隱含一個**次主權的行政機構**（如 local authorities 地方當局）。
+
+把「Taiwan **government**」機械替換成「Taiwan **authorities**」，等於在**單一詞彙層**執行一項法理主張：**台灣不是國家、而是中國主權下的地方當局**。這不是修辭偏好，是**主權語義降格（sovereignty semantic downgrade）**——每一篇被管線處理的文章，都在無聲地重申這項主張。
+
+**關鍵：這不是行為者的發明，而是一套既存的、對全體官媒強制的官方詞表。**「Taiwan authorities」是 PRC 早已成文的用語規範：
+
+- **白皮書層級**：2022 年《台灣問題與新時代中國統一事業》（The Taiwan Question and China's Reunification in the New Era）全文一致使用「Taiwan authorities」「DPP authorities」，**從不**用「Taiwan government」。
+- **通訊社禁用詞層級**：新華社《新聞報導中的禁用詞（第一批）》涉台條款（第 49–88 條）明訂：**嚴禁**用「中華民國」「中華民國總統」（即使加引號也不得），台灣地區領導人須稱「台灣當局領導人」；台灣政府機構名稱無法迴避時**須加引號**（台灣「立法院」「行政院」）。這是對**所有** PRC 媒體強制的文體規範。
+- **國際命名層級**：UN／ISO 3166-1 的「Taiwan, Province of China」是 PRC 在國際組織強制推行的既有詞表。
+
+**這與本案核心命題精確對應。** 第 4.3 節說本案的本質是「**把監控 SOP 交給 AI 標準化**」（v2.6 框架把*工作流*標準化）；**用語武器化則是同一動作在內容政治層的對應**——把*詞彙*標準化：**訓練 Claude 執行一套 lexicon（詞表）**。v2.6 標準化「怎麼做」，lexicon 標準化「怎麼說」；兩者都是「**把人的政治判斷一次性寫進規則，之後讓 AI 每天大規模套用**」。AI 在這裡不是被說服去相信某立場，而是被**設定成一台自動套用官方詞表的機器**——這比說服更危險，因為它**規模化、去人化、不留猶豫**。
+
+**精確對映「三戰」的法律戰（lawfare）。** 三戰（第 4.4、E.2 節）中的**法律戰**＝用法律/規範語言（主權、國內法、國際法）為己方行動塑造正當性、給對手扣上「違法」。「government→authorities」與「Taiwan, Province of China」正是**詞彙層的法律戰**：不辯論、不論證，直接用**詞的選擇**把主權主張寫進每一篇產出。而對「human rights violations」加**恐嚇引號（scare quotes）**是同一手法的另一面——把一個**事實描述**降格成**「所謂的」指控**，在讀者接觸內容前就先抽掉「人權」框架的正當性。**法律戰（主權降格）＋輿論戰（人權去正當化）在此融進了「選字」這個最細的顆粒。**
+
+### G.2 「強制對抗性分析段落」：模板如何把中性新聞變成情報產品（補第 4.1／6.3／7 節之名詞）
+
+第 4.1 表第 4 列、6.3／7 節都列了「**mandatory adversarial analysis sections（強制對抗性分析段落）**」（p.101 指標表 Operation signatures），但只列名未說明。補足如下：這是每份簡報**模板中一個必填的結構欄位**，強制產出**必須**包含一段「對抗性/敵情分析」——也就是說，即使輸入是一篇**中性事實報導**（一場欠薪抗議、一次台灣文化交流），輸出也**被格式規則要求**附上「誰是敵對勢力、對穩定/主權構成什麼威脅、建議何種反制」。由於這是**模板的強制欄位、而非可選的分析**，管線**保證**每一篇新聞都被轉成一件**內建敵我框架的情報產品**——對抗性解讀不是分析者的判斷，而是**輸出格式的結構性要求**。這正是「監控（monitoring）」滑向「標定（targeting）」的機制：**模板本身在製造敵人**。它與 G.1 的用語武器化是一組配套——lexicon 改「詞」、強制對抗段改「結構」，兩者夾擊，中性素材無處可逃。
+
+### G.3 跨案對照：「用語武器化」貫穿中國三案（14020／14021／14022）
+
+把本案的詞彙轉換規則，與同群集 GTG-14020、GTG-14021 並列，可見**詞彙武器化不是本案獨有，而是中國三案共通的手法主線**：
+
+| 案例（頁碼） | 原始（中性）語彙 | 行為者要求的替換／框定 | 語義操作 | 對映三戰 |
+|---|---|---|---|---|
+| **GTG-14022（本案，p.99）** | Taiwan government | **Taiwan authorities** | 主權語義降格 | 法律戰 |
+| GTG-14022（本案，p.98–99） | human rights violations（事實描述） | 加**恐嚇引號**「"human rights violations"」 | 事實→「所謂」指控，去正當化 | 輿論戰＋法律戰 |
+| GTG-14022（本案，p.99–100） | 台灣兩岸/文化外交活動；台媒/外媒報導 | 「**threats to sovereignty**」「**hostile narrative**」 | 中性事件→敵情 | 輿論戰 |
+| GTG-14021（p.94） | 維吾爾倡議（Uyghur advocacy） | 「**adjacent to terrorism（與恐怖主義相鄰）**」 | 人權倡議→恐怖主義鄰接 | 法律戰（扣違法/恐怖帽子） |
+| GTG-14021（p.94） | 主要人權組織（human rights organizations） | 「**hostile forces（敵對勢力）**」 | 公民團體→敵對勢力 | 心理戰＋輿論戰 |
+| GTG-14020（p.90） | 藏人流亡體系 | 「**illegal separatist administration（非法分裂政權）**」 | 合法自治→非法分裂 | 法律戰 |
+| GTG-14020（p.90） | 法輪功 | 套用國家「**evil cult（邪教）**」定性；並要求 Claude 採「**China's standpoint（中國立場）**」 | 信仰群體→國家定性的邪教 | 法律戰＋輿論戰 |
+
+**跨案結論**：三案都在做同一件事——**要 Claude 對整批來源套用一套固定的政治用語替換/框定映射**，把中性語彙系統性轉成「主權降格＋敵我化＋去正當化」的情報語言。差別只在**替換表的內容**（台灣主權／維吾爾反恐／宗教邪教）。這證明「**詞彙武器化是中國國家對齊 AI 濫用的共通範式**」，不是任一案的偶發。**對防禦者的意義**：這種「固定政治用語替換映射」本身**高度可辨識、可寫成內容側偵測規則**（見 G.4）——它是本模組少數能直接從**內容**（而非只從行為節奏）抓到的濫用特徵。
+
+### G.4 內容側偵測規則：偵測「對整批來源套用固定政治用語替換映射」（補第 7 節缺口）
+
+第 7 節（行為型指標表）與第 5.2 節（DISARM Reframe）都指出「特定政治用語轉換規則具辨識度、可用內容規則偵測」，但附錄 B.4 只給了「官僚化**評分**產線」的 Sigma/KQL，**缺一條針對「用語替換映射」本身的內容側規則**。補足如下（概念示意，需依實際 LLM 閘道/稽核遙測欄位改寫；作用在 prompt/對話內容，非端點日誌）：
+
+```yaml
+title: 疑似「政治用語替換映射」內容側濫用（lexicon-as-a-service）
+status: experimental
+description: >
+  偵測「要求模型對整批來源，套用一套固定的政治用語替換/框定映射」的請求——
+  典型如把 government→authorities、對人權詞加恐嚇引號、把倡議團體改述為敵對勢力/與恐怖主義相鄰。
+  這是 G.1/G.3 描述的「用語武器化」的可偵測形態。概念規則，欄位需依實際遙測改寫。
+logsource:
+  product: llm_gateway
+  service: messages_api
+detection:
+  # (1) 要求「固定用語替換/映射」的指令語意
+  mapping_instruction:
+    prompt|contains:
+      - 'replace all'
+      - 'always refer to'
+      - 'use the term'
+      - 'convert ... to'
+      - '統一用語'
+      - '一律稱'
+      - '改為'
+  # (2) 命中已知政治降格/敵我化的替換對（可維護成清單）
+  political_substitution:
+    prompt|contains:
+      - 'Taiwan authorities'          # <- Taiwan government（主權降格）
+      - 'hostile forces'              # <- human rights orgs（敵對勢力）
+      - 'adjacent to terrorism'       # <- Uyghur advocacy（恐怖鄰接）
+      - 'illegal separatist'          # <- Tibetan administration（非法分裂）
+      - 'evil cult'                   # <- Falun Gong（邪教）
+      - '台灣當局'
+      - '敵對勢力'
+      - '非法分裂'
+  # (3) 恐嚇引號/去正當化：對人權類詞強制加引號
+  scare_quotes:
+    prompt|re: '["“]human rights (violations|abuses)["”]|["“]人權["”]'
+  # (4) 批次套用：對「一批」來源而非單篇
+  batch_application:
+    prompt|contains:
+      - 'each article'
+      - 'all sources'
+      - 'batch'
+      - '每篇'
+      - '整批'
+  condition: mapping_instruction and (political_substitution or scare_quotes) and batch_application
+fields: [account_id, session_id, source_ip, output_schema_hash]
+falsepositives:
+  - 學術/新聞的用語規範研究、翻譯風格指南、對照分析（應無「敵我化替換 + 批次套用於監控目標」的組合）
+  - 合法在地化（i18n）用語統一（不會命中政治降格替換對）
+level: medium
+```
+
+> **偵測工程要點**：這條規則抓的是**內容特徵**（固定政治替換映射 + 恐嚇引號 + 批次套用），與 B.4 抓**行為節奏**（每日 15–30+、code-exec、schema 一致）**互補**——一條看「說了什麼」、一條看「怎麼跑」。兩條 AND 起來，才能把「合規外觀的高頻自動化 + 用語武器化」這種本案型濫用穩定框住，同時把合法的翻譯/新聞用語研究排除（見 falsepositives）。這也回答第 7 節留下的缺口：**用語武器化是本案少數「可從內容直接偵測」的特徵**，不該只靠行為節奏。
+
+### G.5 本節新增之第三方來源
+
+| 主題（對應小節） | 來源 | URL | 性質／信賴層級 |
+|---|---|---|---|
+| 「Taiwan authorities」官方詞表（G.1） | PRC 白皮書《The Taiwan Question and China's Reunification in the New Era》（2022，SCIO 全文） | http://english.scio.gov.cn/whitepapers/2022-08/10/content_78365819.htm | 一手官方文件／高（PRC 立場文件，用以佐證詞表存在，非採信其主張） |
+| 白皮書獨立譯介（G.1） | CSIS Interpret: China, "The Taiwan Question and China's 'Reunification' in the New Era" | https://interpret.csis.org/translations/the-taiwan-question-and-chinas-reunification-in-the-new-era/ | 獨立學術譯介／高 |
+| 新華社涉台禁用詞（G.1） | 中央社 CNA〈新華社最新禁用詞〉；TNL 關鍵評論網〈新華社新增57項禁語：不得使用「中華民國」〉 | https://www.cna.com.tw/news/acn/202602270111.aspx ／ https://www.thenewslens.com/article/74177 | 台灣獨立媒體記錄 PRC 詞表／高 |
+| UN／ISO「Taiwan, Province of China」命名（G.1） | ISO 3166-1（TW 條目）／UN Statistics Division 命名慣例 | https://www.iso.org/obp/ui/#iso:code:3166:TW | 國際標準／高 |
+| 三戰之法律戰（G.1/G.3） | 見第 9.3、附錄 E.2 已列來源（Jamestown、War on the Rocks、USNI、Wikipedia "Three warfares"） | （課程內互引） | 智庫/軍事期刊／高 |
+
+> **紅線與單一來源聲明（不變）**：本節為機制拆解、跨案比對與內容側偵測，全程防禦/分析視角；G.5 的 PRC 白皮書連結**僅用以佐證「Taiwan authorities 是既存官方詞表」這個事實，非採信其政治主張**。本案「中國承包商用 Claude 監控台灣政治人物」的核心指控**仍為 Anthropic 單一來源**（第 9、12 節結論不變）；本節補的是「用語武器化的官方詞表依據真實存在」。
+
+---
+
+*（技術附錄結束。本附錄僅新增技術縱深與防禦方法，未改動第 1–12 節；所有機制拆解以偵測/分析/OPSEC 為落點，不含任何監控或審查產線的重建步驟。附錄 G（2026-09-15 深化）新增「用語武器化＝語言即法律戰」機制、強制對抗段說明、中國三案詞彙轉換對照表與內容側偵測規則，不含 Mermaid、未改動既有各節。中國輿情廠商 domain 均 defang 且全程未連線；本案無外連 IOC。）*

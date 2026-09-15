@@ -1,5 +1,5 @@
 {
- "published": "2026-09-15T15:33:17",
+ "published": "2026-09-15T16:24:46",
  "files": {
   "shared/00-agent-brief.html": {
    "local": "_shared/00-agent-brief.html",
@@ -18,13 +18,13 @@
   },
   "01-cyber/00-cyber-trends-and-skills.html": {
    "local": "01-cyber/00-cyber-trends-and-skills.html",
-   "sha256": "4fe214d9ac52a8fb3352f8e9049f9b4397a658cc288e92e2663ed16bc1db6a5b",
-   "bytes": 725208
+   "sha256": "ec1ea0b65e1c5935a4d3c605ef03c403e1a06fa343b88ab43c35ae6cc2b6246f",
+   "bytes": 739213
   },
   "01-cyber/GTG-10007-exploit-foundry.html": {
    "local": "01-cyber/GTG-10007-exploit-foundry.html",
-   "sha256": "86f49c38597909844fc4892bbd1c799519c00bf83430f41f1b323e25643fb7fd",
-   "bytes": 1644168
+   "sha256": "7e60a608173eae6b610a22f282212397fa98246151f7da1b65ffb5ea124cb394",
+   "bytes": 1661765
   },
   "01-cyber/GTG-20006-russian-espionage.html": {
    "local": "01-cyber/GTG-20006-russian-espionage.html",
@@ -33,8 +33,8 @@
   },
   "01-cyber/GTG-50014-shinyhunters.html": {
    "local": "01-cyber/GTG-50014-shinyhunters.html",
-   "sha256": "34ea23a0aaa87ce97f4d7326958ffdbac2b7c311e3a8f0acfbe9272781f0944f",
-   "bytes": 3542853
+   "sha256": "08ea134f9975a03521ce482b7fd4d4b6365cb68b3470d65e5f03b310338a76e1",
+   "bytes": 3558378
   },
   "01-cyber/GTG-50020-ai-supply-chain.html": {
    "local": "01-cyber/GTG-50020-ai-supply-chain.html",
@@ -63,13 +63,13 @@
   },
   "02-influence/GTG-24015-russian-state-media.html": {
    "local": "02-influence/GTG-24015-russian-state-media.html",
-   "sha256": "2dc70fa05eb2d5d7a02a3ec55f111b98b4077b15f80580661861774513e2deb5",
-   "bytes": 1189147
+   "sha256": "982e0b5a73117c050af758f7df67bf01c9294f025f74744023c31f341de5a01c",
+   "bytes": 1200339
   },
   "02-influence/GTG-34001-iran-icco.html": {
    "local": "02-influence/GTG-34001-iran-icco.html",
-   "sha256": "4b1b55a6cc50601fde681901e7b71f84e439a90cd0bcd6be9639b1cc623089fc",
-   "bytes": 859929
+   "sha256": "57c64ae05f52d2680162de304a4282212d3312e49c722bcd71ba626703302c29",
+   "bytes": 859942
   },
   "02-influence/GTG-54002-influence-as-a-service.html": {
    "local": "02-influence/GTG-54002-influence-as-a-service.html",
@@ -88,13 +88,13 @@
   },
   "02-influence/GTG-84002-uae-muslim-brotherhood.html": {
    "local": "02-influence/GTG-84002-uae-muslim-brotherhood.html",
-   "sha256": "bcc74cef21043550c7aa26c3c16f02e2649c971b91148ab38c7dc19e6e108da8",
-   "bytes": 2090975
+   "sha256": "73e5feaaf9a1ca9a7df42c39f8a626024077312f59c6dbdbe60a2e9847cb0c5e",
+   "bytes": 2106218
   },
   "02-influence/GTG-84005-malaysia-election-platform.html": {
    "local": "02-influence/GTG-84005-malaysia-election-platform.html",
-   "sha256": "62b1f70975f8f82b08ae51533de4cb560ca81da61ef5abdf84c458f17ae666ab",
-   "bytes": 1947676
+   "sha256": "62b0877d32030a0159d51d52de6c63dbe89934821c9f3c12abe2468d0715c004",
+   "bytes": 1957279
   },
   "02-influence/GTG-84006-mek-ncri-viktor.html": {
    "local": "02-influence/GTG-84006-mek-ncri-viktor.html",
@@ -108,13 +108,13 @@
   },
   "03-surveillance/GTG-14010-uyghurs-syria.html": {
    "local": "03-surveillance/GTG-14010-uyghurs-syria.html",
-   "sha256": "be795ac5423434935899edca1cff8016e3243f8f0ec40615fe840cc31cda2b81",
-   "bytes": 855865
+   "sha256": "9d839225222b59aaecd150086e60d83a605e864e30bc84af88ad2f316a8ccfe1",
+   "bytes": 868764
   },
   "03-surveillance/GTG-14020-religious-affairs-taiwan-church.html": {
    "local": "03-surveillance/GTG-14020-religious-affairs-taiwan-church.html",
-   "sha256": "5f3e1c0c76392074909b7ffd0d2bcdbc1451ce20b8690ea6f7bcf23e02ba7620",
-   "bytes": 876284
+   "sha256": "932987141ea56d3b674ab0716e280a71476ce71b6d6f4d6da734f287ab9ba3e0",
+   "bytes": 882045
   },
   "03-surveillance/GTG-14021-weiwen-transnational-repression.html": {
    "local": "03-surveillance/GTG-14021-weiwen-transnational-repression.html",
@@ -123,8 +123,8 @@
   },
   "03-surveillance/GTG-14022-public-opinion-monitoring-taiwan.html": {
    "local": "03-surveillance/GTG-14022-public-opinion-monitoring-taiwan.html",
-   "sha256": "b4c30316bd1c2f47d764f8d27052bc14ce26fdeb80e8e37d23cd01d27be4fbd0",
-   "bytes": 561344
+   "sha256": "b734a503e4f324580c7bf77a957999e08b7c773e2b830b652b0d062e1783e2c1",
+   "bytes": 576516
   },
   "03-surveillance/GTG-30004-30005-30006-osint-recon.html": {
    "local": "03-surveillance/GTG-30004-30005-30006-osint-recon.html",
@@ -138,13 +138,13 @@
   },
   "03-surveillance/GTG-50027-mali-mass-interception.html": {
    "local": "03-surveillance/GTG-50027-mali-mass-interception.html",
-   "sha256": "0b3eef1f3dcd60fdb7bf8646312ef6fe7850398743960934fa2c4412fed4e24e",
-   "bytes": 118550
+   "sha256": "1270d31846211246d77bfd6dbf3ee621feb3a9a76a2343f0978d6e36195df738",
+   "bytes": 129064
   },
   "03-surveillance/GTG-54009-s2t-commercial-spyware.html": {
    "local": "03-surveillance/GTG-54009-s2t-commercial-spyware.html",
-   "sha256": "032b7b28c22e02029a64a3e6e3f1b6104a3fcbd73a17f69b7ce6f4de97f1718d",
-   "bytes": 806423
+   "sha256": "c31896a097216dd48a6e0670c5308ce395e72e1211b34285f5fa2a03019dd38e",
+   "bytes": 806481
   },
   "04-weapons/00-weapons-intro-and-safeguards.html": {
    "local": "04-weapons/00-weapons-intro-and-safeguards.html",
@@ -208,8 +208,8 @@
   },
   "06-scams/GTG-15001-dating-app-network.html": {
    "local": "06-scams/GTG-15001-dating-app-network.html",
-   "sha256": "2c3b6ce86b98f38f6d4553888c7bd9c637e16cb8eb6c86d8c8606a2cb92e873a",
-   "bytes": 600637
+   "sha256": "3de5f12d9e64d7f7cf379945e845de60512f6729bc41f07f830f0200fe223635",
+   "bytes": 610375
   },
   "07-distillation/00-distillation-intro-and-mitigations.html": {
    "local": "07-distillation/00-distillation-intro-and-mitigations.html",
@@ -233,8 +233,8 @@
   },
   "07-distillation/GTG-16006-zhipu.html": {
    "local": "07-distillation/GTG-16006-zhipu.html",
-   "sha256": "a1b3e8d16dcd8435fa8a8062d2d5b0ec72ec2bbf0233652a89e27f0376f842a3",
-   "bytes": 129991
+   "sha256": "91812d507c2d98f33727cb1521610dedecc946c23c188001bb04a844888d7073",
+   "bytes": 149499
   },
   "07-distillation/GTG-16008-xiaomi.html": {
    "local": "07-distillation/GTG-16008-xiaomi.html",
@@ -268,8 +268,8 @@
   },
   "09-external-research/anthropic-2025-08-threat-intel-report.html": {
    "local": "09-external-research/anthropic-2025-08-threat-intel-report.html",
-   "sha256": "aa7388ec1df5709388c4b82fec60ebc3d026fc0aa910fb73f1867afd98b3beef",
-   "bytes": 122465
+   "sha256": "7f543525e838704f6abad4ea414faac8c8c4fc7a7d3647a42f1866ef94551d21",
+   "bytes": 136694
   },
   "09-external-research/anthropic-2025-11-ai-orchestrated-espionage.html": {
    "local": "09-external-research/anthropic-2025-11-ai-orchestrated-espionage.html",
@@ -278,8 +278,8 @@
   },
   "09-external-research/anthropic-2026-02-distillation-disclosure.html": {
    "local": "09-external-research/anthropic-2026-02-distillation-disclosure.html",
-   "sha256": "de2ff8b6e19b54dca715cfb059343507c1fc9164e57e299d655778cdc5c89e44",
-   "bytes": 112065
+   "sha256": "419524c7ecebe07e48149ef7bedd8acfccc6b4f509b889aafd970be8eca03cde",
+   "bytes": 118316
   },
   "09-external-research/gtig-2025-01-adversarial-misuse-generative-ai.html": {
    "local": "09-external-research/gtig-2025-01-adversarial-misuse-generative-ai.html",
@@ -303,8 +303,8 @@
   },
   "09-external-research/gtig-2026-09-ai-threat-tracker.html": {
    "local": "09-external-research/gtig-2026-09-ai-threat-tracker.html",
-   "sha256": "191853e4f17dc91c8b4495f6facdeca184c3dc524e82d61f9eb05cf32e613813",
-   "bytes": 147230
+   "sha256": "abc91d35af46961851536567aaf6c927dd188ca356220c3a94887211628c248b",
+   "bytes": 155017
   },
   "09-external-research/microsoft-2026-03-ai-as-tradecraft.html": {
    "local": "09-external-research/microsoft-2026-03-ai-as-tradecraft.html",
@@ -318,8 +318,8 @@
   },
   "09-external-research/openai-2025-06-disrupting-malicious-uses.html": {
    "local": "09-external-research/openai-2025-06-disrupting-malicious-uses.html",
-   "sha256": "c49983fa513d2827c34444d43bd4ea43be3fff7b3b383f88ab44c8b85f94024f",
-   "bytes": 198945
+   "sha256": "6d64ae7814d5b23be8135481a14a5b340cd0adeaccec2954cf7bdebea4b5784d",
+   "bytes": 202058
   },
   "09-external-research/openai-2025-10-disrupting-malicious-uses.html": {
    "local": "09-external-research/openai-2025-10-disrupting-malicious-uses.html",
@@ -338,7 +338,7 @@
   },
   "index.html": {
    "local": "_site/index.html",
-   "sha256": "1ed4473c4294fd7db9ec6864629bc88245a080f5e3466314d68862ec86a47199",
+   "sha256": "2ee622e2d5021d168d0b2aa91931d2614145d2a960b2aa24d8f206c603d01cbf",
    "bytes": 25864
   }
  }

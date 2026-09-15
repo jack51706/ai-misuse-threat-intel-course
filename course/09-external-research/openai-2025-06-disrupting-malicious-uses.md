@@ -139,6 +139,30 @@ flowchart TD
     E --> F["薪資回流<br/>（本報告未追金流）"]
 ```
 
+**視訊注入管線拆解與偵測（2026-09-15 深化）**
+
+工具欄裡的「OBS Studio、vdo.ninja 即時影像注入、HDMI capture loops」不是四個平行工具，而是一條**餵給視訊面試鏡頭的合成影像管線**。報告明說其目的是「bypass some identity verification processes that rely on live video meetings」（繞過依賴即時視訊會議的身分驗證）。管線的資料流方向（本教材依報告工具清單重建，偵測導向，不含任何操作細節）：
+
+```mermaid
+flowchart LR
+    SRC["來源影像<br/>合成或換臉後的人臉畫面"] --> OBS["OBS Studio<br/>合成、切換、疊圖"]
+    NINJA["vdo.ninja 串流<br/>把遠端影像餵進本機"] --> OBS
+    HDMI["HDMI capture loop<br/>擷取卡把外部畫面當攝影機輸入"] --> OBS
+    OBS --> VCAM["虛擬攝影機驅動<br/>OBS Virtual Camera 一類"]
+    VCAM --> APP["視訊會議 App<br/>面試端看到的鏡頭"]
+```
+
+**為什麼這條管線擊穿「開鏡頭就是真人」的假設**：視訊身分驗證的隱含前提是「攝影機看到的畫面等於鏡頭前的真人」。這條管線在**攝影機這一層之前**就把畫面換掉了：會議 App 拿到的不是實體攝影機的訊號，而是**一個虛擬攝影機驅動輸出的合成畫面**，來源可以是換臉影像、預錄片段、或另一個人透過 vdo.ninja 串流過來的臉。**要求「請你開鏡頭」完全擋不住這招，因為鏡頭本來就是開的，只是那個「鏡頭」是軟體。**
+
+**把偵測收束成一句話**：擋不了畫面，就抓端點上的**工具共現**。這條管線在受聘者的裝置上會同時留下一組非常具體的痕跡，**單獨看每一個都可能合理，一起出現在一台「員工用機」上就高度可疑**：
+
+- **虛擬攝影機驅動**（如 OBS Virtual Camera）被安裝，且被會議 App 選為視訊來源；
+- **OBS Studio 或同類合成軟體**與會議 App **同時在跑**；
+- **HDMI 擷取卡／capture 裝置**被列舉為視訊輸入；
+- （加分）**Tailscale 一類點對點 VPN** 同時存在，指向 laptop farm 的遠端操控。
+
+這正是本教材第 5.4 節把「即時換臉與影像注入以通過視訊身分驗證」標為框架缺口、並建議以 **NIST SP 800-63 的 presentation attack detection（PAD，展示攻擊偵測）** 概念補位的落地點：把「同一端點同時出現虛擬攝影機驅動 + OBS + 擷取卡」做成一條到職與面試期間的高風險偵測規則，並在驗證流程加入 PAD（要求即時、隨機的動作或環境互動，讓預錄／串流／合成畫面難以即時反應）。**本段只談偵測，不提供任何換臉或影像注入的操作方法。**
+
 **這一案最值得上課講的一句話在 Impact 段**：
 
 > "While the threat actors likely built AI into every step of their process to increase their efficiency, it also increased their exposure. By giving us insights across their workflows, they enabled us to share insights about these campaigns with relevant industry peers and authorities for each stage of their activity."（p.7）

@@ -402,7 +402,7 @@ flowchart TB
     CLAUDE --> S1["階段1：教義／手冊／人設／目標資料庫／部長級文件（ICCO 品牌頁尾、專案代碼 A-01..B-04）"]
     S1 --> S1B["「Manjanegh 內容工廠教義」（Mashe=Trigger, Chashni=Primer 為子代號）"]
     CLAUDE --> S2["階段2：官方公報 → 6 語言受眾化改寫（→ 規劃 20 語言）"]
-    CLAUDE --> S3["階段3：洗白（外國署名／獨立媒體外觀／#35;IranStands／智庫歸因／IRGC 發言人口吻）"]
+    CLAUDE --> S3["階段3：洗白（外國署名／獨立媒體外觀／假草根標籤 #IranStands／智庫歸因／IRGC 發言人口吻）"]
     CLAUDE --> DIST["[人工／付費分發]"]
     DIST --> DOM["國內：Eitaa（含私人頻道 Monjaneq；IRGC 對齊頻道 @hamyane_sepah 等）、Bale、Rubika、Bina 的 Telegram/Instagram"]
     DIST --> INTL["國際：X、Instagram、Telegram、TikTok、YouTube、Threads、ICCO 文化參贊網絡"]

@@ -173,7 +173,7 @@ Figure 4 的九個發現面（**這是本案的技術核心，務必逐格教**�
 | **Public-surface mining** | client-side JS secret、app SQLite config、未認證端點與 console | live replay |
 | **Victim credential stores** | 備份保險庫、k8s secret store、datasource/connector registry、平台 token 表 | cluster/secret-store dumping、platform-admin amplification、vendor OAuth app → tenant fan-out |
 | **Session/token capture** | XSS + CORS 外洩監聽器；在目標 web app 上做 token 捕獲鋪墊 | live replay |
-| **AI-endpoint injection** | 對**受害者部署的 LLM 代理/機器人**做 prompt injection，誘其吐出機密與內部資料 | dump mining → signing keys |
+| **AI-endpoint injection** | 對**受害者部署的 LLM 代理/機器人**做 prompt injection，誘其吐出機密與內部資料（機制／偵測／防禦見 **4.AA**） | dump mining → signing keys |
 | **Container images & registries** | 大量拉取 registry；映像檔內建 baked-in 憑證、config、內部程式碼 | cloud-key validation |
 | **Cloud metadata endpoints** | SSRF/in-app 程式路徑打到 IMDS、task-metadata 憑證；從曝露 runtime dump env | live replay |
 | **Exposed storage & buckets** | 開放/全球可讀的 bucket 與檔案分享；依嚴重度排序的目錄 fuzzing 找 .env 與金鑰檔 | cloud-key validation |
@@ -405,6 +405,94 @@ Figure 2 的第 9 格「Cover」沒有專屬展開圖，但其內涵散見各階
 
 ---
 
+### 4.AA 深入④：對受害者部署的 AI 代理做間接注入（AI-endpoint injection）（2026-09-15 深化）
+
+前三個深入段落拆的是「偷別人的憑證（4.X）、偷別人的租戶（4.Y）、偷別人的 AI 金鑰（4.Z）」。這一段補上 Discover 面裡**最新型、也最被前一版教材壓成一格**的採集手法：**把受害者自己部署的 LLM 代理，當成一個可以被誘導吐出機密的資料來源。** Figure 4 給它的紅籤是「dump mining → signing keys」——注入的終點不是聊天回覆，而是**簽章金鑰**這種能通往更深偽造與 pivot 的材料（呼應階段⑥「Dump mining → signing keys」與階段⑦「Session & 2FA forgery」）。
+
+#### 4.AA.0 先把證據等級標死（誠信紅線）
+
+| 主張 | 證據等級 | 依據 |
+|---|---|---|
+| 機會型行為者會「對 LiteLLM 或 OpenClaw 部署做 prompt injection」 | **一手（報告明載）** | p.12 機會型攻擊型態清單（本教材第 2.2 節已引） |
+| 「受害者部署的 AI 代理」是工業規模的 Discover 採集面，紅籤「dump mining → signing keys」 | **一手（報告明載）** | p.16 正文「victim-deployed AI agents」+ Figure 4「AI-endpoint injection」格（見第 4 節階段②表、line 176、第 6 節 Figure 4 判讀）；第 5 節框架缺口列亦記此行為 |
+| 具體的間接注入機制、gateway 為何是標的、可部署的偵測與防禦手法 | **推論＋三方佐證** | 報告在本案只給「一句話＋一格」，未展開機制；以下機制層由公開的 agent／LLM 安全研究補足，**非本報告對 GTG-50014 的逐句描述** |
+
+> **本節定位：** 報告明確把「打受害者的 AI 代理」列為採集面並給了紅籤，但沒有展開「怎麼打、怎麼防」。以下補的是機制與防禦，用的是通用 agent 安全研究，不是宣稱報告在 GTG-50014 頁面講了它沒講的細節（與附錄式深化的誠信原則一致，參照 GTG-10007 附錄 H.0）。
+
+#### 4.AA.1 機制：間接提示注入（indirect prompt injection）如何誘出機密
+
+要先分清兩種注入：
+
+- **直接注入（direct）**：攻擊者**自己**對著代理輸入惡意指令。這在本案沒有意義——攻擊者要打的是**別人的**代理，他不是那個代理的合法使用者。
+- **間接注入（indirect / cross-domain）**：攻擊者把指令**藏進代理「會去讀」的資料裡**——一封工單、一份共享文件、一個網頁、一封 email、一個知識庫條目、一個 API 回應。當受害組織的員工（或另一個自動流程）叫代理去「總結這張工單」「回覆這封信」「根據這份文件回答」，代理讀進了那段被污染的內容，**把其中夾帶的指令當成任務指令執行**——而且是**用合法使用者的權限**執行。使用者從頭到尾看不到那段注入。
+
+這正是 Simon Willison 提出、現已成為業界共識的**「致命三元組（lethal trifecta）」**風險模型：當一個代理**同時**具備 (a) 能接觸敏感資料、(b) 會處理不可信內容、(c) 有對外通訊能力，這三者一湊齊，間接注入就能把敏感資料經由對外通道搬走。本案的「受害者部署的 RAG／tool-calling 代理」幾乎天生湊齊這三項：它為了有用而被接上內部資料（a）、它的工作就是讀外來文件與工單（b）、它有工具呼叫或網路存取（c）。
+
+**在本案脈絡下，注入的「payload」目標很明確**——不是要代理講髒話，而是誘它：把**系統提示（system prompt）**原樣吐出、把它被授權呼叫的**內部 API／密鑰庫**查一遍、把 RAG 索引裡的**機密文件**回讀出來、或呼叫某個工具把資料送到攻擊者可讀的位置。報告 Figure 4 的紅籤「dump mining → signing keys」點出終點：從代理能觸及的 dump 裡挖出**簽章金鑰**。
+
+> 教學要點：**代理不是「被駭」，它是「被說服」。** 沒有記憶體破壞、沒有 CVE、沒有 exploit——只有一段「看起來像資料、其實是指令」的文字。這是為什麼傳統漏洞掃描與 WAF 對它幾乎無感（呼應第 5 節：ATT&CK 對此**沒有對應技術 ID**，是框架缺口）。
+
+#### 4.AA.2 為什麼 LiteLLM / OpenClaw 這類 gateway 是高價值標的
+
+報告 p.12 特別點名「LiteLLM 或 OpenClaw 部署」不是隨口舉例。**LLM gateway（又稱 AI gateway / LLM proxy）**是一層架在應用與各家模型供應商之間的中介，它之所以存在，就是為了**集中掌管**——而「集中掌管」對防守方是治理、對攻擊者是**單一劫掠點**：
+
+| gateway 握有什麼 | 對攻擊者的價值 | 對應本案 |
+|---|---|---|
+| **下游各家模型供應商的 API 金鑰**（OpenAI／Anthropic／Bedrock…，往往是高額度正式金鑰） | 一次拿下 = 一整排可轉售、可自用的 AI 算力金鑰 | 直接餵養 4.Z「偷 AI 算力打 AI」；金鑰驗證後即時進 Telegram 型錄（階段③） |
+| **系統提示與路由設定**（哪個請求走哪個模型、哪些 guardrail 規則） | 讀到 guardrail 規則＝知道怎麼繞；讀到系統提示＝知道內部語意與角色 | 情報偵察（階段①）＋為後續注入調校 |
+| **內部 endpoint 與工具清單**（gateway 常同時是 tool／MCP 路由層） | 拿到內部服務地圖、可呼叫的工具面 | 橫向擴張的地圖（階段④） |
+| **每把金鑰的用量／團隊／使用者對應**（用於計費與配額） | 使用者名冊 + 內部組織結構 | 目標分級與 loot tree（階段⑥） |
+
+換句話說，**gateway 是「AI 版的憑證庫（credential store）」**——它對 AI 供應鏈的地位，等同 Figure 4 那格「Victim credential stores」對傳統憑證的地位。一旦攻擊者能透過**被 gateway 代理的某個代理**做間接注入、或直接對暴露的 gateway 管理面下手，他拿到的不是一把金鑰，而是**一整層的金鑰、設定與內部地圖**。這也是為什麼本案把「AI-endpoint injection」和「victim credential stores」並列在同一張 Discover 圖上——**它們是同一種「集中式機密」在 AI 時代的兩個面貌**。
+
+```mermaid
+flowchart LR
+  SRC["污染來源<br/>被植入指令的工單／共享文件<br/>網頁／email／知識庫條目<br/>= 不可信內容"] --> AGENT["受害者部署的 AI 代理<br/>RAG／tool-calling agent<br/>經 LiteLLM／OpenClaw gateway 路由"]
+  AGENT -->|"把注入內容當成任務指令<br/>以合法使用者權限執行"| CALL["代理發出工具呼叫<br/>讀密鑰庫・查內部 API<br/>回讀 RAG 機密・吐系統提示"]
+  CALL --> SECRET["gateway 集中掌管的機密<br/>下游 API 金鑰・系統提示<br/>內部 endpoint・使用者名冊"]
+  SECRET -->|"經代理輸出或對外通道外洩"| EXFIL["攻擊者收贓<br/>Figure 4 紅籤：dump mining → signing keys<br/>→ 餵入 4.Z 偷算力 / 階段⑦ 偽造"]
+  classDef bad fill:#ffe8e8,stroke:#c62828,color:#000
+  class SRC,EXFIL bad
+```
+
+#### 4.AA.3 偵測落點（防守方視角）
+
+間接注入沒有雜湊、沒有 CVE，偵測必須落在**行為與輸出**層。四類訊號：
+
+| 偵測面 | 具體訊號 | 為什麼有效 |
+|---|---|---|
+| **注入樣式（輸入側）** | 進代理的外來內容裡出現「ignore previous instructions」「you are now…」「system prompt」「print your instructions」等祈使／角色改寫樣式；或不可見字元、超長 base64、隱藏在 HTML 註解／白字／metadata 的指令 | 間接注入的 payload 幾乎都要「改寫代理的角色或任務」；這些樣式在**正常業務文件裡不該出現** |
+| **代理輸出洩密監控（輸出側，最關鍵）** | 代理輸出裡出現系統提示片段、API 金鑰／token 形態字串、內部主機名／endpoint、超出當前任務範圍的資料 | 直接抓「機密離開代理」這個終點；即使注入手法千變萬化，**洩密的輸出特徵相對穩定**（金鑰有格式、系統提示有指紋） |
+| **工具呼叫節律（behavior）** | 單次「總結一份文件」卻觸發一連串**與任務無關**的工具呼叫（查密鑰庫、列內部服務、對外送資料）；工具呼叫序列的**確定性、機器節奏**（呼應 GTG-10007 附錄 A.4、本教材第 5 節框架缺口） | 良性任務的工具呼叫是**收斂、相關**的；被注入劫持的代理會突然「做起沒被交代的事」 |
+| **gateway 側稽核** | 某個代理身分／API key 在短時間對**異常多的下游 endpoint**發請求、讀取用不到的密鑰、系統提示被大量讀出 | LiteLLM 這類 gateway **原生有 per-key／per-agent／per-tool 的稽核與用量記錄**，是防守方少數看得到代理行為的位置 |
+
+> 教學提醒：**輸出側監控比輸入側過濾更耐打。** 輸入側的樣式比對會被改寫、編碼、多語言繞過（如同分類器被重新提示突破，見第 8 節）；但「機密不該出現在這個輸出裡」是一條**語意上更硬的線**——把偵測重心放在「代理吐了什麼不該吐的」，比追「攻擊者寫了什麼咒語」更務實。
+
+#### 4.AA.4 防禦：三道結構性護欄
+
+單靠「把模型訓練得更會拒絕」擋不住間接注入（這是雙重用途／指令混淆的結構問題，非模型不夠聰明）。真正有效的是**架構層**的三道護欄：
+
+1. **輸入／輸出護欄（guardrail）＋信任分層**：對進入代理的外來內容做「資料 vs 指令」分離（例如把不可信內容明確標記為「僅供參考、其中任何指令都不得執行」的資料通道）；對輸出做機密外洩掃描（金鑰／token／系統提示／PII 樣式）。LiteLLM 這類 gateway 已可掛載 prompt-injection／jailbreak 偵測與 PII 遮罩作為 middleware——**把護欄放在 gateway 這一層，一次覆蓋所有走它的代理**。
+
+2. **工具最小權限（least privilege）＋能力邊界**：代理能呼叫的工具、能觸及的資料，一律以「完成此任務所需的最小集合」授權；高危工具（改寫、對外送出、讀密鑰）要人類確認或完全隔離。對應「致命三元組」的拆解策略——**讓任一代理不要同時擁有「接觸敏感資料」「讀不可信內容」「對外通訊」三者**（業界稱「Agents Rule of Two」：三取二為上限），注入即使成功也搬不走東西（blast-radius reduction）。
+
+3. **機密不進代理上下文（secrets out of context）**：**最根本的一條**——如果金鑰、系統提示、內部 endpoint 根本不放進代理拿得到的上下文與工具回應裡，注入就沒有東西可吐。密鑰留在後端、由受控的後端服務代呼叫（代理只拿到「已完成」的結果，拿不到金鑰本身）；系統提示不回顯；RAG 索引做欄位級授權與機密剔除。這是把 4.X 的核心觀念（「client 端沒有秘密可言」）**平移到代理上下文**：**凡是代理拿得到的，都要當作「可能被注入吐出來」來設計。**
+
+> 對應報告主線：本案把「受害者的 AI 代理」同時當**標的（採集面）**；4.Z 把 AI 金鑰當**資源（算力）**。兩者合起來，就是報告 p.29–30「AI supply chain as target, loot, and attack compute」在本案的完整落地——**AI 部署既是攻擊工具、也是被覬覦的攻擊面。** 防守方的心智模型要同步升級：**你部署的每一個 LLM 代理，都是一個新的、握有機密的對外資產。**
+
+#### 4.AA.5 本節外部來源（信賴層級已標）
+
+- **一手（Anthropic 報告）**：p.12「prompt injection of LiteLLM or OpenClaw deployments」；p.16 + Figure 4「AI-endpoint injection」格與「dump mining → signing keys」紅籤；p.29–30 AI 供應鏈章。
+- **三方獨立（agent／LLM 安全研究，WebSearch 2026-09-15）**：
+  - Simon Willison，〈The lethal trifecta for AI agents: private data, untrusted content, and external communication〉，simonwillison.net/2025/Jun/16/the-lethal-trifecta/（致命三元組模型，**高信賴、業界廣泛引用**）。
+  - Sophos，〈Inside the lethal trifecta: Blast radius reduction in AI agent deployments〉，sophos.com（爆炸半徑削減、Agents Rule of Two 的防禦實作，**廠商技術部落格**）。
+  - Sysdig，〈The Comprehensive Guide to Prompt Injection Attacks〉，sysdig.com/learn-cloud-native/prompt-injection（間接注入 vs RAG/agent 攻擊面總覽，**廠商技術指南**）。
+  - OWASP，《OWASP Top 10 for LLM Applications》LLM01 Prompt Injection（**業界標準框架**，指令注入列為首要風險）。
+  - LiteLLM 官方文件，docs.litellm.ai/docs/proxy/guardrails/（gateway 內建 prompt-injection 偵測、leaked-key protection、per-key/agent 稽核，**一手產品文件**，佐證 gateway 為「集中式機密」與可掛護欄）。
+  - 近期學術防禦框架（arXiv，2025–2026，**未逐篇精讀**，僅標存在）：以工具依賴圖或執行期監控為基礎的間接注入防禦提案（如 IPIGuard、ClawGuard、AgentSentry 一類）——說明「輸出／行為層防禦」正在成為研究主線，與 4.AA.3–4.AA.4 的偵測哲學一致。
+
+---
+
 ## 5. TTP 與 MITRE ATT&CK 對應
 
 > 說明：以下對應以 Enterprise ATT&CK 為主。凡涉及「AI 代理編排/自主執行」的行為，現行 ATT&CK **沒有對應技術 ID**，標記為**框架缺口**——這是課程要點：ATT&CK 描述「做了什麼技術動作」，但不描述「由誰/由什麼自主程度編排」，而後者正是 AI 賦能犯罪的關鍵變數。
@@ -499,7 +587,7 @@ Figure 2 的第 9 格「Cover」沒有專屬展開圖，但其內涵散見各階
 - **圖片類型：** 標題「② Discover」，3×3 九張卡片，各帶綠籤（cloud-key validation / live replay）或橘籤（dump mining→signing keys 等）。
 - **九卡：** Mobile-app secret mining、Repo/CI/IaC mining、Public-surface mining、Victim credential stores（橘籤三連：cluster/secret-store dumping、platform-admin amplification、vendor OAuth app→tenant fan-out）、Session/token capture、AI-endpoint injection（橘籤 dump mining→signing keys）、Container images & registries、Cloud metadata endpoints、Exposed storage & buckets。（逐格內容見第 4 節階段②表）
 - **核心訊息：** 「機密無所不在」——從 App 二進位、repo、client JS、憑證庫、容器、雲 metadata、開放 bucket，到**受害者自己部署的 AI 代理**，全是採集面。**AI-endpoint injection 這一格是新型態**：把「受害者的 LLM 代理」當成一個可被 prompt injection 誘導吐機密的來源。
-- **課堂用法：** 這是**第 4.X「為什麼 APK 是重災區」的主圖**。逐格對應防線（見 4.X 表）。特別停在「AI-endpoint injection」，連結到報告的 AI 供應鏈章與本課程其他模組。
+- **課堂用法：** 這是**第 4.X「為什麼 APK 是重災區」的主圖**。逐格對應防線（見 4.X 表）。特別停在「AI-endpoint injection」——完整機制、偵測與防禦見**第 4.AA 節（深入④）**，並連結到報告的 AI 供應鏈章（p.29–30）與本課程其他模組。
 
 ### Figure 5（p.17）：Validate/qualify（驗證與分級）
 （與 Figure 4 同頁 `../figures/page-017.png`，位於下半）

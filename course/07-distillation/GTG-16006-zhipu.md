@@ -190,6 +190,8 @@
 3. Zhipu **改攻 Opus 4.6 與另一家美國實驗室的旗艦**——**明講原因：他們評估這些模型的防護較弱**。
 
 > **這是防禦工程的核心教材**：Fable 的防護「成功了」，但整體攻擊**沒有被阻止**，只是被**轉移到產品線裡防護較弱的一環**。對手是理性的，會**挑最弱的一環（weakest link）下手**。因此「單一旗艦模型防護做好」不等於「能力擴散被擋住」——**同一實驗室的模型家族之間、以及跨實驗室之間的防護落差，就是攻擊面**。這一點在第 8 節「防線缺口」再深入。
+>
+> （至於原文那個關鍵動詞 **degraded／「削弱」**，在操作層到底是什麼——拒答、降質、輸出擾動/蜜罐化、萃取分類器攔截，還是能力誘出壓制——以及它與通用反蒸餾層在機制上有何不同，見**技術附錄 D.5〔2026-09-15 深化〕**。）
 
 ---
 
@@ -305,7 +307,7 @@ Anthropic 這份報告的可貴之處在於**多次自曝防線被繞過**。本
    - **跨實驗室之間**，防護強度不一致（「another US AI lab」被評估為更弱）。
    - 對手只要**挑最弱的一環**，就能達成「補強網路能力」的目的。**單點防守成功 ≠ 能力擴散被阻止**。
 
-> **教學提煉**：把 8.2 的四點串起來，就是一堂「防禦者為什麼會輸掉一半」的課——(1) 舊控制被協定層手法繞過；(2) 帳號限制被規模化詐欺帳號繞過；(3) 偵測有時間差；(4) 最致命的是防護落差被當套利點。**其中 (4) 不是把某個模型修好就能解決的，它要求「跨模型、跨實驗室的防護基線一致化」與「能力導向（capability-based）的統一管制」**——這正是政策層（如出口管制、能力揭露規範）介入的理由。
+> **教學提煉**：把 8.2 的四點串起來，就是一堂「防禦者為什麼會輸掉一半」的課——(1) 舊控制被協定層手法繞過；(2) 帳號限制被規模化詐欺帳號繞過；(3) 偵測有時間差；(4) 最致命的是防護落差被當套利點。**其中 (4) 不是把某個模型修好就能解決的，它要求「跨模型、跨實驗室的防護基線一致化」與「能力導向（capability-based）的統一管制」**——這正是政策層（如出口管制、能力揭露規範）介入的理由。（第 4 點裡 Fable 那個「degrade／削弱」動作**本身**的操作層機制——它是哪一種 degrade、為何 degrade 對「蒸餾」常比 refuse 更有效、又與通用反蒸餾層有何機制差異——見**技術附錄 D.5**。）
 
 ---
 
@@ -705,6 +707,90 @@ flowchart TD
 
 ---
 
+### D.5 「degrade（削弱）」的操作層機制拆解（2026-09-15 深化）
+
+正文第 4 節軌道 C、第 8.2 節第 4 點、以及本附錄 D.1–D.4，都把本案的**支點事件**停在報告原文一句話——「Anthropic's cyber safeguards **degraded** Zhipu's attacks」（p.151）。對它的**戰略教訓**（weakest-link、min 問題、結構性缺口）已講透；但技術聽眾會追問一個前四小節都沒答的問題：**所謂「degrade（削弱）」，在操作層到底是哪一種動作？** 是拒答、是給錯的 exploit 推理、是輸出擾動/蜜罐化、是萃取分類器攔截、還是能力誘出被壓制？報告**沒有明示**。本節補這段技術短論，把 `degrade` 從「一個詞」下沉到「一族可辨識、可對照、可據以設計防禦的機制」。
+
+> **證據等級（本節通用）★☆☆＝推論**。報告只給了「degraded」這一個動詞；以下的機制光譜、以及「哪一種最可能」的判斷，地基只有兩塊：(a) 報告用的是 **degraded 而非 blocked/refused**（一個語意線索），(b) 公開的反蒸餾/反模型竊取研究對「這類 safeguard 可以是什麼」已有成熟分類（見 G.8）。**非報告明示、非獨立查證**——教學時務必如此標註，不要把本節的機制推論講成報告事實。
+
+#### D.5.1 五種候選機制與對照（Mermaid 圖 5）
+
+```mermaid
+flowchart TD
+    Q["報告原文：cyber safeguards『degraded』Zhipu's attacks<br/>degrade 到底是哪一種操作機制？<br/>（報告未明示，以下皆為推論）"]
+    Q --> M1["① 拒答 hard refusal<br/>直接拒絕 cyber-offensive 請求<br/>語意不合：硬拒會被寫成 blocked／refused，非 degraded"]
+    Q --> M2["② 降質 quality degradation／data poisoning<br/>給貌似正確、實則系統性錯誤的 exploit 推理／PoC<br/>語意吻合：攻擊仍執行、產物變差"]
+    Q --> M3["③ 輸出擾動／蜜罐化 perturbation／honeypot<br/>微調輸出、逐請求變動、導向低可轉移知識、埋 canary<br/>＝本檔 D.4 對策＋CISA 建議2（見 D.5.4 內部連結）"]
+    Q --> M4["④ 萃取分類器攔截 classifier interception<br/>偵測 cyber 蒸餾意圖→擋請求／封帳號<br/>全攔＝blocked；部分攔截才呈現為整體 degraded"]
+    Q --> M5["⑤ 能力誘出壓制 capability suppression<br/>對 cyber-offensive 只給淺層、非操作性回答<br/>能力域專屬的『軟性降級』，語意吻合"]
+    M2 --> POISON["②③⑤ 的共同效果：毒化軌道 C 的<br/>LLM-as-judge 擇優迴圈（見 E 節）<br/>攻擊者拿到的訓練訊號變不可靠"]
+    M3 --> POISON
+    M5 --> POISON
+```
+
+| # | 機制 | 操作層長相 | 是否符合「degraded」語意 | 對蒸餾的打擊點 | 證據等級 |
+|---|---|---|---|---|---|
+| ① | 拒答（hard refusal） | 直接拒絕 cyber-offensive 請求 | **弱**：拒答通常被描述為 blocked/refused，非 degraded | 斷絕資料源，但給攻擊者明確訊號可繞道 | 推論 |
+| ② | 降質（quality degradation / data poisoning） | 回「貌似正確、實則系統性錯誤」的 exploit 推理/PoC | **強**：攻擊照跑、產物品質下降＝degraded | 直接毒化訓練樣本，錯誤訊號傳進 student | 推論 |
+| ③ | 輸出擾動／蜜罐化（perturbation / honeypot） | 微調輸出、逐請求變動、導向低可轉移知識、埋 canary | **強** | 讓軌道 C 的 LLM-as-judge 評分變噪、擇優失準 | 推論（**且本檔 D.4 已列為對策**） |
+| ④ | 萃取分類器攔截（classifier interception） | 偵測 cyber 蒸餾意圖→擋請求/封帳號 | **中**：全攔＝blocked；**部分**攔才呈現為整體 degraded | 降低有效產出率 | 推論 |
+| ⑤ | 能力誘出壓制（capability elicitation suppression） | 對 cyber-offensive 只給淺層、非操作性、拒絕深入 | **強**：能力域專屬的「軟性降級」 | 讓萃取到的「能力」空心化 | 推論 |
+
+#### D.5.2 語意線索：為什麼「degraded」把天平推向 ②③⑤
+
+報告在**同一段**對不同防禦用了**不同動詞**，這在情報學上是「動詞即證據」的典型（呼應正文 2.2 對措辭強弱的訓練）：
+
+- 對帳號限制：273 帳號「to **evade** our model restrictions」——用 **evade**，代表限制**被繞過**。
+- 對 Fable 的網路防護：「cyber safeguards **degraded** Zhipu's attacks」——用 **degrade**，代表攻擊**仍發生、但被削弱**。
+
+**`degrade` 這個詞本身就排除了「完全擋下」**：若 Fable 走的是硬拒答（①）或整體攔截（④全攔），報告更可能寫 blocked / prevented / refused。選用 degraded，指向「攻擊照跑、產出變差」——正是 ②降質、③擾動、⑤能力壓制的共同特徵。⚠️ 但這**只是語意推論**：degrade 也可能只是作者的概括用詞，不宜當機制證據；且真實防禦常是**多機制疊加**（見 D.5.6）。
+
+#### D.5.3 為什麼「降質/擾動」對『蒸餾』特別致命（而非對一般濫用）
+
+這是本節對技術聽眾最有價值的一點：**對「蒸餾」這種攻擊，degrade 往往比 refuse 更有效**。三層理由：
+
+1. **攻擊者要的是「高品質訓練資料」，不是「一次回答」**。硬拒答給出明確失敗訊號，攻擊者可換提示、換帳號、換模型繞道（正是本案 weakest-link 的由來）。反之，**靜默降質/擾動不給明確訊號**，攻擊者難以分辨哪些樣本被下了毒。
+2. **它直接攻擊軌道 C 的自動化心臟**（E 節的 LLM-as-judge 迴圈）：若「解題者」或「評分者」的輸出被逐請求擾動，**擇優迴圈會把毒化樣本當高分樣本留下**，毒性隨 SFT/RL 傳進 GLM 5.3。這比封帳號更能「降低蒸餾的投資報酬率（attenuate the payoff）」——與 CISA 建議 #2、B.3 完全同源。
+3. **公開研究已把這條路走出來**（見 G.8）：**Prediction Poisoning**（擾動回傳機率以扭曲攻擊者梯度）、**Adaptive Misinformation**（只對疑似攻擊查詢回誤導輸出、對正常用戶保持準確）、**Knowledge Honeypot**（把萃取導向低可轉移知識）、**data poisoning**（注入系統性錯誤訊號）都是「degrade 而非 block」的成熟範式。**其中 Adaptive Misinformation 尤其貼合「cyber safeguard」**——它是「偵測到 out-of-distribution／攻擊型查詢才降級」，正好能解釋「為何只有 cyber-offensive 萃取被 degrade、一般使用不受影響」。
+
+#### D.5.4 內部連結：本檔 D.4／B.3 早就寫了一種 `degrade` 機制，卻沒回連到 Fable 事件
+
+**這是本節要補的關鍵內部連結。** 回看本附錄自己寫過的東西：
+
+- **D.4 對策表**有一列「**輸出擾動（response perturbation）**：對疑似蒸餾請求**微調輸出且逐請求變動**（CISA 建議 #2）→ 讓軌道 B/C 的 LLM-as-judge 評分變噪、清洗後樣本品質下降」。
+- **B.3** 也寫了「模型供應商可對疑似蒸餾請求『微調輸出（subtly alter responses）』並在請求間變動，使攻擊者的 LLM-as-judge 品質評分變噪、清洗後樣本品質下降」。
+
+我們把「輸出擾動」寫成了一個**前瞻性、建議防禦方採用**的對策——**卻沒注意到：報告的支點事件（Fable 的 cyber safeguards degrade 掉 Zhipu 的攻擊）很可能就是這個機制的一次「已部署、且已見效」的實例**。把三者對齊：
+
+> **D.5 機制③（輸出擾動/蜜罐化）＝ D.4 的「輸出擾動」列 ＝ CISA 建議 #2 的「subtly alter responses」——三者是同一件事。** 若 Fable 的「degrade」屬於③（或②/⑤），那麼 D.4 那一列就不再只是「值得考慮的對策」，而是**報告已用一次真實事件證明「有效」的對策**——有效到 Zhipu 直接放棄 Fable、轉去打防護較弱的一環。
+
+這條連結把全檔收成一個閉環：**B.3 說「清洗流量可被擾動反制」→ D.4 把擾動列為對策 → D.5 指出 Fable 事件可能就是擾動（或降質/壓制）的實戰結果**。對防禦方的意涵很直接：**面對工業規模蒸餾，「degrade 而非 block」可能是投報比最高的防線**——但它的代價與極限見 D.5.6。
+
+#### D.5.5 機制上的關鍵區分：cyber safeguard ≠ 通用反蒸餾層
+
+技術聽眾必問的第二個問題：**「cyber safeguard」和 §8.1／附錄 A.1 講的通用反蒸餾層（thinking signature、summarize reasoning、preserved thinking）機制上有何不同？** 答案是——**它們作用在不同的層**，而這正好解釋了本案兩條軌道為何「一個得手、一個被擋」：
+
+| 面向 | 通用反蒸餾層 | cyber safeguard（能力域防護） |
+|---|---|---|
+| 作用層 | **協定/格式層** | **內容/能力域層** |
+| 保護對象 | reasoning trace 這個「資產」本身（不論主題） | 特定危險能力的「誘出」——此處＝cyber-offensive |
+| 具體機制 | thinking signature、summarize reasoning、preserved thinking（§8.1 第 3–4 點、附錄 A.1） | 對「網路攻防意圖」的拒答/降質/擾動/壓制閾值（即 D.5.1 的 ①–⑤） |
+| 主題相依性 | **主題無關**（topic-agnostic）：不管問什麼，都不讓 raw CoT 外流 | **主題相依**（topic-specific）：只在 cyber-offensive 誘出時觸發 |
+| 觸發的攻擊面 | 軌道 A（偷推理軌跡） | 軌道 C（榨取網路攻防能力） |
+| 在本案的實際遭遇 | **被 cross-session replay 部分繞過** → 軌道 A 對 Opus 4.8 得手（10 天 770,609） | **degrade 住 Fable 的軌道 C** → Zhipu 放棄 Fable |
+| 攻擊者的因應 | 換 session/帳號搬運 signature（協定層對抗） | 換到 safeguard 較弱的 Opus 4.6／他廠旗艦（weakest-link 選擇） |
+
+> **這張表是本案的機制樞紐**：**同一個行為者、同一個存取層（273 帳號＋proxy），碰到兩種不同的防禦層，得到兩種相反的結果**。通用反蒸餾層防的是「不讓你把推理『搬走』」（保護資產的**可得性**），被協定層手法（cross-session replay）繞過；cyber safeguard 防的是「就算你問得到，也不讓你把 cyber 攻防能力『問深』」（壓制危險能力的**誘出**），在 Fable 上守住了。**兩者不是同一道牆的厚薄之別，而是兩道不同的牆。** 這正是為什麼「Fable 守住了 cyber，但 Opus 4.8 的 CoT 照樣被大規模萃取」——**它們防的根本是不同的東西**。教學上這一格能一舉打通「為何 §8.2 的四個缺口不是同一個問題」。
+
+#### D.5.6 誠實界線與極限（務必對學員講）
+
+1. **全節是推論**：報告只給「degraded」一個詞。①–⑤ 哪一種（或哪幾種的組合）是 Fable 實際採用的，報告**未明示**；本節只給**可能性光譜＋語意傾向**，不臆測 Fable 的具體實作。
+2. **「degrade 型防禦」不是萬靈丹**——公開研究已標出其極限（見 G.8）：**DistillGuard** 的評測發現**改寫式擾動對 student 品質的傷害有限**，且 **data poisoning 主要傷到對話流暢度、對「任務型能力」的抑制有限**。換言之，若攻擊者只要 cyber 任務能力（正是本案），純擾動未必擋得住——**Fable 能 degrade 到讓 Zhipu 放棄，很可能是 ②/③ 疊加 ⑤能力誘出壓制或 ④分類器攔截的組合**，不是單一機制。
+3. **對正常用戶的代價**：擾動/降質本質是「對所有用戶降低輸出品質」與「防禦強度」的取捨（除非像 Adaptive Misinformation 那樣**只對疑似攻擊查詢**降級——但那又依賴分類器判準的準確度，會有誤傷）。這正是把 D.4「輸出擾動」列真正上線時，防禦方要面對的工程與體驗權衡，也是課堂討論題 10.2 第 5 題（偵測倫理）的技術底稿。
+4. **與 weakest-link 教訓互補、不衝突**：即使 degrade 在 Fable 上有效，只要 Opus 4.6／他廠的**同層** safeguard 較弱，攻擊就被轉移（D.2 的 min 問題）。**degrade 是「把單點守得更貴」，不是「把生態守住」**——後者仍需 D.3/D.4 的跨模型基線一致化與跨廠情報共享。
+
+---
+
 ## E. CTF 蒸餾網路能力的 LLM-as-judge 迴圈（Mermaid 圖 2，第二階段明確要求）
 
 這是軌道 C 的技術心臟。把「public vulnerability datasets → CTF → 蒸餾他廠模型 → Opus 4.6 評分 → 訓練 GLM 5.3」畫成可自動運轉的迴圈：
@@ -863,6 +949,21 @@ ApiTelemetry
 
 - Zhipu 於 **2025-01-15** 依 EAR §744.11 被列入 Entity List（本體＋9 家關聯），理由「advance PRC military modernization」，為**首家被列的中國大模型公司**；Zhipu 稱不會有實質影響。來源：[Medium/AI Disruption](https://medium.com/ai-disruption/zhipu-ai-chinas-leading-large-model-added-to-u-s-entity-list-following-first-ai-export-ban-1e107828ca7e)、[MLex](https://www.mlex.com/mlex/articles/2285637/addition-of-china-s-zhipu-to-us-entity-list-to-hit-international-cooperation)、[aibase](https://www.aibase.com/news/14749)。**判定**：提供「美方早視 Zhipu 為國安關切」的背景，**不直接證明蒸餾**。
 
+### G.8 反蒸餾/反模型竊取的「degrade 型防禦」研究（佐證 D.5 的機制光譜，2026-09-15 補）
+
+沿用 G 節分類：以下均為**獨立學術研究**，佐證「degrade 而非 block」型防禦**在技術上是成熟且多樣的一整族範式**（擾動、選擇性誤導、蜜罐、對抗性降質），因此 D.5 對「Fable 的 `degrade` 很可能屬 ②/③/⑤」的推論**有公開技術基礎**；但它們**佐證的是機制的存在與可行性，非對 Fable／Zhipu 這次具體攻防的查證**（判定＝獨立研究/機制佐證，同 G.3–G.5）。
+
+| 研究 | 對應 D.5 機制 | 要點 | 來源 |
+|---|---|---|---|
+| Defending Against Model Stealing Attacks with **Adaptive Misinformation** | ⑤能力壓制＋③選擇性擾動 | 只對 out-of-distribution／疑似攻擊查詢回**誤導輸出**，對正常查詢保持準確——最貼合「只 degrade cyber-offensive 萃取、不傷一般使用」 | [arXiv 1911.07100](https://arxiv.org/pdf/1911.07100) |
+| **Prediction Poisoning**（經模型竊取防禦綜述） | ③輸出擾動 | 擾動回傳的後驗機率/logits 以扭曲攻擊者的梯度訊號，同時把擾動壓小以保留正常效用 | [Model Extraction 攻防綜述 2508.15031](https://arxiv.org/pdf/2508.15031) |
+| Let Them Steal: Trapping LLM Extraction Attacks with **Knowledge Honeypot** | ③蜜罐化 | 用 Honeypot Knowledge Graph 把萃取**導向低可轉移知識**，降 surrogate 一致性而不傷正常用戶效用 | [arXiv 2606.15810](https://arxiv.org/html/2606.15810) |
+| **Adversarial Sparse Teacher** | ②降質 | 用對抗樣本讓 teacher 輸出對「蒸餾式竊取」有毒，正常表現不變 | [arXiv 2403.05181](https://arxiv.org/html/2403.05181v1) |
+| **DistillGuard: Evaluating Defenses Against LLM Knowledge Distillation** | 極限/反證 | 評測發現**改寫式擾動對 student 傷害有限、data poisoning 主要傷流暢度而非任務能力**——即 D.5.6「非萬靈丹」的依據 | [arXiv 2603.07835](https://arxiv.org/pdf/2603.07835) |
+| **Distillation-Resistant LLMs**（資訊理論觀點）／**Lossless Anti-Distillation Sampling**／**What Does It Mean to Break a Distillation Defense** | 理論邊界 | 蒸餾抵抗的資訊理論極限、盡量不傷正常用戶的取樣、以及「攻破一個蒸餾防禦」的定義 | [2602.03396](https://arxiv.org/html/2602.03396v3)、[2605.18829](https://arxiv.org/pdf/2605.18829)、[2606.25059](https://arxiv.org/html/2606.25059) |
+
+> **判定**：這些**獨立**研究證明「degrade 型防禦」是一整族成熟技術，使 D.5「Fable 的 degrade 很可能是 ②/③/⑤（而非 ①硬拒）」的推論**有公開技術基礎**；同時 DistillGuard 等也標出其極限（對任務型能力抑制有限、對正常用戶有品質代價）。**但再次強調：佐證的是「機制可行」，不是「Fable 這次就是這樣做」——後者報告未明示（單一來源＋單一動詞 degraded）。**
+
 ---
 
 ### 技術附錄小結（給講師）
@@ -870,4 +971,5 @@ ApiTelemetry
 - **新增技術縱深**：把三重用途下沉到協定層（加密 CoT／cross-session replay）、後訓練管線層（LLM-as-judge/RLAIF）、與 CTF 可評分能力語料層；並給出可部署的**三條偵測邏輯**與**六項對策**（對齊 CISA AA26-251a）。
 - **最有力的新佐證**：(1) **GLM 5.3（2026-08-14）自我定位為 cyber 模型、"post-training is all we did"**——與軌道 B/C 敘事強吻合；(2) **CISA 通報獨立點名 Z.AI 蒸餾 Claude Opus 4.8＋GPT-5.5 之 CoT 資料**——政府層級佐證，並提示（未證實）「另一家美廠」可能是 OpenAI；(3) **arXiv 多篇獨立驗證加密 CoT 萃取橫跨三大廠**——手法可信度佐證。
 - **最該守住的準確性**：**770,609 = 6 月・10 天・清洗器・訓練 GLM 泛用；GLM 5.3 網路能力 campaign = 另一段 more recently、無數字**（已用 PDF 原文坐實，C 節）。
-- **Mermaid 圖**：本附錄新增 **4 張**（圖1 三重用途架構、圖2 CTF＋LLM-as-judge 迴圈〔要求項〕、圖3 三數字範圍區分、圖4 safeguard arbitrage 決策）。
+- **`degrade` 機制深化（2026-09-15，D.5）**：把支點事件那個詞從「一句話」拆成 **①拒答／②降質／③輸出擾動蜜罐化／④萃取分類器攔截／⑤能力誘出壓制** 五種可能機制（全標為推論），指出「degraded ≠ blocked」的語意傾向，並補上**關鍵內部連結**——本檔 D.4／B.3 早已把「輸出擾動」列為對策，而 Fable 的 degrade 很可能就是這對策的一次實戰實例；另釐清 **cyber safeguard（內容/能力域層）≠ 通用反蒸餾層（協定/格式層）**，解釋兩軌一擋一破。
+- **Mermaid 圖**：本附錄新增 **5 張**（圖1 三重用途架構、圖2 CTF＋LLM-as-judge 迴圈〔要求項〕、圖3 三數字範圍區分、圖4 safeguard arbitrage 決策、圖5 `degrade` 機制光譜對照〔2026-09-15 深化〕）。

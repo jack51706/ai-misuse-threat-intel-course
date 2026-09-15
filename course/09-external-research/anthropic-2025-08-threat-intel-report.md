@@ -194,7 +194,52 @@ flowchart TD
 
 > ［分析］這條時間軸是**本報告最被低估的方法論貢獻**。它示範了「平台側遙測可以重建攻擊者的能力成長曲線」這件事，是 endpoint 或網路遙測做不到的。2026-09 的 GTG-50014 儀表板（Figure 2 的 118 天 campaign span）本質上是同一種分析的視覺化版本。
 
-### 3.6 詐欺生態系四案：報告的「供應鏈」論點［原文 p.21 至 p.25］
+### 3.6 案例四：中國 APT 打越南關鍵基礎設施（2026-09-15 深化）［原文 p.18］
+
+本案在總表（3.2 節第 4 列）之前只有一行，但它是全報告**最嚴重的案件之一**，也是**唯一自帶官方 ATT&CK 錨點**的案例：報告明寫這名行為者「integrated Claude as an assistant across **12 of 14 MITRE ATT&CK tactics**」。案例一、二、三都有深挖子節與 ATT&CK 表，獨缺這案，本節補上。專屬 ATT&CK 對應表見第 5.5 節。
+
+**基本輪廓**［原文 p.18］：
+
+> "We identified and investigated a sophisticated Chinese threat actor who systematically leveraged Claude to enhance cyber operations targeting Vietnamese critical infrastructure. The actor integrated Claude across nearly all phases of the attack lifecycle over a **9-month campaign**."
+
+> 譯：我們辨識並調查了一名精密的中國威脅行為者，其有系統地利用 Claude 強化針對越南關鍵基礎設施的網路行動。這名行為者在一場**長達 9 個月**的行動中，把 Claude 整合進攻擊生命週期的幾乎每一個階段。
+
+- **行為者**：具備「characteristics consistent with Chinese APT operations」，含作業 tradecraft、主要使用中文並要求以中文溝通（原文逐字：`中文交流`）、以及「systematic targeting aligned with Chinese strategic interests in Southeast Asia」。跨 Windows、Linux、web 應用與資料庫技術都有專長。**這是本報告歸因措辭最直白的一案（直接寫 Chinese APT），與 2026-09 改用分級信度詞形成對比（見 4.7 節）。**
+- **受害者**：「appears to have compromised **major Vietnamese telecommunications providers, government databases, and agricultural management systems**」，報告定性為「an intelligence collection operation with potential implications for Vietnamese national security and economic interests」。**電信、政府資料庫、農業管理系統三者都是關鍵基礎設施（CI），這是一次國家級對他國 CI 的情蒐行動。**
+- **時間跨度**：9 個月（原文 `9-month campaign`），是本報告時間最長的單一行動。
+- **AI 自主程度**：報告把 Claude 定位為「technical advisor, code developer, security analyst, and operational consultant」，即**人類指揮、AI 全程貼身輔助**（總表評為「中」）。
+
+**攻擊生命週期與 AI 用途**（每一階段對應報告 p.18 逐字列出的六項 Claude 用途）：
+
+```mermaid
+flowchart TD
+    P1["階段 1 偵察<br/>Claude 開發客製 Python 掃描工具<br/>掃描越南 IP 範圍"]
+    P2["階段 2 Web 利用<br/>Claude 打造檔案上傳 fuzzing 工具<br/>與 WordPress 利用框架"]
+    P3["階段 3 憑證破解<br/>Claude 優化憑證收割<br/>操作 Hydra 與 hashcat"]
+    P4["階段 4 核心提權<br/>Claude 實作提權利用<br/>含 Linux 核心漏洞"]
+    P5["階段 5 proxy 樞紐<br/>Claude 建 proxy chain 設定<br/>作業安全與隱蔽 C2"]
+    P6["階段 6 情蒐分析與橫移規劃<br/>Claude 分析偵察資料<br/>規劃橫向移動策略"]
+    P1 --> P2 --> P3 --> P4 --> P5
+    P4 --> P6
+    P6 -. "回饋：擴大下一輪目標" .-> P1
+```
+
+逐項原文對照（Claude 被拿來做什麼，均為 p.18 逐字）：
+
+| 階段 | 原文（Claude 的用途） | 白話 |
+|---|---|---|
+| 偵察 | `Developing custom Python scanning tools for reconnaissance of Vietnamese IP ranges` | 針對越南 IP 段的客製掃描器 |
+| Web 利用 | `Creating sophisticated file upload fuzzing tools and WordPress exploitation frameworks` | 檔案上傳 fuzzing 與 WordPress 利用框架 |
+| 憑證破解 | `Optimizing credential harvesting operations using tools like Hydra and hashcat` | 用 Hydra（線上猜測）與 hashcat（離線破解）優化破密 |
+| 核心提權 | `Implementing privilege escalation exploits including Linux kernel vulnerabilities` | Linux 核心漏洞提權 |
+| OPSEC | `Building proxy chain configurations for operational security` | proxy chain 作業安全 |
+| 情蒐與橫移 | `Analyzing reconnaissance data and planning lateral movement strategies` | 分析偵察資料、規劃橫移 |
+
+**處置**［原文 p.18］：與 GTG-2002 一樣是靠「**ad hoc threat hunting**」（人工主動狩獵）發現，不是被系統性偵測抓到；事後「implemented additional monitoring and shared intelligence with relevant authorities」，並宣稱「new detection systems now online」。這與第 8.2 節的觀察一致：**兩個最嚴重的案子都是人工碰上的，處置一律以「我們因此新建了偵測」作結，等於自陳偵測缺口。**
+
+> ［分析］**為什麼這案該被深挖，而不是壓成一格。** 三個理由：(1) 它是全報告唯一的**國家級對他國關鍵基礎設施**案，危害層級高於財務動機的 GTG-2002；(2) 它是唯一有**官方 ATT&CK 數字**（12/14）的案例，對做 TTP 對應的分析者價值最高；(3) 它是 vibe hacking 的**國家級版本**：GTG-2002 是一個人打 17 個組織，這案是一個 APT 用 Claude 當「technical advisor + code developer + security analyst + operational consultant」四合一，把一條完整 kill chain 的每一段都外包給 AI。**能力擴散的兩端（單兵犯罪者與國家 APT）在同一份報告裡收斂到同一種用法，這正是 2026-09 報告 p.38「差別不再是精密度，而是意圖」的最早證據之一。** 第三方媒體（The Hacker News `https://thehackernews.com/2025/08/anthropic-disrupts-ai-powered.html`、CyberScoop `https://cyberscoop.com/anthropic-report-ai-enabled-cyber-attacks/`）曾轉述本案「12/14 戰術、9 個月、越南電信與政府與農業系統」等要點，但均屬【僅引述】、無獨立查證；如同全報告，本案在**案例層仍是單一來源**（見第 9 節）。
+
+### 3.7 詐欺生態系四案：報告的「供應鏈」論點［原文 p.21 至 p.25］
 
 報告刻意把四個小案並列，論點是**AI 已經覆蓋詐欺價值鏈的每一段**：
 
@@ -287,7 +332,7 @@ flowchart LR
 | GTG-2002 的偵測失敗後自適應 | **GTG-20006**：AI 工作流在被資安產品偵測後**自動重建並重新部署**工具組［2026 p.6］ | **能力升級**：人類貼回失敗訊息 → 全自動閉環 | `../01-cyber/GTG-20006-russian-espionage.html` |
 | 北韓 IT 工作者 | **無**。2026-09 全文 0 次提及 North Korea 或 DPRK | **完全消失** | 無對應教材 |
 | GTG-5004 勒索軟體即服務 | **無**。2026-09 全文 0 次出現 "ransomware" | **完全消失** | 無對應教材 |
-| 中國行為者打越南關鍵基礎設施 | **無直接對應**。2026-09 的中國關聯案集中在監控（GTG-14010／14020／14021／14022）與武器情報（GTG-17001／17002／17003），沒有「中國打東南亞關鍵基礎設施」的網路案 | **題材轉移** | `../03-surveillance/00-surveillance-intro.html` |
+| 中國行為者打越南關鍵基礎設施（案例四，見 3.6 節） | **無同題續案，但同型的網路案在 2026-09 仍在**。就題材而言，2026-09 的中國關聯案分到了監控（GTG-14010／14020／14021／14022）與武器情報（GTG-17001／17002／17003），沒有再出現「中國打東南亞關鍵基礎設施」的專案；但就**手法型態**（國家級行為者用 Claude 貫穿掃描→Web 利用→提權→橫移的完整 kill chain）而言，2026-09 網路行動章有直接可比的案例 | **手法延續、題材未再現**（先前誤標為「題材轉移」並連到監控導論，2026-09-15 修正為連向網路模組） | [`../01-cyber/GTG-20006-russian-espionage.html`](../01-cyber/GTG-20006-russian-espionage.html)、[`../01-cyber/GTG-10007-exploit-foundry.html`](../01-cyber/GTG-10007-exploit-foundry.html) |
 | 北韓 Contagious Interview 自動攔阻 | **無** | **完全消失** | 無 |
 | 俄語 no-code 惡意程式開發 | **概念上被 GTG-50029 與 Appendix A 的 skills 清單吸收**；2026-09 不再單獨報導「某人用 Claude 寫惡意程式」這種等級的案例 | **門檻抬高**：這種案子在 2026 已經不算「notable and novel」 | `../01-cyber/GTG-50029-hacktivist.html` |
 | MCP 竊資分析與受害者側寫 | **無直接對應**，但 2026-09 的 GTG-50014「Validate/qualify」與「Warehouse」階段、以及 GTG-50029 的 `fafsearch` doxxing 平台，都是同一件事的放大版 | **概念放大** | `../01-cyber/GTG-50014-shinyhunters.html`、`../01-cyber/GTG-50029-hacktivist.html` |
@@ -401,6 +446,25 @@ flowchart TD
 | 盜刷卡商店 | T1657 Financial Theft（勉強） | 卡片驗證服務輪替、節流、批次排程都是攻擊者後端工程，非受害端行為 |
 | 交友詐騙 bot | **無對應** | ATT&CK 不涵蓋對消費者的社交工程詐騙 |
 | 合成身分服務 | **無對應** | 同上 |
+
+### 5.5 案例四：中國 APT 打越南關鍵基礎設施的 ATT&CK 對應（2026-09-15 補）
+
+報告對本案自陳「integrated Claude as an assistant across **12 of 14 MITRE ATT&CK tactics**」，是全報告唯一附官方 ATT&CK 數字的案例（案例深挖見 3.6 節）。下表依 p.18 逐項描述做對應（技術 ID 為本教材［分析］，「12/14 戰術」為報告原文）。與 5.1 的 GTG-2002 對照，本案技術面高度重疊，差別在**行為者是國家級、目標是他國關鍵基礎設施**。
+
+| 戰術 | 技術 ID | 報告 p.18 的具體作法 | 偵測構想 |
+|---|---|---|---|
+| Reconnaissance | **T1595.001／.002 Active Scanning** | 客製 Python 掃描工具掃越南 IP 範圍 | 對外服務的來源掃描指紋聚類；短時間對單一國別 IP 段的系統性探測；掃描器 User-Agent 與行為節奏異常 |
+| Reconnaissance | **T1590 Gather Victim Network Information** | 分析偵察資料以規劃後續 | 屬上游情報行為，受害端難偵測；可從被掃描資產的日誌回推鎖定範圍 |
+| Resource Development | **T1587.001 Develop Capabilities** | 用 Claude 打造 fuzzing 工具、WordPress 利用框架、proxy 設定 | 不適用受害端偵測；屬平台側（AI 供應商）可觀測面 |
+| Initial Access | **T1190 Exploit Public-Facing Application** | WordPress 利用框架 + 檔案上傳 fuzzing | **高價值規則**：WordPress 上傳端點的異常檔案型別與 webshell 特徵；`wp-content/uploads` 出現可執行檔；外掛漏洞掃描流量 |
+| Credential Access | **T1110.001／.002／.003 Brute Force** | Hydra（線上猜測／噴灑）、hashcat（離線破解） | 對外服務（SSH／RDP／web 登入）的認證失敗速率與帳號廣度；離線破解無法從受害端偵測，需靠外洩雜湊的來源管控 |
+| Privilege Escalation | **T1068 Exploitation for Privilege Escalation** | Linux 核心漏洞提權 | Linux 端點的異常 syscall／核心模組載入；已知核心 CVE 的 exploit 行為；auditd 的提權特徵序列 |
+| Command and Control | **T1090.001／.002／.003 Proxy** | proxy chain 設定以隱蔽 C2 與作業安全 | 長連線、固定心跳、經多跳 proxy 的持續外連；出向連線的 ASN 與地理異常 |
+| Discovery／Lateral Movement | **T1046／T1021** | 分析偵察資料、規劃橫向移動策略 | 內網掃描與異常橫向 SMB／SSH／WinRM 連線圖；非管理主機發起管理連線 |
+| Collection／Exfiltration | **T1213／T1041**（推定） | 對電信、政府資料庫、農業管理系統的情蒐 | 資料庫大量匯出、異常查詢量；出向流量體積偏離基線 |
+| **框架缺口** | **無對應 ID** | **Claude 同時扮演 technical advisor + code developer + security analyst + operational consultant，貫穿 12/14 戰術** | ATT&CK 無法表達「這條 kill chain 的每一段由誰串起來」。報告用一個外部框架的覆蓋率（12/14）來間接量化 AI uplift：**當一個行為者能在幾乎所有戰術上都得到即時專家輔助，「精密度」就不再是國家級 APT 的專利。** 跨切分類討論見 `../01-cyber/00-cyber-trends-and-skills.html` 第 8 節 |
+
+> **偵測收束**：本案技術上**沒有一項是新的**（WordPress 利用、Hydra、hashcat、Linux 核心提權、proxy chain 都是十年以上的老技術），uplift 全部發生在「**同一個人不用樣樣精通**」上。對關鍵基礎設施防守方的意涵：**你要防的仍是那些老技術，但攻擊方的門檻已被 AI 抹平，過去「這麼全面一定是頂尖團隊」的假設不再成立。** 台灣關鍵基礎設施的防護意涵見第 10.4 節第五點。
 
 > **本節的教學結論**：一份 2025 年的 AI 濫用報告，用 ATT&CK 可以對應到的大約只有一半。**缺口集中在三處**：(1) agentic 編排本身，(2) 竊資之後的受害者側寫與變現，(3) 以正當身分取得存取的詐欺就業。這三處在 2026-09 報告裡不但沒有縮小，反而因為案例更複雜而更明顯。詳見 `../01-cyber/00-cyber-trends-and-skills.html` 的 ATT&CK 缺口討論。
 
@@ -760,6 +824,15 @@ p.24 的 `@Chat_ChatGPT_AIbot` 服務訊息與頻道以中文為主、鎖定美�
 
 - **原文定義**（依 2026-09 p.14）：操作者給 AI 一個概括目標，讓 AI 自行評估環境、撰寫並執行腳本、產出摘要、反覆執行直到完成；操作者可能根本不理解目標環境。
 - **建議譯法**：「**氛圍式入侵**」或直接保留英文，重點在說明它是**授權模式**（把細節全權交給 AI），不是**欺騙技巧**。
+
+**五、越南案是台灣關鍵基礎設施防護的一面鏡子（2026-09-15 補）。**
+
+案例四（見 3.6 節）是一次國家級 APT 用 Claude 貫穿 12/14 戰術、打越南電信／政府資料庫／農業管理系統的情蒐行動。把「越南」換成「台灣」，這個威脅模型幾乎原封不動成立：台灣同樣是中國戰略利益的重點鎖定對象，同樣有大量對外暴露的 WordPress 網站、SSH／RDP 服務與未即時更新的 Linux 主機。可操作的防護意涵：
+
+- **要防的仍是老技術，但要假設攻擊方沒有能力門檻。** 本案用的 WordPress 利用、Hydra／hashcat、Linux 核心提權、proxy chain 全是十年以上的老手法（見 5.5 節）。AI 帶來的 uplift 不在技術新穎，而在「一個人就能全會」。**關鍵基礎設施防守方不能再用「這麼全面一定是頂尖 APT」來過濾告警。**
+- **關鍵基礎設施的對外暴露面要當成首要戰場。** 依 5.5 節的偵測構想優先落地三項：(1) 對外 WordPress／CMS 上傳端點的 webshell 與異常檔案型別偵測；(2) SSH／RDP／web 登入的暴力破解速率與帳號廣度告警；(3) Linux 主機的核心提權與異常核心模組載入監控。這三項成本低、誤報可控，且直接對應本案 kill chain 的前四段。
+- **農業與地方型 CI 常被忽略，卻正是本案的目標之一。** 報告點名「agricultural management systems」。台灣的水利、農漁、地方政府系統往往資安投資最低，但一旦被情蒐或癱瘓，衝擊面極廣。**CI 防護清單不能只涵蓋電力、金融、電信這些「明星」領域。**
+- **這是網路案，不是監控案。** 本案的正確對照是網路行動章的國家級間諜案（[`../01-cyber/GTG-20006-russian-espionage.html`](../01-cyber/GTG-20006-russian-espionage.html)）與 agentic 攻擊框架案（[`../01-cyber/GTG-10007-exploit-foundry.html`](../01-cyber/GTG-10007-exploit-foundry.html)），不是監控章。防守方在做威脅建模時要把「他國 APT 用 AI 打我方 CI」單獨列為一條情境，與監控、影響力行動分開處理。
 
 ---
 

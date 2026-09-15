@@ -788,7 +788,7 @@ Anthropic 因此正與 MITRE 洽談在 ATT&CK 中「add new cross-cutting catego
 
 1. **工具鏈簽章（tool-chain signature）：** 確定性的工具順序（`theHarvester→owa_spray→netexec→memory update`、`docker compose→curl→sshpass`）是機器生成管線的指紋。受害端表徵＝**階段之間沒有人類 think-time**（偵察結束到 spray 開始的間隔以秒計，而非人類的分鐘~小時）。
 2. **API 呼叫節奏（cadence）：** 動作間隔極短且**固定、無 jitter、無晝夜節律**（T.2 量化）。
-3. **persona / register 切換產物：** `/security-engineer`、`ctf-pentest register` 是 Claude Code 的 slash-command / skill 呼叫。攻擊者主機會留下 `.claude/` skill 檔、`CLAUDE.md`、專案記憶（`MEMORY.md`、`dead-end ledger`）。**若能取得攻擊者主機鏡像或內部視角，這些檔案是「Claude Code skill 驅動」的鐵證**——這也是為何本報告能寫出 Figure 19（Anthropic 有平台側可見度）。
+3. **persona / register 切換產物：** `/security-engineer`、`ctf-pentest register` 是 Claude Code 的 slash-command / skill 呼叫。攻擊者主機會留下 `.claude/` skill 檔、`CLAUDE.md`、專案記憶（`MEMORY.md`、`dead-end ledger`），以及**最直接的「工具編排」鐵證——`.mcp.json`**（Claude Code 的 MCP server 設定檔，`mcpServers` 表逐條記錄它接了哪些底層攻擊工具伺服器）、**常駐的 MCP server 行程**、與 **Claude Code 對本地 MCP endpoint 的 stdio／SSE 連線**。前一版取證清單列了 `.claude/`、`CLAUDE.md`、`MEMORY.md` 卻獨缺 MCP 設定——但 `.mcp.json` 才是把「自然語言 persona」接到「真實 nmap/metasploit/sqlmap」的那條膠水的落地證據（完整機制與偵測見**附錄 T.5**）。**若能取得攻擊者主機鏡像或內部視角，這些檔案是「Claude Code skill 驅動」的鐵證**——這也是為何本報告能寫出 Figure 19（Anthropic 有平台側可見度）。
 4. **build-loop 雜湊叢集：** 數分鐘內產出多個「近似但不同雜湊」的 implant（Defender 規避迭代）＝AI 驅動「重編譯到不被偵測」的簽章。對應第 3.2.3 的「close the loop」——攻擊者的改工具迴圈以小時/分鐘收斂。
 
 **八個 skill 如何拼成「一個人＝一支團隊」（本教材重繪，Mermaid）：**
@@ -1079,3 +1079,94 @@ flowchart TB
 | Sigma / KQL 規則 | 本教材原創（依 Sigma correlation 與 KQL 語法撰寫，需依環境調校） | 教學範本，非現成產品規則 |
 
 > 研究限制補記：T.2 的 Sigma/KQL 為**教學範本**，閾值（30 目標、APM 30、CV 0.15、22/24 小時）為示意值，實際部署須以各組織基線校準並多訊號融合；T.3 的 orchestration score 權重（35/35/30）為仿 ARiES 的設計示意，Anthropic 未公開 ARiES 完整權重（見 8.1、12.6）。Verizon DBIR 的 793 actor 與 832 帳號研究期間、口徑略有差異（前者至 2026-02、後者至 2026-03），數字不可直接互減。
+
+---
+
+## T.5 MCP（Model Context Protocol）：工具伺服器抽象——自主攻擊平台的技術底座與取證（2026-09-15 深化）
+
+> 前一版全檔只在第 8.3 節（GTG-1002 悖論）用半句話提過 MCP——「把 Claude Code 變成跑在 Kali Linux 上、以 MCP server 整合開源滲透工具的自主攻擊平台」。但 MCP 不是順帶的名詞，它是「**Claude Code 為何能從編碼助手變成自主攻擊平台**」的工程核心：把 persona skill 與底層 `nmap`/`metasploit`/`sqlmap` 接起來的那層膠水。本節把它展開，並補上前一版取證清單（T.1.1）獨缺的 MCP 這一項。
+
+### T.5.0 證據等級
+
+| 主張 | 證據等級 | 依據 |
+|---|---|---|
+| MCP 是開放的 client–server 協定，把工具／資料源包成模型可呼叫的介面 | **一手（官方規格）** | Anthropic 2024-11 發布的 Model Context Protocol 開放規格 |
+| GTG-1002 用「Claude Code + MCP」整合開源滲透工具、跑成自主攻擊平台 | **一手（姊妹報告）** | 2025-11 報告；本教材第 8.3／8.4 節、GTG-10007 第 2.5 節對照表 |
+| 本報告的攻擊者工具集裡也出現 MCP | **一手（本報告）** | GTG-50014 Figure 2 工作流 W2「C2 web-UI/MCP bridge」；GTG-10007 附錄 A.1 的反編譯「tool server」即 MCP 式介面 |
+| MCP 設定檔／行程／連線是可取證的「工具編排」痕跡 | **推論＋三方佐證** | 協定規格 + MCP 安全研究（Invariant Labs、Snyk、CSA）；具體取證清單為本教材工程推論 |
+
+### T.5.1 機制：一句自然語言如何變成一次工具呼叫
+
+MCP 是 Anthropic 2024 年 11 月開放的協定，常被類比為「AI 應用的 USB-C」——**一個標準介面，讓模型客戶端（如 Claude Code）用同一套協定接上任意數量的「工具伺服器」**。三個角色：
+
+- **MCP host / client（宿主／客戶端）**：Claude Code 本身。拿著模型，負責把自然語言意圖轉成「呼叫哪個工具、帶什麼參數」。
+- **MCP server（工具伺服器）**：一個獨立行程，對外**宣告（advertise）** 它提供哪些 tools、resources、prompts，並實際執行。攻擊場景裡，一個 MCP server 可把 `nmap`、`metasploit`、`sqlmap` 各包成一個可呼叫的 tool。
+- **傳輸（transport）**：client 與 server 間走 **JSON-RPC**，通道是 **stdio**（本地行程間，最常見於「同機常駐 server」）或 **HTTP + SSE**（可跨行程／跨主機）。
+
+一次呼叫的資料流：使用者說「掃這個網段、找可利用的服務」→ Claude Code（client）判斷該調用 MCP server 宣告的 `scan` tool → 經 JSON-RPC 送 `tools/call` → MCP server 實際跑 `nmap` → 回傳**結構化結果** → 模型讀結果、決定下一步（可能再 call `exploit` tool）。**自然語言在這一層被翻譯成一連串確定性的工具呼叫。**
+
+```mermaid
+flowchart LR
+  NL["操作者自然語言意圖<br/>『掃這個網段, 找可利用的服務』"] --> HOST["Claude Code = MCP client<br/>模型決定 call 哪個 tool"]
+  HOST -->|"JSON-RPC: tools/call<br/>over stdio 或 HTTP+SSE"| SRV["MCP server（常駐行程）<br/>宣告並執行 tools"]
+  SRV -->|"實際執行"| TOOLS["底層攻擊工具鏈<br/>Kali 上的 nmap／metasploit／sqlmap"]
+  TOOLS -->|"結構化結果"| SRV
+  SRV -->|"tools/call result"| HOST
+  HOST -->|"讀結果, 決定下一步 → 再 call"| HOST
+  CFG[".mcp.json（mcpServers 表）<br/>= 接了哪些工具伺服器的鐵證"]
+  HOST -.取證落點.-> CFG
+  classDef k fill:#e3f2fd,stroke:#1565c0,color:#000
+  classDef f fill:#fff3cd,stroke:#b8860b,color:#000
+  class HOST,SRV k
+  class CFG f
+```
+
+### T.5.2 為什麼這層抽象是 uplift 的關鍵：skill 與工具鏈解耦
+
+MCP 對攻擊者的價值，不在「能跑 nmap」（腳本早就能跑 nmap），而在**解耦（decoupling）**：
+
+- **一邊是 persona skill（意圖層）**：Figure 19 的八個 persona（偵察、implant dev、C2…）描述「要做什麼」。
+- **一邊是工具伺服器（執行層）**：MCP server 描述「用什麼工具、怎麼執行」。
+- **MCP 是中間的膠水**：它讓 persona skill **不必知道 nmap 的命令列細節**，只要說「掃描」；也讓工具**可抽換**（今天接 nmap、明天接 masscan，persona 不用改）。
+
+**這個解耦正是「自主度」的工程底座**：因為意圖與執行分離，一個主代理（agent swarm 的 lead）才能把「掃描→發現→利用→橫向」串成一條**自主流水線**，每步都只是「向某個 MCP server 發一次 tools/call」。沒有這層抽象，模型要嘛只能吐文字（人類再手動複製去跑），要嘛得為每個工具寫死整合。**MCP 把「工具編排」從一次性膠水變成標準協定——這就是報告說 GTG-1002 能把 Claude Code 變成「自主攻擊平台」的技術原因**（第 8.3 節），也是它 ATT&CK 量不到、卻讓 ARiES 打滿分那個落差的來源（第 8.3 節悖論）。
+
+### T.5.3 偵測面（本節最重要）：MCP 在攻擊者主機留下的取證痕跡
+
+前一版取證清單（T.1.1 第 3 點）列了 `.claude/`、`CLAUDE.md`、`MEMORY.md`，卻**獨缺 MCP 設定**——而 MCP 設定恰恰是「這台機器把 AI 接上了真實攻擊工具」最直接的鐵證。補齊三類痕跡：
+
+| 取證痕跡 | 具體位置／形態 | 偵測／鑑識價值 |
+|---|---|---|
+| **`.mcp.json` 設定檔** | 專案根目錄 `.mcp.json`，及使用者層設定（如 `~/.claude.json`／IDE 的 `mcp.json`）。內含 `mcpServers` 表：每個 server 的名稱、啟動 `command`／`args`／`env`、transport 型別 | **最高。** 一張「這台機器把 Claude 接了哪些工具伺服器」的清單。若 `command` 指向包裝 `nmap`/`msf`/`sqlmap`/自製 exploit 的 server，就是「工具編排」的直接證據。安全研究（Invariant Labs、Snyk MCP-Scan）正是掃這類設定檔找 tool poisoning／惡意 server |
+| **常駐 MCP server 行程** | 由 Claude Code 派生（parent 為 Claude Code／node）、長生命週期的子行程，通常是 `node`／`python`／`uvx`／`npx` 跑某個 MCP server 套件 | **高。** 行程樹上「AI 客戶端 → 常駐工具 server → 底層攻擊工具」這條血緣，是人手操作不會有的形態。EDR 可抓「Claude Code 為 parent、卻派生出網路掃描／滲透工具」的異常血緣 |
+| **本地 stdio／SSE 連線** | client 與本地 MCP server 間的 stdio pipe，或連到 `127.0.0.1:<port>` 的 SSE／HTTP endpoint | **中高。** 本地 loopback 上「AI 客戶端持續與一個常駐 server 對話、該 server 又對外發動掃描／利用」的模式，是 agentic 攻擊的網路側指紋 |
+
+**與 T.1.1 四訊號的接合**：`.mcp.json` 正是 T.1.1 第 3 點「persona/register 切換產物」缺的那一塊；常駐 server 行程與 scan/build 工具的血緣，強化 T.1.1 第 1 點「工具鏈簽章」與第 4 點「build-loop」。**取證時，`.claude/` 告訴你「他用了 Claude Code」，`.mcp.json` 告訴你「他把 Claude Code 接到了哪些武器」——後者才是把意圖坐實成能力的關鍵物證。**
+
+> 安全紅線提醒：MCP 生態自身也是攻擊面——工具描述欄位可被植入隱藏指令（**tool poisoning**，Invariant Labs 2025-04 揭露），這與 GTG-50014 教材第 4.AA 節「對受害者部署的 AI 代理做間接注入」是同一類問題的另一面。防守方若自建 MCP，務必對第三方 MCP server 做來源審查與 `mcp-scan` 類靜態掃描。
+
+### T.5.4 與 PentAGI executor 並排：兩種「工具伺服器抽象」的實作
+
+MCP 不是唯一的工具伺服器抽象。把它與 T.4.1 的 PentAGI 架構並排，會看到**同一個工程問題的兩種解法**：
+
+| 面向 | **MCP（Claude Code 路線）** | **PentAGI Executor（框架路線，見 T.4.1）** |
+|---|---|---|
+| 抽象形式 | 開放**協定**（JSON-RPC over stdio/SSE），client 與 server 各自獨立、可混搭第三方 server | 框架**內建**的 Executor/Pentester agent，把工具鏈封在自己的 Docker sandbox |
+| 工具在哪 | 各 MCP server 行程（可本地、可遠端） | Kali 映像 + 20+ 工具的 Docker sandbox（DinD over TLS） |
+| 誰決定呼叫 | Claude（host 端模型）發 tools/call | PentAGI 的 Primary agent 派給 Executor |
+| 取證落點 | `.mcp.json`、MCP server 行程、stdio/SSE 連線 | `docker-compose`／DinD 容器、pgvector 記憶庫、框架設定（見 T.4.1） |
+| 共通本質 | **都是把「模型的意圖」與「真實工具的執行」中介起來的一層——工具伺服器抽象。** 這一層存在，自主編排才可能；它也正是防守方最該找的取證錨點 | 同左 |
+
+> 教學收束：**無論走 MCP（協定）還是 PentAGI Executor（框架），自主攻擊平台都需要一層「工具伺服器抽象」把自然語言接到真實工具。** 認得這一層，防守方就知道兩件事：(1) 它是 uplift 的技術底座，量 ATT&CK 技術數量會低估它（第 8.3 節悖論）；(2) 它必然在主機上留下設定與行程痕跡（`.mcp.json`／compose 檔），是把「疑似 AI 驅動」坐實成鑑識結論的物證。這也呼應 GTG-10007 附錄 A.1——那裡的反編譯「tool server」就是同款抽象用在**逆向**工具上的實作。
+
+### T.5.5 本節新增外部來源（信賴層級已標）
+
+| 來源 | URL | 性質 |
+|---|---|---|
+| Anthropic，Model Context Protocol 規格與介紹（2024-11 發布） | modelcontextprotocol.io ；anthropic.com/news/model-context-protocol | **一手（官方協定規格）** |
+| Invariant Labs，〈MCP Security Notification: Tool Poisoning Attacks〉（2025-04） | invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks | 三方獨立（MCP tool poisoning 首份揭露） |
+| Snyk Labs，〈How to Detect Tool Poisoning in MCP Server Security〉（MCP-Scan 掃 `~/.cursor/mcp.json`、`~/.vscode/mcp.json`） | labs.snyk.io/resources/detect-tool-poisoning-mcp-server-security | 三方（廠商安全研究，佐證設定檔取證） |
+| Cloud Security Alliance，〈MCP Attack Surface: Tool Poisoning and IDE Auto-Execution〉（2026-07） | labs.cloudsecurityalliance.org/research/csa-research-note-mcp-tool-poisoning-auto-execution-20260701 | 三方（產業研究） |
+| Black Hills Information Security，〈Model Context Protocol〉（攻防視角導論） | blackhillsinfosec.com/model-context-protocol | 三方（滲透測試社群） |
+
+> 研究限制：本節取證清單（`.mcp.json` 路徑、行程血緣、stdio/SSE 訊號）為**依協定規格與公開 MCP 安全研究推得的工程推論**，非本報告對某一 GTG 案例的逐項鑑識轉錄；實際檔名與路徑隨 Claude Code／IDE 版本而異，落地以當版文件為準。MCP 相關 arXiv 研究（MCPGuard、MCP-DPT、MCPTox 等）為 2025–2026 學術提案，本節未逐篇精讀，僅作「偵測研究正在成形」的存在性佐證。

@@ -1805,16 +1805,106 @@ flowchart TB
 
 **結論**：本案 p.86–89 的**唯一 PDF 圖檔 Figure 2** 及所有表格/版面**均已完整解說**，第二階段無遺漏需補的 PDF 圖。
 
-**本附錄新增的 Mermaid 圖（皆為防禦性重繪，非 PDF 原圖）共 5 張**：
+**本附錄新增的 Mermaid 圖（皆為防禦性重繪，非 PDF 原圖）共 6 張**（第 1–5 張為第二階段；第 6 張為 2026-09-15 深化）：
 1. 附錄 A.1.3 — chatter→結構化情報 NLP pipeline（flowchart）
 2. 附錄 B.3 — AI 陪跑外聯即時迴圈 + 防守觀察點（sequenceDiagram）
 3. 附錄 C.2 — 親屬槓桿資料關聯與防禦切點（flowchart）
 4. 附錄 D — 「蒐集→側寫→招募」技術鏈 + 偵測插入點（flowchart，對應 Figure 2）
 5. 附錄 D — 三層可見性互補圖（flowchart，對應 §5.3）
+6. **附錄 G — 多模態 LLM 輔助 OSINT 地理定位流程 + 防禦切點（flowchart，對應 Figure 2 工作流第 3 列「Physical geolocation」）**
 
 ---
 
-> **教材版本**：v1.1｜第一階段整理 2026-09-13；**第二階段技術深化 pass 2026-09-14**（增補附錄 A–F，不動既有 §1–§12）
+### 附錄 G：實體地理定位（physical geolocation）的技術、平台偵測與社群防護（2026-09-15 深化）
+
+> **為什麼補這一節**：實體地理定位是本案**六大工作流之一**（Figure 2／§6.1 表第 3 列「Physical geolocation」），報告**四次**點名（p.86「locate specific Uyghur businesses and points of interest」、p.87「geolocate specific individuals」、p.88 工作流表與 Figure 2 圖說「geolocation」），且其 Outcome 欄是全表用詞最重的一句——「**Real-world locations of specific civilians in a conflict zone**」，本教材 §6.1 已定性它是「整份報告裡最接近直接指出實體傷害風險」的能力。但相較「專家品管」（附錄 B）、「可接近性評分」「親屬槓桿」（附錄 C）各有專節＋Mermaid，**地理定位卻只散見 §6.1／附錄 A.1.3／附錄 D、無專節**。本節補齊三層：(G.1) 機制＋Mermaid；(G.2) 平台端偵測＋KQL；(G.3) 社群端降險。全程防禦視角，**不教任何定位操作、不對真實個資示範**。
+
+#### G.1 機制：多模態 LLM 輔助的 OSINT 地理定位流程
+
+報告 p.88 工作流表把這一列描述為「**Network mapping and location fixing via satellite and maps**」——關鍵是「**via satellite and maps**」：定位不是靠 GPS 座標，而是靠**把影像/貼文裡的視覺線索，比對衛星影像與地圖服務**。這正是 Bellingcat 類公開來源地理定位（OSINT geolocation）方法論的核心，近年因**多模態 LLM（視覺語言模型，如 GPT-4V/4o）**而**大幅降低門檻**——過去需資深分析師逐格比對的工作，模型能在一次對話裡完成候選推理。技術鏈（防禦者需理解，才知道要最小化什麼）：
+
+- **視覺線索抽取**：從一張店面照/自拍/短影片，模型可讀出**招牌文字（含語言/字體）、路標、車牌樣式、天際線輪廓、山形、植被、電線桿/路燈型號、建物立面**等**可判別特徵（discriminating features）**。
+- **地標與地圖比對**：把每個特徵當成**縮小地理範圍**的條件——先用最獨特的特徵（某連鎖招牌、某清真寺尖塔輪廓）鎖定區域，再用次要特徵（街道走向、相對位置）交叉三角定位到精確點，對照**衛星影像（如 Sentinel-2 可回溯歷史影像）與街景/地圖**。
+- **時間定位（chronolocation）**：由**陰影方向與長度＋日期時間**反推可能地點（Bellingcat「Shadow Finder」即此原理），或用衛星歷史影像確認「某事件某日是否可見」。
+- **中繼資料（EXIF）**：若原始檔未被平台剝除，照片 EXIF 可能直接含 **GPS 座標、機型、時間**——最直接、但也最常被社群平台自動移除的一層。
+- **多模態 LLM 的角色**：模型把「特徵抽取→範圍縮小→三角定位」的**分析師推理鏈提示化**——學界已量化其能力與**隱私風險**：GPT-4V/4o 在街景定位上表現領先，**含文字（招牌/路標）的影像**準確率明顯較高（一研究中 GPT-4o 對含文字影像的郵遞區號推斷達約 27%），但對**無人造物的自然景觀**準確率大幅下降。這解釋了為何**招牌/路標/車牌**是定位黃金線索，也直接對映 G.3 的降險重點。
+
+（下圖為**防禦性重繪**，非報告原圖；標出每一步「防禦者能最小化什麼」。）
+
+```mermaid
+flowchart TD
+    SRC["來源影像／貼文<br/>店面照 / 自拍 / 短影片"] --> EXIF{"EXIF 未被剝除?"}
+    EXIF -->|"是"| GPS["直接讀 GPS 座標<br/>機型 / 時間"]
+    EXIF -->|"否"| FEAT["視覺特徵抽取<br/>招牌文字 / 路標 / 車牌 / 天際線 / 山形"]
+    GPS --> FIX
+    FEAT --> NARROW["以最獨特特徵縮小範圍<br/>連鎖招牌 / 地標輪廓"]
+    NARROW --> TRI["次要特徵三角定位<br/>街道走向 / 相對位置"]
+    TRI --> MATCH["比對衛星影像與地圖<br/>Sentinel-2 歷史影像 / 街景"]
+    CHRONO["時間定位 chronolocation<br/>陰影方向長度 + 日期時間"] -.-> MATCH
+    MATCH --> FIX["位置定樁 location fix<br/>衝突區特定平民的真實位置"]
+
+    D1["防禦: 剝 EXIF / 關閉相機定位"]:::def -.->|"阻斷"| EXIF
+    D2["防禦: 不發可定位地標<br/>招牌 / 門牌 / 獨特天際線"]:::def -.->|"阻斷"| FEAT
+    D3["防禦: 錯開打卡時間地點<br/>延遲發布"]:::def -.->|"阻斷"| CHRONO
+    classDef def fill:#d3f9d8,stroke:#2b8a3e,color:#000;
+```
+
+#### G.2 平台端偵測：人名/組織 × 衛星影像/地圖服務的交叉查詢請求序列
+
+在 AI 平台（如 Anthropic）的遙測裡，「地理定位工作流」有一個**可觀測的請求序列指紋**：**同一會話/帳號內，把「特定人名或組織」與「衛星影像/地圖/街景判讀」綁在一起的交叉查詢**——例如先要求對某人/某商家做 OSINT 彙整，接著上傳影像要求「這是哪裡、比對地圖座標」。單看任一步都中性（「幫我看這張照片在哪」是合法旅遊/新聞用途）；訊號在**組合 + 目標屬性**（目標是**特定自然人**、且屬**已知受迫害社群**、且要求輸出**精確位置**）。以下 KQL 為**概念示意，需依實際 LLM 閘道/稽核遙測欄位改寫**（作用在對話後設資料，非端點日誌）：
+
+```kql
+// 概念：偵測「特定人物/組織 × 影像地理定位」的交叉查詢序列（帳號/會話層）
+// 落地點：企業自架 LLM 閘道（LiteLLM/Portkey/Cloudflare AI Gateway）或平台內部稽核
+LLMGatewayLogs
+| where TimeGenerated > ago(30d)
+| extend HasPersonOrgTarget = RequestText has_any (
+        "profile", "OSINT", "dossier", "locate this person", "identify individual",
+        "人物", "建檔", "定位此人")
+| extend HasGeoInference = (ToolType has_any ("image", "vision"))
+        or RequestText has_any (
+        "geolocate", "where was this photo", "satellite", "map coordinates",
+        "street view", "這是哪裡", "座標", "衛星影像")
+| where HasPersonOrgTarget or HasGeoInference
+| summarize PersonOrgReqs = countif(HasPersonOrgTarget),
+            GeoReqs        = countif(HasGeoInference),
+            Images         = countif(ToolType has_any ("image","vision")),
+            Window         = max(TimeGenerated) - min(TimeGenerated)
+    by SessionId, AccountId
+// 同一會話同時出現「鎖定特定人/組織」與「影像地理定位」= 高價值訊號
+| where PersonOrgReqs >= 1 and GeoReqs >= 1 and Images >= 1
+| where Window < 6h                    // 緊密交錯於同一作業窗
+| project AccountId, SessionId, PersonOrgReqs, GeoReqs, Images, Window
+| order by GeoReqs desc
+```
+
+> **偵測工程要點**：與本模組其他案一致——**偵測單位是「會話/帳號 × 請求組合」，不是單一請求**。真正把可疑度拉高的，是「特定自然人（尤其屬受迫害社群）＋要求精確實體位置」這個**組合 + 目標屬性**，而非「判讀影像」這個中性動作本身。對映報告 p.87 的自承：Claude **拒絕**了若干最嚴重請求（covert interrogation、大規模人設），但**地理定位並未被記載為被拒**——這正是「防線擋名詞不擋動詞」（§8.2）在地理定位上的體現，也是平台端偵測要補的縫。
+
+#### G.3 社群端降險指引（給衝突區與離散社群，非攻擊操作）
+
+地理定位**唯一能在源頭削弱**的一環，是**減少可被抽取的視覺與中繼線索**。以下對映 G.1 各步給可落地降險（對象為記者、運動者、衝突區平民與其海外親友；**技術無法根治「你人在那裡」，但能抬高定位成本**）：
+
+- **對映「EXIF」**：發布前**剝除 EXIF**（多數社群平台會自動剝，但**私訊/雲端原檔/某些平台不一定**）；平時**關閉相機的定位寫入**；傳原檔給他人前先另存去中繼資料。
+- **對映「視覺特徵」**：**不發帶可定位地標的店面照**——含**招牌文字、門牌、獨特天際線、山形、車牌、路標**（G.1 已證這些是定位黃金線索，尤其**含文字者**最致命）；必要時裁切/遮蔽背景招牌與門牌。
+- **對映「chronolocation」**：**錯開打卡**——不即時發布「現在在哪」，**延遲發布**行程照；避免固定時段/地點的規律，降低陰影與軌跡定時定位。
+- **關係面**：注意**他人**把你標記/合照/打卡在**可定位場景**（清真寺、社群中心、店面）——降險是**社群共識**，不是個人努力（對映附錄 A.2 的社群衛生、附錄 C.2 的親屬最小化）。
+- **轉介**：高風險個人可轉介公民社會資安急救資源（Access Now Digital Security Helpline、EFF SSD、Amnesty Security Lab——見附錄 E.1），取得針對定位/跨國鎮壓的個別化防護。
+
+#### G.4 本節新增之第三方技術來源
+
+| 主題（對應小節） | 來源 | URL | 性質／信賴層級 |
+|---|---|---|---|
+| OSINT 地理定位方法論（G.1） | Bellingcat, How-tos / Resources（陰影/衛星/地標三角定位、Shadow Finder） | https://www.bellingcat.com/category/resources/how-tos/ | 調查方法一手／高 |
+| 多模態 LLM 地理定位能力與隱私風險（G.1） | Evaluation of Geolocation Capabilities of Multimodal LLMs and Analysis of Associated Privacy Risks（arXiv 2506.23481） | https://arxiv.org/html/2506.23481 | 學術／高 |
+| VLM 地理隱私控制（G.1/G.2） | Granular Privacy Control for Geolocation with Vision Language Models（GPTGeoChat, arXiv 2407.04952） | https://arxiv.org/html/2407.04952v1 | 學術／高 |
+| 地理隱私推論 LMM（G.1） | GeoLocator: A Location-Integrated Large Multimodal Model for Inferring Geo-Privacy（MDPI Applied Sciences 2024） | https://doi.org/10.3390/app14167091 | 學術／高 |
+| 社群端定位風險與防護（G.3） | State of Surveillance, Geolocation OSINT: How Investigators Find Where Photos Were Taken | https://stateofsurveillance.org/articles/technical/geolocation-osint-photo-location-tracking/ | 資安教育／中 |
+
+> **紅線**：本節為機制理解、平台偵測與社群防護，**不含任何對真實個人的定位操作示範**；Bellingcat／學術連結為方法論參考，非操作入口。本案報告無任何網域/IP/帳號/雜湊（沿用 §7.1），故無 defang 對象。地理定位的**核心指控仍為 Anthropic 單一來源**（§9.1／§9.4 結論不變）；本節補的是「多模態 LLM 地理定位能力真實存在且被學界量化」。
+
+---
+
+> **教材版本**：v1.1｜第一階段整理 2026-09-13；**第二階段技術深化 pass 2026-09-14**（增補附錄 A–F，不動既有 §1–§12）；**2026-09-15 深化**（增補附錄 G：實體地理定位專節，不動既有內容）
 > **一手來源**：Anthropic《Detecting and countering misuse of AI: September 2026》p.86–89（另引用 p.3、p.39、p.81–84、p.94、p.97、p.98、p.102、p.103 作對照）
 > **圖檔**：`../figures/page-088.png`（Figure 2 與工作流表）
-> **技術附錄新增（第二階段）**：附錄 A（大規模擷取技術與偵測）、B（AI 翻譯與品管機制與辨識）、C（可接近性評分與親屬槓桿關聯）、D（技術鏈與偵測插入點）、E（新第三方來源與背景更新）、F（圖表完整性複核）；新增 5 張 Mermaid 防禦向圖與可部署 KQL/Sigma 偵測邏輯。
+> **技術附錄新增（第二階段）**：附錄 A（大規模擷取技術與偵測）、B（AI 翻譯與品管機制與辨識）、C（可接近性評分與親屬槓桿關聯）、D（技術鏈與偵測插入點）、E（新第三方來源與背景更新）、F（圖表完整性複核）；**2026-09-15 深化**：附錄 G（實體地理定位機制/偵測/防護）。新增 6 張 Mermaid 防禦向圖與可部署 KQL/Sigma 偵測邏輯。

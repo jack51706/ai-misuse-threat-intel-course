@@ -97,7 +97,7 @@ timeline
 2. **Moonshot 的 computer vision 出現得很突兀。** 四項鎖定能力裡有三項是 agentic／coding／data，第四項卻是電腦視覺。9 月報告的 Moonshot 案（p.148 到 149）**完全沒有提到電腦視覺**，改為專注在「靜默轉發 ＋ CoT 抽取管線 ＋ 跨工作階段重放」。這是一個**在後續報告中消失的情報項目**，第 12 節會處理。
 3. **MiniMax 的「24 小時內轉向」是全篇技術含量最高的一句。** Anthropic 發布新模型後，MiniMax 在一天內把將近一半流量改指向新模型。這說明對方**有自動化的模型偵測與流量調度能力**，而不是人工手動改設定。9 月報告的 MiniMax 段（p.153）完全沒有這條敏捷性描述，改成空殼公司 proxy 的結構性敘事。
 
-### 3.2 存取手法：hydra cluster
+### 3.2 存取手法：hydra cluster（2026-09-15 深化：補上 ③ Clean 資料工程步驟）
 
 2 月揭露對「怎麼進得來」的描述，是全篇最技術性的一段：
 
@@ -115,8 +115,9 @@ flowchart TD
     CLOUD["第三方雲端平台（分散流量）"]
     API["Anthropic API"]
     NOISE["正常客戶請求（混入以掩護）"]
-    HARVEST["收割回應與推理軌跡"]
-    TRAIN["訓練自家模型"]
+    HARVEST["② Harvest：收割回應與推理軌跡"]
+    CLEAN["③ Clean：清洗並重新格式化成訓練對<br/>去雜訊、去識別化、排成 SFT 的 prompt 到 completion 對"]
+    TRAIN["④ Train：訓練自家學生模型"]
 
     LAB -->|購買存取| PROXY
     PROXY --> HYDRA
@@ -125,12 +126,19 @@ flowchart TD
     CLOUD --> API
     NOISE --> HYDRA
     API --> HARVEST
-    HARVEST --> TRAIN
+    HARVEST --> CLEAN
+    CLEAN --> TRAIN
     API -.->|封鎖單一帳號| HYDRA
     HYDRA -.->|"補上新帳號（no single point of failure）"| HYDRA
 ```
 
 > **偵測工程的關鍵洞察**：`mixing distillation traffic with unrelated customer requests` 這半句話，說明了為什麼**帳號層級的封鎖無效**。攻擊者刻意讓每個帳號的流量看起來像混合負載，把蒸餾請求的訊號稀釋掉。**這直接預告了 9 月報告 p.153 的解方：`Instead of banning proxy accounts individually, we work to attribute this suspicious activity to a specific organization`。** 2 月描述問題，9 月給出答案，前後呼應得非常乾淨。
+
+> **補：③ Clean（清洗與重新格式化）步驟及其偵測意涵（2026-09-15 深化）**。上圖過去把 ② Harvest 直接接到 ④ Train，跳過了 9 月報告 p.144 四格圖裡真有的一格 **Clean**：`The harvested exchanges are cleaned and reformatted for distillation.` 這是一個**發生在攻擊者端、Anthropic API 遙測看不到**的資料工程步驟，內容包括：去除雜訊與失敗回合、**去識別化**（把 harvest 到的第三方使用者姓名、email、公司資料剝掉，這正是 9 月 p.146 個資外洩指控的另一面），以及把對話重排成監督式微調（SFT）要用的「prompt 到 completion」訓練對或推理軌跡對。它對偵測有三層意義：
+>
+> 1. **偵測位置只能停在 ② Harvest。** Clean 與 Train 都在平台外，防守方唯一能觀測的攻擊面就是 Harvest 這一格的請求流量。這解釋了為什麼 2 月的偵測方法論（下一節的 volume／structure／focus 三軸）全部是**對請求分佈**的量測，而不是對「清洗後訓練集」的量測，因為後者根本看不到。
+> 2. **Clean 的需求會反過來塑形 Harvest 的可觀測特徵。** 收割方最終要把資料整成整齊的訓練對，於是他們在 Harvest 階段就傾向下**結構高度一致、輸出格式固定**的 prompt（例如強制 inline CoT 標籤、rubric 式評分、固定角色設定），好讓後續清洗成本最低。**這種「為了好清洗而在源頭就標準化」的傾向，正是三軸裡 structure 軸抓得到的訊號。** 換句話說，Clean 這個看不見的步驟，在 Harvest 這個看得見的步驟上留下了指紋，這也是本教材第 7.2 節「句式結構高度重複」與「請求內容高度對應訓練最有價值的東西」兩條行為指標的成因。
+> 3. **去識別化不會消滅外洩事實。** 攻擊者在 Clean 階段剝掉 PII 是為了訓練品質，不是為了保護當事人；資料在 Harvest 當下就已經完整流經第三方。對防守方與被害使用者而言，「訓練集裡最後沒有你的名字」不等於「你的資料沒有外洩」。這一點要與第 4.5 節的跨境資料保護論述接起來讀。
 
 ### 3.3 偵測方法論：volume／structure／focus 三軸
 
@@ -453,18 +461,31 @@ flowchart TD
 - **課堂用法**：**先投這張圖，再問學員「這張圖裡哪一個環節變了，就從合法變成非法？」** 正確答案不在演算法（演算法完全相同），而在**存取是否經授權、資料是否經同意、規模是否隱蔽、是否涉及詐欺**。詳細的四要件拆解見 [`../07-distillation/00-distillation-intro-and-mitigations.html`](../07-distillation/00-distillation-intro-and-mitigations.html) 第 2.3 節。
 - **與 2 月揭露的關係**：2 月揭露用一句話定義蒸餾（`training a less capable model on the outputs of a stronger one`），**沒有畫出來**。9 月報告把它畫成圖，代表 Anthropic 認知到「必須先讓讀者理解合法版本，才能理解非法版本」，**這是被 2 月揭露後的公共辯論逼出來的補強**（中國商務部的主要反駁論點正是「蒸餾是中性技術」）。
 
-#### 圖 B（9 月報告 p.144）：Anatomy of a distillation campaign
+#### 圖 B（9 月報告 p.144）：Anatomy of a distillation campaign（2026-09-15 修正）
 
 `../figures/page-144.png`
 
-- **類型**：生命週期／解剖圖。
-- **內容**：呈現非法蒸餾行動的完整生命週期，從詐欺帳號建立、proxy 存取、收割、到訓練與轉售。
-- **課堂用法（本教材建議的專屬用法）**：**把 2 月揭露的 hydra cluster 描述，逐句貼到這張圖的節點上。** 例如：
-  - 「thousands of new accounts using false identities, fake or stolen credit cards, and stolen API keys」對應「帳號建立」節點；
-  - 「distribute traffic across our API as well as third-party cloud platforms」對應「存取路徑」節點；
-  - 「mixing distillation traffic with unrelated customer requests」對應「規避偵測」節點；
-  - 「purchasing them from third-party resellers」（9 月 p.144 新增）對應「資料轉售」節點，**這個節點在 2 月版本裡是缺的**。
-- **教學價值**：這個練習讓學員親眼看到**七個月間情報圖像補完了哪一塊**。2 月的圖像是「假帳號 → proxy → 收割」的線性鏈；9 月補上「資料二級市場」與「靜默轉發自家使用者」兩條旁支，把線性鏈變成網路。
+> **修正說明（2026-09-15）**：本小節先前把圖上不存在的「存取路徑／規避偵測／資料轉售」當成流程節點，又把圖上真有、且技術上重要的第三段 **Clean** 漏掉了。經逐字重讀 `../figures/page-144.png` 原圖後改寫如下。**證據等級：直接判讀本課程已渲染的報告原頁（一手，等同讀原文）。**
+
+- **類型**：**四段編號**的生命週期／解剖圖，標題 `Anatomy of a distillation campaign`。它是一條由左到右的線性流程，**圖上真正的方塊只有四個，而且是編號的**。
+- **四個階段（逐字抄錄圖內文字，不要自行增刪節點）**：
+
+| 編號 | 階段名（圖上原文） | 圖上說明（逐字） |
+|---|---|---|
+| ① | **Manufacture identities** | `Thousands of fake accounts are created under invented aliases and made to look like ordinary customers.` |
+| ② | **Harvest** | `Automated scripts send millions of requests per day through these fraudulent accounts. These requests target the frontier model's reasoning capabilities.` |
+| ③ | **Clean** | `The harvested exchanges are cleaned and reformatted for distillation.` |
+| ④ | **Train**（圖上以紅框標示，是唯一被框成紅色的一格） | `The exchanges are used to train a student model to mimic the responses of the frontier model.` |
+
+- **圖下方內文（是內文，不是流程節點，務必分清）**：緊接圖片的兩段正文才提到「向第三方轉售商購買逐字稿」與「把自家使用者請求靜默轉發（reroute）給 Claude」。原文：`Unauthorized labs also obtain transcripts of user exchanges with US frontier models by purchasing them from third-party resellers.` 以及 `In other cases, unauthorized labs rerouted requests from their users to Claude [,] without the knowledge or permission of those users [,] to harvest exchanges between users and Claude for training.` **這兩條是文字旁支，圖的四格流程裡沒有對應方塊；引用時不可講成「圖上的節點」。**
+- **課堂用法（本教材建議的專屬用法，修正版）**：把 2 月揭露的 hydra cluster 描述，貼到這張圖**真正存在**的四個階段上，貼不上去的就明確標成「圖下方內文、非流程節點」：
+  - 「thousands of new accounts using false identities, fake or stolen credit cards, and stolen API keys」對應 **① Manufacture identities**；
+  - 「Automated scripts send millions of requests per day」「target the frontier model's reasoning capabilities」對應 **② Harvest**（2 月的 volume／structure／focus 三軸偵測，量的就是這一格的請求流量）；
+  - **③ Clean** 在 2 月揭露裡完全沒有對應描述，是 9 月圖像獨有的一格，其偵測意涵見第 3.2 節的補述；
+  - 「train a student model to mimic」對應 **④ Train**；
+  - 「distribute traffic across our API as well as third-party cloud platforms」「mixing distillation traffic with unrelated customer requests」是 hydra cluster 的**存取與掩護手法**，屬於 ② Harvest 底下的基礎設施細節，**圖上沒有獨立方塊**，不要另立「存取路徑」「規避偵測」節點；
+  - 「purchasing them from third-party resellers」與「rerouted requests from their users」是**圖下方內文的兩條旁支**，不是圖上的第五、第六格。
+- **教學價值**：這個練習讓學員親眼看到**七個月間情報圖像補完了哪一塊**，同時訓練一個更基本的紀律：**判讀圖表時只認圖上真有的方塊，圖說與圖下方內文要分層引用，不能把內文的句子塞成不存在的節點。** 2 月揭露只用文字描述「假帳號 → 收割 → 訓練」的線性鏈；9 月的四格圖在中間補上了 **③ Clean（清洗與重新格式化成訓練對）** 這個資料工程步驟，並在圖外用內文補上「資料二級市場」與「靜默轉發自家使用者」兩條旁支。**先前版本把內文旁支誤植成節點、又漏掉 Clean，正好是本張圖最該避免的兩個判讀錯誤，本小節保留這個修正紀錄作為反面教材。**
 
 ---
 

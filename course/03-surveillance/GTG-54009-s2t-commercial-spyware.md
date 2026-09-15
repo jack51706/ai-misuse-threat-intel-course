@@ -832,7 +832,7 @@ Anthropic 引用的禁令文字非常具體：
 #### 8.3.4 但也要誠實說出上游偵測的四個界線
 
 1. **可見度只覆蓋一半漏斗**。已詳述。
-2. **只能看到「用我家模型」的那部分**。行為者完全可以改用開源模型本地部署。報告在另一個案例（p.104，GTG-11005 語境）明確承認過這種失效模式：「The end-user deployed the platform locally with an on-premises LLM. Our account enforcement actions disrupted the actor's software and design activities, but not the deployment of the platform.」（終端使用者以地端 LLM 在本地部署了該平台。我們的帳號執法行動中斷了該行為者的軟體與設計活動，但沒有中斷該平台的部署。）**同樣的失效邏輯完全適用於本案。**
+2. **只能看到「用我家模型」的那部分**。行為者完全可以改用開源模型本地部署。報告在另一個案例（p.105，GTG-50027／馬利 Lakana 360 案的處置段）明確承認過這種失效模式：「The end-user deployed the platform locally with an on-premises LLM. Our account enforcement actions disrupted the actor's software and design activities, but not the deployment of the platform.」（終端使用者以地端 LLM 在本地部署了該平台。我們的帳號執法行動中斷了該行為者的軟體與設計活動，但沒有中斷該平台的部署。）**同樣的失效邏輯完全適用於本案。**
 3. **封禁帳號 ≠ 中斷公司**。被封的是一個帳號。S2T（或其經銷商、或其客戶）可以開新帳號、換公司主體、換法域、或直接向其他 AI 供應商採購。報告自己的措辭也很小心——它說中斷的是 "the campaign"，而且需要「與夥伴分享指標，以在我們自身平台之外中斷此行動」。
 4. **「pilot stage」的判定本身帶不確定性**。判斷一個行動處於試營運而非實戰，依據的是「規模、產出物的成熟度、以及沒有看到下游痕跡」。但一個成熟行為者**刻意把敏感階段拆到別的供應商**，在遙測上看起來會跟 pilot 一模一樣。
 
@@ -842,7 +842,7 @@ Anthropic 引用的禁令文字非常具體：
 |---|---|---|
 | **緩解措施在發報時尚未完成** | "are implementing mitigations"（進行式，p.84） | 中。誠實揭露，但代表同類行為在報告發布時可能仍可通過 |
 | **視野只覆蓋漏斗上半** | Figure 1 的垂直虛線；"We were not able to independently confirm the downstream operational stages"（p.84） | **高**。這是結構性缺口，不是可修補的缺陷 |
-| **地端模型完全繞過** | 報告他處自承此失效模式（p.104 語境） | **高**。無法由單一供應商解決 |
+| **地端模型完全繞過** | 報告他處自承此失效模式（p.105，GTG-50027 語境） | **高**。無法由單一供應商解決 |
 | **未揭露是如何被發現的** | 報告全段沒有說明偵測是來自分類器、人工審查、還是外部通報 | 中。對防守方複製此偵測能力構成障礙 |
 | **未說明帳號是否曾成功規避管制** | 章節導論說「In every case we describe below, the threat actors violated our Usage Policy **and attempted to circumvent controls designed to detect such misuse**」（p.81），但本案正文未說明**具體規避手法** | 中。導論宣稱有規避行為，個案卻未舉證，是本案的資訊缺口 |
 | **229+ 個合成帳號仍在野** | 255+ vs 揭露 26 | 中。已透過夥伴管道分享，但公開資訊不足以讓一般防守方自行比對 |
@@ -1294,7 +1294,7 @@ p.85–86 的波斯語與阿拉伯語主題標籤，**PDF 文字層的擷取結�
 
 ### 12.5 頁段界線說明
 
-本教材涵蓋 PDF **p.82（案例起始）至 p.86 上半（Hashtags by corpus 表結束，其後轉入 GTG-14010）**，並引用 p.81（章節導論）、p.64（2026 年美以伊戰爭脈絡）、p.89–93（GTG-14020 台灣交叉引用）、p.104 一帶（地端 LLM 失效模式）、p.111 與 p.153（Anthropic 處置方法論）作為必要脈絡。**本頁段內沒有 IOC 表格**（見第 7.1 節）。
+本教材涵蓋 PDF **p.82（案例起始）至 p.86 上半（Hashtags by corpus 表結束，其後轉入 GTG-14010）**，並引用 p.81（章節導論）、p.64（2026 年美以伊戰爭脈絡）、p.89–93（GTG-14020 台灣交叉引用）、p.105（GTG-50027／馬利案的地端 LLM 失效模式）、p.111 與 p.153（Anthropic 處置方法論）作為必要脈絡。**本頁段內沒有 IOC 表格**（見第 7.1 節）。
 
 ---
 

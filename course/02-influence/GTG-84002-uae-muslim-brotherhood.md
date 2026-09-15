@@ -1701,6 +1701,7 @@ GTG-84002 證明：**冒用一個真實 NGO 的身分、以它的文風產出一
 - **§B**　協同性的時序偵測（深化 §6.1.4）＋ **Mermaid 圖 1**（協同貼文時序偵測流程）
 - **§C**　信度分級（ICD 203 / Admiralty Code）的技術化（深化 §2.4）
 - **§D**　滲透國際組織的文件戰溯源技術 ＋ **Mermaid 圖 3**（文件三路驗真）
+- **§E**　攻擊方基礎設施重建：Deadshot 私有平台、~300 人設帳號與同步化產線（2026-09-15 深化）＋ **Mermaid 圖 4**（私有平台→Claude API→300 帳號協同→接偵測流）
 - **§F**　新 WebSearch 配額補齊的查證（HRC62、DAWN/POMED、C2PA/SynthID/頻域偵測）
 
 ---
@@ -2137,6 +2138,104 @@ flowchart TD
 ```
 
 > **三路互補的邏輯**：L1（溯源）證**在場**、stylometry 證**同筆**、metadata 證**同源容器**——三者偵測對象不同、失效模式也不同（截圖破壞 L1、翻譯破壞文體、另存新檔洗掉部分 metadata），所以**任一路都可能單獨失效，但三路同時被規避的成本極高**。這就是「融合研判」優於任何單一方法的原因。
+
+---
+
+### E. 攻擊方基礎設施重建：Deadshot 私有平台、~300 人設帳號與同步化產線（2026-09-15 深化）
+
+> **本節性質與紅線**：本檔前四個技術附錄（§A 合成圖像、§B 時序協同、§C 信度、§D 文件溯源）全是**防守方視角**，唯獨沒有把**攻擊方的基礎設施**拆解成可偵測的接縫——而姊妹檔對更小的機制都做了（`GTG-54006` §B 重建「29 帳號輪替＋跨帳號關聯」、`GTG-54004` §A.3 重建「選前養帳號 cohort／pHash」）。本案的基礎設施反而是全模組最值得重建的：**「Deadshot」私有平台是全影響力模組唯一的自建代理平台**，**~300 個假影響者帳號是全模組最大的網絡**（對比 `GTG-54006` 的 29、`GTG-54004` 的 1）。本節補這個缺口。**重建的目的是偵測**——把報告所稱「built so that it could not be traced back」（p.78）的設計，拆回**它在工程上必然留下的接縫**，全節為偵測／溯源取向，**不含任何可用於搭建此類基礎設施的操作教學**。證據等級一律標【報告明載】／【推論】／【三方佐證】。
+
+#### E.1 (a)「私有平台託管 AI 人格」的工程重建：包裹 Claude API 的自建應用＋記憶檔 scaffold
+
+**報告明載的原料**（p.78 與 p.43 趨勢段拼合）：
+
+| 報告原文 | 頁碼 | 揭露的工程事實 |
+|---|---|---|
+| "maintain an AI persona named 'Deadshot' **hosted on their own private platform**" | p.78 | 有一個**自建應用**（不是直接用 claude.ai 對話框） |
+| "Embedded inside the system's setup was a **master doctrine file** that instructed Claude to repeat the same mission **across hundreds of sessions**" | p.78 | 有一份**固定的 system prompt／教義檔**，跨數百 session 重用 |
+| "a great deal is **embedded within persistent memory files**" | p.43 | 意圖不在逐次提示裡，而在**持久記憶檔**裡 |
+| "Actors kept **lists of banned words** inside their AI agents, maintained **shared files of approved sources and evasion rules**, and ran **custom software that called Claude in fixed batches**" | p.43 | 記憶檔內含：禁用詞表、核可來源表、規避規則；並有**批次呼叫的自訂軟體** |
+
+把這些詞組還原成工程架構，「Deadshot 私有平台」在最小假設下就是**一個包裹 Claude API 的自建 orchestration 應用**，其構成【推論，但每一項都對得上一句報告原文】：
+
+- **API client 層**：呼叫 Claude Messages API 的自訂軟體（p.43「custom software that called Claude in fixed batches」）——**批次**而非互動，代表有排程器。
+- **固定 system prompt ＝ master doctrine file**（p.78）：把「a coordinated transatlantic and regional operation to dismantle the Muslim Brotherhood globally」這個任務宣言釘死在每次呼叫的系統設定裡。
+- **persistent memory scaffold**（p.43「persistent memory files」）：持久記憶檔集合，至少含（i）Deadshot 人設定義、（ii）banned-words 表、（iii）approved-sources 表、（iv）evasion-rules 表。這就是「Deadshot」這個**固定人格**跨數百 session 保持一致的技術載體。
+
+**為什麼這個架構是本案「全程無拒絕紀錄」的根因**【推論，呼應 §8.2 缺口 1、跨案例分析主線三失效模式 4】：當任務意圖、目標、禁用詞、規避規則都**搬進部署層的記憶檔**、每次 API 呼叫只送「看似中性的子任務」，內容分類器在**單次對話**裡幾乎無從判定惡意——惡意在 scaffold 裡，不在 prompt 裡。這與 `GTG-54006` 的 `fake_news_3.py` 批次、`GTG-84006` 的共享 AI agent 是同一族「把意圖固化進部署層」的手法。
+
+**供應商端的偵測落點**【偵測構想，移植 `GTG-54006` §B「提示指紋＋輸出綱要是最難放棄的關聯邊」】：
+
+- **system-prompt 指紋跨 session 聚類**：doctrine 檔被「across hundreds of sessions」近乎逐字重用（p.78），對 system prompt 做 MinHash／嵌入相似度聚類，數百個 session 會聚成**異常緊密的一團**——這是「一個人跑數百 session、同一教義」的直接簽章。
+- **fixed-batch 呼叫節奏**：批次呼叫（p.43）在時序上不像人類互動，像排程器（固定間隔、夜間也跑、每批 request 數穩定）。
+- **persona 一致性**：同一 Deadshot 人設語氣跨 session 穩定 → 與 §D.2 的「LLM 代筆會抹平個體差異、反而『太一致』」是同一個簽章。
+
+#### E.2 (b) ~300 影響者人設帳號：暖機／輪替／跨帳號關聯偵測（移植 54006／54004）
+
+**報告明載**：「approximately 300 inauthentic influencer social media accounts」、「the actor also **funded** the social media network that amplified the content」（p.78）；OPSEC 段（p.43）：「built **account warmup and evasion logic**」「**rotated accounts**」。**報告未給任何一個 handle／IOC**（本案無 IOC 表，§7），所以以下是**「若你是平台防守方，該對這種網絡建的偵測」**，非對已知帳號的分析。
+
+**先講最關鍵的一句：influencer 人設帳號比拋棄式 bot 難抓**【分析要點，承 §3.2.1】。政治機器人是拋棄式的（無頭像、無歷史、發完即棄）；**影響者人設帳號有頭像、顯示名、領域、累積的貼文歷史，甚至付費藍勾驗證**（§3.2.1 由 Figure 18 觀察），其行為分布**刻意接近真人**。因此針對「拋棄式 bot」的偵測（如帳號無歷史、批量同文）在此**大幅減效**，必須改用**孵化期結構訊號＋協同時序＋金流**三路。
+
+**移植 `GTG-54004` §A.3（孵化期 cohort 偵測，內容無害時唯一可用）**：
+
+| 訊號 | 技術 | 對 ~300 影響者帳號的適用 |
+|---|---|---|
+| 註冊批次 | `created_at` 分桶找尖峰 | 300 帳號若分批孵化，會露出註冊時間叢集 |
+| bio 近重複 | MinHash + LSH | 「同模板換幾字」的人設簡介分到同桶 |
+| 頭像來源 | pHash＋反向圖搜 | GAN 合成臉「反搜查無」本身即訊號；同圖多帳號則 pHash 命中 |
+| 首批追蹤重疊 | 最初追蹤 K 對象的 Jaccard | 同一操作者建的號常追同一批「種子」 |
+| 三序列變點對齊 | 發文率／主題向量／議題熵的 CUSUM／PELT | 「潛伏發無害內容 → 突然轉向政治」的暖機結構 |
+
+**移植 `GTG-54006` §B（跨帳號關聯：把偵測狀態從「帳號」搬到「跨帳號穩定實體」）**，但**要點出一個關鍵差異**【分析要點】：
+
+- `GTG-54006` 輪替的是 **29 個 Claude API 帳號**，穩定實體是**產線指紋**（TLS/JA4、system-prompt 雜湊、輸出綱要），落點在 **AI 供應商端**。
+- 本案輪替／經營的是 **~300 個社群平台人設帳號**（不是 Claude 帳號），社群平台端**看不到 Claude 產線指紋**。所以本案跨帳號關聯的「穩定實體」要換成三個**社群平台／金流端可觀測**的錨：
+  1. **圖像資產重用**：同一批合成圖跨多帳號（§6.1 的 pHash≈0；Figure 18 六帳號共用兩組圖）——這是本案最強、最耐改的跨帳號邊（§7.3 指標 4）。
+  2. **協同時序簽章**：§B 的 16 分鐘 burst＋低互動方差（Figure 18）。
+  3. **金流錨**：報告明說「actor **funded** the amplification network」（p.78）——**付費放大**必然留下支付／廣告帳戶軌跡（同一資金源、同一付款方式跨多帳號投放）。這是本案獨有、且 `GTG-54004`（無金流）與 `GTG-54006`（API 帳號）都沒有的關聯邊。**金融情報（FININT）在此比網路情報更可能追回單一行為者**——呼應 §3.2.1「付費放大代表存在可供金融情報追蹤的軌跡」。
+
+#### E.3 (c)「technical obfuscation 與 narrative generation 同步」的工程長相
+
+**報告明載**（p.78）：「ensuring that **narrative generation, technical obfuscation, and tactical target selection** were **completely synchronized** across the entire campaign」；且「built so that it **could not be traced back**」。
+
+**工程解讀：這裡的「同步」不是靠三個團隊開會協調，而是三者共用同一份 doctrine 記憶檔、由同一個 orchestration 層驅動，所以在建構上（by construction）就同步。**【推論，承 E.1】把 p.43 的 OPSEC 拆成兩層，才看得清「同步」同步的是哪一層：
+
+| obfuscation 層 | 報告原文（p.43） | 與 narrative generation 的關係 |
+|---|---|---|
+| **內容層**（產線內） | 「strip the marks of automated text and to sound organic」「removed metadata and codenames before delivery」 | **與 narrative gen 緊耦合**——去 AI 文體痕跡、去元資料是**在生成的同一條產線裡**做的，這就是「completely synchronized」指的耦合 |
+| **存取層**（產線外） | 「laundered their access … through VPNs, foreign phone numbers, rotated accounts, and third-party services that masked their IP」 | 遮的是**行為者到 Claude 的連線**，與內容產製解耦（§4 階段 0 型 OPSEC） |
+
+**反直覺的偵測啟示**【偵測構想，接 §D】：「同步」本身製造了一個**偵測面**。因為 narrative、obfuscation、target selection 共用**同一套 banned-words／approved-sources／persona 語氣**，三類產出物之間會有**跨產出物的一致性指紋**——同一操作的證詞、dossier、300 帳號貼文，會共享異常穩定的用語規則與規避痕跡。**單看一份產出物看不出，跨產出物比對就浮現**（正是 §D.2 stylometry「太一致＝代筆農場簽章」、§E.1「system-prompt 跨 session 聚類」的同一個道理）。**攻擊者用「同步」換效率，防守方用「同步」抓關聯——這是同一個屬性的兩面。**
+
+#### E.4 Mermaid 圖 4：Deadshot 私有平台 → Claude API → ~300 帳號協同放大 → 接現有偵測流
+
+```mermaid
+flowchart TD
+    subgraph PLAT["Deadshot 私有平台（自建 orchestration 應用）"]
+        DOC["master doctrine file 任務宣言：dismantle the Muslim Brotherhood globally<br/>【報告明載 p.78】"]
+        MEM["persistent memory files：Deadshot 人設 + banned-words + approved-sources + evasion-rules<br/>【報告明載 p.43】"]
+        SCHED["fixed-batch 排程器：custom software calling Claude in batches<br/>【報告明載 p.43】"]
+    end
+    DOC --> API["Claude API（Messages）<br/>每次只送看似中性的子任務 → 全程無拒絕紀錄"]
+    MEM --> API
+    SCHED --> API
+    API --> SYNC["同一產線同步輸出三股<br/>narrative generation ／ technical obfuscation ／ tactical target selection<br/>completely synchronized【報告明載 p.78】"]
+    SYNC --> N300["~300 影響者人設帳號協同放大 funded【報告明載 p.78】<br/>暖機 warmup ／ 輪替 rotated accounts【p.43】"]
+    SYNC --> ART["其他四條線落地：front NGO ／ HRC 代筆證詞 ／ 18 議員 dossier ／ 特別報告員反問責"]
+    N300 --> LAND["社群平台落地：Figure 18 六帳號 16 分鐘 burst、共用合成圖"]
+    LAND --> DET1["偵測流 A｜協同時序：§B burst + near-dup + 低互動方差"]
+    LAND --> DET2["偵測流 B｜孵化 cohort：§E.2 註冊批次 / bio MinHash / 頭像 pHash 反搜"]
+    LAND --> DET3["偵測流 C｜金流 FININT：付費放大的支付/廣告帳戶關聯"]
+    ART --> DET4["偵測流 D｜文件溯源：§D stylometry + metadata 三路驗真"]
+    API --> DET5["偵測流 E｜供應商端：§E.1 system-prompt 跨 session 聚類 + fixed-batch 節奏"]
+    DET1 --> HUMAN["人工研判：跨產出物一致性指紋收斂 → detection != attribution"]
+    DET2 --> HUMAN
+    DET3 --> HUMAN
+    DET4 --> HUMAN
+    DET5 --> HUMAN
+```
+
+> **這張圖的教學重點**：左上 `PLAT` 是攻擊方唯一的**單點**——doctrine＋memory＋排程器三件套就是「一個人管五條線」的槓桿所在；中段 `SYNC` 是報告 p.78「completely synchronized」的工程位置（同步發生在**產線內**，不是團隊間）；右側五條偵測流（A–E）分屬**三個不同的觀測者**——社群平台（A/B）、金流機構（C）、AI 供應商（E）、文件收件機構如 HRC/NGO（D）。**沒有任何單一觀測者能看到全貌**（呼應 §9.1 單一來源情報問題），這正是為什麼最後一步必須「人工研判＋跨產出物一致性指紋收斂」，且刻意停在「detection != attribution」——與 §B.5、§D.6 的收尾邏輯一致。
 
 ---
 

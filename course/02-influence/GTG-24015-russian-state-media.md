@@ -168,6 +168,44 @@ flowchart TB
 
 ---
 
+### 2.6 拉美線的當地脈絡：Sputnik en Español／Mundo 的戰略受眾與反美敘事（2026-09-15 深化）
+
+**為什麼需要補這一節**：§2.5 給了摩爾多瓦線（線 A）極詳盡的地緣脈絡，但報告對**拉美線（線 B）**幾乎沒有著墨——線 B 在報告裡只有 p.60 分發表一列、p.59 一句「a contractor with links to Russia」，**無圖、無觸及數字**（見 §4.8 線 B、§3 受害表）。這種不對稱是**報告本身的限制**，不是本案拉美線比較不重要。要評估這條線的威脅，必須知道 Sputnik en Español／Mundo 在拉美的受眾與敘事定位。以下全為第三方脈絡，**用來補足報告的沉默，不可與報告發現混為一談**。
+
+- **品牌歸屬**【報告明載＋三方佐證】：報告寫「Sputnik en Español for Latin American audiences」（p.60）。Sputnik en Español／Sputnik Mundo 同屬 Rossiya Segodnya 體系（§2.3），與線 A 的 Sputnik Moldova、線 C 的 Sputnik Africa 是同一母體的地區分支。
+- **西語是俄國對外觸及最大的語種之一**【三方佐證，可信度：學術研究機構】：RT en Español 與 Sputnik Mundo 的西語社群帳號合計追隨者**逾 2,600 萬**，明顯**高於**其英語帳號（約 1,900 萬）；RT en Español 曾是「Twitter 上關於俄羅斯入侵烏克蘭的西語資訊第三大被分享網站」。這說明線 B 的分發終端本身就座落在一個**高觸及**的既有生態，AI 只是把「內容產能」接上這個既有通路——與 §4.8「生產能力 × 既有通路 = 影響力」的觀察一致。（Reuters Institute for the Study of Journalism）
+- **戰略受眾與核心敘事**【三方佐證，可信度：官方／獨立研究，含政策立場需標註】：美國國務院與 EUvsDisinfo 均指出，俄語系西語對外宣傳的**主要目標是拉美閱聽眾**，以**墨西哥**為重點，主軸是**煽動反美情緒（anti-US／anti-imperialism）**、重塑拉美對烏克蘭戰爭的認知、把美國描繪為區域干預者。這正好解釋線 B 的「來源等級跳躍」（§4.8）為何有效：把 Rybar／Colonel Cassad 的**戰場敘事**經 AI 在地化為「拉美觀點」，剛好嵌進拉美既有的、對反美框架的**結構性接受度**（William & Mary DisinfoLab 專文〈Why Latin America is Susceptible to Russian War Disinformation〉即分析此一土壤）。
+- **制裁與規避＝內容供給端的同一生態**【三方佐證，可信度：獨立研究／新聞】：Sputnik 因支持對烏戰爭於 **2022-03** 遭歐盟全面禁播（§2.3）；其後 Sputnik Mundo 換域名，並出現 `latamnews[.]lat`／`noticiaslatam[.]lat` 等**複製站**以規避制裁。本案線 B 的 **@ATodaPotencia**「偽裝獨立拉美分析」正是這個生態「假在地聲音」的標準件（§4.6）——被制裁的品牌需要**看似獨立**的前端來續命，而 AI 讓這種前端的內容量產成本趨近於零。（EU DisinfoLab；Espreso）
+- **對台灣的一句話**：拉美線示範的是「**大國把既有的區域反美／反殖民情緒當成免費的擴音土壤**」。台灣的對應不是反美，而是**兩岸／統獨與世代**的既有裂縫——同樣的手法是「把外部敘事包裝成本地既有立場的自然延伸」，讓查核者難以指認其為外來。
+
+> **證據等級小結**：本節「品牌歸屬」為報告明載；受眾規模、敘事定位、制裁規避均為**第三方獨立查證**，佐證的是「Sputnik 西語生態的既有樣貌」，**不直接驗證** GTG-24015 線 B 的具體產出（後者仍是 Anthropic 單一來源，見 §9.1、§12）。
+
+### 2.7 非洲線的當地脈絡：Sputnik Africa 的反西方／反法定位與薩赫勒（2026-09-15 深化）
+
+**為什麼需要補這一節**：非洲線（線 C）是四條線中報告資訊**最少**的一條——**行為者完全未描述**，只出現在 p.60 表格（§4.8 線 C）。但這條線恰好與**同模組的 GTG-04001（俄羅斯在中非共和國的 FIMI 行動）**是同一部機器的兩端，把兩案並讀才看得到全貌。以下為第三方脈絡與跨案交叉引用。
+
+- **品牌與定位**【報告明載＋三方佐證，可信度：官方／獨立研究】：報告寫「Sputnik Africa for African audiences」（p.60）。Sputnik Africa／Afrique 是 Rossiya Segodnya 的非洲品牌（英／法雙語），**2023 年起顯著強化**，定位**反西方、反法（anti-France）、親俄**，主打**薩赫勒**（馬利、布吉納法索、尼日組成的「薩赫勒國家聯盟」AES）的**反殖民／反帝**情緒。分析界普遍認為俄國的宣傳與 FIMI 行動是薩赫勒「去法國化」的關鍵推手之一，手法是放大歷史殖民怨懟、將法國描繪為新殖民者。（EUvsDisinfo〈Echoes of influence: inside Russia's FIMI activities in Africa〉；Institute for Strategic Dialogue；VOA/GlobalSecurity）
+- **供給鏈：African Initiative → Sputnik Afrique**【三方佐證，可信度：政府技術報告／獨立研究】：法國 VIGINUM 與 FCDO／EEAS 的技術報告記載，**African Initiative（2023-09 成立）**自我定位為「俄羅斯與非洲的資訊橋樑」，其產製內容**回饋進 Sputnik Afrique 等國家媒體通路**，藉此獲得「全球規模的人工正當性（artificial legitimacy on a global scale）」。這與本案線 C 的產製鏈——「俄語／法語通訊稿（RIA Novosti、TASS、Sputnik Afrique）→ Claude 依 40 條風格規則改寫 → @sputnik_africa 貼文」——是**同一條供給鏈的兩端**：一端量產「看似在地」的內容，另一端用**掛牌國家媒體**賦予公信力。（VIGINUM／FCDO／EEAS African Initiative 技術報告，2025-06；DFRLab；第 3 版 EEAS FIMI 威脅報告）
+- **交叉引用 GTG-04001（同模組）**【本課推論＋兩案比對】：GTG-04001 是這條生態的**落地版**——班基（Bangui）一名說俄語的行為者作為「production backbone」，每日透過 **Radio Lengo Songo（98.9 FM）**產製「親中非政府、親 Wagner、**反法**、反反對派」內容，並與 **RT、Sputnik Afrique、TASS、俄羅斯之家**協調，歸因指向 **SVR 掌控的 Politology（Africa Corps／Wagner 的影響力分支）**，Breakout Scale 評到**罕見的 Category Four**（見 `GTG-04001-russia-car-fimi.md` §1–2）。**把兩案並讀**：線 C 是俄國非洲 FIMI 機器的「**旗艦國家媒體產出端**」（Sputnik Africa 的 X 貼文，反法敘事的全球櫥窗），GTG-04001 是同一機器的「**在地落地端**」（FM 電台＋當地轉載，反法敘事的地面部隊）。單看任一案都會低估這部機器；線 C 的「反西方英語貼文」與 GTG-04001 的「班基 FM 反法廣播」共用同一套敘事骨架與同一個 Sputnik Afrique 節點。
+- **對台灣的一句話**：非洲線提醒防禦方，**同一個敘事會以「國家媒體全球櫥窗」與「在地落地媒體」兩種形態並行**；只監測其中一種（例如只看國際平台的英語貼文，或只看本地電台）都會漏掉另一半。台灣須同時盯「對外櫥窗」（如對台的多語官媒與海外華媒）與「在地落地」（本地電視／LINE／社群）兩端。
+
+> **證據等級小結**：本節「品牌歸屬」為報告明載；反法定位、African Initiative 供給鏈、薩赫勒脈絡均為**第三方獨立查證**（含法國政府 VIGINUM 技術報告）；與 GTG-04001 的並讀為**本課推論**（兩案皆一手，但報告未把它們明確連結）。這些佐證的是「Sputnik Africa 生態的既有樣貌」，**不直接驗證** GTG-24015 線 C 的具體產出（後者仍是 Anthropic 單一來源）。
+
+**本節新增外部來源（含信賴層級）**：
+
+| 來源 | 類型／信賴層級 | 用於佐證 | URL |
+|---|---|---|---|
+| Reuters Institute — Putin's propaganda in Spanish | 學術研究機構，高可信 | 西語觸及 >2,600 萬、>英語 | https://reutersinstitute.politics.ox.ac.uk/news/despite-western-bans-putins-propaganda-flourishes-spanish-tv-and-social-media |
+| William & Mary DisinfoLab — Why Latin America is Susceptible | 大學研究實驗室，可信 | 拉美對反美敘事的結構性接受度 | https://www.disinfolab.wm.edu/post/why-latin-america-is-susceptible-to-russian-war-disinformation |
+| EU DisinfoLab — Disinfo Update | 獨立研究機構，可信 | Sputnik 西語制裁規避生態 | https://www.disinfo.eu/disinfo-update-16-12-2025-2-2-2-2-2-2/ |
+| Espreso — Sputnik changes domains to avoid sanctions | 新聞媒體（烏克蘭，立場需標註） | latamnews/noticiaslatam 複製站 | https://global.espreso.tv/russia-fake-news-spanish-version-of-russias-sputnik-has-been-relaunched-on-new-domain-noticiaslatamlat |
+| EUvsDisinfo — Russia's FIMI activities in Africa | EEAS 官方平台（政策立場需標註） | Sputnik Afrique 反西方定位、FIMI 擴張 | https://euvsdisinfo.eu/echoes-of-influence-inside-russias-fimi-activities-in-africa/ |
+| ISD — Pro-Kremlin influencers targeting AES | 獨立研究機構，可信 | 薩赫勒國家聯盟被鎖定 | https://www.isdglobal.org/digital-dispatch/investigation-pro-kremlin-influencers-targeting-audiences-in-the-alliance-of-sahel-states-aes/ |
+| VIGINUM／FCDO／EEAS — African Initiative 技術報告（2025-06） | 政府技術報告，高可信 | African Initiative → Sputnik Afrique 供給鏈 | https://www.sgdsn.gouv.fr/files/files/Publications/20250612_TLP-CLEAR_VIGINUM_FCDO_EEAS_Technical_Report_African_Initiative_EN.pdf |
+| DFRLab — Africa | 獨立研究機構（Atlantic Council），可信 | 俄國非洲影響力行動盤點 | https://dfrlab.org/region/africa/ |
+
+---
+
 ## 3. 受害者與目標清單
 
 本案沒有傳統意義上的「受駭組織」，受害者是**資訊環境與受眾**。依報告 p.58–60 整理：
