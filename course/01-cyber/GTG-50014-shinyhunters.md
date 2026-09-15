@@ -1390,3 +1390,21 @@ Sources:
 - [Arctic Wolf: Salesloft Drift OAuth token theft](https://arcticwolf.com/resources/blog/widespread-salesforce-data-theft-via-compromised-salesloft-drift-oauth-tokens/)
 - [Anomali: Salesloft Drift breach recap](https://www.anomali.com/blog/salesloft-drift-breach-recap)
 - [AppOmni: Drift breach (UNC6395)](https://appomni.com/blog/drift-breach-salesforce-unc6395-saas-prevention/)
+
+---
+
+## 操作手法族 × 地端 LLM 防護（2026-09-15 新增）
+
+> 本節依 `../_shared/02-claude-safeguards-and-bypass-paths.md` 第九節的七大手法族（F1–F7）與四層地端防護 playbook，逐案標明本案疑似用到哪幾族、證據等級，並給自架開源 LLM 的防護重點。防禦視角，不含可複製的越獄字串。
+
+**本案疑似用到的手法族**
+- **路徑 A（存取層規避，本案主體，非提示操作）**：偷受害者的 AI API 金鑰，把自己的攻擊工作負載切到受害者金鑰上（loot／compute／cover）；入侵起手多靠 combolist、竊得憑證與 valid accounts。**本案「怎麼濫用 Claude」主要在存取層，提示操作手法著墨少** — 證據 一手（報告 p.14–15、p.30）。
+- **F5（工具／記憶中介——反向利用）**：把「間接提示注入」反過來打受害者自架的 LLM 代理／gateway（報告點名 LiteLLM、OpenClaw），誘它把系統提示、下游 API 金鑰、RAG 機密吐出（Figure 4「AI-endpoint injection → dump mining → signing keys」）— 證據 ★★☆（報告 p.12、p.16 明載此行為為採集面；注入機制細節由通用 agent 安全研究補，非本案逐句描述）。
+
+**對地端 LLM 的意義**　本案最該讓學員記住的是：你自架的每一個 LLM 代理，都是一個「握有機密的對外資產」。攻擊者不需要 CVE，只要一段「看起來像資料、其實是指令」的內容混進代理會讀的工單／文件／網頁，就能用你員工的權限把金鑰搬走——這正是「致命三元組」（接觸敏感資料 × 讀不可信內容 × 對外通訊）湊齊的後果。
+
+**地端防護重點**（對映四層 playbook）
+1. 架構層（最根本）：機密不進代理上下文——金鑰留後端代呼叫、系統提示不回顯、RAG 做欄位級授權與機密剔除；凡代理拿得到的，都當「可能被注入吐出來」設計。
+2. 架構層：工具最小權限＋拆解致命三元組（讓任一代理不同時具「接觸敏感資料／讀不可信內容／對外通訊」，即 Agents Rule of Two），注入即使成功也搬不走東西。
+3. 輸出層：輸出側洩密掃描（金鑰／token／系統提示／PII 樣式）比輸入側樣式比對更耐打——直接抓「機密離開代理」這個終點。
+4. 存取層：把 AI 金鑰當正式環境憑證治理（秘密管理、輪替、用量上限、IP 允許清單），阻斷 loot／compute／cover 的變現鏈。
