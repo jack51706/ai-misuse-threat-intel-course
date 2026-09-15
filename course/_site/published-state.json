@@ -1,5 +1,5 @@
 {
- "published": "2026-09-14T16:40:35",
+ "published": "2026-09-15T15:33:17",
  "files": {
   "shared/00-agent-brief.html": {
    "local": "_shared/00-agent-brief.html",
@@ -23,8 +23,8 @@
   },
   "01-cyber/GTG-10007-exploit-foundry.html": {
    "local": "01-cyber/GTG-10007-exploit-foundry.html",
-   "sha256": "06d6ac492e9ed456f36339e388ff7e2504a50461f3707bd5cddf70ca4a55f7f4",
-   "bytes": 1625731
+   "sha256": "86f49c38597909844fc4892bbd1c799519c00bf83430f41f1b323e25643fb7fd",
+   "bytes": 1644168
   },
   "01-cyber/GTG-20006-russian-espionage.html": {
    "local": "01-cyber/GTG-20006-russian-espionage.html",
@@ -338,7 +338,7 @@
   },
   "index.html": {
    "local": "_site/index.html",
-   "sha256": "a39e810c2c32d84fb599f919e2875d40250bdd902a6b9cbb899737e04c90eccc",
+   "sha256": "1ed4473c4294fd7db9ec6864629bc88245a080f5e3466314d68862ec86a47199",
    "bytes": 25864
   }
  }
