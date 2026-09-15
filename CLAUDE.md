@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `Anthropic-Detecting-and-countering-091026.pdf`：Anthropic 威脅情報報告《Detecting and countering misuse of AI: September 2026》，2026-09-10 發布，154 頁，約 11 MB。
 - `course/`：以這份 PDF 及同日發布的 Frontier Red Team 常規武器能力研究為本，產出的**繁體中文課程教材**（見下節）。
 
-沒有建置、測試、lint 指令，也不是 git repo（位於 OneDrive 同步資料夾）。這裡的工作是閱讀、摘要、比對、萃取報告內容（案例、趨勢、IOC）並產出教材，不是寫程式。
+位於 OneDrive 同步資料夾，2026-09-14 起同時是 git repo（見文末「模組 09 延伸研究與自動更新」）；沒有測試與 lint，建置與發布指令見文末。這裡的工作是閱讀、摘要、比對、萃取報告內容（案例、趨勢、IOC）並產出教材，不是寫程式。
 
 ## course/ 課程教材樹
 
