@@ -11,3 +11,15 @@ course/_site/
 !course/_site/published-state.json
 course/09-external-research/_wip/
 .claude/*.lock
+
+# 課程簡報產生器的機器端產物（由 prep_assets.py / build_deck.py 重建）
+course/_slides_generator/assets/
+course/_slides_generator/figs/
+course/_slides_generator/_gen/
+course/_slides_generator/__pycache__/
+course/_slides_generator/mermaid/
+course/_slides_generator/mermaid_png/
+course/_slides_generator/node_modules/
+
+# Anthropic 原始報告 PDF：不隨公開 repo 轉載（建置用預渲染的 figures/*.png，不需 PDF）
+Anthropic-Detecting-and-countering-091026.pdf
