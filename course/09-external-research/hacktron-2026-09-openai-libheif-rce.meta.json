@@ -1,0 +1,23 @@
+{
+  "id": "hacktron-2026-09-openai-libheif-rce",
+  "org": "Hacktron AI",
+  "org_zh": "Hacktron AI（獨立資安研究）",
+  "title": "Hacking OpenAI (libheif Heist)",
+  "title_zh": "用 Claude Opus 5 攻進 OpenAI：libheif 影像鏈與 CTF 框定繞過",
+  "published": "2026-09-18",
+  "url": "https://www.hacktron.ai/blog/hacking-openai",
+  "source_type": "industry-research",
+  "related_modules": [
+    "01-cyber",
+    "08-capability-research"
+  ],
+  "related_materials": [
+    "01-cyber/GTG-10007-exploit-foundry.md",
+    "01-cyber/00-cyber-trends-and-skills.md",
+    "01-cyber/GTG-50020-ai-supply-chain.md",
+    "08-capability-research/01-targeting-evals.md",
+    "_shared/02-claude-safeguards-and-bypass-paths.md"
+  ],
+  "summary_zh": "三名研究員用 Claude Opus 5 把 libheif 影像溢位鏈成 RCE、經 SSO 缺失打進 OpenAI 內部 monorepo；Opus 4.8 做不到、Opus 5 三小時可用，並以 CTF 框定繞過護欄。GTG-10007 漏洞鑄造廠的合法雙重用途鏡像。",
+  "added": "2026-09-19"
+}

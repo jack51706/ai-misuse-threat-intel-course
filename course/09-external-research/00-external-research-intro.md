@@ -31,6 +31,7 @@
 <!-- LEDGER:START -->
 | 機構 | 發布 | 原文標題 | 教材 |
 |---|---|---|---|
+| Hacktron AI（獨立資安研究）（Hacktron AI） | 2026-09-18 | [Hacking OpenAI (libheif Heist)](https://www.hacktron.ai/blog/hacking-openai) | [用 Claude Opus 5 攻進 OpenAI：libheif 影像鏈與 CTF 框定繞過](hacktron-2026-09-openai-libheif-rce.html) |
 | Google 威脅情報小組（Google GTIG） | 2026-09-09 | [GTIG AI Threat Tracker: From Prompting to Autonomy – The Evolution of Adversarial AI](https://cloud.google.com/blog/topics/threat-intelligence/from-prompting-to-autonomy-the-evolution-of-adversarial-ai) | [從提示到自主：對抗性 AI](gtig-2026-09-ai-threat-tracker.html) |
 | 微軟威脅情報團隊（Microsoft Threat Intelligence） | 2026-07-31 | [CaptiveCrunch: Midnight Blizzard targets travelers worldwide for malware delivery and credential theft](https://www.microsoft.com/en-us/security/blog/2026/07/31/captivecrunch-midnight-blizzard-targets-travelers-worldwide-for-malware-delivery-and-credential-theft/) | [旅館 WiFi 劫持與 CaptiveCrunch](microsoft-2026-07-captivecrunch-storm-2945.html) |
 | Google 威脅情報小組（Google GTIG） | 2026-05-12 | [GTIG AI Threat Tracker: Adversaries Leverage AI for Vulnerability Exploitation, Augmented Operations, and Initial Access](https://cloud.google.com/blog/topics/threat-intelligence/ai-vulnerability-exploitation-initial-access) | [AI 漏洞利用與初始存取](gtig-2026-05-ai-threat-tracker.html) |
