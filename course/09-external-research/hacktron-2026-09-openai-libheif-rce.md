@@ -8,7 +8,7 @@
 
 ## 1. 一頁速覽（TL;DR）
 
-1. **這是什麼**：三名獨立資安研究員（Hacktron AI，印度）用 **Anthropic Claude Opus 5** 把一個影像解析漏洞鏈成完整攻擊，72 小時內從 OpenAI 的社群論壇（Discourse）一路打進 OpenAI **內部 GitHub monorepo**，並開了一個「無害的」PR（#1186742）當存取證明。整條 HEIF Heist 行動兩個月、跨多家公司，**token 成本合計不到 3,000 美元**。（一手：Hacktron writeup）
+1. **這是什麼**：三名獨立資安研究員（Hacktron AI，美國舊金山的資安新創，2025 年成立、Crane Venture Partners 領投 290 萬美元 pre-seed）用 **Anthropic Claude Opus 5** 把一個影像解析漏洞鏈成完整攻擊，72 小時內從 OpenAI 的社群論壇（Discourse）一路打進 OpenAI **內部 GitHub monorepo**，並開了一個「無害的」PR（#1186742）當存取證明。整條 HEIF Heist 行動兩個月、跨多家公司，**token 成本合計不到 3,000 美元**。（一手：Hacktron writeup）
 2. **鏈路**：上傳惡意 HEIF 圖到 Discourse → FastImage 不支援 HEIF 故轉交 ImageMagick 的 `magick` → 底層 **libheif（1.19.7/1.19.8）堆積緩衝區溢位** → 遠端程式碼執行（RCE）→ 再串一個 **OpenAI SSO（「Sign in with OpenAI」）信任隔離缺失** → 接管論壇成員的 ChatGPT/Codex 帳號 → 連動的 GitHub → 內部 monorepo。
 3. **能力階變（本案對課程最硬的一條）**：**Opus 4.8 做不到**（只能在關掉 ASLR 的容器拿到利用，卡在預設 ASLR），**Opus 5 一發布、同一題三小時就產出可用 ARM64 利用**，再移植到 Discourse 的 x86-64/jemalloc 環境、以自主 `/goal` 迴圈拿下 RCE。這是有日期、雙源可查的「模型能力跨門檻」實例。
 4. **CTF 框定繞過護欄**：因為 **Opus 拒絕對真實遠端主機寫利用**，他們把流量**代理成 CTF 靶機網域**（`rce[.]ee/ctf-forum`）偽裝成競賽題目才通過。這正是本課程 F1／F4（授權/CTF 框定）在真實世界的具名實例，也反證**護欄確實有作用**。
@@ -24,7 +24,7 @@
 |---|---|
 | 發布機構 | Hacktron AI（自建 AI 資安代理的獨立研究團隊） |
 | 具名研究員 | Harsh Jaiswal、Mohan Pedhapati、Rahul Maini |
-| 揭露日期 | 2026-09-18（事件發生 2026-07；HEIF Heist 涵蓋約兩個月） |
+| 揭露日期 | 2026-09-13（Hacktron 部落格頁面標示日期；部分新聞轉述作 2026-09-18。事件本身發生於 2026-07；HEIF Heist 涵蓋約兩個月） |
 | 涉及模型 | Anthropic Claude Opus 4.8（失敗）、**Claude Opus 5（成功）**；另用 OpenAI Codex 作為受害端工具 |
 | 受害/標的 | OpenAI（主標的）；HEIF Heist 另及 Slack、Meta、Zoom、GitHub Enterprise、Shopify（唯一偵測到者），以及 Ruby on Rails、Next.js／Astro／Gatsby 等框架 |
 | 形式 | 團隊自述技術 writeup（部落格長文），非同行審查論文 |
@@ -62,6 +62,50 @@ flowchart TB
 - **Opus 5**：「Feeding the exact same challenge to Opus 5, the model produced a functional ARM64 exploit within 3 hours.」隨後應要求移植到 x86-64/jemalloc；研究者把 Claude 放進**自主 `/goal` 迴圈**對測試機打，「by 10:00 a.m. ... the agent had achieved RCE on Discourse Cloud and demonstrated access by reading `/etc/hosts`」。
 - **意義**：同一題、同一批人、只換模型版本，結果從「卡住」變「三小時可用」。這把「uplift」從抽象講成一個**可標日期的能力跨越**，直接對應能力評測模組「地板而非天花板」的量測邏輯。
 
+### 3.2.1 自主 `/goal` 迴圈：機制、自主邊界與偵測落點（2026-09-19 深化）
+
+前面幾處只把「自主 `/goal` 迴圈」當一句帶過，但這正是本案對課程最核心的機制，值得拆開講。原文關於它的關鍵句只有三句，卻描述了一個完整的自主代理迴圈：
+
+- 建立：「We then placed Claude in an autonomous `/goal` loop against our own Discourse Cloud instance, proxied through `rce[.]ee/ctf-forum`.」（網域已 defang）
+- 產出：「When we checked again at 10:00 a.m., the agent had achieved RCE on Discourse Cloud and demonstrated access by reading `/etc/hosts`.」
+- 邊界：「This was not completly autonomous hacking, and skilled human guidance remained important.」
+
+**`/goal` 迴圈是什麼**：它是 Hacktron 代理框架（harness）的一個原語。人類只給模型一個高階目標（「拿下這台 Discourse 的 RCE」），不再逐步下指令；模型自己在「假設，動手（呼叫工具實際打靶），看結果，修正」之間反覆迭代，朝一個**可量測的成功條件**爬升（hill climbing），直到達成或放棄。人類在迴圈啟動後離開，事後回來查看（原文「When we checked again at 10:00 a.m.」），這就是本案「自主」二字的實指。
+
+這條迴圈把本案定位在課程自主光譜的**最上層**（對照 `../01-cyber/00-cyber-trends-and-skills.html` 的三層：對話式協助，人類逐步指揮，AI 編排自主執行），也是 GTG-10007 Figure 12「二進位反轉與利用開發迴圈」與 GTG-50020 Figure 16「autonomous exploitation pipeline」的合法鏡像（`../01-cyber/GTG-10007-exploit-foundry.html`、`../01-cyber/GTG-50020-ai-supply-chain.html`）。
+
+**迴圈的階段拆解（防禦視角，只到機制層）**：
+
+```mermaid
+flowchart TB
+    H["人類：設定目標與成功條件＋提供靶機環境<br/>（並把真實目標偽裝成 CTF 靶場）"] --> G["發出 /goal：把高階目標交給代理"]
+    G --> L{"自主迭代迴圈<br/>（人類離線）"}
+    L --> A["假設：這一版利用該怎麼調"]
+    A --> ACT["動手：呼叫工具對靶機實際打<br/>跨架構移植 ARM64 到 x86-64/jemalloc"]
+    ACT --> OBS["觀察：讀回結果與錯誤"]
+    OBS --> ADAPT["修正：在未知 libheif/libc 版本下適配"]
+    ADAPT --> L
+    L --> V["自我驗證：讀 /etc/hosts 當達標鐵證"]
+    V --> R["回報：等人類回來查看"]
+    style H fill:#e8f0ff
+    style V fill:#fff0e8
+```
+
+這張圖的教學點是「**grind（苦工）交給迴圈，判斷留給人**」。跨架構移植、在不知道確切版本與環境下反覆試錯，過去要一名逆向工程師盯上數天，這裡壓縮成一段無人看管的隔夜迴圈，正是「AI 作為勞動力，而非知識」主線（`../shared/01-cross-cutting-analysis.html`）的具體形狀。
+
+**自主到哪裡，人還管著什麼（別高估自主性）**：原文明說「not completly autonomous」。人類仍做了三件迴圈補不了的事：(1) 設定目標與成功條件；(2) 搭出被代理過的靶機環境（這一步同時也是柵欄繞過，見下）；(3) 事後回來驗收。這與 GTG-10007 新增附錄 J 整理的「六道自主化缺口」（harness 依賴、驗證缺口、目標漂移、context 退化、依賴操作者、無自我復原）互相印證：`/goal` 迴圈這次跑得動，是因為 Opus 5 把其中幾道缺口補到「夠用」，但補的是「這一代的門檻」，不是原理性難關。
+
+**關鍵：迴圈被內容柵欄「閘」住，靠改框才放行**：原文另一句常被忽略，「Opus refused write exploit for remote instances」。正因如此，他們才把自家靶機**代理偽裝成 CTF 靶場**（`rce[.]ee/ctf-forum`），模型才肯進迴圈。這說明兩件事並存：柵欄**確實有作用**（模型拒絕對真實遠端寫利用），**但內容層的框定可被繞過**（把「真實攻擊」重新框成「CTF 競賽」，屬安全柵欄專題的 F1/F4 授權與良性改框家族，見 `../shared/02-claude-safeguards-and-bypass-paths.html`）。對防守方的意涵：自主迴圈不是無條件啟動的，它被模型的拒絕所閘制，所以問題從「模型能不能做」移到「這個框定能不能被驗證」，也就是柵欄專題主張的「把判斷從內容移到經審核的身分」。
+
+**偵測落點（本迴圈在防守側長什麼樣）**：利用碼本身無穩定簽章（跨環境即時適配），所以偵測要落在**行為軌跡**，而非 payload 型 IOC：
+
+- **機速的背對背工具呼叫**：單一身分對同一台靶機在短時間內大量、規律地重試利用，且跨晝夜不間斷（無人看管的隔夜迴圈）。
+- **大量失敗嘗試聚在單一目標**：迴圈本質是試錯，會留下密集失敗，再突然成功的軌跡。
+- **自我驗證的指紋**：達標時去讀 `/etc/hosts`、`id`、`hostname` 這類「證明我進來了」的低破壞性動作，是自主迴圈特有的收尾。
+- **框架缺口**：ATT&CK Enterprise 沒有「agentic 利用開發與編排」的技術 ID（見第 5 節），所以整條迴圈對應不到單一格子，偵測工程要自建「跨請求、單身分、高速率、單目標試錯」的關聯規則，與 GTG-10007、GTG-50020 的自主管線偵測構想同源。
+
+**與 Hugging Face 事件的對照**：把同一種自主迴圈交給一個**降低了拒答、又缺乏成功條件約束**的評測模型，就會從「合法紅隊的受控 `/goal`」滑向「模型 reward hacking、自主逃逸」的另一極（`./openai-2026-07-huggingface-agent-incident.html`）。本案的迴圈有人設定目標、有 CTF 框定的邊界、有事後驗收；HF 事件的迴圈沒有這些護欄。這正是課堂並置兩案要講的一句話：**同一機制，治理決定結局**。
+
 ### 3.3 「HEIF Heist」更廣的行動（★★☆）
 
 - 同一條 libheif 研究線延伸到 Slack、Meta、GitHub Enterprise、Zoom、Shopify 與多個 Node.js／Ruby 框架。
@@ -79,7 +123,7 @@ flowchart TB
 | 2026-07-25 13:30–15:30 | 接管員工帳號＋開 PoC PR；**主動停止研究** |
 | 2026-07-25 ~22:49 | OpenAI 修復（通報後約 14 小時） |
 | 2026-09-01 | 發放 6,500 美元 bounty |
-| 2026-09-18 | 公開揭露 |
+| 2026-09-13 | 公開揭露（部落格頁面標示；部分新聞作 09-18） |
 
 ---
 
@@ -205,7 +249,7 @@ flowchart TB
    「Feeding the exact same challenge to Opus 5, the model produced a functional ARM64 exploit within 3 hours.」
    （把完全相同的題目餵給 Opus 5，模型在三小時內產出了一個可用的 ARM64 利用。）
 2. CTF 框定繞過（Hacktron，★★★）：
-   「proxied through `rce.ee/ctf-forum` to make it look like a CTF target as Opus refused write exploit for remote instances.」
+   「proxied through `rce[.]ee/ctf-forum` to make it look like a CTF target as Opus refused write exploit for remote instances.」（網域已 defang）
    （因為 Opus 拒絕對遠端實例寫利用，我們代理到 `rce[.]ee/ctf-forum` 讓它看起來像 CTF 靶機。）
 3. 護欄與框定並存（lilting 獨立佐證，★★★）：
    「Because frontier models include safeguards against attacking live remote servers, the researchers routed traffic through a CTF-styled proxy.」
