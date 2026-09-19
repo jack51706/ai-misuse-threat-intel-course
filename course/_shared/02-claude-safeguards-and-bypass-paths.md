@@ -273,20 +273,271 @@ flowchart TB
 
 **拿現成的公開紅隊工具打你自己的地端 LLM（最實用、樣本最多）**
 
-與其手抄越獄字串，不如用這些維護好的框架自動跑上千筆對抗樣本：
+與其手抄越獄字串，不如把這些**維護好的開源框架**接到你的地端端點，自動跑上千筆對抗樣本、把「哪族打穿我」量化成通過率。下面每個工具給：**定位 → 安裝 → 怎麼對準地端端點 → 核心用法（可直接照打）→ 涵蓋哪些手法族（對應 F1–F7）→ 怎麼判讀**。
 
-- **Garak（NVIDIA）**：37+ probe，generator–probe–detector 架構，涵蓋 DAN 越獄、編碼攻擊、提示注入、glitch token、有害內容——對地端模型端點直接掃。
-- **Promptfoo red-team**：50+ 弱點類型、YAML 定義、可進 CI/CD，外掛式攻擊生成＋自動評分。
-- **Microsoft PyRIT**：多輪／多模態，內建 **Crescendo（對應 F3）**、TAP 等自適應多輪攻擊——最適合測 agent 的多輪韌性。
-- **DeepTeam**、**HarmBench**（標準化對抗評測）、學術資料集 **JailbreakBench／AdvBench**。
-- **Meta Llama Prompt Guard 2 / LlamaFirewall**：現成分類器＋訓練資料，可直接當輸入層第一道網（見 9.3）。
+> **共同前提：多數地端部署都提供 OpenAI 相容端點。** Ollama、vLLM、LM Studio、TGI（text-generation-inference）、llama.cpp server 幾乎都吐 `POST /v1/chat/completions`。所以下面工具大多能用「OpenAI 相容 + 自訂 `base_url`」對準你的模型，**不必改模型、不必上雲**。以下範例的模型名、埠號請換成你自己的。
 
-**建議流程（業界已收斂的五階段）**：偵察 → 攻擊生成 → 執行 → 驗證 → 緩解後再測。用上述工具跑自動化廣度，量出**哪些手法族打穿你的地端模型**，再對照 9.3 的四層 playbook 補洞，然後重測驗證。
+#### A. Garak（NVIDIA）— 廣度掃描的第一棒
+
+- **定位**：LLM 界的漏洞掃描器（「Nessus for LLMs」）。`generator–probe–detector` 架構：generator＝受測模型、probe＝攻擊手法、detector＝自動判定是否得逞。**40+ probe 模組、150+ 攻擊、3000+ 提示樣本**，一條指令跑完給你一張脆弱度全景圖。適合「還不知道自己弱在哪」時第一棒廣掃。
+- **安裝**：`python -m pip install -U garak`
+- **對準地端**：原生支援 Ollama、Hugging Face、REST 泛用端點與 OpenAI 相容端點。
+  - Ollama：`--model_type ollama --model_name llama3.1`
+  - 任何 OpenAI 相容端點（vLLM／LM Studio／TGI）：用 `litellm` generator 指向 `http://localhost:11434/v1`（或你的埠），provider 設 `openai`、`api_base` 設該網址。
+- **核心用法**：
+
+```bash
+python -m garak --list_probes                       # 先看有哪些 probe
+# 對地端 Ollama 跑「DAN 越獄＋提示注入＋編碼繞過」三族
+python -m garak --model_type ollama --model_name llama3.1 \
+  --probes dan,promptinject,encoding
+# 只挑單一 probe：模組名.Probe 名（例：辱罵語）
+python -m garak --model_type ollama --model_name llama3.1 --probes lmrc.SlurUsage
+```
+
+- **涵蓋的手法族（→ F 對應）**：`dan`（DAN 家族角色扮演越獄 → **F1／F3**）、`promptinject`、`latentinjection`（直接／間接提示注入 → **F5**）、`encoding`（base64／ROT13／摩斯等編碼繞過 → **F7**）、`glitch`（glitch token）、`leakreplay`／`divergence`（訓練資料重放與重複 token 外洩 → **F6 近親**）、`malwaregen`、`packagehallucination`（幻覺套件名 → 供應鏈風險）、`xss`（輸出挾帶 XSS）、`atkgen`（用一個紅隊 LLM 自動生成對抗提示 → 自適應）、`realtoxicityprompts`／`lmrc`（毒性與風險卡）、`grandma`（親情勸誘越獄）。
+- **判讀**：輸出 `.report.jsonl` + `.report.html` + hitlog，每個 `probe × detector` 一個**通過率**與命中清單。先看**哪些 probe 通過率最低＝你的模型在那族最脆**，把它們列為下一輪深挖與優先補洞的對象。
+
+#### B. Promptfoo red-team — 能進 CI/CD 的回歸測試
+
+- **定位**：**50+ 弱點外掛（plugins）× 15+ 攻擊策略（strategies）** 的組合矩陣；plugin 產生「基礎攻擊」，strategy 把它變形成更難的變體，再用 LLM-as-judge 自動評分。最大優勢是 **YAML 定義、可掛 GitHub Action 進 CI/CD**——每次改系統提示或換模型就自動回歸，不會改一版破一版。
+- **安裝**：不用裝，Node 環境 `npx promptfoo@latest ...` 即可。
+- **對準地端**：`targets` 用 `ollama:chat:llama3.1`，或 `openai:chat:<model>` 搭 `config.apiBaseUrl` 指向你的 `/v1`，或泛用 `http` provider 打任意端點。
+- **核心用法**：
+
+```bash
+npx promptfoo@latest redteam init      # 互動式產生 promptfooconfig.yaml
+npx promptfoo@latest redteam run       # 生成攻擊 → 打你的端點 → 自動評分
+npx promptfoo@latest redteam report    # 開網頁報告（依 OWASP LLM Top 10 分類）
+```
+
+```yaml
+# promptfooconfig.yaml（節錄）
+targets:
+  - id: ollama:chat:llama3.1           # 或 openai:chat:xxx + config.apiBaseUrl 指向地端 /v1
+redteam:
+  plugins:                              # 「測什麼弱點」
+    - harmful:cybercrime               #   有害內容（另有 hate/self-harm… → F4）
+    - pii                              #   個資外洩
+    - prompt-extraction                #   系統提示套取 → F6
+    - indirect-prompt-injection        #   間接注入 → F5
+    - excessive-agency                 #   代理越權（agent）
+    - politics                         #   政治立場操縱 → F7 影響力
+  strategies:                           # 「怎麼把攻擊變難」
+    - jailbreak                        #   迭代越獄
+    - jailbreak:tree                   #   TAP 樹搜尋
+    - crescendo                        #   多輪升溫 → F3
+    - base64                           #   編碼繞過 → F7
+    - multilingual                     #   低資源語言繞過
+```
+
+- **手法族對應**：plugins 對「弱點類型」、strategies 對「投遞方式」。`crescendo`＝**F3**、`indirect-prompt-injection`＝**F5**、`prompt-extraction`＝**F6**、`base64／leetspeak／multilingual／layer`（可鏈接多招）＝**F7 編碼族**、`politics／imitation`＝**F7 影響力**。
+- **判讀**：`redteam run` 回傳每個「plugin × strategy」組合的**通過／失敗與門檻**；掛進 CI 後可設「ASR 高於 X% 就讓 build 失敗」，把紅隊變成回歸測試。
+
+#### C. Microsoft PyRIT — 多輪、自適應與 agent 韌性
+
+- **定位**：微軟 AI 紅隊自用框架（「Metasploit for LLMs」）。強項是**多輪、多模態、自適應**——不是單發打一槍，而是讓一個攻擊模型跟你的模型**對打好幾輪、逐步升溫**。最適合測 **agent 的多輪韌性**與「第幾輪才破防」。
+- **安裝**：`pip install pyrit`（Python 3.10–3.13）。
+- **對準地端**：`OpenAIChatTarget` 指向你的 `/v1` `endpoint`＋`api_key`（地端可填假值）即可；另有 Ollama、Hugging Face target。
+- **核心用法（概念骨架，建構子參數以你安裝的 PyRIT 版本官方 doc 為準）**：
+
+```python
+from pyrit.prompt_target import OpenAIChatTarget
+from pyrit.orchestrator import CrescendoOrchestrator      # 多輪升溫 → F3
+from pyrit.prompt_converter import Base64Converter, ROT13Converter  # 變形 → F7
+
+target = OpenAIChatTarget(endpoint="http://localhost:8000/v1/chat/completions",
+                          api_key="none", model_name="your-local-model")
+# Crescendo：多輪逐步升溫，量「第幾輪破防」；用 SelfAskRefusalScorer 自動判是否拒絕
+orchestrator = CrescendoOrchestrator(objective_target=target)
+```
+
+- **三個可組合的積木**：**orchestrator**（攻法）——`CrescendoOrchestrator`（F3 升溫）、`TreeOfAttacksWithPruningOrchestrator`（TAP 樹搜尋）、`RedTeamingOrchestrator`（多輪對打）、`PromptSendingOrchestrator`（單發）；**converter**（變形）——Base64／ROT13／Leetspeak／Unicode 混淆字／低資源語言翻譯／ASCII art（**對應 F7 編碼族**）；**scorer**（自動判定）——`SelfAskRefusalScorer`（判是否拒絕）、`SelfAskLikertScorer`（打分）、二元 true/false、LLM-as-judge。
+- **判讀**：所有對話存進 memory（DuckDB），可回溯「哪一輪、哪個 converter 讓它破防」；Crescendo 的**破防輪數**就是你的多輪韌性指標——輪數越少越脆。
+
+#### D. 標準化評測與語料庫（拿來當「考卷」與「判分器」）
+
+上面 A–C 是**執行器**；這一組是**題庫與裁判**，餵給執行器或直接跑其 harness，得到跨模型可比的分數：
+
+- **HarmBench**（Center for AI Safety）：**400+ 有害行為 × 18 種紅隊方法**的標準化評測，最有價值的是附一個**驗證過的分類器**，自動判「攻擊是否成功」並算 **ASR（Attack Success Rate 攻擊成功率）**——讓「不同攻擊、不同防禦」能公平比較。
+- **DeepTeam**（DeepEval 團隊）：`pip install deepteam`，**40+ 弱點 × 10+ 攻擊方法**，`red_team()` 一行啟動，直接接 DeepEval 的評測指標——已用 DeepEval 的團隊接起來最省事。
+- **JailbreakBench**：公開排行榜＋`JBB-Behaviors`（100 條行為）＋越獄字串 **artifact 倉庫**＋標準化的攻擊與**防禦**評測；想要「現成、已標註的越獄樣本庫」看這裡。
+- **AdvBench**（GCG 論文 Zou et al.）：**520 條有害行為／字串**，是最佳化型攻擊（如 GCG 後綴）的標準標的集，也常被其他框架當基準。
+- **用法**：把這些行為集餵進 Garak／PyRIT／Promptfoo 當輸入，或用 HarmBench 分類器當你自己流程的統一判分器，就能把「我的地端模型 vs 上游模型」放在同一把尺上比。
+
+#### E. Meta Llama Prompt Guard 2 / LlamaFirewall — 這一族「測完就能留著當防線」
+
+- **Prompt Guard 2**（`meta-llama/Llama-Prompt-Guard-2-86M`，另有 22M 輕量版）：現成的**注入／越獄輸入分類器**（86M 以 mDeBERTa 為底、多語）。三行接上就是 §9.3 的**輸入層第一道網**：
+
+```python
+from transformers import pipeline
+guard = pipeline("text-classification", model="meta-llama/Llama-Prompt-Guard-2-86M")
+guard("Ignore previous instructions and ...")   # 回傳 LABEL 與分數，高分＝疑似注入/越獄
+```
+
+也可拿它的訓練語料擴充你自家偵測規則。
+- **LlamaFirewall**（`pip install llamafirewall`，arXiv 2505.03574）：把多個掃描器串成護欄框架——**PromptGuard**（注入／越獄）、**AlignmentCheck**（審 agent 的思維鏈有沒有被外來指令**劫持目標** → 專打 **F5 間接注入導致的目標漂移**）、**CodeShield**（掃模型吐出的不安全程式碼）。
+- **雙重身分**：這一族和 A–D「純攻擊執行器」不同——**它既是紅隊測項，也是藍隊防線**：先當測項量基線，再直接留在輸入層／agent 層當防護，然後用 A–C 重測看 ASR 有沒有降。
+
+#### 手法族 → 工具對照（想測某一族，直接查這張表）
+
+| 手法族 | Garak probe | Promptfoo | PyRIT | 標準語料／判分 |
+|---|---|---|---|---|
+| **F1** 人設＋授權框定 | `dan` | `jailbreak` ＋ `harmful:*` | `RedTeamingOrchestrator` | AdvBench／HarmBench 行為集 |
+| **F2** 任務拆解＋跨 session | 較弱（單發為主），需自寫多請求腳本 | agent 多步模式 | 多輪 orchestrator ＋ memory 回溯 | — |
+| **F3** 拒絕後重提示 | `atkgen` | **`crescendo`**、`jailbreak:tree` | **`CrescendoOrchestrator`**、TAP | — |
+| **F4** 良性／防禦改框 | `dan`、`lmrc` | `harmful:*` ＋ `jailbreak` | 良性框架 converter | HarmBench 分類器判分 |
+| **F5** 工具／記憶中介（間接注入） | `promptinject`、`latentinjection` | **`indirect-prompt-injection`** | LlamaFirewall AlignmentCheck | OWASP LLM01 |
+| **F6** CoT／系統提示套取 | `leakreplay`、`divergence` | **`prompt-extraction`** | 自訂 orchestrator | 報告 p.145–146 原文 |
+| **F7** 輸出格式操縱 | `encoding` | `base64`／`leetspeak`／`multilingual`／`layer`、`politics` | **converters**（Base64／ROT13／Unicode／ASCII） | — |
+
+**建議流程（業界已收斂的五階段，附具體指令）**：
+
+1. **偵察**：Garak 廣掃三族（`--probes dan,promptinject,encoding`），約 10 分鐘拿到「哪族最脆」的粗圖。
+2. **攻擊生成**：對脆弱族深挖——Promptfoo `redteam run`（自動生成變體）或 PyRIT converter／orchestrator 擴樣、升溫。
+3. **執行**：全部對準你的地端 OpenAI 相容 `base_url` 跑，不接雲。
+4. **驗證**：**自動判分、別人工逐筆看**——Garak detector／PyRIT `SelfAskRefusalScorer`／Promptfoo model-graded／HarmBench 分類器算 **ASR**。
+5. **緩解後再測**：對照 §9.3 四層補洞（輸入層掛 **Prompt Guard 2**、輸出層放**獨立於請求格式**的分類器、agent 掛 **LlamaFirewall AlignmentCheck**、會話層做跨請求聚合），用**同一組樣本回歸**——**ASR 沒降就是沒補到**，回到第 2 步。
 
 > 用法一句話：**9.1–9.5 教你「懂手法、搭防線」；9.6 給你「打自己、驗防線」的具體樣態與工具。** 各 GTG 案例末節已標明該案用到哪幾族（F1–F7），對照本表即可取得該族的示範樣態與測試法。
 
 **本節來源（三方獨立，WebSearch 2026-09）**：
 - LLM red-teaming 工具比較 2026：https://www.braintrust.dev/articles/best-llm-red-teaming-tools-2026 ｜ https://netguardia.com/security-operations/software-tools/the-best-ai-red-teaming-tools-of-2026-from-garak-to-promptfoo/ ｜ https://qawerk.com/blog/llm-red-teaming-tools/
 - Garak／PyRIT／Promptfoo 實作教學：https://ransomnews.com/red-team-llm-app-garak-pyrit-promptfoo-tutorial/
-- 工具倉庫：https://github.com/NVIDIA/garak ｜ https://github.com/Azure/PyRIT ｜ https://www.promptfoo.dev/docs/red-team/
+- 執行器倉庫／文件：Garak https://github.com/NVIDIA/garak （probe 清單 https://reference.garak.ai/ ）｜ PyRIT https://github.com/microsoft/PyRIT （文件 https://microsoft.github.io/PyRIT/ ）｜ Promptfoo red-team https://www.promptfoo.dev/docs/red-team/ （plugins／strategies 清單 https://www.promptfoo.dev/docs/red-team/plugins/ ）
+- 標準語料／判分器：HarmBench https://github.com/centerforaisafety/HarmBench ｜ DeepTeam https://github.com/confident-ai/deepteam ｜ JailbreakBench https://jailbreakbench.github.io/ ｜ AdvBench（GCG，arXiv 2307.15043）https://github.com/llm-attacks/llm-attacks
+- 現成防線分類器：Meta Llama Prompt Guard 2 https://huggingface.co/meta-llama/Llama-Prompt-Guard-2-86M ｜ LlamaFirewall（PromptGuard＋AlignmentCheck＋CodeShield，arXiv 2505.03574）https://github.com/meta-llama/PurpleLlama
 - OWASP LLM Top 10：https://genai.owasp.org/llm-top-10/
+
+---
+
+## 十、真實世界的柵欄規避與 AI 產品／代理防護清單（2026-09-19 增補）
+
+> **這一節是什麼**：第九節（含 §9.6）教的是「**打自己的模型**」，把裸的地端 LLM 當標的，測它會被哪幾個提示操作手法族打穿。這一節補另一半：「**打／守自己的 AI 產品與代理**」。因為真實世界被繞過的，往往不是模型本身的內容柵欄，而是包在模型外面那層 **agent 的工具授權、產品的特權介面、開發流程的審查閘**。三個小節分別給：(1) 一個具名、可查證、發生在**別家 AI 產品**上的柵欄規避真實案例；(2) AI coding agent 的藍隊防護清單；(3) AI 瀏覽器／IDE 的藍隊檢查清單。全部給防守方（藍隊）當自我檢查用。
+>
+> **與第九節的分工**：§9.6 給的是「攻擊樣態＋公開紅隊工具（Garak／PyRIT／Promptfoo／HarmBench／Llama Prompt Guard）」，打的是模型端點；本節給的是「產品與代理的防護清單」，守的是模型被接上工具、瀏覽器、IDE、CI 之後**新增的攻擊面**。一句話：**§9.6 打模型，本節守產品與代理**，兩者互補。
+>
+> **紅線同前**：本節只寫到**手法族、檢查點、教訓**層次（與 OWASP LLM Top 10、CWE 粒度相當），不含任何可複製的越獄字串、完整提示注入文字、payload 或 exploit 步驟。廠商（Hacktron）的敘述一律標為**廠商自述／廠商觀點**，只有可查證處（bounty 金額、CVE）才當事實。
+
+### 10.1 第三方柵欄規避真實案例：Lovable 的 AI 資料庫工具被「間接查詢框架」繞過（SupaPwn）
+
+**一句話**：資安團隊 Hacktron 在測試 AI 建站平台 Lovable（前端 React、後端 Supabase）時，發現它的 **AI 資料庫工具設有 guardrail**（限制高權限的 migration 操作），多種直接越獄都失敗；最後改用一種**間接查詢框架**：不直接命令 AI 執行動作，而是把越權操作包裝成「請判斷這段查詢是否應該執行」這類看似正常的資料查詢語意，讓工具放行、執行了原本被擋下的高權限資料庫操作。這是一則發生在**別家 AI 產品**、有 **$25,000 bounty 可查**的柵欄規避實例。
+
+**歸到哪條規避路徑**：對應本教材第三節的**路徑 B（內容層繞過）**，而且是路徑 B 在**別家 AI 產品的 agent 工具授權層**上的真實對應；它同時帶有第九節 **F4（良性／防禦性改框）** 的味道，把越權請求重寫成語意上看似正當的資料查詢，讓工具的判斷落到「看似正常」的一側。關鍵差別：這裡被騙過的不是「模型要不要拒絕有害內容」，而是「**agent 的工具要不要對這個看似正常的查詢授權**」。
+
+**機制到手法族層次（不含 payload）**：
+
+- **被繞的是工具授權那一層，不是模型的內容安全**。AI 產品把資料庫能力包成一個工具給模型呼叫，工具端用 guardrail 限制高權限操作；但 guardrail 判斷的是「這個請求看起來像不像一個正常查詢」，攻擊者就把越權意圖藏進看似正常的查詢語意裡。這與路徑 B 的原理性上限同構：**用內容判斷意圖，在雙重用途／模糊語意下必然有縫**。
+- **這只是整條鏈的入口**。依廠商敘述，這個 guardrail 繞過只是多階段雲端攻擊鏈的第一步，後續串接的是資料庫元件競態條件、SUID 執行檔本地提權、雲端設定不當等**與 AI 無關的傳統弱點**。對本課程有意義的是**入口這一段**：AI 工具的授權柵欄被語意框架繞過；後段傳統提權細節不在本節範圍。
+- **教訓**：別家 AI 產品的護欄一樣會被繞，而且**被繞的正是 agent 把能力開放給模型的那層工具授權**。凡是「讓模型能透過工具動到高權限資源」的設計，都要假設 guardrail 會被語意框架繞過，並在工具授權層之外再放一道**與內容判斷無關**的控制（例如以帳號外已驗證的權限做強制授權、對高權限工具呼叫要求二次確認或人類核可）。
+
+**這則案例對本課程證明三件事**：
+
+- 柵欄會被繞這件事**不限於 Claude**：別家 AI 產品、由別的團隊做的護欄，一樣被語意框架繞過。
+- 真正被繞的是 **agent 工具授權層**，不是模型的內容分類器；把「模型對齊」做好，並不能免除「工具授權」這層的風險。
+- guardrail 繞過往往只是**入口**：一旦跨過 AI 工具的授權，後面接的就是與 AI 無關的傳統雲端弱點鏈（競態、SUID、雲端設定不當）。這正呼應 §9.1「單一 guardrail 會被繞過，必須縱深多層」。
+
+**這條鏈的分層（僅到弱點族層次，教學用，不含步驟）**：
+
+| 階段 | 弱點族（CWE／手法族粒度） | 對本課程的意義 |
+|---|---|---|
+| 入口 | AI 工具 guardrail 被語意框架繞過（路徑 B／F4；OWASP LLM01 類） | 這一段是「AI 特有」的，也是本節的重點 |
+| 提權 | 資料庫元件競態條件（CWE-362 TOCTOU 類） | 與 AI 無關的傳統弱點，本節不展開 |
+| 落地 | SUID 執行檔本地提權、雲端設定不當（CWE-269／CWE-732 類） | 同上，屬一般雲端縱深防禦議題 |
+
+**與 Anthropic 治理的對照**：Anthropic 對內容柵欄上限的解方是「可信任使用者審核制（CVP）」，把判斷從**內容**移到**經驗證的身分**（見第五節）。這案的教訓完全平行：工具授權層若只用「請求看起來正不正常」判斷，就會被語意框架繞過；要擋住，得在工具授權層引入**與內容無關的身分／權限強制**，而不是把 guardrail 的用語再調嚴一次。
+
+**可查證與界線**：$25,000 bounty 與「Supabase／Lovable 一天內修補」是廠商自述且有具名 bounty，可查證性中上；受影響範圍（廠商稱僅及極小比例、待退役的過時基礎設施）為廠商單方說法，引用時應並陳。來源：https://www.hacktron.ai/blog/supapwn （廠商自述）。本課程只取「AI 工具 guardrail 被間接查詢框架繞過」這一教訓，**不重述任何繞過字串、SQL、payload 或後段提權步驟**。
+
+### 10.2 AI coding agent 藍隊防護清單（廠商建議，Hacktron 觀點）
+
+把研究筆記中四篇 Hacktron 文章（AI coding agent 安全、AI 產生程式碼風險、AI 安全審查、VSCode Copilot 的工具 TOCTOU）收斂成一份可勾選清單。**這些是廠商（Hacktron）的經驗性建議，非量化事實**，標為廠商觀點引用。適用對象：任何把 coding agent（Copilot、Cursor、Claude Code 等）接進自家 repo 與 CI 的團隊。
+
+**為什麼傳統掃描器抓不到**：掃描器擅長模式比對（找 SQL 字串串接、hardcoded secret），但判斷不了「`organizationId` 是來自 request body 還是 session token」這種**要靠應用程式脈絡**才看得出的授權缺陷；這些設計錯誤在 diff 裡看起來都很合理，卻削弱了整個安全模型。所以 AI 產生的程式碼需要一道 **pre-merge 的安全閘**，而不是只靠 CI 上的通用掃描。
+
+**先盤點 agent 引入的新攻擊面（8 項）**：
+
+- 幻覺套件名 → dependency confusion／搶註（slopsquatting 類）
+- 未經安全審查就加入的新依賴（含 transitive）
+- 產生的範例設定或測試憑證把 secrets 洩進 commit
+- 缺 auth 與 ownership 檢查（路由能跑，但不強制物件擁有權）
+- agent 功能的 prompt injection 路徑（未受信任內容能操縱工具呼叫）
+- 過寬的 GitHub Actions 或雲端權限
+- 只證明 happy path、漏掉濫用情境的測試
+- 人還沒理解安全模型就 merge
+
+**再逐項設防（可勾選）**：
+
+- [ ] **依賴**：merge 前擋不安全依賴，檢查套件年齡與發布者信譽、typosquatting 與幻覺名、install script 與混淆碼、新 transitive 風險、這個依賴到底需不需要。
+- [ ] **Secrets**：三層掃描（本機 pre-commit ＋ CI ＋ PR 審查），不靠單層。
+- [ ] **Auth 與 ownership**：在 PR 內審**業務邏輯與授權**，不只看語法。最危險的是「缺失的假設」：路由能跑但不強制 ownership、公開處重用了本該受保護的 mutation helper、流程能跳過付款狀態。
+- [ ] **Prompt injection 路徑**：把「哪些 agent 工具可以對未受信任的輸入採取行動」寫成明文政策；未受信任內容進到工具呼叫前先淨化（對應 §9.2 F5、OWASP LLM01 間接注入）。
+- [ ] **CI 與雲端權限一起審**：同一個 PR 若同時改 code 與 workflow／IaC，要當成一個系統審。GitHub Actions 權限變更單獨看無害，配上新的套件發布步驟就危險；雲端權限配上新的 SSRF 路徑就是 critical。
+- [ ] **工具授權邊界**：把「哪個 auth helper 必須保護租戶資料、哪些 repo 可發布套件、哪些 branch 可部署、哪些網域是受信任 webhook 來源、哪些資源永不可公開」寫成專案規則明文，讓 agent 與審查工具都吃得到脈絡。
+- [ ] **人類審查閘**：程式碼在**有人真的理解其安全模型**之前不得 merge；把團隊反覆糾正的模式回寫成專案規則。
+
+**評估一個 AI 安全審查工具時，先問（Hacktron 六題）**：
+
+- 它抓到的是現有審查會漏掉的東西嗎？
+- 它有沒有**解釋 exploit path**，而不只給一個 CWE 類別？
+- 它有沒有避開風格與品質噪音，只留可利用風險？
+- 它懂不懂周邊的 auth、tenancy、資料流假設？
+- 它的修補建議符不符合你的 codebase 寫法？
+- 修補 commit 落地後，finding 會不會自動關閉？
+
+**導入順序（practical rollout，廠商建議）**：從 agent 已經在寫程式的 repo 開始；優先對 auth、付款、整合、依賴、AI 功能、CI/CD、IaC 的變更加上 PR 安全審查；追蹤開發者接受了哪些 finding，把重複模式回寫進專案規則。目標不是禁止 AI 產生的程式碼，而是讓它得到一位謹慎的人類審查者會給的安全判斷。
+
+**「工具面即安全邊界」的設計洞見**：Hacktron 在 VSCode Copilot 找到一條「agent 自動套用 patch 導致任意檔案寫入」的鏈（確認機制與實際寫入之間的 TOCTOU），但明白指出：該攻擊依賴某個特定的 patch 套用工具（applyPatch），而 **Claude 模型因為沒有該工具的存取權而免疫**。這帶出一個超越單一產品的教訓：**一個 agent 能造成多大傷害，上限往往由「你給了它哪些工具」決定，而不只由「模型對齊得多好」決定**。所以防護的第一槓桿是**工具面最小化**：沒給的工具，就是打不穿的邊界。這與 10.1（被繞的是工具授權層）、§9.3 第四層（工具最小權限）指向同一件事。
+
+### 10.3 AI 瀏覽器／IDE 藍隊檢查清單（廠商研究綜合，Hacktron 觀點）
+
+從四個具名的第三方案例綜合：OpenAI Atlas 瀏覽器、Perplexity Comet 瀏覽器、Google Antigravity（AI code editor，與 Windsurf 同源）、Cluely（Electron 桌面 AI overlay）。這些都是**別家 AI 產品自身**被攻破的案例，共同規律是廠商反覆講的一句話：**讓 browser agent 得以運作所需的特權 API，正是它在保護不當時最危險的地方**。細部技術為單一來源廠商自述，但多案各有 bounty 或修補紀錄可查。
+
+| 案例 | 產品類型 | 核心弱點族（檢查點層次） | 可查證性 |
+|---|---|---|---|
+| OpenAI Atlas | AI 瀏覽器 | 特權 IPC allowlist 過寬 → 子域 XSS 觸及瀏覽器控制、OAuth code 竊聽 | $5,000 bounty、修補版本可查（中上） |
+| Perplexity Comet | AI 瀏覽器 | 擴充 `externally_connectable` 過寬 → 一鍵 UXSS、跨源讀取 | $6,000 bounty、24 小時 hot patch（中上） |
+| Google Antigravity | AI code editor（與 Windsurf 同源） | `externally_connectable: <all_urls>` ＋ language server 路徑穿越 → 任意寫檔 | $10,000 bounty、有 post-fix 分析（中上） |
+| Cluely | Electron 桌面 AI overlay | 缺導航守衛 ＋ IPC 未 allowlist ＋ sandbox 關閉 → 截圖／錄音／RCE | 靜默修補、無 CVE（偏低） |
+
+**檢查點（可勾選）**：
+
+- [ ] **擴充 `externally_connectable` 範圍**：別開成 `<all_urls>` 或整個 `*.yourdomain.com`。任一子域的一個 XSS 就能跨進擴充的特權訊息介面（Comet、Antigravity 皆栽在這）。
+- [ ] **特權 IPC 的域名 allowlist**：把 Mojo／IPC 這類特權瀏覽器介面暴露給過寬的來源，等於把 agent 的瀏覽器控制能力開放給任一子域的 XSS（Atlas 案）；allowlist 要收到最小必要來源。
+- [ ] **agent 工具的來源驗證與授權**：agent 為自動化而暴露的工具（開分頁、讀分頁內容、列出所有分頁 URL、截圖、錄音）必須驗證**呼叫來源**並做授權，否則會被外部頁面觸發成即時監控與跨源竊取管道。
+- [ ] **language server 路徑處理**：AI IDE 綁的 language server 對檔名／路徑參數要正規化並做邊界檢查，錯誤訊息別洩漏路徑結構（Antigravity 的任意寫檔即由路徑穿越加上被洩漏的路徑資訊達成）。
+- [ ] **Electron preload IPC allowlist 與 sandbox**：preload 別把整個 `ipcRenderer` 裸露給 renderer，要對 channel 名做 allowlist；`webPreferences` 要開 `sandbox: true`、加 `will-navigate` 導航守衛。三者缺一，一個被誘導點擊的連結就可能升級到截圖、錄音、甚至 RCE（Cluely 案）。
+- [ ] **OAuth code 是否可經分頁 URL 洩漏**：若 agent 工具能即時讀取所有分頁的導航 URL，OAuth 或社群登入流程的 authorization code 就可能在分頁 URL 中被竊聽，形成帳號接管（Atlas 案點名 GitHub、Reddit、Facebook 登入）；要確保授權碼不落在可被 agent 讀取的 URL 面。
+- [ ] **入口常是 AI 特有的間接提示注入**：上述多案的**觸發入口**是「AI 把一段惡意內容渲染成可點連結，或依未受信任內容採取動作」（Cluely、Copilot）。所以內容渲染與工具動作都要假設輸入不可信（呼應 §9.2 F5、OWASP LLM01）。
+
+**一句話總結**：AI 瀏覽器／IDE／桌面助手把「模型 ＋ 特權介面」綁在一起，**新攻擊面幾乎都出在那個特權介面的授權，而不是模型本身**；防守重點是把 agent 特權介面的**來源、範圍、授權**三件事收到最小。這組跨廠商規律，正對應 Anthropic「防線失效四模式」與 `01-cross-cutting-analysis.md` 主線三：**同一手法族、不同廠商，會反覆在「特權介面授權」這一層失效**。
+
+**對台灣的意涵**：台灣開發者與團隊正大量採用 AI IDE、AI 瀏覽器、桌面 AI 助手，這些工具往往對機器、螢幕、麥克風、檔案、剪貼簿有深度存取權。本清單可直接當「導入前的端點與供應鏈風險盤點」，也是很好的在地資安意識素材（別隨手安裝來路不明、又有深度機器存取權的 AI 代理）。
+
+### 10.4 延伸與交叉連結
+
+- **AI 瀏覽器／IDE 攻擊面**（本節 10.3 四案的完整教材）：`../09-external-research/hacktron-2026-02-ai-browser-ide-attack-surface.html`
+- **OpenAI／Hugging Face 事件**：Hugging Face 以 GLM-5.2 模型做事件鑑識，是**路徑 D（模型選擇）**在防守側的一個活例（防守方也會為特定任務挑特定模型）：`../09-external-research/openai-2026-07-huggingface-agent-incident.html`
+- **GTG-50020**（評測沙箱內的 prompt injection 竊取 API 金鑰，10.2「prompt injection 路徑」的報告內對應）：`../01-cyber/GTG-50020-ai-supply-chain.html`
+- **GTG-50021**（AI 供應鏈、假轉售商，與 10.1「入口之後串接傳統弱點」的供應鏈視角相鄰）：`../01-cyber/GTG-50021-fake-reseller.html`
+
+### 10.5 課堂用法與三個帶走的重點
+
+- **重點一**：柵欄被繞不是 Claude 獨有的問題；只要是「模型 ＋ 工具／特權介面」的組合，被繞的通常是**外圍那層授權**，不是模型本身。
+- **重點二**：防護的第一槓桿是**工具面最小化與授權收斂**（§9.3 第四層、10.2 工具授權邊界、10.3 特權介面 allowlist），其次才是內容分類器。
+- **重點三**：§9.6 教你「打自己的模型」，本節教你「守自己的產品與代理」；一個健康的 AI 系統兩邊都要做。
+- **桌面演練題**：給學員一個「自建 AI coding agent ＋ 內部知識庫 ＋ CI 自動 merge」的情境，讓他們用 10.2、10.3 兩份清單盤點會被 10.1 那種「工具授權層繞過」打穿在哪裡，並對照 §9.3 四層 playbook 補洞。
+- **討論題**：如果「工具面即安全邊界」（Claude 因無某工具而免疫）成立，那麼「給 agent 更多工具以提升生產力」與「限制工具面以縮小攻擊面」之間，團隊該怎麼定線？
+- **延伸討論題**：SupaPwn 顯示「入口是 AI、後段是傳統弱點」。一個組織要把 AI 產品的紅隊預算，投在「更強的模型內容對齊」還是「工具授權與雲端縱深」？本節傾向後者，理由是什麼？
+
+### 10.6 與 OWASP LLM Top 10 對照（快速定位）
+
+| 本節重點 | 對應 OWASP LLM Top 10（2025） |
+|---|---|
+| 10.1 工具授權被語意框架繞過、10.2 prompt injection 路徑、10.3 間接注入入口 | LLM01 Prompt Injection（含間接注入） |
+| 10.2 secrets 洩漏、10.3 OAuth code 經分頁 URL 洩漏 | LLM02 Sensitive Information Disclosure |
+| 10.2 幻覺套件名／未經審查的依賴 | LLM03 Supply Chain |
+| 10.2 與 10.3 的 agent 工具過度授權、特權介面 allowlist 過寬 | LLM06 Excessive Agency |
+| §9.2 F6 思維鏈／系統提示套取（本節工具授權亦相關） | LLM07 System Prompt Leakage |
+
+> 這張表只為快速定位，實際歸類以最新版 OWASP LLM Top 10 為準（https://genai.owasp.org/llm-top-10/）。
