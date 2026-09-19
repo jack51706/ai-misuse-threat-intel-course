@@ -1,0 +1,14 @@
+{
+  "id": "ncsc-2025-05-ai-cyber-threat-2027",
+  "org": "NCSC",
+  "org_zh": "英國國家網路安全中心",
+  "title": "Impact of AI on cyber threat from now to 2027",
+  "title_zh": "AI威脅政府概率評估",
+  "published": "2025-05-07",
+  "url": "https://www.ncsc.gov.uk/report/impact-ai-cyber-threat-now-2027",
+  "source_type": "government",
+  "related_modules": ["01-cyber"],
+  "related_materials": ["01-cyber/00-cyber-trends-and-skills.md", "01-cyber/GTG-10007-exploit-foundry.md", "01-cyber/GTG-50020-ai-supply-chain.md"],
+  "summary_zh": "解析政府概率用語、預測條件與人機分工，將AI威脅評估轉為可檢驗的防禦決策。",
+  "added": "2026-09-19"
+}

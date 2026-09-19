@@ -20,9 +20,9 @@
 建議兩條路徑：
 
 1. **時間軸**：先讀 Anthropic 自己的前作（2025-03、2025-08、2025-11、2026-02），看同一家平台的觀察怎麼從「對話式協助」演變到「agentic 編排」，再回頭讀 2026-09 報告的趨勢章節。
-2. **橫向比較**：挑同一季度的 OpenAI 與 Google GTIG 報告，和 2026-09 報告並讀，找三家都提到的行為者與 TTP。三家都看到的，才是跨平台的趨勢。
+2. **橫向比較**：挑觀察期間接近的 OpenAI 與 Google GTIG 報告，和 2026-09 報告並讀，先對齊行為者、TTP 與分類定義，再檢查底層資料是否獨立。三家轉述同一線索仍可能是單一來源；兩家有獨立遙測則可能支持指定的跨平台主張，沒有固定的機構數門檻。
 
-每份教材的第 9 節都標明該報告是否為單一來源情報。跨機構互相印證的案例，在課堂上可以作為「多來源情報」的正面教材。
+每份教材第 9 節應分開標示「來源類型、資料獨立性、驗證了哪個主張」。媒體轉述、官方編目與第三方評論，不自動增加事件證據。共用判讀規則見[證據與方法](../shared/04-evidence-and-methods.html)。
 
 ## 4. 收錄清單
 
@@ -31,7 +31,7 @@
 <!-- LEDGER:START -->
 | 機構 | 發布 | 原文標題 | 教材 |
 |---|---|---|---|
-| Hacktron AI（獨立資安研究）（Hacktron AI） | 2026-09-18 | [Hacking OpenAI (libheif Heist)](https://www.hacktron.ai/blog/hacking-openai) | [用 Claude Opus 5 攻進 OpenAI：libheif 影像鏈與 CTF 框定繞過](hacktron-2026-09-openai-libheif-rce.html) |
+| Hacktron AI（獨立資安研究）（Hacktron AI） | 2026-09-13 | [Hacking OpenAI (libheif Heist)](https://www.hacktron.ai/blog/hacking-openai) | [用 Claude Opus 5 攻進 OpenAI：libheif 影像鏈與 CTF 框定繞過](hacktron-2026-09-openai-libheif-rce.html) |
 | Google 威脅情報小組（Google GTIG） | 2026-09-09 | [GTIG AI Threat Tracker: From Prompting to Autonomy – The Evolution of Adversarial AI](https://cloud.google.com/blog/topics/threat-intelligence/from-prompting-to-autonomy-the-evolution-of-adversarial-ai) | [從提示到自主：對抗性 AI](gtig-2026-09-ai-threat-tracker.html) |
 | 微軟威脅情報團隊（Microsoft Threat Intelligence） | 2026-07-31 | [CaptiveCrunch: Midnight Blizzard targets travelers worldwide for malware delivery and credential theft](https://www.microsoft.com/en-us/security/blog/2026/07/31/captivecrunch-midnight-blizzard-targets-travelers-worldwide-for-malware-delivery-and-credential-theft/) | [旅館 WiFi 劫持與 CaptiveCrunch](microsoft-2026-07-captivecrunch-storm-2945.html) |
 | Google 威脅情報小組（Google GTIG） | 2026-05-12 | [GTIG AI Threat Tracker: Adversaries Leverage AI for Vulnerability Exploitation, Augmented Operations, and Initial Access](https://cloud.google.com/blog/topics/threat-intelligence/ai-vulnerability-exploitation-initial-access) | [AI 漏洞利用與初始存取](gtig-2026-05-ai-threat-tracker.html) |
@@ -39,13 +39,16 @@
 | OpenAI 威脅情報團隊（OpenAI） | 2026-02-25 | [Disrupting malicious uses of AI](https://openai.com/index/disrupting-malicious-ai-uses/) | [AI 濫用處置報告 2026-02](openai-2026-02-disrupting-malicious-uses.html) |
 | Anthropic（Anthropic） | 2026-02-23 | [Detecting and preventing distillation attacks](https://www.anthropic.com/news/detecting-and-preventing-distillation-attacks) | [偵測與防範蒸餾攻擊](anthropic-2026-02-distillation-disclosure.html) |
 | Google 威脅情報小組（Google GTIG） | 2026-02-13 | [GTIG AI Threat Tracker: Distillation, Experimentation, and (Continued) Integration of AI for Adversarial Use](https://cloud.google.com/blog/topics/threat-intelligence/distillation-experimentation-integration-ai-adversarial-use) | [蒸餾、實驗與對抗性 AI 整合](gtig-2026-02-ai-threat-tracker.html) |
+| 數位發展部（moda） | 2026-01-28 | [公部門人工智慧應用參考手冊 V1.0](https://www-api.moda.gov.tw/File/Get/moda/zh-tw/WwHCroVhwWy52dw) | [台灣AI導入與資安驗收](moda-2026-01-public-sector-ai-playbook.html) |
 | Anthropic 威脅情報團隊（Anthropic） | 2025-11-13 | [Disrupting the first reported AI-orchestrated cyber espionage campaign](https://www.anthropic.com/news/disrupting-AI-espionage) | [首起 AI 編排網路間諜行動](anthropic-2025-11-ai-orchestrated-espionage.html) |
 | Google 威脅情報小組（Google GTIG） | 2025-11-06 | [GTIG AI Threat Tracker: Advances in Threat Actor Usage of AI Tools](https://cloud.google.com/blog/topics/threat-intelligence/threat-actor-usage-of-ai-tools) | [執行期 AI 惡意程式登場](gtig-2025-11-ai-threat-tracker.html) |
 | OpenAI 威脅情報團隊（OpenAI） | 2025-10-07 | [Disrupting malicious uses of AI: October 2025](https://openai.com/global-affairs/disrupting-malicious-uses-of-ai-october-2025/) | [AI 濫用處置報告 2025-10](openai-2025-10-disrupting-malicious-uses.html) |
 | Anthropic 威脅情報團隊（Anthropic） | 2025-08-27 | [Detecting and countering misuse of AI: August 2025](https://www.anthropic.com/news/detecting-countering-misuse-aug-2025) | [AI 濫用報告 2025-08](anthropic-2025-08-threat-intel-report.html) |
 | OpenAI 威脅情報團隊（OpenAI） | 2025-06-05 | [Disrupting malicious uses of AI: June 2025](https://openai.com/global-affairs/disrupting-malicious-uses-of-ai-june-2025/) | [AI 濫用處置報告 2025-06](openai-2025-06-disrupting-malicious-uses.html) |
+| 英國國家網路安全中心（NCSC） | 2025-05-07 | [Impact of AI on cyber threat from now to 2027](https://www.ncsc.gov.uk/report/impact-ai-cyber-threat-now-2027) | [AI威脅政府概率評估](ncsc-2025-05-ai-cyber-threat-2027.html) |
 | Anthropic 威脅情報團隊（Anthropic） | 2025-04-23 | [Detecting and countering malicious uses of Claude: March 2025](https://www.anthropic.com/news/detecting-and-countering-malicious-uses-of-claude-march-2025) | [首份 Claude 濫用報告](anthropic-2025-04-malicious-uses-report.html) |
 | Google 威脅情報小組（Google GTIG） | 2025-01-30 | [Adversarial Misuse of Generative AI](https://cloud.google.com/blog/topics/threat-intelligence/adversarial-misuse-generative-ai) | [生成式 AI 的對抗性濫用](gtig-2025-01-adversarial-misuse-generative-ai.html) |
+| Fang等研究團隊（Fang et al.） | 2024-04-17 | [LLM Agents can Autonomously Exploit One-day Vulnerabilities](https://arxiv.org/abs/2404.08144v2) | [已知漏洞代理實驗判讀](arxiv-2024-04-one-day-agent-benchmark.html) |
 <!-- LEDGER:END -->
 
 ## 5. 維護方式

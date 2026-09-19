@@ -1,4 +1,5 @@
 import json
+from hashlib import sha256
 from pathlib import Path
 import sys
 import tempfile
@@ -20,6 +21,10 @@ class PagesBuildTests(unittest.TestCase):
                       "00-index.html": {"local": "00-index.html"}}
 
     def build(self):
+        for info in self.files.values():
+            source = self.root / info["local"]
+            if source.is_file():
+                info.setdefault("sha256", sha256(source.read_bytes()).hexdigest())
         (self.root / "_site/publish-manifest.json").write_text(json.dumps({"files": self.files}))
         return build_pages.assemble(self.root)
 
@@ -53,6 +58,14 @@ class PagesBuildTests(unittest.TestCase):
         self.files["../outside.html"] = {"local": "00-index.html"}
         with self.assertRaises(ValueError):
             self.build()
+
+    def test_changed_html_is_rejected_without_replacing_previous_site(self):
+        output = self.build()
+        original = (output / "00-index.html").read_bytes()
+        (self.root / "00-index.html").write_text("changed after manifest")
+        with self.assertRaises(ValueError):
+            self.build()
+        self.assertEqual((output / "00-index.html").read_bytes(), original)
 
     def test_non_html_manifest_entry_is_rejected(self):
         self.files["published-state.json"] = {"local": "_site/published-state.json"}

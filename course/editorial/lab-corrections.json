@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "checked_on": "2026-09-19",
+  "review_scope": "模組 B：成熟度精準修訂與離線防禦作業包",
+  "limitations": [
+    "保留報告原文中的「可直接部署」引文及明確否定句，不以關鍵字批次替換全部。",
+    "未讀入原 OneDrive 目錄未提交教材。"
+  ],
+  "records": [
+    {
+      "materials": [
+        "01-cyber/GTG-10007-exploit-foundry.md"
+      ],
+      "summary": "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。",
+      "checked_on": "2026-09-19",
+      "review_scope": "只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "limitations": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        {
+          "before": "這是**投報率最高**的一步",
+          "after": "這是**建議優先評估**的一步（本教材未比較各項措施的成本與成效）"
+        }
+      ]
+    },
+    {
+      "materials": [
+        "01-cyber/GTG-50014-shinyhunters.md"
+      ],
+      "summary": "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。",
+      "checked_on": "2026-09-19",
+      "review_scope": "只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "limitations": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        {
+          "before": "可直接部署的偵測規則（KQL / Sigma / CI 設定）",
+          "after": "待環境驗證的偵測規則範例（示意等級；KQL / Sigma / CI 設定）"
+        },
+        {
+          "before": "### T.1.4 防守方：CI/CD 硬編碼機密掃描（可直接部署）",
+          "after": "### T.1.4 防守方：CI/CD 硬編碼機密掃描（示意，尚未在指定環境驗證）"
+        },
+        {
+          "before": "### T.2.3 KQL 偵測規則包（Microsoft Sentinel / Entra，可直接部署）",
+          "after": "### T.2.3 KQL 偵測規則範例（Microsoft Sentinel / Entra；示意，待環境驗證）"
+        },
+        {
+          "before": "rev: v8.x            # 釘住版本",
+          "after": "rev: v8.x            # 示意佔位；須替換成已確認的完整 tag/commit，本例未執行"
+        },
+        {
+          "before": "只擋「真的還活著」的金鑰，低誤報",
+          "after": "只列 verification 判為有效的命中；本教材未量測誤報率"
+        }
+      ]
+    },
+    {
+      "materials": [
+        "01-cyber/GTG-50020-ai-supply-chain.md"
+      ],
+      "summary": "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。",
+      "checked_on": "2026-09-19",
+      "review_scope": "只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "limitations": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        {
+          "before": "可直接部署（需依自家 schema 微調）的偵測規則",
+          "after": "示意等級的偵測規則範例（需依自家 schema、版本與基線驗證）"
+        },
+        {
+          "before": "**偵測（可直接部署，需依自家反向代理調整）**",
+          "after": "**偵測範例（示意；需依自家反向代理、欄位與正常流量驗證）**"
+        }
+      ]
+    },
+    {
+      "materials": [
+        "01-cyber/GTG-50029-hacktivist.md"
+      ],
+      "summary": "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。",
+      "checked_on": "2026-09-19",
+      "review_scope": "只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "limitations": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        {
+          "before": "### B.5 偵測與加固實作（可直接部署）",
+          "after": "### B.5 偵測與加固範例（示意，待版本與環境驗證）"
+        }
+      ]
+    },
+    {
+      "materials": [
+        "02-influence/00-influence-intro-and-breakout-scale.md"
+      ],
+      "summary": "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。",
+      "checked_on": "2026-09-19",
+      "review_scope": "只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "limitations": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        {
+          "before": "**兩個可直接部署的時間訊號：**",
+          "after": "**兩個待正常流量與基線驗證的時間訊號（示意）：**"
+        }
+      ]
+    },
+    {
+      "materials": [
+        "02-influence/GTG-54004-kenya-cib.md"
+      ],
+      "summary": "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。",
+      "checked_on": "2026-09-19",
+      "review_scope": "只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "limitations": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        {
+          "before": "可直接部署的偵測規則（YARA / KQL / 虛擬碼）",
+          "after": "待環境驗證的偵測規則範例（示意；YARA / KQL / 虛擬碼）"
+        },
+        {
+          "before": "### A.1.8 開源工具鏈（可直接部署）",
+          "after": "### A.1.8 開源工具鏈（選型範例，需核對版本與驗證資料）"
+        },
+        {
+          "before": "是所有對策裡投報率最高的",
+          "after": "可能有助補足可見度，但取得成本、隱私影響與防禦成效仍待評估"
+        }
+      ]
+    },
+    {
+      "materials": [
+        "02-influence/GTG-84006-mek-ncri-viktor.md"
+      ],
+      "summary": "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。",
+      "checked_on": "2026-09-19",
+      "review_scope": "只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "limitations": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        {
+          "before": "### E.4 防護技術（被冒充者與聯絡人，可直接部署）",
+          "after": "### E.4 防護技術（被冒充者與聯絡人；建議措施，需依環境驗證）"
+        }
+      ]
+    },
+    {
+      "materials": [
+        "03-surveillance/GTG-54009-s2t-commercial-spyware.md"
+      ],
+      "summary": "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。",
+      "checked_on": "2026-09-19",
+      "review_scope": "只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "limitations": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        {
+          "before": "**可直接部署的偵測規則**",
+          "after": "**待環境驗證的偵測規則範例（示意等級）**"
+        }
+      ]
+    },
+    {
+      "materials": [
+        "03-surveillance/GTG-14020-religious-affairs-taiwan-church.md"
+      ],
+      "summary": "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。",
+      "checked_on": "2026-09-19",
+      "review_scope": "只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "limitations": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        {
+          "before": "本節補足**演算法細節**與**可部署的規則**",
+          "after": "本節補足**演算法示意**與**待環境驗證的規則範例**"
+        }
+      ]
+    },
+    {
+      "materials": [
+        "07-distillation/GTG-16001-deepseek.md"
+      ],
+      "summary": "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。",
+      "checked_on": "2026-09-19",
+      "review_scope": "只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "limitations": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        {
+          "before": "（含可直接部署的偵測規則）",
+          "after": "（含待環境驗證的示意偵測規則）"
+        },
+        {
+          "before": "是蒸餾投報率最高的流量",
+          "after": "可能被行為者視為有價值的蒸餾流量（分析推論；未取得收益比較資料）"
+        }
+      ]
+    },
+    {
+      "materials": [
+        "07-distillation/GTG-16008-xiaomi.md"
+      ],
+      "summary": "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。",
+      "checked_on": "2026-09-19",
+      "review_scope": "只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "limitations": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        {
+          "before": "**企業防守方（CISO）可直接部署的偵測方向**",
+          "after": "**企業防守方（CISO）可評估的偵測方向（示意，未附指定環境實測）**"
+        }
+      ]
+    },
+    {
+      "materials": [
+        "10-practice/00-practice-guide.md",
+        "10-practice/01-50014-student.md",
+        "10-practice/02-50014-instructor.md",
+        "10-practice/03-14020-student.md",
+        "10-practice/04-14020-instructor.md",
+        "10-practice/05-50020-student.md",
+        "10-practice/06-50020-instructor.md"
+      ],
+      "summary": "新增九模組專屬紙上作業入口、三套完整離線案例、學員與講師材料、100 分規準和指定資料驗證。",
+      "checked_on": "2026-09-19",
+      "review_scope": "Python 規則 1.0.0；45 筆合成事件、15 個手工情境與明確 expected outputs；包含已知 FP/FN。",
+      "limitations": [
+        "只驗證合成 metadata 的程式行為，不驗證正式環境防禦效能。",
+        "未驗證語意分類器、DLP、真實日誌 schema 或後端規則。",
+        "所有情境與門檻為教學設計，不是原報告公開資料。"
+      ]
+    }
+  ]
+}

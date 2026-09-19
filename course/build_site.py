@@ -18,7 +18,7 @@
 <!-- LEDGER:START --> 與 <!-- LEDGER:END --> 之間的收錄清單表（來源：同資料夾的 *.meta.json），
 並重新轉出該頁的 .html。
 
-重跑安全：只讀 .html / .png / .meta.json，只寫 _site/ 與導論頁的清單區段。
+重跑安全：讀取課程來源、HTML、圖片、meta 與 labs 白名單；只寫 _site/ 與導論頁清單區段。
 """
 import os, re, sys, json, glob, hashlib, html, datetime
 from html.parser import HTMLParser
@@ -40,6 +40,7 @@ MODULES = [  # (資料夾, 側欄標題)；順序即側欄順序
     ("07-distillation", "非法蒸餾"),
     ("08-capability-research", "能力評測"),
     (EXTERNAL, "延伸研究"),
+    ("10-practice", "實作與評量"),
 ]
 
 
@@ -133,6 +134,11 @@ def load_meta():
 
 def label_for(folder, name, meta):
     """側欄每一列顯示的 (代號, 描述)"""
+    if folder == "_shared":
+        return "專題", name.replace("-", " ")
+    if folder == "10-practice":
+        code = "講師" if name.endswith("-instructor") else "作業" if name.endswith("-student") else "總覽"
+        return code, name.replace("-", " ")
     if folder == EXTERNAL:
         if meta:
             code = f'{meta.get("org", "")} {str(meta.get("published", ""))[:7]}'.strip()
@@ -522,6 +528,7 @@ def render_nav(nav):
 
 
 def main():
+    from package_labs import package_labs, DOWNLOAD
     metas = load_meta()
     sync_intro(metas)  # 先同步導論頁清單，再走訪（這樣導論 html 的雜湊才是最新的）
     nav, stats, manifest, metas = collect()
@@ -535,6 +542,9 @@ def main():
     with open(shell_path, "w", encoding="utf-8", newline="\n") as f:
         f.write(shell)
     manifest["index.html"] = {"local": "_site/index.html", "sha256": sha256(shell_path), "bytes": os.path.getsize(shell_path)}
+    lab_archive = package_labs(ROOT)
+    if lab_archive:
+        manifest[DOWNLOAD] = lab_archive
 
     now = datetime.datetime.now().isoformat(timespec="seconds")
     with open(os.path.join(SITE, "publish-manifest.json"), "w", encoding="utf-8", newline="\n") as f:

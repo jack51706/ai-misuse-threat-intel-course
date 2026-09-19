@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "checked_on": "2026-09-19",
+  "materials": [
+    "_shared/02-claude-safeguards-and-bypass-paths.md"
+  ],
+  "source_check_scope": "核對 PDF p.3、30、95、97、104、131、135–137 的指定主張；核對 OWASP LLM01/06/07 與官方工具定位。SupaPwn 依研究者原文限定敘述範圍；未獨立重現。",
+  "evidence_urls": [
+    "https://genai.owasp.org/llmrisk/llm01-prompt-injection/",
+    "https://genai.owasp.org/llmrisk/llm062025-excessive-agency/",
+    "https://genai.owasp.org/llmrisk/llm072025-system-prompt-leakage/",
+    "https://github.com/NVIDIA/garak",
+    "https://www.promptfoo.dev/docs/red-team/troubleshooting/data-handling/",
+    "https://github.com/microsoft/PyRIT/blob/main/doc/code/framework.md"
+  ],
+  "changes": [
+    "重整12節閱讀順序與四個快速入口",
+    "拆分內容、工具授權、執行與處置",
+    "補正常反例、測試口徑、講師評分與離線實作",
+    "移除未鎖定版本的工具命令、未驗證賞金與免疫推論",
+    "校正 SupaPwn 早期 Lovable 測試未跨租戶、不可直接接成後續研究鏈的邊界。"
+  ],
+  "limitations": [
+    "未取得原始遙測，未獨立重現報告事件。",
+    "工程建議未在生產環境或真實模型測試。",
+    "合成實作僅驗證附帶資料與規則。"
+  ]
+}

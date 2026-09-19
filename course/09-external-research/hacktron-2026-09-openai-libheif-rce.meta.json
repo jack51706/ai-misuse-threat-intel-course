@@ -4,9 +4,9 @@
   "org_zh": "Hacktron AI（獨立資安研究）",
   "title": "Hacking OpenAI (libheif Heist)",
   "title_zh": "用 Claude Opus 5 攻進 OpenAI：libheif 影像鏈與 CTF 框定繞過",
-  "published": "2026-09-18",
+  "published": "2026-09-13",
   "url": "https://www.hacktron.ai/blog/hacking-openai",
-  "source_type": "industry-research",
+  "source_type": "industry",
   "related_modules": [
     "01-cyber",
     "08-capability-research"

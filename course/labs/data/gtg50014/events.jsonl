@@ -1,0 +1,13 @@
+{"id": "gtg50014-a01", "timestamp": "2026-01-01T00:00:00Z", "entity": "gtg50014-a", "event": "signin", "attrs": {"session": "session-a", "ip": "192.0.2.10", "asn": 64512, "success": true}}
+{"id": "gtg50014-a02", "timestamp": "2026-01-01T00:05:00Z", "entity": "gtg50014-a", "event": "signin", "attrs": {"session": "session-a", "ip": "198.51.100.10", "asn": 64513, "success": true}}
+{"id": "gtg50014-a03", "timestamp": "2026-01-01T00:07:00Z", "entity": "gtg50014-a", "event": "privileged_export", "attrs": {"session": "session-a"}}
+{"id": "gtg50014-b01", "timestamp": "2026-01-01T01:00:00Z", "entity": "gtg50014-b", "event": "signin", "attrs": {"session": "session-b", "ip": "192.0.2.10", "asn": 64512, "success": true}}
+{"id": "gtg50014-b02", "timestamp": "2026-01-01T01:05:00Z", "entity": "gtg50014-b", "event": "signin", "attrs": {"session": "session-b", "ip": "198.51.100.10", "asn": 64513, "success": true}}
+{"id": "gtg50014-c01", "timestamp": "2026-01-01T02:00:00Z", "entity": "gtg50014-c", "event": "signin", "attrs": {"session": "session-c", "ip": "192.0.2.10", "asn": 64512, "success": true}}
+{"id": "gtg50014-c02", "timestamp": "2026-01-01T02:05:00Z", "entity": "gtg50014-c", "event": "signin", "attrs": {"session": "session-c", "ip": "198.51.100.10", "asn": 64512, "success": true}}
+{"id": "gtg50014-c03", "timestamp": "2026-01-01T02:07:00Z", "entity": "gtg50014-c", "event": "privileged_export", "attrs": {"session": "session-c"}}
+{"id": "gtg50014-d01", "timestamp": "2026-01-01T03:00:00Z", "entity": "gtg50014-d", "event": "signin", "attrs": {"session": "session-d", "ip": "192.0.2.10", "asn": 64512, "success": true}}
+{"id": "gtg50014-d02", "timestamp": "2026-01-01T03:05:00Z", "entity": "gtg50014-d", "event": "signin", "attrs": {"session": "session-d", "ip": "198.51.100.10", "asn": 64513, "success": true}}
+{"id": "gtg50014-d03", "timestamp": "2026-01-01T03:07:00Z", "entity": "gtg50014-d", "event": "privileged_export", "attrs": {"session": "session-d"}}
+{"id": "gtg50014-e01", "timestamp": "2026-01-01T04:00:00Z", "entity": "gtg50014-e", "event": "signin", "attrs": {"session": "session-e", "ip": "192.0.2.10", "asn": 64512, "success": true}}
+{"id": "gtg50014-e02", "timestamp": "2026-01-01T04:07:00Z", "entity": "gtg50014-e", "event": "privileged_export", "attrs": {"session": "session-e"}}

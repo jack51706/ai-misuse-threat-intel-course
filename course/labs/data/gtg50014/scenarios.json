@@ -1,0 +1,27 @@
+[
+  {
+    "entity": "gtg50014-a",
+    "class": "simulated_abuse",
+    "explanation": "模擬同一工作階段被濫用後匯出；應交人工查證。"
+  },
+  {
+    "entity": "gtg50014-b",
+    "class": "benign",
+    "explanation": "良性網路移動，沒有後續匯出。"
+  },
+  {
+    "entity": "gtg50014-c",
+    "class": "benign",
+    "explanation": "良性同 ASN 位址切換與核准匯出。"
+  },
+  {
+    "entity": "gtg50014-d",
+    "class": "benign",
+    "explanation": "已授權遷移窗口，日誌外另有核准單；規則仍會誤報。"
+  },
+  {
+    "entity": "gtg50014-e",
+    "class": "simulated_abuse",
+    "explanation": "模擬濫用沿用同一出口，缺少網路位移特徵；規則會漏報。"
+  }
+]

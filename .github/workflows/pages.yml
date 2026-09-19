@@ -50,6 +50,8 @@ jobs:
         env:
           EMBED: "0"
         run: |
+          python check_content.py
+          python labs/run_labs.py --all
           python build_html.py
           python build_site.py
           python build_pages.py

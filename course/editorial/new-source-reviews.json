@@ -1,0 +1,47 @@
+{
+  "checked_on": "2026-09-19",
+  "review_scope": "新增三份教材的一手原文、主要數字、選定圖表與證據類型核對；未執行攻擊、獨立實驗重現或真實機關控制測試。",
+  "reviews": [
+    {
+      "id": "ncsc-2025-05-ai-cyber-threat-2027",
+      "source_url": "https://www.ncsc.gov.uk/report/impact-ai-cyber-threat-now-2027",
+      "checked_on": "2026-09-19",
+      "review_scope": "核對官方頁面的發布日期、NCSC assessment、Key judgements、Context、Assessment 與 Implications；讀取官方 PDF，實看實體 p.2 概率尺度，核對用語對應範圍。",
+      "limitations": [
+        "政府評估包含未公開情報，未取得底層樣本或判斷權重。",
+        "沒有完成預測校準或結果驗證，不能將概率用語當成實際事件比例。",
+        "ATT&CK 對應、控制與作業規準為教材分析，未獨立驗證任何 GTG 案例。"
+      ],
+      "peer_review": "not_applicable_government_assessment",
+      "independent_replication": false
+    },
+    {
+      "id": "arxiv-2024-04-one-day-agent-benchmark",
+      "source_url": "https://arxiv.org/abs/2404.08144v2",
+      "checked_on": "2026-09-19",
+      "review_scope": "核對 arXiv v2 版本紀錄、HTML 全文及 PDF；實看 Figure 1 與 Tables 1–4（實體 pp.4–6、8），核對 15 個情境、86.7% pass@5、40.0% overall success rate 及移除弱點說明後約 7% 的條件；查閱 dblp 書目分類。",
+      "limitations": [
+        "採用版本標示為預印本，本次未確認正式同行審查版本。",
+        "未取得完整提示與全部執行軌跡，未獨立重跑實驗。",
+        "可重建性篩選的小樣本不代表所有軟體、現實受害率或當前模型能力。",
+        "未逐一外部複核 Table 2 的 CVE 登錄，因此未轉製完整識別碼清單。"
+      ],
+      "peer_review": "preprint_peer_review_not_verified",
+      "independent_replication": false
+    },
+    {
+      "id": "moda-2026-01-public-sector-ai-playbook",
+      "source_url": "https://www-api.moda.gov.tw/File/Get/moda/zh-tw/WwHCroVhwWy52dw",
+      "checked_on": "2026-09-19",
+      "review_scope": "核對官方下載入口、PDF V1.0 修訂史（115.01.28）及 96 個實體頁；選讀 §2.1、§3.6、§4.3–4.4；實看 pp.22、65、81–84 的生命週期、驗收與資安圖表，區分空白檢核工具與成效證據。",
+      "limitations": [
+        "選讀章節核對，不是整本手冊逐句法遵審查。",
+        "未取得真實機關採用率、阻擋效果或誤報資料，不視為台灣 AI 攻擊事件實證。",
+        "教材驗收步驟及評分為教學設計，不能視為新增官方義務。",
+        "未獨立驗證任何 GTG 案例，也未保證手冊其他章節的服務與法規資訊仍然適用。"
+      ],
+      "peer_review": "not_applicable_government_guidance",
+      "independent_replication": false
+    }
+  ]
+}

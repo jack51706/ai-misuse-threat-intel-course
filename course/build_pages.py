@@ -2,7 +2,7 @@
 """從發布清單組裝 GitHub Pages 到 _pages/，保留 _site/ 的 Artifact 狀態。
 
 Pages 請設 EMBED=0，再依序執行 build_html.py、build_site.py、本檔與
-validate_site.py。只發布清單上的 HTML 和 HTML 實際引用的本機圖片。
+validate_site.py。只發布清單上的 HTML、固定實作下載包及 HTML 實際引用的本機圖片。
 """
 from html.parser import HTMLParser
 import json
@@ -12,6 +12,8 @@ import shutil
 import tempfile
 from urllib.parse import unquote, urlsplit
 from build_site import rewrite_links
+from package_labs import DOWNLOAD
+from hashlib import sha256
 
 ROOT = Path(__file__).resolve().parent
 
@@ -52,9 +54,18 @@ def assemble(root=ROOT):
         for published, info in manifest.items():
             target = contained(stage, published)
             source = contained(root, info["local"])
+            if published == DOWNLOAD and info["local"] == "_site/" + DOWNLOAD:
+                if sha256(source.read_bytes()).hexdigest() != info.get("sha256"):
+                    raise ValueError("實作下載包與發布清單雜湊不符")
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, target)
+                continue
             if target.suffix != ".html" or source.suffix != ".html":
                 raise ValueError(f"發布清單不是 HTML：{published}")
-            document = rewrite_links(source.read_text(encoding="utf-8"))
+            payload = source.read_bytes()
+            if sha256(payload).hexdigest() != info.get("sha256"):
+                raise ValueError(f"HTML 與發布清單雜湊不符：{published}")
+            document = rewrite_links(payload.decode("utf-8"))
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(document, encoding="utf-8", newline="\n")
             parser = ImageSources()
@@ -81,7 +92,7 @@ def assemble(root=ROOT):
             shutil.rmtree(output)
         shutil.copytree(stage, output)
     size = sum(p.stat().st_size for p in output.rglob("*") if p.is_file())
-    print(f"Pages 組裝完成：_pages/，{len(manifest)} 份 HTML、{len(images)} 張圖片、{size:,} bytes")
+    print(f"Pages 組裝完成：_pages/，{len(manifest)} 個清單檔案、{len(images)} 張圖片、{size:,} bytes")
     return output
 
 

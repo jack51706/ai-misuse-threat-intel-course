@@ -98,7 +98,19 @@ Cyber / Influence / Surveillance / Weapons 的案例大致都有這幾段，找�
 - 測試：`python -m unittest discover -s course/tests -v`。
 - Windows 建置：先設 `$env:EMBED='0'; $env:PYTHONIOENCODING='utf-8'`，依序執行 `python course/build_html.py`、`python course/build_site.py`、`python course/build_pages.py`、`python course/validate_site.py`。Linux/CI 設 `EMBED=0` 後同樣執行。
 - Pages 圖片以相對路徑發布、瀏覽器快取與延遲載入，Artifact 預設仍使用 base64 自足 HTML。
-- 只收錄課程索引、模組 01–09 與跨案例專題；`_shared/00-agent-brief.md`、底線開頭的草稿、簡報工具、相依套件不發布。過期 HTML 不得靠掃描輸出目錄重新帶入。
+- 只收錄課程索引、模組 01–10 與跨案例專題；`_shared/00-agent-brief.md`、底線開頭的草稿、簡報工具、相依套件不發布。過期 HTML 不得靠掃描輸出目錄重新帶入。
 - 內文 `.md` 連結轉成 `.html`，Pages 將 `_shared/` 對映為 `shared/`；分享網址為 `#教材路徑.html#章節錨點`。路由僅接受已收錄教材。
 - `validate_site.py` 離線檢查本機連結、圖片、錨點、HTML 文件設定與不應公開的檔案；不得為檢查而連線 IOC。失敗必須修復才發布。
 - 發布後驗證 Actions 成功及線上首頁、中文搜尋、教材跳轉與行動版導覽；保留工作目錄內使用者尚未提交的教材與簡報修改。
+
+## 內容品質、實作與審核（2026-09-19）
+
+- `_shared/02-claude-safeguards-and-bypass-paths.md` 以控制檢查點、案例證據、防護驗收編排。A–E 與 F1–F7 是教材分析視角；不把模型選擇、工具使用或未知拒絕情形硬算成越獄證據。
+- 共用規範在 `_shared/04-evidence-and-methods.md`，公開勘誤在 `_shared/05-editorial-review-and-changelog.md`。來源陳述、分析推論、教學示意與未知須分開。
+- `content_quality.py` 為所有頁面產生真實章節的分層閱讀與審核狀態；課程新增模組時補 PROFILES，不逐頁複製 HTML。
+- `editorial/catalog.json` 是審核紀錄，schema_version=1。每頁需 content_sha256、checked_on、scope、pending、changes；只有實際核對來源才填 source_checked_on 與 source_check_scope。結構檢查不可當全面事實查證。
+- 教材新增／內容雜湊改變會顯示「待審」，不要在建置流程自動批准。使用 `python course/check_content.py --fingerprint 模組/教材.md` 取得雜湊，人工核對差異後才更新紀錄。自動收錄表不納入導論的編輯雜湊。
+- `python course/check_content.py` 驗證紀錄與來源欄位；待審可發布但必須可見，格式錯誤使 CI 失敗。
+- 模組 10 含模組 01–09 作業與三套學員／講師包。離線實作在 `course/labs/`，執行 `python course/labs/run_labs.py --all`。使用合成資料，含刻意設計的 FP/FN，不測真實模型或 IOC。
+- `package_labs.py` 只將 ALLOWED_FILES 明列的 labs 教學檔案打包為 `downloads/course-labs.zip`，附 SHA256SUMS.json；固定時間戳與換行，未知檔案／缺檔使建置失敗。不得包含隱藏檔、快取、symlink 或真實秘密。Pages 只接受此固定下載項及既有 HTML/圖片，HTML 與 ZIP 都核對 manifest 雜湊。
+- 新增／改動來源與偵測宣稱時更新逐頁範圍和勘誤，跑單元測試、內容檢查、離線實作、完整建置與站台檢查。不得宣稱未實測的規則低誤報、可直接上線或可保證免疫。

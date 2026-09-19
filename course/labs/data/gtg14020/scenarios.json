@@ -1,0 +1,27 @@
+[
+  {
+    "entity": "gtg14020-a",
+    "class": "simulated_abuse",
+    "explanation": "模擬高風險模板產線；僅人工審查，不代表現實歸因。"
+  },
+  {
+    "entity": "gtg14020-b",
+    "class": "benign",
+    "explanation": "調查記者的結構化資料，沒有脅迫標籤。"
+  },
+  {
+    "entity": "gtg14020-c",
+    "class": "benign",
+    "explanation": "正常合規工作；敏感欄位本身不是濫用證據。"
+  },
+  {
+    "entity": "gtg14020-d",
+    "class": "benign",
+    "explanation": "授權稽核使用虛構個案且被預先風險標註；規則會誤報。"
+  },
+  {
+    "entity": "gtg14020-e",
+    "class": "simulated_abuse",
+    "explanation": "模擬高風險工作流只有三個主體，未達四個門檻；規則會漏報。"
+  }
+]

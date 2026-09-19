@@ -942,7 +942,7 @@ Sources:
 
 # 第二階段：技術深化附錄（2026-09-14 追加）
 
-> 本附錄為**技術高手向**的深化層，銜接前文第 4、5、6 節。原則：**不重述已寫過的分析，只補「能據以理解與防禦」的技術細節**——攻擊鏈的實際工具/API/命令、可直接部署的偵測規則（KQL / Sigma / CI 設定）、以及用 **Mermaid** 重畫的流程/時序圖。所有 IOC 仍保留 defang、全程未連線。
+> 本附錄為**技術高手向**的深化層，銜接前文第 4、5、6 節。原則：**不重述已寫過的分析，只補「能據以理解與防禦」的技術細節**——攻擊鏈的實際工具/API/命令、待環境驗證的偵測規則範例（示意等級；KQL / Sigma / CI 設定）、以及用 **Mermaid** 重畫的流程/時序圖。所有 IOC 仍保留 defang、全程未連線。
 >
 > 導覽：**T.1** 憑證收割管線逐層還原（APK 工具鏈 + TruffleHog 偵測器/驗證 + Telegram 路由 + CI 防線）｜**T.2** Entra ID token 傾印、跨租戶橫移與 **KQL 規則包**｜**T.3** 單一 dev token→3 小時雲端管理權（逐步 + 偵測點）｜**T.4** 產業鏈 **Mermaid** 重畫（9 階段 + Figure 11 四工作流）｜**T.5** Snowflake/Salesloft-Drift 獨立技術佐證｜**T.6** Figure 1–11 技術解說完整性核對｜**T.7** 新增來源。
 
@@ -1023,12 +1023,12 @@ flowchart LR
 - **雙群分工（對應 IOC）：** `ClintonHog`（`-1003893854338`）收「第一波」已驗證憑證；`ChatMignon` 是主要外洩/分類通道；另有專門 bot 把 **AWS SES**（`8628746407`）與 **SNS SMS-abuse**（`8709258476`）的驗證結果直送 operator 個人帳號（`8179098353`）——顯示 actor 對「濫發郵件/簡訊」的變現特別上心。
 - **偵測含義：** 對防守方而言，「內部主機 → `api.telegram.org` 的定期 bot API 出站」本身就是可疑訊號（見 T.2.4 的 exfil/C2 規則思路）。
 
-### T.1.4 防守方：CI/CD 硬編碼機密掃描（可直接部署）
+### T.1.4 防守方：CI/CD 硬編碼機密掃描（示意，尚未在指定環境驗證）
 
 報告 Figure 4「Mobile-app secret mining / Repo·CI·IaC mining」對應的防線，是把**同一套工具反過來用在自己的建置流程**。分層策略（業界共識）：
 
 - **pre-commit（開發者本機，零延遲、擋在提交前）：** gitleaks（正則、快，適合 commit gate）。
-- **CI（管線，驗證式深掃、命中即 fail build）：** TruffleHog（`--only-verified`，只擋「真的還活著」的金鑰，低誤報）。
+- **CI（管線，驗證式深掃、命中即 fail build）：** TruffleHog（`--only-verified`，只列 verification 判為有效的命中；本教材未量測誤報率）。
 - **平台後盾：** GitHub Secret Scanning / push protection（partner pattern 可自動撤銷）。
 - **關鍵：掃「最終產物」而不只掃原始碼**——因為建置期注入（build config、CI 變數、資源合併）也會把機密帶進 APK/IPA。所以要在 **打包後對 .apk/.ipa 本身跑掃描**。
 
@@ -1037,7 +1037,7 @@ flowchart LR
 ```yaml
 repos:
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.x            # 釘住版本
+    rev: v8.x            # 示意佔位；須替換成已確認的完整 tag/commit，本例未執行
     hooks:
       - id: gitleaks     # commit 前掃 diff，命中即擋
 ```
@@ -1111,7 +1111,9 @@ sequenceDiagram
 
 > 教學點：使用者指名的 **T1550.001** 是本案「token 重放/扇出」的**主幹技術**——它明確描述「用替代驗證材料（application access token）繞過正常認證」。它與 T1528（**竊**）、T1539（**竊 session cookie**）、T1606（**偽造**）是「取得→重放→偽造」的三段；防守要三段都有偵測。
 
-### T.2.3 KQL 偵測規則包（Microsoft Sentinel / Entra，可直接部署）
+### T.2.3 KQL 偵測規則範例（Microsoft Sentinel / Entra；示意，待環境驗證）
+
+> 成熟度校正（2026-09-19）：本節 KQL、Sigma 與 CI 片段未附指定版本／日誌的執行結果，不以「可部署」作驗收結論。[離線作業](../10-practice/01-50014-student.md) 使用另寫的 Python 合成資料關聯規則；通過該作業不代表本節 KQL 已驗證。
 
 > 說明：以下為 Entra ID 診斷日誌接進 Log Analytics/Sentinel 後的查詢。閾值（如 `> 200`、`> 10`）務必**先用 14–30 天基線校準**再上線，否則誤報高。欄位以現行 Entra schema 為準（`SessionId`、`UniqueTokenIdentifier`、`AutonomousSystemNumber` 為近年新增，若租戶未輸出可退用 IP/UserAgent）。
 

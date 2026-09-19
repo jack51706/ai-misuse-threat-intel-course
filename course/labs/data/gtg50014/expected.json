@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "alerts": [
+    {
+      "rule_id": "LAB-50014-01",
+      "entity": "gtg50014-a",
+      "evidence_ids": [
+        "gtg50014-a01",
+        "gtg50014-a02",
+        "gtg50014-a03"
+      ],
+      "disposition": "human_review_only"
+    },
+    {
+      "rule_id": "LAB-50014-01",
+      "entity": "gtg50014-d",
+      "evidence_ids": [
+        "gtg50014-d01",
+        "gtg50014-d02",
+        "gtg50014-d03"
+      ],
+      "disposition": "human_review_only"
+    }
+  ],
+  "metrics": {
+    "tp": 1,
+    "fp": 1,
+    "tn": 2,
+    "fn": 1,
+    "precision": 0.5,
+    "recall": 0.5,
+    "unit": "synthetic_scenario_entity"
+  },
+  "limitation": "Hand-authored expected outputs for synthetic teaching fixtures; no production accuracy claim.",
+  "known_false_positives": [
+    {
+      "entity": "gtg50014-d",
+      "reason": "已授權遷移窗口，日誌外另有核准單；規則仍會誤報。"
+    }
+  ],
+  "known_false_negatives": [
+    {
+      "entity": "gtg50014-e",
+      "reason": "模擬濫用沿用同一出口，缺少網路位移特徵；規則會漏報。"
+    }
+  ],
+  "truth_source": "Instructor-authored synthetic scenario labels, not the threat report."
+}

@@ -1,0 +1,14 @@
+{
+  "id": "moda-2026-01-public-sector-ai-playbook",
+  "org": "moda",
+  "org_zh": "數位發展部",
+  "title": "公部門人工智慧應用參考手冊 V1.0",
+  "title_zh": "台灣AI導入與資安驗收",
+  "published": "2026-01-28",
+  "url": "https://www-api.moda.gov.tw/File/Get/moda/zh-tw/WwHCroVhwWy52dw",
+  "source_type": "government",
+  "related_modules": ["01-cyber"],
+  "related_materials": ["01-cyber/GTG-50020-ai-supply-chain.md", "01-cyber/GTG-50021-fake-reseller.md", "_shared/02-claude-safeguards-and-bypass-paths.md"],
+  "summary_zh": "以台灣官方手冊練習AI資料權限、外掛與關鍵動作驗收，將治理原則轉成可追查證據。",
+  "added": "2026-09-19"
+}

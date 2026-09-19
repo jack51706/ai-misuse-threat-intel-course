@@ -14,6 +14,7 @@ from urllib.parse import urlsplit, urlunsplit, unquote
 import markdown
 from markdown.extensions import Extension
 from markdown.treeprocessors import Treeprocessor
+from content_quality import render_learning_panel
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 FIG_DIR = os.path.join(ROOT, "figures")
@@ -22,7 +23,7 @@ EMBED = os.environ.get("EMBED", "1") != "0"   # 預設把圖片內嵌成 base64�
 PUBLISH_DIRS = (
     "_shared", "01-cyber", "02-influence", "03-surveillance", "04-weapons",
     "05-bio", "06-scams", "07-distillation", "08-capability-research",
-    "09-external-research",
+    "09-external-research", "10-practice",
 )
 
 def is_publishable_source(path, root=None):
@@ -191,6 +192,14 @@ h2,h3,h4{scroll-margin-top:4rem}
 .skip-link{position:absolute;left:-10000px}
 .skip-link:focus{left:1rem;top:.4rem;background:var(--bg);padding:.3rem;z-index:2}
 .topbar{z-index:1}
+.learning-panel{margin:1em 0;padding:1em;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;background:var(--code-bg);font-size:.9rem}
+.learning-panel p{margin:.4em 0}.learning-panel summary{cursor:pointer;font-weight:600;padding:.35em 0}
+.learning-panel details+details{margin-top:.4em}.review-badge{font-weight:700}.review-date{color:var(--muted);font-size:.85em}
+.learning-panel[data-review-state="pending"]{border-left-color:#b06d12}
+.topic-jumps{display:flex;flex-wrap:wrap;gap:.6rem;margin:1.25rem 0}
+.topic-jumps a{display:block;border:1px solid var(--line);border-radius:6px;padding:.55rem .8rem;text-decoration:none;background:var(--code-bg)}
+.topic-jumps a:hover,.topic-jumps a:focus-visible{border-color:var(--accent);text-decoration:underline}
+@media(max-width:640px){table th,table td{min-width:8rem}}
 @media print{.topbar,.page-toc,.skip-link{display:none}body{max-width:none;padding:0;color:#111;background:#fff}a{color:inherit}pre,figure,img{break-inside:avoid}}
 hr{border:none;border-top:1px solid var(--line);margin:2em 0}
 """
@@ -210,6 +219,7 @@ MERMAID_JS = """
 def convert_one(md_path, rel_to_root):
     with open(md_path, encoding="utf-8") as f:
         text = f.read()
+    source_text = text
 
     # 1) 抽出 mermaid 區塊，換成 placeholder（避免 markdown 轉義破壞語法）
     blocks = []
@@ -265,9 +275,11 @@ def convert_one(md_path, rel_to_root):
         extension_configs={"toc": {"toc_depth": "2-3"}},
     )
     body = renderer.convert(text)
+    panel = render_learning_panel(rel_to_root.replace("\\", "/"), source_text, renderer.toc_tokens, ROOT)
     if renderer.toc_tokens:
         toc = f'<details class="page-toc"><summary>本頁目錄</summary><nav aria-label="本頁章節">{renderer.toc}</nav></details>'
         body = re.sub(r"</h1>", lambda m: m.group(0) + toc, body, count=1)
+    body = re.sub(r"</h1>", lambda m: m.group(0) + panel, body, count=1)
 
     # 3) 換回 mermaid（純文字，交給 mermaid.js 渲染）
     def unstash(m):

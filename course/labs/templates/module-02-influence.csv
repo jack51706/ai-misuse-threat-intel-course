@@ -1,0 +1,7 @@
+row_id,相對時間,虛構帳號,素材代碼,已知情境,觸及資料
+IO-1,09:00,fictional-a,event-notice-A,社區公告,未提供
+IO-2,09:01,fictional-b,event-notice-A,未知是否預排,未提供
+IO-3,09:01,fictional-c,event-notice-A,未知是否同一操作者,未提供
+IO-4,10:00,fictional-a,correction-B,更正活動時間,未提供
+IO-5,10:10,fictional-d,news-summary-C,一般摘要；資料來源未知,未提供
+IO-6,12:00,fictional-b,event-notice-A,可能是再次提醒；需補證據,未提供

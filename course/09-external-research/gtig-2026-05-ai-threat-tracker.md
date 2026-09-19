@@ -406,9 +406,9 @@ GTIG 的「Obfuscated LLM Access」一節等於把上面兩個個案**升級成�
 
 **兩句話其實不矛盾，而且必須一起讀才完整：**
 
-1. GTIG 自己在報告裡就記錄了 **UNC2814 的人設提示成功繞過**（並對應到 `AML.T0054: LLM Jailbreak`），也記錄了 **PROMPTSPY 的硬編碼提示「assigns a benign persona to bypass the LLM's safety filters」**。所以 GTIG 並不是說「沒人繞得過」，而是說「**沒人找到通用的、結構性的破口**」。
-2. Anthropic 說的是**逐案的守備率**，GTIG 說的是**架構的完整性**。用資安的類比：GTIG 說「城牆沒有被炸開」，Anthropic 說「有幾個人從側門混進來了」。兩句都對。
-3. **最有意思的推論是 GTIG 這句話的下半段**：正因為模型的核心邏輯難攻，對手「instead are leveraging **traditional supply chain tactics**」。**柵欄有效，會把攻擊壓力擠到別的層。** 這與本課程 `../shared/02-claude-safeguards-and-bypass-paths.html` 的五條規避路徑是同一個結論：柵欄不是紙糊的，正因為它有效，攻擊者才必須繞路，而繞路的方向就是**存取層**（偷金鑰、假帳號、聚合器）與**供應鏈層**。
+1. GTIG 同時記載個別人設框定與安全規避行為。因此「not yet achieved breakthrough capabilities」不等於從未出現成功個例；其觀測範圍與 breakthrough 定義仍須保留。
+2. Anthropic 提供個案中的拒絕與後續表現，並非一個有共同分母的守備率；GTIG 的概括亦不是對所有模型架構完整性的驗證。兩份敘述可並讀，但不能換成量化或普遍性結論。
+3. **分析假說**：來源記載供應鏈手段，可討論攻擊者是否因控制成本改變路徑；沒有反事實或時間配對資料，不能把「內容防護有效，所以攻擊必然轉移」當已證明因果。本課[五個規避／治理分析視角](../_shared/02-claude-safeguards-and-bypass-paths.html)用來定位控制責任，不驗證這個因果。
 
 **課堂設計建議**：把兩段原文並排投影，先問學員「這兩家是不是在互相打臉？」，再引導出「不同層次的主張」這個分析習慣。這是訓練 CTI 分析師讀廠商報告的核心技能。
 

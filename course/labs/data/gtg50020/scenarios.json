@@ -1,0 +1,27 @@
+[
+  {
+    "entity": "gtg50020-a",
+    "class": "simulated_abuse",
+    "explanation": "模擬不可信輸入後 canary 出現於未核准目的地；須查證因果。"
+  },
+  {
+    "entity": "gtg50020-b",
+    "class": "benign",
+    "explanation": "核准 gateway 的正常評測流量；允許清單不等於整體安全保證。"
+  },
+  {
+    "entity": "gtg50020-c",
+    "class": "benign",
+    "explanation": "只有不可信文件與普通外連，沒有 canary；不應只因輸入就判洩漏。"
+  },
+  {
+    "entity": "gtg50020-d",
+    "class": "benign",
+    "explanation": "核准的安全驗證工作同樣觸發；須核對變更單與目的地授權。"
+  },
+  {
+    "entity": "gtg50020-e",
+    "class": "simulated_abuse",
+    "explanation": "模擬外洩但缺少 secret_read 遙測，三階段關聯規則會漏報。"
+  }
+]

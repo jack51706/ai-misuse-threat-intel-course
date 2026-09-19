@@ -1,0 +1,1212 @@
+{
+  "schema_version": 1,
+  "pages": {
+    "00-index.md": {
+      "content_sha256": "6647c97f87a81dcd70fdd6857fa48c5bdc3f55514ea5a7b2d63c408dea921f29",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增角色交付表、實作入口及查核規範連結，修正初版全面查證的過度敘述。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "01-cyber/00-cyber-trends-and-skills.md": {
+      "content_sha256": "8f9dd436b889235e2d2530f766790b67230ce95036c8665bc775ec2b3aa9e64a",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "01-cyber/GTG-10007-exploit-foundry.md": {
+      "content_sha256": "1059158fbabbbb7a31386151cd672885aa619f59e9ae093a95bf62a98459f49f",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "pending": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "01-cyber/GTG-20006-russian-espionage.md": {
+      "content_sha256": "871f51620a79a605fb00184b527763eb98bb747075d8c1755e984ff7fedf6d92",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "01-cyber/GTG-50014-shinyhunters.md": {
+      "content_sha256": "fa5b6126cba8c8c9e036c7ede367ed020a2ce2a754d8ab3fdbe84723311f5a19",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "pending": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "01-cyber/GTG-50020-ai-supply-chain.md": {
+      "content_sha256": "8af54072cdf5a9958b10480ce4e9a1207f2bd492d564736a4d5cf916f1b46cd5",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "pending": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "01-cyber/GTG-50021-fake-reseller.md": {
+      "content_sha256": "4b8e2f440847cd7bd92440b52666ae98ec6d09d76b8f57fbf2295b243c118b6f",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "01-cyber/GTG-50029-hacktivist.md": {
+      "content_sha256": "a63fac31b80da4bdbf57eccba81ac00282d4bcd5fbf47000cc630dc5984a70b6",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "pending": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "02-influence/00-influence-intro-and-breakout-scale.md": {
+      "content_sha256": "fc43a1e9dd560939c8cf1545fc461ee6a806227b8a52014e5fba00d167a1c6b7",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "pending": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "02-influence/GTG-04001-russia-car-fimi.md": {
+      "content_sha256": "6dae82d8657710032c0072d84d889c2e030dad3b19db0177db3833bfefc5d0ad",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "02-influence/GTG-24015-russian-state-media.md": {
+      "content_sha256": "13d12adc5bd71deebf5643002bc8b7863607b3333a218abb295a4e6c4b7b933b",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "02-influence/GTG-34001-iran-icco.md": {
+      "content_sha256": "da55f9c598d9e722465b5b373c5c24ef2dd58f5889f6e4b7a491bbf516bd586b",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "02-influence/GTG-54002-influence-as-a-service.md": {
+      "content_sha256": "2c380b46f596cd0e806450e8b978b102c956a662b0bc11f0d6985514af1eff2d",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "02-influence/GTG-54004-kenya-cib.md": {
+      "content_sha256": "22ff0cceeb101759915218c13d5136b4296f82696185aff4c9171a2bee00753b",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "pending": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "02-influence/GTG-54006-bangladesh-awami-league.md": {
+      "content_sha256": "d34b25bfa873c3cc5a1d0dc4cbe1777dce0d6104d34f7c49d8732fdb0d78f7c8",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "02-influence/GTG-84002-uae-muslim-brotherhood.md": {
+      "content_sha256": "8511bb04ddb349a9d545b449bb1695c74dd3521877b1f78002c35d756bde13c5",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "02-influence/GTG-84005-malaysia-election-platform.md": {
+      "content_sha256": "912175818f98eecca131f799b3674323a158e931b8e9960bb48a8cbffd49811e",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "02-influence/GTG-84006-mek-ncri-viktor.md": {
+      "content_sha256": "13a49ab7b2d4ac1d535b08de1132c7d7e001736aa114462ba59f3038ed6b2903",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "pending": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "03-surveillance/00-surveillance-intro.md": {
+      "content_sha256": "f0539c5971dc77fcb72d81f30623c2bc2346607582da1d9f33a01a41d0f2900e",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "03-surveillance/GTG-14010-uyghurs-syria.md": {
+      "content_sha256": "720a12413844bf4d03d774df5161d973d467da7f275bdfc927bf105cfcd94e43",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "03-surveillance/GTG-14020-religious-affairs-taiwan-church.md": {
+      "content_sha256": "654077f93893fd846804d432fdd30c027cb21cfe6ea2a3145896b8c819535f42",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "pending": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "03-surveillance/GTG-14021-weiwen-transnational-repression.md": {
+      "content_sha256": "d6cd4c8ea6cb98359e14a3f8445b2781d9102e4adc5bbbc1eeaf99e2804474b8",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "03-surveillance/GTG-14022-public-opinion-monitoring-taiwan.md": {
+      "content_sha256": "800e41a127a16875d0ece46ad03fac401c81a7aa488cb1255aed7b1c3a9f6293",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "03-surveillance/GTG-30004-30005-30006-osint-recon.md": {
+      "content_sha256": "c62dffdb445c2c4140d408f94b92dd2d366178636e2b422e2cd90dce8aa53be0",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "03-surveillance/GTG-34007-iran-surveillance.md": {
+      "content_sha256": "d7cbc60dd2340a71917c32542728fce2ad4a24651561d35c1305efd1aba56ae4",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "03-surveillance/GTG-50027-mali-mass-interception.md": {
+      "content_sha256": "a188d4da570c20512ca31a1e39d0c8a0901d4bfef188f1f6920dddeefefd7d18",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "03-surveillance/GTG-54009-s2t-commercial-spyware.md": {
+      "content_sha256": "d0df0620397e5d6dcdf25f5093041d9ff5d2a4e5f20d63f526b8ed8dd92907cf",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "pending": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "04-weapons/00-weapons-intro-and-safeguards.md": {
+      "content_sha256": "e5901d79394ac14929b6a52431a8be6c74158872bb1ee93abd7eee76f8fceaa3",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "04-weapons/GTG-17001-fire-control-spec.md": {
+      "content_sha256": "12ef4867a3a5956ef0e890c7ea35e6a5a72c444143686195fb47d45125342393",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "04-weapons/GTG-17002-ew-sead-taiwan.md": {
+      "content_sha256": "6286089c431556a150856b3dcab42e202bfff59582460c82cfdab957fb2e2267",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "04-weapons/GTG-17003-directed-energy-intel.md": {
+      "content_sha256": "09aa1ecb60b571ba4376cd87802ed3e0392e82aa39ef432d9106fc4bfd6225e0",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "04-weapons/GTG-27005-autonomous-fpv-drone.md": {
+      "content_sha256": "bde076b423364666424b162ce80913165a71075e31b43b04a99d6d1a3bd6703a",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "04-weapons/GTG-27006-procurement-diversion.md": {
+      "content_sha256": "a25595fc0a698101467070d7383533d27add69659f8b16f370933b7f67a9ea86",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "04-weapons/GTG-87001-yemen-gnc.md": {
+      "content_sha256": "655fabd9b940d7c1c2ba0c60786483e6fc89a8357da346999ea7d8c7fd145613",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "05-bio/00-bio-intro-and-safeguards.md": {
+      "content_sha256": "aab44dd0c433f02978045a6eb0da13b7592c400432ff0cf4e217cb0c45b14dcd",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "05-bio/case1-classifier-caught.md": {
+      "content_sha256": "a2ab8f431b47b69efbbc703806e90574f320ec8255883f3077c6638525181fd6",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "05-bio/case2-weak-model-limit.md": {
+      "content_sha256": "41a008bbb1dc370535ab7461ff2ed9fa6d1580e9acdf051c73ed8c1eb8ae7e0f",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "05-bio/case3-classifier-gap.md": {
+      "content_sha256": "11bf3d81fb010790f53ea5d4f98401802dfe956ec431c6cde725f77ac29def86",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "05-bio/case4-5-venoms-toxins-out-of-scope.md": {
+      "content_sha256": "a159b357fae6c003696b7a49a876f6d089b1fdd90e3f9aaa3e1ff6ead879fdf0",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "06-scams/GTG-15001-dating-app-network.md": {
+      "content_sha256": "19a19aad924f78b33a1e040c170133b092d812af48eda774e48095cdc1065105",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "07-distillation/00-distillation-intro-and-mitigations.md": {
+      "content_sha256": "da6a6aac019c4ce04ec943f42a031f42bb7f26d94104c329d970cb0665eb11c2",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "07-distillation/GTG-16001-deepseek.md": {
+      "content_sha256": "5d4369036face99c5e187cff4b0ca58d9824bdcf81d6b4a71302b39c848efa68",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "pending": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "07-distillation/GTG-16002-moonshot.md": {
+      "content_sha256": "8bf4f46c8b72869f6555deb1afe8ceac009b44b37afc511314a8d4050131f056",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "07-distillation/GTG-16005-alibaba.md": {
+      "content_sha256": "bd92c83728486e496c871da1a881124641e6f3ae4a09060940588b60ac6e1bd9",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "07-distillation/GTG-16006-zhipu.md": {
+      "content_sha256": "c9494a18e90a463169ce2c8a1b0fdd41a260b974100be230810c9c809003d41f",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "07-distillation/GTG-16008-xiaomi.md": {
+      "content_sha256": "24cfaac7306aea77054cbb7008417749ece74e438220f1682764412e3b842d68",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 只檢查規則成熟度與未支持的效益最高說法，未重做事件或技術來源查證。",
+      "pending": [
+        "本次離線測試不驗證本篇 KQL/Sigma/YARA/產品設定。",
+        "原事件敘述、歸因與工具版本仍須按各節來源另行查核。"
+      ],
+      "changes": [
+        "精準校正未附實測的部署／效益措辭；保留原文引文與一般技術敘述。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "07-distillation/GTG-16012-16003-sensetime-minimax.md": {
+      "content_sha256": "ffa474db4dc90a24afb97ff93284607914104c1acd3d9f581df3ce411a7dbdd6",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "08-capability-research/01-targeting-evals.md": {
+      "content_sha256": "626dcf2361501b2d79a79673efb828dd0733c649e87ade51aa458bbde9081ec7",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "08-capability-research/02-weapons-dev-evals-and-policy.md": {
+      "content_sha256": "fc225f333788b4175177859ae59dd5efaced2e165e20fc1190e9ed170c54d1ee",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "09-external-research/00-external-research-intro.md": {
+      "content_sha256": "432a35bdd3ae7a07b3949dc2a4dda504d7378fe82ff6d6f9e973fa119b5a78cb",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次完成閱讀結構與本機連結檢查，並校正指定段落的證據界線、統計或推論；未重新查遍全文歷史來源。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。",
+        "並未重新查遍所有歷史來源的底層資料或將全部舊星等逐項重新評分。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。",
+        "分開來源接近程度、主張距離與獨立資料支持；統一星等讀法，機構數量、MITRE 編目、評論或官方重述不自動新增獨立事件證據。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "09-external-research/anthropic-2025-04-malicious-uses-report.md": {
+      "content_sha256": "5257ae16b52fded4525ee410dd5ef02c731a729c58fb521582f4a9a1dd88bae6",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次完成閱讀結構與本機連結檢查，並校正指定段落的證據界線、統計或推論；未重新查遍全文歷史來源。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。",
+        "本組為文本推論界線檢查，沒有重查全部 GTIG、Microsoft 事件、樣本或外部報導。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。",
+        "將跨廠商相似分類改為可比較的概念，不推成獨立驗證、共同必然弱點或控制失效頻率；未揭露遙測不等於平台沒有遙測。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "09-external-research/anthropic-2025-08-threat-intel-report.md": {
+      "content_sha256": "c951401886d2783fbbe543336b9ebedaaf5d5286ccce593664b1912d714342c2",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次完成閱讀結構與本機連結檢查，並校正指定段落的證據界線、統計或推論；未重新查遍全文歷史來源。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。",
+        "未在讀者環境、真實 SIEM 或模型上測試；未宣稱修訂後規則具有已驗證的偵測率。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。",
+        "把無測試支撐的即時部署、低誤報、最高精確度或最高投報率改為待驗證假說，補遙測、平台欄位與合法活動反例。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "09-external-research/anthropic-2025-11-ai-orchestrated-espionage.md": {
+      "content_sha256": "1d85a409cfe8f3329519b6f2a3a9e7dc246315c7d1fe9fe695a31e56a91ab469",
+      "checked_on": "2026-09-20",
+      "source_checked_on": "2026-09-19",
+      "scope": "本次完成閱讀結構與本機連結檢查，並校正指定段落的證據界線、統計或推論；未重新查遍全文歷史來源。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。",
+        "並未重新查遍所有歷史來源的底層資料或將全部舊星等逐項重新評分。",
+        "未取得分子分母、權重或原始時間紀錄；本次未重新下載 2025-11 PDF，時間表依既有教材保留並限制解讀。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。",
+        "分開來源接近程度、主張距離與獨立資料支持；統一星等讀法，機構數量、MITRE 編目、評論或官方重述不自動新增獨立事件證據。",
+        "80–90% 明列為來源對特定行動工作占比的估計，非成功率或已量測工時比；移除無配對依據的 12:1–40:1 結論。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）",
+      "source_check_scope": "核對 Anthropic 官網工作占比及約 4–6 次人類決策的原文範圍；時間表只作區間算術示意，標出缺少配對與並行條件。"
+    },
+    "09-external-research/anthropic-2026-02-distillation-disclosure.md": {
+      "content_sha256": "6b83321dc391a858c15b7140785dc3f20c4b6553cac86394990089b5eec775b1",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次完成閱讀結構與本機連結檢查，並校正指定段落的證據界線、統計或推論；未重新查遍全文歷史來源。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。",
+        "並未重新查遍所有歷史來源的底層資料或將全部舊星等逐項重新評分。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。",
+        "分開來源接近程度、主張距離與獨立資料支持；統一星等讀法，機構數量、MITRE 編目、評論或官方重述不自動新增獨立事件證據。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "09-external-research/arxiv-2024-04-one-day-agent-benchmark.md": {
+      "content_sha256": "a387576cc81bf90de3e3be924e8dc2c93dd309701e507c9a963aee306a2eb338",
+      "checked_on": "2026-09-20",
+      "source_checked_on": "2026-09-19",
+      "scope": "新教材的指定一手來源與證據類型核對；閱讀結構與本機連結檢查。",
+      "pending": [
+        "採用版本標示為預印本，本次未確認正式同行審查版本。",
+        "未取得完整提示與全部執行軌跡，未獨立重跑實驗。",
+        "可重建性篩選的小樣本不代表所有軟體、現實受害率或當前模型能力。",
+        "未逐一外部複核 Table 2 的 CVE 登錄，因此未轉製完整識別碼清單。"
+      ],
+      "changes": [
+        "新增政府／學術／台灣治理視角，明列數字條件與外推限制。"
+      ],
+      "detection_level": "研究／治理教材；未在真實環境驗證控制成效",
+      "source_check_scope": "核對 arXiv v2 版本紀錄、HTML 全文及 PDF；實看 Figure 1 與 Tables 1–4（實體 pp.4–6、8），核對 15 個情境、86.7% pass@5、40.0% overall success rate 及移除弱點說明後約 7% 的條件；查閱 dblp 書目分類。"
+    },
+    "09-external-research/gtig-2025-01-adversarial-misuse-generative-ai.md": {
+      "content_sha256": "8c3db84e452d96ce26e5b4e72132365c6e69dd2bcf03c172c3366ad6e2e3802b",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次完成閱讀結構與本機連結檢查，並校正指定段落的證據界線、統計或推論；未重新查遍全文歷史來源。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。",
+        "未在讀者環境、真實 SIEM 或模型上測試；未宣稱修訂後規則具有已驗證的偵測率。",
+        "本組為文本推論界線檢查，沒有重查全部 GTIG、Microsoft 事件、樣本或外部報導。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。",
+        "把無測試支撐的即時部署、低誤報、最高精確度或最高投報率改為待驗證假說，補遙測、平台欄位與合法活動反例。",
+        "將跨廠商相似分類改為可比較的概念，不推成獨立驗證、共同必然弱點或控制失效頻率；未揭露遙測不等於平台沒有遙測。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "09-external-research/gtig-2025-11-ai-threat-tracker.md": {
+      "content_sha256": "d581a8961bcb6b37f6d0be888158844f6c395e73640aee4a1e270cc679028a4d",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次完成閱讀結構與本機連結檢查，並校正指定段落的證據界線、統計或推論；未重新查遍全文歷史來源。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。",
+        "未在讀者環境、真實 SIEM 或模型上測試；未宣稱修訂後規則具有已驗證的偵測率。",
+        "本組為文本推論界線檢查，沒有重查全部 GTIG、Microsoft 事件、樣本或外部報導。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。",
+        "把無測試支撐的即時部署、低誤報、最高精確度或最高投報率改為待驗證假說，補遙測、平台欄位與合法活動反例。",
+        "將跨廠商相似分類改為可比較的概念，不推成獨立驗證、共同必然弱點或控制失效頻率；未揭露遙測不等於平台沒有遙測。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "09-external-research/gtig-2026-02-ai-threat-tracker.md": {
+      "content_sha256": "f4477b8b55eb4e47d5472994b8ec444b2466d4fa96811a70e4bccd11e16bf6cd",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次完成閱讀結構與本機連結檢查，並校正指定段落的證據界線、統計或推論；未重新查遍全文歷史來源。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。",
+        "本組為文本推論界線檢查，沒有重查全部 GTIG、Microsoft 事件、樣本或外部報導。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。",
+        "將跨廠商相似分類改為可比較的概念，不推成獨立驗證、共同必然弱點或控制失效頻率；未揭露遙測不等於平台沒有遙測。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "09-external-research/gtig-2026-05-ai-threat-tracker.md": {
+      "content_sha256": "ad67b9c0cd59e42dbc7c15ce2783c911e1194ddf49f804c67ecb94043ffb1e13",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次完成閱讀結構與本機連結檢查，並校正指定段落的證據界線、統計或推論；未重新查遍全文歷史來源。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。",
+        "本組為文本推論界線檢查，沒有重查全部 GTIG、Microsoft 事件、樣本或外部報導。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。",
+        "將跨廠商相似分類改為可比較的概念，不推成獨立驗證、共同必然弱點或控制失效頻率；未揭露遙測不等於平台沒有遙測。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "09-external-research/gtig-2026-09-ai-threat-tracker.md": {
+      "content_sha256": "f996e5c425c3bfbe61edad616014e4203da4c4c6393986b984ab9e96d508386a",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次完成閱讀結構與本機連結檢查，並校正指定段落的證據界線、統計或推論；未重新查遍全文歷史來源。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。",
+        "未在讀者環境、真實 SIEM 或模型上測試；未宣稱修訂後規則具有已驗證的偵測率。",
+        "本組為文本推論界線檢查，沒有重查全部 GTIG、Microsoft 事件、樣本或外部報導。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。",
+        "把無測試支撐的即時部署、低誤報、最高精確度或最高投報率改為待驗證假說，補遙測、平台欄位與合法活動反例。",
+        "將跨廠商相似分類改為可比較的概念，不推成獨立驗證、共同必然弱點或控制失效頻率；未揭露遙測不等於平台沒有遙測。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "09-external-research/hacktron-2026-09-openai-libheif-rce.md": {
+      "content_sha256": "2ab5c5d1933db9335c0c9e83d680026b26c3893f7f71882590f981ea5a66007a",
+      "checked_on": "2026-09-20",
+      "source_checked_on": "2026-09-19",
+      "scope": "本次完成閱讀結構與本機連結檢查，並校正指定段落的證據界線、統計或推論；未重新查遍全文歷史來源。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。",
+        "並未重新查遍所有歷史來源的底層資料或將全部舊星等逐項重新評分。",
+        "未取得原始賞金回覆、完整操作紀錄、受測平台授權範圍或供應商獨立確認；未重現漏洞，也未連線 IOC。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。",
+        "分開來源接近程度、主張距離與獨立資料支持；統一星等讀法，機構數量、MITRE 編目、評論或官方重述不自動新增獨立事件證據。",
+        "核對研究者頁面發布日、libheif 版本、修補時序及偵測可見度；撤回未有出處的 /goal 原生 CLI 歸屬、無偵測與全面合法或賞金證實等斷言。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）",
+      "source_check_scope": "讀取作者原文中日期、平台版本、模型嘗試、/goal 迴圈、偵測敘述、揭露與賞金段落；將模型比較限於其自述特定嘗試。"
+    },
+    "09-external-research/microsoft-2026-03-ai-as-tradecraft.md": {
+      "content_sha256": "b16536d9a723047f329582877049465e249279f3d39dbd8c0134ce839e6a6a87",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次完成閱讀結構與本機連結檢查，並校正指定段落的證據界線、統計或推論；未重新查遍全文歷史來源。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。",
+        "本組為文本推論界線檢查，沒有重查全部 GTIG、Microsoft 事件、樣本或外部報導。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。",
+        "將跨廠商相似分類改為可比較的概念，不推成獨立驗證、共同必然弱點或控制失效頻率；未揭露遙測不等於平台沒有遙測。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "09-external-research/microsoft-2026-07-captivecrunch-storm-2945.md": {
+      "content_sha256": "fb0d240c31b922623a30a28056cc33ad760ca5f2485db4b99facd410a12f1f87",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "09-external-research/moda-2026-01-public-sector-ai-playbook.md": {
+      "content_sha256": "1168e2e24a13086bad83975c7c010f0d75ba8a462b20354784ee5d9f458e8b7a",
+      "checked_on": "2026-09-20",
+      "source_checked_on": "2026-09-19",
+      "scope": "新教材的指定一手來源與證據類型核對；閱讀結構與本機連結檢查。",
+      "pending": [
+        "選讀章節核對，不是整本手冊逐句法遵審查。",
+        "未取得真實機關採用率、阻擋效果或誤報資料，不視為台灣 AI 攻擊事件實證。",
+        "教材驗收步驟及評分為教學設計，不能視為新增官方義務。",
+        "未獨立驗證任何 GTG 案例，也未保證手冊其他章節的服務與法規資訊仍然適用。"
+      ],
+      "changes": [
+        "新增政府／學術／台灣治理視角，明列數字條件與外推限制。"
+      ],
+      "detection_level": "研究／治理教材；未在真實環境驗證控制成效",
+      "source_check_scope": "核對官方下載入口、PDF V1.0 修訂史（115.01.28）及 96 個實體頁；選讀 §2.1、§3.6、§4.3–4.4；實看 pp.22、65、81–84 的生命週期、驗收與資安圖表，區分空白檢核工具與成效證據。"
+    },
+    "09-external-research/ncsc-2025-05-ai-cyber-threat-2027.md": {
+      "content_sha256": "fc0e728e6a2357fc061dfead9284c6fcecf15d08834d5940ef9868cc58418d4e",
+      "checked_on": "2026-09-20",
+      "source_checked_on": "2026-09-19",
+      "scope": "新教材的指定一手來源與證據類型核對；閱讀結構與本機連結檢查。",
+      "pending": [
+        "政府評估包含未公開情報，未取得底層樣本或判斷權重。",
+        "沒有完成預測校準或結果驗證，不能將概率用語當成實際事件比例。",
+        "ATT&CK 對應、控制與作業規準為教材分析，未獨立驗證任何 GTG 案例。"
+      ],
+      "changes": [
+        "新增政府／學術／台灣治理視角，明列數字條件與外推限制。"
+      ],
+      "detection_level": "研究／治理教材；未在真實環境驗證控制成效",
+      "source_check_scope": "核對官方頁面的發布日期、NCSC assessment、Key judgements、Context、Assessment 與 Implications；讀取官方 PDF，實看實體 p.2 概率尺度，核對用語對應範圍。"
+    },
+    "09-external-research/openai-2025-06-disrupting-malicious-uses.md": {
+      "content_sha256": "99f1844f79e429b4869cb7acaa0be517db45f5a96ea6de7f6ba47c11b0bb7666",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次完成閱讀結構與本機連結檢查，並校正指定段落的證據界線、統計或推論；未重新查遍全文歷史來源。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。",
+        "未在讀者環境、真實 SIEM 或模型上測試；未宣稱修訂後規則具有已驗證的偵測率。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。",
+        "把無測試支撐的即時部署、低誤報、最高精確度或最高投報率改為待驗證假說，補遙測、平台欄位與合法活動反例。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "09-external-research/openai-2025-10-disrupting-malicious-uses.md": {
+      "content_sha256": "e4221fe73e142c9c6964ab1fbbddc7fddaf5f39dd70d17ed22fe6f79c5c5af52",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "09-external-research/openai-2026-02-disrupting-malicious-uses.md": {
+      "content_sha256": "1339d1d36fc1e7d693abc4ba77ec692f157204cdf83269bd1140901178f2ac04",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "10-practice/00-practice-guide.md": {
+      "content_sha256": "a421b5d0820ad21ce9c9ce5b60bff18bc2ab9b4746870f3af0ade326a69a95ca",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 Python 規則 1.0.0；45 筆合成事件、15 個手工情境與明確 expected outputs；包含已知 FP/FN。",
+      "pending": [
+        "只驗證合成 metadata 的程式行為，不驗證正式環境防禦效能。",
+        "未驗證語意分類器、DLP、真實日誌 schema 或後端規則。",
+        "所有情境與門檻為教學設計，不是原報告公開資料。"
+      ],
+      "changes": [
+        "新增九模組專屬紙上作業入口、三套完整離線案例、學員與講師材料、100 分規準和指定資料驗證。"
+      ],
+      "detection_level": "Python 規則 1.0.0 於指定合成資料測試通過；刻意保留已知誤報與漏報"
+    },
+    "10-practice/01-50014-student.md": {
+      "content_sha256": "61d198139a34aa792d531f2bb87634fa98eb75277e8346604e5e063453e9af3b",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 Python 規則 1.0.0；45 筆合成事件、15 個手工情境與明確 expected outputs；包含已知 FP/FN。",
+      "pending": [
+        "只驗證合成 metadata 的程式行為，不驗證正式環境防禦效能。",
+        "未驗證語意分類器、DLP、真實日誌 schema 或後端規則。",
+        "所有情境與門檻為教學設計，不是原報告公開資料。"
+      ],
+      "changes": [
+        "新增九模組專屬紙上作業入口、三套完整離線案例、學員與講師材料、100 分規準和指定資料驗證。"
+      ],
+      "detection_level": "Python 規則 1.0.0 於指定合成資料測試通過；刻意保留已知誤報與漏報"
+    },
+    "10-practice/02-50014-instructor.md": {
+      "content_sha256": "18e934e433beb0e4741e0437abd69a1c963d7f4e753c2aecb54be597c4c28066",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 Python 規則 1.0.0；45 筆合成事件、15 個手工情境與明確 expected outputs；包含已知 FP/FN。",
+      "pending": [
+        "只驗證合成 metadata 的程式行為，不驗證正式環境防禦效能。",
+        "未驗證語意分類器、DLP、真實日誌 schema 或後端規則。",
+        "所有情境與門檻為教學設計，不是原報告公開資料。"
+      ],
+      "changes": [
+        "新增九模組專屬紙上作業入口、三套完整離線案例、學員與講師材料、100 分規準和指定資料驗證。"
+      ],
+      "detection_level": "Python 規則 1.0.0 於指定合成資料測試通過；刻意保留已知誤報與漏報"
+    },
+    "10-practice/03-14020-student.md": {
+      "content_sha256": "faffa49e967bf1a68c4c1233f354c02557a1c9c5dd01737dedd78e7a4c6fe904",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 Python 規則 1.0.0；45 筆合成事件、15 個手工情境與明確 expected outputs；包含已知 FP/FN。",
+      "pending": [
+        "只驗證合成 metadata 的程式行為，不驗證正式環境防禦效能。",
+        "未驗證語意分類器、DLP、真實日誌 schema 或後端規則。",
+        "所有情境與門檻為教學設計，不是原報告公開資料。"
+      ],
+      "changes": [
+        "新增九模組專屬紙上作業入口、三套完整離線案例、學員與講師材料、100 分規準和指定資料驗證。"
+      ],
+      "detection_level": "Python 規則 1.0.0 於指定合成資料測試通過；刻意保留已知誤報與漏報"
+    },
+    "10-practice/04-14020-instructor.md": {
+      "content_sha256": "db931debc22252b1b72d9fc65ce59217fc38de0767a6c691e7899d173cf40d6d",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 Python 規則 1.0.0；45 筆合成事件、15 個手工情境與明確 expected outputs；包含已知 FP/FN。",
+      "pending": [
+        "只驗證合成 metadata 的程式行為，不驗證正式環境防禦效能。",
+        "未驗證語意分類器、DLP、真實日誌 schema 或後端規則。",
+        "所有情境與門檻為教學設計，不是原報告公開資料。"
+      ],
+      "changes": [
+        "新增九模組專屬紙上作業入口、三套完整離線案例、學員與講師材料、100 分規準和指定資料驗證。"
+      ],
+      "detection_level": "Python 規則 1.0.0 於指定合成資料測試通過；刻意保留已知誤報與漏報"
+    },
+    "10-practice/05-50020-student.md": {
+      "content_sha256": "c52d6be169367ebd6652b5b34a403fad2805ca30fdbf7f683e7abccc9611b862",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 Python 規則 1.0.0；45 筆合成事件、15 個手工情境與明確 expected outputs；包含已知 FP/FN。",
+      "pending": [
+        "只驗證合成 metadata 的程式行為，不驗證正式環境防禦效能。",
+        "未驗證語意分類器、DLP、真實日誌 schema 或後端規則。",
+        "所有情境與門檻為教學設計，不是原報告公開資料。"
+      ],
+      "changes": [
+        "新增九模組專屬紙上作業入口、三套完整離線案例、學員與講師材料、100 分規準和指定資料驗證。"
+      ],
+      "detection_level": "Python 規則 1.0.0 於指定合成資料測試通過；刻意保留已知誤報與漏報"
+    },
+    "10-practice/06-50020-instructor.md": {
+      "content_sha256": "cb6bdf92ed9ad0859b5955101227aef06c854818ef121a0a6e9aca266b744763",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。 Python 規則 1.0.0；45 筆合成事件、15 個手工情境與明確 expected outputs；包含已知 FP/FN。",
+      "pending": [
+        "只驗證合成 metadata 的程式行為，不驗證正式環境防禦效能。",
+        "未驗證語意分類器、DLP、真實日誌 schema 或後端規則。",
+        "所有情境與門檻為教學設計，不是原報告公開資料。"
+      ],
+      "changes": [
+        "新增九模組專屬紙上作業入口、三套完整離線案例、學員與講師材料、100 分規準和指定資料驗證。"
+      ],
+      "detection_level": "Python 規則 1.0.0 於指定合成資料測試通過；刻意保留已知誤報與漏報"
+    },
+    "_shared/01-cross-cutting-analysis.md": {
+      "content_sha256": "be9f9721a3fe347a1486492f2e932077043eee3cba57378b5dc07ce21aab67f8",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次完成閱讀結構與本機連結檢查，並校正指定段落的證據界線、統計或推論；未重新查遍全文歷史來源。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。",
+        "未取得完整模型對話；沒有記載的拒絕不能補判為有或無。",
+        "框架是教材分析，不是官方分類或控制效力測試；未取得密碼協定細節，不自行推定 AEAD 實作。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。",
+        "區分未記載、明確否定與已觀察行為；GTG-14020 不列為已觀察到的拒絕後重提示，保留未知。",
+        "建立四失效模式、五個規避／治理分析視角與七個手法族對照；撤回內容控制無效、跨模型全部適用、地端全部繼承攻擊面與任意重放可解密的普遍化。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    },
+    "_shared/02-claude-safeguards-and-bypass-paths.md": {
+      "content_sha256": "74ca3b37338dfb3c9dcaa7266a6b6cfdd8ebaf54127f9b8c6a0b6485b2c81d67",
+      "checked_on": "2026-09-20",
+      "source_checked_on": "2026-09-19",
+      "scope": "全文教學重構與指定主張、術語及來源範圍校正。",
+      "pending": [
+        "未取得原始遙測，未獨立重現報告事件。",
+        "工程建議未在生產環境或真實模型測試。",
+        "合成實作僅驗證附帶資料與規則。"
+      ],
+      "changes": [
+        "重整12節閱讀順序與四個快速入口",
+        "拆分內容、工具授權、執行與處置",
+        "補正常反例、測試口徑、講師評分與離線實作",
+        "移除未鎖定版本的工具命令、未驗證賞金與免疫推論",
+        "校正 SupaPwn 早期 Lovable 測試未跨租戶、不可直接接成後續研究鏈的邊界。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）",
+      "source_check_scope": "核對 PDF p.3、30、95、97、104、131、135–137 的指定主張；核對 OWASP LLM01/06/07 與官方工具定位。SupaPwn 依研究者原文限定敘述範圍；未獨立重現。"
+    },
+    "_shared/03-guardrail-bypass-and-defense-overview.md": {
+      "content_sha256": "01274cf09bab7781e2e85e29cd7a20ae962e1687ca7bc611a2e86219ba100021",
+      "checked_on": "2026-09-20",
+      "source_checked_on": "2026-09-19",
+      "scope": "本次完成閱讀結構與本機連結檢查，並校正指定段落的證據界線、統計或推論；未重新查遍全文歷史來源。",
+      "pending": [
+        "歷史引文、歸因、圖表、IOC、框架對應與外部來源仍須逐項核對。",
+        "未附實測的防禦建議需依指定環境驗證。",
+        "未取得完整模型對話；沒有記載的拒絕不能補判為有或無。",
+        "本次驗證表內計數與分類口徑，未以原始對話重新編碼每一案例。",
+        "未取得攻擊者完整對話或所有引用來源原始紀錄；沒有補出操作步驟。",
+        "框架是教材分析，不是官方分類或控制效力測試；未取得密碼協定細節，不自行推定 AEAD 實作。"
+      ],
+      "changes": [
+        "新增分層閱讀、學習產出與明確的查核範圍。",
+        "區分未記載、明確否定與已觀察行為；GTG-14020 不列為已觀察到的拒絕後重提示，保留未知。",
+        "保留原表 F1–F7 計數，明定分母為 40 個教材分組；合併列、間接關聯、推論與反例均揭露，不稱盛行率或成功率。",
+        "輸入摘錄、來源作者的機制敘述、教材示意分開；撤回全課僅 F6 有原文與 GTG-1002 敘述可代表 GTG-10007 提示詞的暗示。",
+        "建立四失效模式、五個規避／治理分析視角與七個手法族對照；撤回內容控制無效、跨模型全部適用、地端全部繼承攻擊面與任意重放可解密的普遍化。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）",
+      "source_check_scope": "核對 Anthropic 2025-11 官網對身分框定及任務拆分的敘事角色；保留 2026-09 蒸餾章為輸入摘錄而非完整提示。"
+    },
+    "_shared/04-evidence-and-methods.md": {
+      "content_sha256": "5f11aa5454a6c18f073da2f9a2c1fca4f8b135ef8c3f943f7c26fea2a33d7d1b",
+      "checked_on": "2026-09-20",
+      "source_checked_on": "2026-09-19",
+      "scope": "本次完成閱讀結構與本機連結檢查，並校正指定段落的證據界線、統計或推論；未重新查遍全文歷史來源。",
+      "pending": [
+        "本頁為編輯與方法說明，不代表所有歷史教材都已完成逐項查證。",
+        "未取得完整模型對話；沒有記載的拒絕不能補判為有或無。",
+        "本次驗證表內計數與分類口徑，未以原始對話重新編碼每一案例。",
+        "未取得攻擊者完整對話或所有引用來源原始紀錄；沒有補出操作步驟。",
+        "並未重新查遍所有歷史來源的底層資料或將全部舊星等逐項重新評分。",
+        "未取得分子分母、權重或原始時間紀錄；本次未重新下載 2025-11 PDF，時間表依既有教材保留並限制解讀。",
+        "未在讀者環境、真實 SIEM 或模型上測試；未宣稱修訂後規則具有已驗證的偵測率。",
+        "框架是教材分析，不是官方分類或控制效力測試；未取得密碼協定細節，不自行推定 AEAD 實作。",
+        "規範更新不表示每份歷史教材已全面符合，後續複核須逐頁記錄範圍與待辦。"
+      ],
+      "changes": [
+        "新增全站共用證據規範、查核狀態解讀與重點勘誤。",
+        "區分未記載、明確否定與已觀察行為；GTG-14020 不列為已觀察到的拒絕後重提示，保留未知。",
+        "保留原表 F1–F7 計數，明定分母為 40 個教材分組；合併列、間接關聯、推論與反例均揭露，不稱盛行率或成功率。",
+        "輸入摘錄、來源作者的機制敘述、教材示意分開；撤回全課僅 F6 有原文與 GTG-1002 敘述可代表 GTG-10007 提示詞的暗示。",
+        "分開來源接近程度、主張距離與獨立資料支持；統一星等讀法，機構數量、MITRE 編目、評論或官方重述不自動新增獨立事件證據。",
+        "80–90% 明列為來源對特定行動工作占比的估計，非成功率或已量測工時比；移除無配對依據的 12:1–40:1 結論。",
+        "把無測試支撐的即時部署、低誤報、最高精確度或最高投報率改為待驗證假說，補遙測、平台欄位與合法活動反例。",
+        "建立四失效模式、五個規避／治理分析視角與七個手法族對照；撤回內容控制無效、跨模型全部適用、地端全部繼承攻擊面與任意重放可解密的普遍化。",
+        "編輯規範補入證據狀態、分母、獨立性、來源取得與實測成熟度；移除固定長篇行數要求以避免重複填充。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）",
+      "source_check_scope": "核對 Anthropic 2025-11 官網對身分框定及任務拆分的敘事角色；保留 2026-09 蒸餾章為輸入摘錄而非完整提示。；核對 Anthropic 官網工作占比及約 4–6 次人類決策的原文範圍；時間表只作區間算術示意，標出缺少配對與並行條件。"
+    },
+    "_shared/05-editorial-review-and-changelog.md": {
+      "content_sha256": "5745784c479e46039e6897bea0065ecf5ed18dd6fd384109ef8c660272e57721",
+      "checked_on": "2026-09-20",
+      "source_checked_on": null,
+      "scope": "本次僅完成導讀／章節結構整合與離線本機連結檢查；不包含歷史正文來源逐項複核。",
+      "pending": [
+        "本頁為編輯與方法說明，不代表所有歷史教材都已完成逐項查證。"
+      ],
+      "changes": [
+        "新增全站共用證據規範、查核狀態解讀與重點勘誤。"
+      ],
+      "detection_level": "概念／待環境驗證（未因本次結構檢查升級）"
+    }
+  }
+}

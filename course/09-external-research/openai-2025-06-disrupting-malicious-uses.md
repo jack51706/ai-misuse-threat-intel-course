@@ -219,7 +219,7 @@ flowchart TD
     F -.-> C
 ```
 
-**最強的偵測訊號是「名稱與語言的錯配」**：報告舉例，一個韓文名稱的帳號發烏爾都語留言，泰文與希伯來文名稱的帳號發英文留言（p.8）。這是低成本人設養殖場的典型指紋，**不需要任何模型側資料就能在平台端偵測**。
+**可供調查的線索是名稱、語言與宣稱身分是否矛盾**。報告列舉的語言組合可作討論材料，但跨語言使用本身很常見，不能單獨判定假人設、國籍或惡意；需要帳號關係、協同行為與其他證據。
 
 ---
 
@@ -430,7 +430,7 @@ flowchart TD
 
 1. **追蹤比失衡**：截圖顯示四個帳號分別是 1,080 追蹤 / 239 被追蹤、1,511 / 96、867 / 227、1,770 / 345（p.36）。追蹤遠多於被追蹤是**濫追求曝光**的典型模式。
 2. **建立時間叢集**：四個帳號中三個「Joined August 2024」、一個「Joined October 2024」。
-3. **無關主題標籤的搭便車**：蘇格蘭獨立、愛爾蘭統一、英國移民政策三組推文全都掛了 **`#YaliCapkini`**（p.38）。這是一部土耳其電視劇的標籤，與內容毫無關係，**用途是蹭高流量標籤的曝光**。這是本報告最乾淨的一個可自動化偵測特徵：**「政治內容 + 與主題無關的高流量娛樂標籤」是一個高精確度的協同行為訊號。**
+3. **無關主題標籤的搭便車**：報告的政治貼文使用了與主題無關的娛樂標籤（p.38）。可研究帳號群反覆使用這類標籤的行為，但正常行銷也可能如此；這是待測的協同線索，不是已驗證的高精確度訊號。
 
 **另一個要記的細節是「操作者失誤」**：報告指出某一則巴勒斯坦議題的推文，發文帳號平常是**專發蘇格蘭議題的英語帳號，卻突然發了西班牙文**，OpenAI 評語是「may indicate an operator error」（p.40）。**人設語言的突變是最容易自動化偵測的操作失誤之一**，SOC 可以直接把「單一帳號的語言分布突變」做成告警規則。
 
@@ -897,7 +897,7 @@ Bluesky 介面，橫幅是美國國會大廈前的抗議人群。圓形頭像是
 上半（蘇格蘭獨立與批評英國）：左推文「This is not just a political movement, it's a deep, unshakable belief that the people of Scotland deserve to shape their own future, in their own voice, with their own hands. #scotland #YaliCapkini #ScottishIndependenceASAP」配蘇格蘭國旗照片，**103 Views**；右推文「Starmer's immigration policies are starting to mirror the cruelty of his predecessors, change was promised, but discrimination is what we got #EnoughIsEnough #YaliCapkini」配一段海上救生艇的影片（0:15），**116 Views**。
 下半（愛爾蘭統一）：左推文「Ireland deserves to be whole. The time has come to end British rule in the North and reunite the island under one independent Irish nation. #SinnFein #YaliCapkini #Irishfreedom」配 Mary Lou McDonald 與 Michelle O'Neill 的合照，「10:55 PM Apr 17, 2025 · **85 Views**」；右推文「British colonialism has no place in Ireland. The future belongs to an Ireland united in freedom, equality, and peace #SinnFein #YaliCapkini #Irishfreedom」配兩名揮舞愛爾蘭國旗的兒童照片，「10:57 PM Apr 17, 2025 · **76 Views**」。
 **核心訊息**：**四則推文、兩個不同國家的議題，全部掛著 `#YaliCapkini`。**
-**課堂用法**：這是本報告**最可操作的一個偵測特徵**。`YaliCapkini`（土耳其電視劇《Yalı Çapkını》）與蘇格蘭獨立、愛爾蘭統一、英國移民政策沒有任何關係，掛它的唯一目的是蹭該標籤的高流量。**規則設計**：「同一帳號群在政治內容上重複使用與主題無關的高流量娛樂標籤」是一個高精確度、低誤報的協同行為訊號，SOC 或平台可以直接實作。另外注意兩則愛爾蘭推文相隔**兩分鐘**（10:55 與 10:57），這是批次發布的時間指紋。
+**課堂用法**：測試「帳號群在政治內容反覆使用不相干娛樂標籤」這個假說，加入正常宣傳、迷因與跨語言社群作反例。不要先稱它高精確度、低誤報或可直接阻擋；兩則貼文相隔兩分鐘也只能是時間線索，不能單獨證明批次操作。
 
 **圖 20（p.37）：拉丁裔權益的兩則西班牙文推文**
 左：「Diversity enriches our communities, and the politics of exclusion only seed hate and division. Let's raise our voices to say that inclusion is our strength and we won't allow ignorance to destroy the fabric of our society.」（圖說提供的官方英譯）。右：「Trump promised to build a wall, but what he really raised was hatred. Against this hate, we Latinos raise our voices, histories and collective strength.」
@@ -989,7 +989,7 @@ Bluesky 介面，橫幅是美國國會大廈前的抗議人群。圓形頭像是
 | 3 | 留言帳號零貼文、零追蹤、0 到 10 追蹤者 | High Five | 三個條件同時成立即為高風險帳號 |
 | 4 | 帳號建立時間叢集（同一週或同一月大量建立） | High Five、STORM-2035 | 依首次個檔照片上傳日期而非宣稱的建立日期 |
 | 5 | 追蹤數遠大於被追蹤數（4 倍以上） | STORM-2035 | 搭配第 3、4 項使用 |
-| 6 | 政治內容掛與主題無關的高流量娛樂標籤 | STORM-2035（`#YaliCapkini`） | **最高精確度的單一訊號** |
+| 6 | 政治內容掛與主題無關的娛樂標籤 | STORM-2035 | 待驗證的協同線索；需加入正常行銷等反例，不以單一標籤判定惡意 |
 | 7 | 單一帳號的貼文語言突然改變 | STORM-2035（操作失誤） | 語言分布突變告警 |
 | 8 | 高追蹤數 + 長期沉寂 + 曾改名 | VAGue Focus | 收購或盜用帳號的三件套 |
 | 9 | 同批帳號在兩分鐘內發布同主題貼文 | STORM-2035 | 時間叢集分析 |

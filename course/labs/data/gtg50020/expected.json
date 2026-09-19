@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "alerts": [
+    {
+      "rule_id": "LAB-50020-01",
+      "entity": "gtg50020-a",
+      "evidence_ids": [
+        "gtg50020-a01",
+        "gtg50020-a02",
+        "gtg50020-a03"
+      ],
+      "disposition": "human_review_only"
+    },
+    {
+      "rule_id": "LAB-50020-01",
+      "entity": "gtg50020-d",
+      "evidence_ids": [
+        "gtg50020-d01",
+        "gtg50020-d02",
+        "gtg50020-d03"
+      ],
+      "disposition": "human_review_only"
+    }
+  ],
+  "metrics": {
+    "tp": 1,
+    "fp": 1,
+    "tn": 2,
+    "fn": 1,
+    "precision": 0.5,
+    "recall": 0.5,
+    "unit": "synthetic_scenario_entity"
+  },
+  "limitation": "Hand-authored expected outputs for synthetic teaching fixtures; no production accuracy claim.",
+  "known_false_positives": [
+    {
+      "entity": "gtg50020-d",
+      "reason": "核准的安全驗證工作同樣觸發；須核對變更單與目的地授權。"
+    }
+  ],
+  "known_false_negatives": [
+    {
+      "entity": "gtg50020-e",
+      "reason": "模擬外洩但缺少 secret_read 遙測，三階段關聯規則會漏報。"
+    }
+  ],
+  "truth_source": "Instructor-authored synthetic scenario labels, not the threat report."
+}

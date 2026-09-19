@@ -695,7 +695,7 @@ flowchart TD
 | **未揭露任何偵測延遲** | 影響力行動的帳號建立於 2023-05 與 2023-10，貼文橫跨 Jan 至 Mar 2025，報告 2025-04 發布。**這個行動至少運作了數個月、發了近 5,000 則貼文才被切斷**，但報告完全沒有提到「多久才發現」 | 2026-09 對多案給了時間跨度（如 GTG-50014 的 118 天 campaign span），可比性提高 |
 | **未說明是否通知平台** | 封的是 Claude 帳號。**X 與 Facebook 上的 100 多個 bot 帳號，報告沒有任何一句話交代後續** | 2026-09 明說「Each case explains how we found the activity and **who else contributed to the investigation**」［p.42］，並在多案提及跨業界資料 |
 | **未說明是否通報執法** | 完全沒有提及 | 2026-09：「shared intelligence with authorities and industry partners, where appropriate」［p.3］ |
-| **無任何具體的規避案例** | 導言承認「threat actors continue to explore methods to circumvent」，但四案全部沒有描述任何一次繞過、拒答或重新提示 | 2026-09 大量自曝：分類器被重新提示突破、跨工作階段拆分後表現不一致、工具請求看似中性。本課程在 `../shared/02-claude-safeguards-and-bypass-paths.html` 有完整的五條規避路徑 |
+| **本篇未揭露具體規避序列** | 導言提及規避探索，但四案未提供完整拒絕與重提示序列；未知不等於未發生 | 可與 2026-09 的個別記載比較；[本課五個規避／治理分析視角](../_shared/02-claude-safeguards-and-bypass-paths.html)屬教材分類，不能補出本期未知操作。 |
 | **未量化任何事** | 沒有封禁帳號數、沒有偵測到的對話數、沒有分類器覆蓋率、沒有誤報率 | 2026-09 有大量量化；2026-06 的《Mapping AI-enabled cyber threats》甚至公布 832 個封禁帳號的技術分布 |
 | **封號等於中斷嗎** | 報告寫「While we have disrupted this **specific operation**」，用詞謹慎。但 JSON 人設狀態、社群帳號、客戶關係全部在 Anthropic 的控制範圍之外，**行為者只要換一個 API 供應商就能續跑** | 2026-09 明說可見性「ends once it's live」［p.42］，並在 GTG-50021、蒸餾章節多次描述封號後行為者並未停止 |
 

@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "alerts": [
+    {
+      "rule_id": "LAB-14020-01",
+      "entity": "gtg14020-a",
+      "evidence_ids": [
+        "gtg14020-a01",
+        "gtg14020-a02",
+        "gtg14020-a03",
+        "gtg14020-a04"
+      ],
+      "disposition": "human_review_only"
+    },
+    {
+      "rule_id": "LAB-14020-01",
+      "entity": "gtg14020-d",
+      "evidence_ids": [
+        "gtg14020-d01",
+        "gtg14020-d02",
+        "gtg14020-d03",
+        "gtg14020-d04"
+      ],
+      "disposition": "human_review_only"
+    }
+  ],
+  "metrics": {
+    "tp": 1,
+    "fp": 1,
+    "tn": 2,
+    "fn": 1,
+    "precision": 0.5,
+    "recall": 0.5,
+    "unit": "synthetic_scenario_entity"
+  },
+  "limitation": "Hand-authored expected outputs for synthetic teaching fixtures; no production accuracy claim.",
+  "known_false_positives": [
+    {
+      "entity": "gtg14020-d",
+      "reason": "授權稽核使用虛構個案且被預先風險標註；規則會誤報。"
+    }
+  ],
+  "known_false_negatives": [
+    {
+      "entity": "gtg14020-e",
+      "reason": "模擬高風險工作流只有三個主體，未達四個門檻；規則會漏報。"
+    }
+  ],
+  "truth_source": "Instructor-authored synthetic scenario labels, not the threat report."
+}
