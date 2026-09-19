@@ -9,7 +9,7 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 - `Anthropic-Detecting-and-countering-091026.pdf`：Anthropic 威脅情報報告《Detecting and countering misuse of AI: September 2026》，2026-09-10 發布，154 頁，約 11 MB。
 - `course/`：以這份 PDF 及同日發布的 Frontier Red Team 常規武器能力研究為本，產出的**繁體中文課程教材**（見下節）。
 
-位於 OneDrive 同步資料夾，2026-09-14 起同時是 git repo（見文末「模組 09 延伸研究與自動更新」）；沒有測試與 lint，建置與發布指令見文末。這裡的工作是閱讀、摘要、比對、萃取報告內容（案例、趨勢、IOC）並產出教材，不是寫程式。
+位於 OneDrive 同步資料夾，2026-09-14 起同時是 git repo。核心工作是閱讀、摘要、比對、萃取報告內容並產出教材；網站建置工具另有單元測試與發布前檢查，指令見文末。
 
 ## course/ 課程教材樹
 
@@ -81,10 +81,24 @@ Cyber / Influence / Surveillance / Weapons 的案例大致都有這幾段，找�
 
 ## 模組 09 延伸研究與自動更新（2026-09-14 起）
 
-- 本資料夾自 2026-09-14 起是 git repo，遠端為私有 repo `jack51706/ai-misuse-threat-intel-course`（main）。OneDrive 同步與 git 並存，其他機器 pull 即可。
+- 本資料夾自 2026-09-14 起是 git repo，遠端為 `jack51706/ai-misuse-threat-intel-course`（main）。OneDrive 同步與 git 並存，其他機器 pull 即可。
 - 課程站台發布在 Claude Artifact：https://claude.ai/code/artifact/f5f4f71c-6b3b-4df6-a817-c4b83d9a9b4e （側欄殼頁由 `course/build_site.py` 產生，不要手寫）。
 - `course/09-external-research/`：其他機構或 Anthropic 先前的同類研究。每份研究一份 `.md` 加同名 `.meta.json`，規格在 `_brief.md`（十二節格式、meta 欄位、安全紅線）。導論頁 `00-external-research-intro.md` 的收錄清單由建置腳本從 meta.json 產生，不要手改。底線開頭的 `.md` 不會被轉成 html。
 - 每週一 09:00（台北）Claude Code 雲端 routine「AI 濫用威脅情報：每週延伸研究」自動執行：掃描固定來源、寫最多 3 份新教材、建置、發布到 Artifact、commit 進 main。人工事後審核；發現錯誤直接改教材、重新建置後由 Claude Code 發布。
 - **建置產物不進版控**（2026-09-14 起）：`course/` 下所有 `*.html` 與整個 `course/_site/` 已 gitignore，由 `build_html.py` / `build_site.py` 每次重建。版控只留原始碼：各 `.md`、`09-external-research/*.meta.json`、`figures/*.png`、兩支建置腳本。`build_html.py` 預設把報告圖 base64 內嵌成自足 HTML（`EMBED=0` 可關），`build_site.py` 因此不再發布獨立 PNG。
 - **唯一保留在版控的建置狀態**：`course/_site/published-state.json`（記錄線上版本各檔案的雜湊；發布成功後執行 `python build_site.py --mark-published` 更新並 commit）。有它，routine 與互動 session 才能只發布有變動的檔案；沒有它，每次都會重傳全站約 41 MB。
-- 建置（在 `course/` 執行）：`python build_html.py && python build_site.py`，待發布清單在 `_site/publish-pending.json`；發布只能由 Claude Code 的 Artifact 工具完成，發布後執行 `python build_site.py --mark-published`。
+- Artifact 建置（在 `course/` 執行）：`python build_html.py && python build_site.py`，待發布清單在 `_site/publish-pending.json`；Artifact 發布由 Claude Code 的 Artifact 工具完成，成功後執行 `python build_site.py --mark-published`。此流程獨立於下方 GitHub Pages。
+
+## GitHub Pages 維護（2026-09-19）
+
+- 正式網站：https://jack51706.github.io/ai-misuse-threat-intel-course/ 。`.github/workflows/pages.yml` 在 main 的課程變更時執行測試、建置、檢查再發布；PR 只驗證，不部署。
+- Pages 輸出改為 `course/_pages/`（不進版控）；`_site/` 留給 Artifact 清單與 published-state。不要將整個 `_site/` 上傳至 Pages。
+- `build_site.py` 將發布用 HTML 複本存至 `_site/content/`，先完成 `_shared/` 連結對映再計算 manifest 雜湊；原始 HTML 保留本機閱讀路徑。Artifact 依 manifest 的 local 欄位取檔。
+- Python 相依固定在 `course/requirements.txt`；從 repo 根目錄安裝：`python -m pip install -r course/requirements.txt`。
+- 測試：`python -m unittest discover -s course/tests -v`。
+- Windows 建置：先設 `$env:EMBED='0'; $env:PYTHONIOENCODING='utf-8'`，依序執行 `python course/build_html.py`、`python course/build_site.py`、`python course/build_pages.py`、`python course/validate_site.py`。Linux/CI 設 `EMBED=0` 後同樣執行。
+- Pages 圖片以相對路徑發布、瀏覽器快取與延遲載入，Artifact 預設仍使用 base64 自足 HTML。
+- 只收錄課程索引、模組 01–09 與跨案例專題；`_shared/00-agent-brief.md`、底線開頭的草稿、簡報工具、相依套件不發布。過期 HTML 不得靠掃描輸出目錄重新帶入。
+- 內文 `.md` 連結轉成 `.html`，Pages 將 `_shared/` 對映為 `shared/`；分享網址為 `#教材路徑.html#章節錨點`。路由僅接受已收錄教材。
+- `validate_site.py` 離線檢查本機連結、圖片、錨點、HTML 文件設定與不應公開的檔案；不得為檢查而連線 IOC。失敗必須修復才發布。
+- 發布後驗證 Actions 成功及線上首頁、中文搜尋、教材跳轉與行動版導覽；保留工作目錄內使用者尚未提交的教材與簡報修改。

@@ -8,7 +8,7 @@
 
 ## 一、這套教材是什麼
 
-本教材把兩份一手文件拆解成 **8 個模組、47 份獨立教材**，每一份都遵循同一套結構：一頁速覽、行為者側寫與歸因、受害者清單、AI 濫用的攻擊生命週期、TTP 與 MITRE ATT&CK 對應、**圖表逐一判讀**、IOC 與技術指標、Anthropic 的偵測與防線缺口、第三方驗證、課程教學設計、關鍵原文引文、研究限制。
+本教材把兩份一手文件拆解成 **8 個核心模組、48 份獨立教材**，另有持續增補的**模組 09 延伸研究**與跨案例專題。核心教材圍繞以下面向展開：一頁速覽、行為者側寫與歸因、受害者清單、AI 濫用的攻擊生命週期、TTP 與 MITRE ATT&CK 對應、**圖表逐一判讀**、IOC 與技術指標、Anthropic 的偵測與防線缺口、第三方驗證、課程教學設計、關鍵原文引文、研究限制。
 
 三個貫穿全教材的製作原則：
 
@@ -33,7 +33,7 @@
 
 ---
 
-## 三、完整模組地圖（47 份教材）
+## 三、完整模組地圖（核心 48 份教材，另含延伸研究）
 
 ### 模組 01：網路行動（Cyber operations）— 7 份
 - `01-cyber/00-cyber-trends-and-skills.md` — 章節導論：三大趨勢、uplift 三軸、Appendix A 武器化 skills 清單、四份威脅報告演進
@@ -56,7 +56,7 @@
 - `02-influence/GTG-54004-kenya-cib.md` — 肯亞為 2027 大選預備的協同不實行為
 - `02-influence/GTG-84002-uae-muslim-brotherhood.md` — 阿聯指揮，滲透聯合國人權機制、側寫歐洲議會議員
 
-### 模組 03：監控行動（Surveillance operations）— 8 份
+### 模組 03：監控行動（Surveillance operations）— 9 份
 - `03-surveillance/00-surveillance-intro.md` — 章節導論：三類行為者、AI 取代工程人力、四種防線失效模式
 - `03-surveillance/GTG-54009-s2t-commercial-spyware.md` — 商業監控平台（關聯 S2T），六類編碼群體、監控+敘事一體化
 - `03-surveillance/GTG-14010-uyghurs-syria.md` — 中國對敘利亞維吾爾人的監控與招募，AI 作為社交工程品管員
@@ -77,7 +77,8 @@
 - `04-weapons/GTG-17003-directed-energy-intel.md` — 中國對美國定向能武器的科技情報蒐集，對具安全許可工程師建檔
 
 ### 模組 05：生物濫用（Biological misuse）— 5 份（治理與偵測框架，不含技術內容）
-> 注意：報告的生物章節**不使用 GTG 編號**，改用「Case study 1–5」。其他七個危害領域都用 GTG 代號，唯獨生物濫用連編號都隱去（行為者國家、機構全部去識別）。所以本模組檔名用 case1–5，不是遺漏。
+> 注意：報告的生物章節**不使用 GTG 編號**，改用「Case study 1–5」。其他六個危害領域使用 GTG 代號；生物章節的行為者國家、機構全部去識別。所以本模組檔名用 case1–5，不是遺漏。
+
 - `05-bio/00-bio-intro-and-safeguards.md` — 章節導論：雙重用途困境、分類器四種狀態、可信任使用者審核制
 - `05-bio/case1-classifier-caught.md` — 案例 1：分類器攔下 + 啟動調查（Soviet Biopreparat 類比）
 - `05-bio/case2-weak-model-limit.md` — 案例 2：分類器降載到最弱模型；「把需求推向防護較弱模型」的外溢效應
@@ -87,7 +88,7 @@
 ### 模組 06：詐騙（Scams and fraud）— 1 份
 - `06-scams/GTG-15001-dating-app-network.md` — 中國交友 app 網絡，4,700+ AI 人設、與殺豬盤信任養成的關係
 
-### 模組 07：非法蒸餾（Illicit distillation）— 8 份
+### 模組 07：非法蒸餾（Illicit distillation）— 7 份
 - `07-distillation/00-distillation-intro-and-mitigations.md` — 章節導論：定義、思維鏈套取技術、Anthropic 分層反制、地緣政治爭議
 - `07-distillation/GTG-16005-alibaba.md` — Alibaba（Qwen/Tongyi），史上最大蒸餾攻擊、1.51 億次
 - `07-distillation/GTG-16002-moonshot.md` — Moonshot（Kimi），掛 Kimi 賣 Claude、跨階段重放攻擊
@@ -102,6 +103,7 @@
 
 ### 模組 09：延伸研究（其他機構的同類研究）— 持續增補
 > 本模組收錄 Anthropic 先前的威脅報告，以及 OpenAI、Google GTIG 等其他機構的同類 AI 濫用研究。每份研究一份教材、固定十二節，第 4 節一律與 2026-09 報告對照。每週由排程研究代理自動增補，人工事後審核。
+
 - `09-external-research/00-external-research-intro.md` — 模組導論：收錄標準、閱讀路徑、自動維護的收錄清單
 - 個別教材依 `<機構>-<年月>-<主題>` 命名（例如 `openai-2026-02-disrupting-malicious-uses.md`），完整清單見導論頁
 
@@ -137,9 +139,9 @@
 - **IOC 安全**：所有指標保留 defang 格式（如 `example[.]com`）。教學或演練時**絕不可**對這些指標連線、解析或查詢互動式服務。
 - **單一來源情報**：每份教材的第 9 節明確標示哪些主張有第三方獨立查證、哪些僅來自 Anthropic。教學時請把後者當「高價值但未經外部驗證」的情報處理。
 - **引用原則**：教材全文繁體中文，英文原文引文保留原樣並附頁碼，供講義直接引用。
-- **共用簡報**：`_shared/00-agent-brief.md` 記錄了本教材的製作規格與品質紅線，可供理解每份教材的一致性標準。
+- **跨案例分析**：`_shared/01-cross-cutting-analysis.md` 串起六大主題，可作為課程回顧與討論材料。
 - **柵欄專題**：`_shared/02-claude-safeguards-and-bypass-paths.md` 回答「Claude 柵欄很嚴為什麼還被繞過」——五條規避路徑（存取層規避、內容層繞過、設計外、模型選擇、部署後不可收回）加一張決策樹。建議排課程第一天。
-- **HTML 版**：`index.html` 與各教材同名 `.html` 是自包含網頁版（Mermaid 已渲染、報告原圖已內嵌），用瀏覽器開即可，無需擴充套件。改了 Markdown 後執行 `python build_html.py` 重新產生。
+- **網頁閱讀**：點選上方教材名稱即可開啟，各頁提供「本頁目錄」快速跳至章節。流程圖需連線載入；列印時會省略導覽與目錄。
 
 ---
 

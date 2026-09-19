@@ -1,81 +1,89 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""從發布清單組裝 GitHub Pages 到 _pages/，保留 _site/ 的 Artifact 狀態。
+
+Pages 請設 EMBED=0，再依序執行 build_html.py、build_site.py、本檔與
+validate_site.py。只發布清單上的 HTML 和 HTML 實際引用的本機圖片。
 """
-把課程站台組裝成 GitHub Pages 可直接部署的目錄（course/_site/）。
+from html.parser import HTMLParser
+import json
+from pathlib import Path
+import re
+import shutil
+import tempfile
+from urllib.parse import unquote, urlsplit
+from build_site import rewrite_links
 
-先跑 build_html.py（各 .md -> .html，圖已 base64 內嵌）與 build_site.py（產生殼頁
-_site/index.html），再跑本檔把散在各模組的 .html 收攏進 _site/，並套用與 Artifact
-相同的 `_shared/ -> shared/` 對映，最後放一個 .nojekyll（GitHub Pages 不要跑 Jekyll，
-否則底線開頭的檔案/目錄會被忽略）。
-
-  cd course
-  python build_html.py && python build_site.py && python build_pages.py
-  # 之後 _site/ 就是完整可部署的站台（GitHub Actions 會上傳它）
-
-重跑安全：只寫入 _site/。
-"""
-import os, glob, shutil
-
-ROOT = os.path.dirname(os.path.abspath(__file__))
-SITE = os.path.join(ROOT, "_site")
-
-MODULES = [
-    "01-cyber", "02-influence", "03-surveillance", "04-weapons",
-    "05-bio", "06-scams", "07-distillation", "08-capability-research",
-    "09-external-research",
-]
+ROOT = Path(__file__).resolve().parent
 
 
-def copy_html(src_dir, dst_dir):
-    os.makedirs(dst_dir, exist_ok=True)
-    n = 0
-    for h in glob.glob(os.path.join(src_dir, "*.html")):
-        shutil.copy2(h, os.path.join(dst_dir, os.path.basename(h)))
-        n += 1
-    return n
+def contained(root, relative):
+    """拒絕發布清單/HTML 指向工作目錄之外（含 symlink）。"""
+    path = (root / relative).resolve()
+    if not path.is_relative_to(root.resolve()):
+        raise ValueError(f"路徑超出教材目錄：{relative}")
+    return path
 
 
-def main():
-    if not os.path.exists(os.path.join(SITE, "index.html")):
-        raise SystemExit("找不到 _site/index.html，請先跑 build_site.py")
+class ImageSources(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.sources = []
 
-    total = 0
+    def handle_starttag(self, tag, attrs):
+        if tag == "img":
+            src = dict(attrs).get("src")
+            if src:
+                self.sources.append(src)
 
-    # 總索引頁
-    idx = os.path.join(ROOT, "00-index.html")
-    if os.path.exists(idx):
-        shutil.copy2(idx, os.path.join(SITE, "00-index.html"))
-        total += 1
 
-    # 八＋一個模組
-    for m in MODULES:
-        src = os.path.join(ROOT, m)
-        if os.path.isdir(src):
-            total += copy_html(src, os.path.join(SITE, m))
+def assemble(root=ROOT):
+    root = Path(root).resolve()
+    output = root / "_pages"
+    if output.is_symlink() or output.resolve() != root / "_pages":
+        raise ValueError("_pages 必須是教材目錄內的實體建置目錄")
+    manifest = json.loads((root / "_site/publish-manifest.json").read_text(encoding="utf-8"))["files"]
+    if "index.html" not in manifest or "00-index.html" not in manifest:
+        raise ValueError("發布清單缺少首頁或總索引，請先執行 build_site.py")
 
-    # _shared -> shared（與 build_site.py 的發布對映一致，殼頁 nav 指向 shared/）
-    total += copy_html(os.path.join(ROOT, "_shared"), os.path.join(SITE, "shared"))
-
-    # 報告原圖：圖已 base64 內嵌，理論上用不到；仍複製一份當安全網（相對路徑 ../figures/ 可解析）
-    figs_src = os.path.join(ROOT, "figures")
-    if os.path.isdir(figs_src):
-        figs_dst = os.path.join(SITE, "figures")
-        os.makedirs(figs_dst, exist_ok=True)
-        for p in glob.glob(os.path.join(figs_src, "*.png")):
-            shutil.copy2(p, os.path.join(figs_dst, os.path.basename(p)))
-
-    # 關掉 Jekyll，避免底線開頭的路徑被忽略、確保原樣送出
-    open(os.path.join(SITE, ".nojekyll"), "w").close()
-
-    # 這幾個是建置中繼檔，不需要對外服務（留著無害，這裡順手移除保持乾淨）
-    for junk in ("publish-manifest.json", "publish-pending.json"):
-        p = os.path.join(SITE, junk)
-        if os.path.exists(p):
-            os.remove(p)
-
-    htmls = len(glob.glob(os.path.join(SITE, "**", "*.html"), recursive=True))
-    print(f"Pages 站台組裝完成 -> _site/（教材 html 收攏 {total} 份，_site 內 html 共 {htmls} 份）")
+    # 先完成暫存複製；缺檔或非法路徑時保留上次成功產物。
+    with tempfile.TemporaryDirectory(prefix=".pages-build-", dir=root) as temporary:
+        stage = Path(temporary)
+        images = set()
+        for published, info in manifest.items():
+            target = contained(stage, published)
+            source = contained(root, info["local"])
+            if target.suffix != ".html" or source.suffix != ".html":
+                raise ValueError(f"發布清單不是 HTML：{published}")
+            document = rewrite_links(source.read_text(encoding="utf-8"))
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(document, encoding="utf-8", newline="\n")
+            parser = ImageSources()
+            parser.feed(document)
+            for value in parser.sources:
+                url = urlsplit(value)
+                if url.scheme or url.netloc:
+                    continue
+                if url.path.startswith("/"):
+                    raise ValueError(f"圖片必須使用相對路徑：{value}")
+                asset = contained(stage, target.parent.relative_to(stage) / unquote(url.path))
+                relative = asset.relative_to(stage)
+                if not re.fullmatch(r"figures/page-\d+\.png", relative.as_posix()):
+                    raise ValueError(f"非報告圖片路徑：{value}")
+                images.add(relative)
+        for relative in sorted(images):
+            source = contained(root, relative)
+            target = stage / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, target)
+        (stage / ".nojekyll").touch()
+        # output 由固定 ROOT/_pages 推導，上方已驗證絕對位置與 symlink。
+        if output.exists():
+            shutil.rmtree(output)
+        shutil.copytree(stage, output)
+    size = sum(p.stat().st_size for p in output.rglob("*") if p.is_file())
+    print(f"Pages 組裝完成：_pages/，{len(manifest)} 份 HTML、{len(images)} 張圖片、{size:,} bytes")
+    return output
 
 
 if __name__ == "__main__":
-    main()
+    assemble()

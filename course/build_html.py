@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-把 course/ 下的所有 .md 教材轉成自包含 HTML：
+把 course/ 下允許發布的 .md 教材轉成 HTML：
 - 內文的 ```mermaid 區塊用 mermaid.js（CDN）渲染成圖
 - 每個教材自動嵌入它頁段對應的報告原圖（course/figures/page-XXX.png）
 - 產生 index.html 導覽全部
@@ -9,11 +9,96 @@
 重跑安全：只讀 .md、只寫 .html，不改動任何 .md。
 """
 import os, re, html, glob, base64
+from pathlib import Path
+from urllib.parse import urlsplit, urlunsplit, unquote
 import markdown
+from markdown.extensions import Extension
+from markdown.treeprocessors import Treeprocessor
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 FIG_DIR = os.path.join(ROOT, "figures")
 EMBED = os.environ.get("EMBED", "1") != "0"   # 預設把圖片內嵌成 base64（Artifact 用）；EMBED=0 可關
+
+PUBLISH_DIRS = (
+    "_shared", "01-cyber", "02-influence", "03-surveillance", "04-weapons",
+    "05-bio", "06-scams", "07-distillation", "08-capability-research",
+    "09-external-research",
+)
+
+def is_publishable_source(path, root=None):
+    """只接受課程索引與已知教材目錄，避免發布工具、草稿或依賴文件。"""
+    root = Path(root or ROOT).resolve()
+    path = Path(path).resolve()
+    try:
+        rel = path.relative_to(root)
+    except ValueError:
+        return False
+    return path.is_file() and (
+        rel.as_posix() == "00-index.md" or (
+            len(rel.parts) == 2 and rel.parts[0] in PUBLISH_DIRS
+            and rel.suffix == ".md" and not rel.name.startswith("_")
+            and rel.as_posix() != "_shared/00-agent-brief.md"
+        )
+    )
+
+def iter_publishable_markdown(root=None):
+    root = Path(root or ROOT).resolve()
+    candidates = [root / "00-index.md"]
+    for directory in PUBLISH_DIRS:
+        candidates.extend((root / directory).glob("*.md"))
+    return sorted(
+        (str(path), path.relative_to(root).as_posix())
+        for path in candidates if is_publishable_source(path, root)
+    )
+
+def html_link(href):
+    """只改站內 Markdown 副檔名；原樣保留查詢字串與章節錨點。"""
+    parts = urlsplit(href)
+    if not parts.scheme and not parts.netloc and parts.path.endswith(".md"):
+        return urlunsplit(parts._replace(path=parts.path[:-3] + ".html"))
+    return href
+
+class CourseTreeprocessor(Treeprocessor):
+    def __init__(self, md, source):
+        super().__init__(md)
+        self.source = Path(source)
+        self.title = self.source.stem
+
+    def run(self, root):
+        for heading in root.iter("h1"):
+            self.title = "".join(heading.itertext()).strip()
+            break
+        for parent in root.iter():
+            for node in parent:
+                # 索引中的檔名可直接閱讀；程式碼區塊及未發布文件保持文字。
+                if (node.tag == "code" and parent.tag not in ("pre", "a") and node.text
+                        and re.fullmatch(r"[^\s]+\.md(?:[?#][^\s]*)?", node.text)):
+                    href = node.text
+                    parts = urlsplit(href)
+                    if not parts.scheme and not parts.netloc and parts.path.endswith(".md"):
+                        target = self.source.parent / unquote(parts.path)
+                        if is_publishable_source(target):
+                            node.tag = "a"
+                            node.set("href", html_link(href))
+                            node.set("class", "course-file-link")
+                if node.tag == "a":
+                    href = node.get("href", "")
+                    node.set("href", html_link(href))
+                    if urlsplit(href).scheme.lower() in ("http", "https"):
+                        node.set("target", "_blank")
+                        node.set("rel", "noopener noreferrer")
+                elif node.tag == "img":
+                    node.set("loading", "lazy")
+                    node.set("decoding", "async")
+
+class CourseExtension(Extension):
+    def __init__(self, source):
+        self.source = source
+        super().__init__()
+
+    def extendMarkdown(self, md):
+        self.processor = CourseTreeprocessor(md, self.source)
+        md.treeprocessors.register(self.processor, "course", 5)
 
 _b64cache = {}
 def _b64(fn):
@@ -77,7 +162,7 @@ CSS = """
 :root{--fg:#1a1a1a;--bg:#fff;--muted:#666;--line:#e2e2e2;--link:#0b5cad;--code-bg:#f5f5f5;--accent:#0b5cad}
 @media(prefers-color-scheme:dark){:root{--fg:#e6e6e6;--bg:#141414;--muted:#9a9a9a;--line:#333;--link:#6cb6ff;--code-bg:#1e1e1e;--accent:#6cb6ff}}
 *{box-sizing:border-box}
-body{max-width:900px;margin:0 auto;padding:2rem 1.2rem 6rem;font-family:"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;line-height:1.75;color:var(--fg);background:var(--bg);font-size:16px}
+body{max-width:900px;margin:0 auto;padding:2rem 1.2rem 6rem;font-family:"Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;line-height:1.75;color:var(--fg);background:var(--bg);font-size:16px;overflow-wrap:anywhere}
 h1,h2,h3,h4{line-height:1.3;margin-top:1.8em}
 h1{font-size:1.7rem;border-bottom:2px solid var(--accent);padding-bottom:.3em}
 h2{font-size:1.35rem;border-bottom:1px solid var(--line);padding-bottom:.2em}
@@ -97,6 +182,16 @@ img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;ma
 .figgallery figcaption{color:var(--muted);font-size:.9em;margin-top:.3em}
 .topbar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:.6em 0;margin:-2rem -1.2rem 1.5rem;padding-left:1.2rem;font-size:.9em}
 .topbar a{text-decoration:none;margin-right:1em}
+.page-toc{margin:1.2em 0;padding:.75em 1em;border:1px solid var(--line);border-radius:8px;background:var(--code-bg)}
+.page-toc summary{cursor:pointer;font-weight:600}
+.page-toc ul{padding-left:1.4em}
+.page-toc a{text-decoration:none}
+h2,h3,h4{scroll-margin-top:4rem}
+.course-file-link{overflow-wrap:anywhere}
+.skip-link{position:absolute;left:-10000px}
+.skip-link:focus{left:1rem;top:.4rem;background:var(--bg);padding:.3rem;z-index:2}
+.topbar{z-index:1}
+@media print{.topbar,.page-toc,.skip-link{display:none}body{max-width:none;padding:0;color:#111;background:#fff}a{color:inherit}pre,figure,img{break-inside:avoid}}
 hr{border:none;border-top:1px solid var(--line);margin:2em 0}
 """
 
@@ -106,7 +201,7 @@ MERMAID_JS = """
 (function(){
   var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   if (window.mermaid) {
-    mermaid.initialize({startOnLoad:true, theme: dark ? 'dark' : 'default', securityLevel:'loose', flowchart:{useMaxWidth:true}});
+    mermaid.initialize({startOnLoad:true, theme: dark ? 'dark' : 'default', securityLevel:'strict', flowchart:{useMaxWidth:true}});
   }
 })();
 </script>
@@ -123,58 +218,56 @@ def convert_one(md_path, rel_to_root):
         return f"\nMERMAIDPLACEHOLDER{len(blocks)-1}ENDPLACEHOLDER\n"
     text = re.sub(r"```mermaid\s*\n(.*?)```", stash, text, flags=re.DOTALL)
 
-    # 1b) 圖片處理：把「引用圖檔：路徑」等文字說明轉成真圖、清掉裸路徑，並在首次提及各頁處插圖
+    # 1b) 只轉換獨立的圖檔引用；不在表格、標題、清單或程式碼中推測插圖位置。
+    # 其餘原圖放在文末畫廊，避免頁碼首次出現於表格時把表格切斷。
     fname = os.path.basename(md_path)
     pages = figs_for(fname)
     placed = set()
     newlines = []
+    fence = None
     for ln in text.split("\n"):
-        # 已是 markdown 圖片：保留並標記該頁
-        mimg = re.search(r"!\[[^\]]*\]\(\.\./figures/page-0*(\d+)\.png", ln)
-        if mimg:
-            placed.add(int(mimg.group(1)))
+        marker = re.match(r"^\s*(`{3,}|~{3,})", ln)
+        if marker:
+            token = marker.group(1)
+            if fence is None:
+                fence = token
+            elif token[0] == fence[0] and len(token) >= len(fence):
+                fence = None
             newlines.append(ln)
             continue
-        # 這行含裸露的圖檔路徑（inline code 或純文字）
-        mp = re.search(r"\.\./figures/page-0*(\d+)\.png", ln)
-        if mp:
-            p = int(mp.group(1))
-            # 表格行：路徑換成頁碼，保留表格結構，不插圖
-            if ln.count("|") >= 2:
-                newlines.append(re.sub(r"`?\.\./figures/page-0*(\d+)\.png`?", lambda m: "p."+str(int(m.group(1))), ln))
-                continue
-            c = re.sub(r"[（(]?\s*[，、]?\s*`?\.\./figures/page-\d+\.png`?\s*[）)]?", "", ln)  # 移除路徑（含緊貼標點/括號）
-            c = re.sub(r"(\*\*)?\s*(課程)?(引用|對應)?圖[檔片][:：]\s*(\*\*)?", "", c)          # 移除「引用圖檔：」標籤
-            c = re.sub(r"（\s*160\s*DPI\s*）", "", c)
-            c = c.strip().lstrip("-*•　 ").rstrip("、,，．. 　（(")
-            if p in pages and p not in placed:
-                if len(c) < 4:   # 原本主要就是路徑說明
-                    newlines.append(f"![報告原圖 · 第 {p} 頁（一手 PDF）](../figures/page-{p:03d}.png)")
-                else:
-                    newlines.append(c)
-                    newlines.append(f"\n![報告原圖 · 第 {p} 頁（一手 PDF）](../figures/page-{p:03d}.png)\n")
-                placed.add(p)
-            else:
-                if len(c) >= 4:   # 交叉引用他案圖或已插過：只留清理後文字，不插圖
-                    newlines.append(c)
+        if fence:
+            newlines.append(ln)
             continue
-        # 一般行：以 p.XX / 第XX頁 錨定插圖（僅限本檔頁段有的頁）
+        # 已是 markdown 圖片：保留並標記該頁
+        image_pages = re.findall(r"!\[[^\]]*\]\(\.\./figures/page-0*(\d+)\.png", ln)
+        if image_pages:
+            placed.update(map(int, image_pages))
+            newlines.append(ln)
+            continue
+        # 獨立的路徑或「引用圖檔：路徑」可在原位置轉成圖片。
+        mp = re.fullmatch(
+            r"\s*(?:(?:\*\*)?(?:課程)?(?:引用|對應)?圖[檔片][:：](?:\*\*)?\s*)?"
+            r"`?\.\./figures/page-0*(\d+)\.png`?\s*[。.]?\s*", ln
+        )
+        if mp and int(mp.group(1)) in pages:
+            p = int(mp.group(1))
+            if p not in placed:
+                newlines.append(f"\n![報告原圖 · 第 {p} 頁（一手 PDF）](../figures/page-{p:03d}.png)\n")
+                placed.add(p)
+            continue
         newlines.append(ln)
-        if pages:
-            for p in pages:
-                if p in placed:
-                    continue
-                if re.search(rf"[pP]\.?\s*0*{p}\b|第\s*0*{p}\s*頁", ln):
-                    newlines.append(f"\n![報告原圖 · 第 {p} 頁（一手 PDF）](../figures/page-{p:03d}.png)\n")
-                    placed.add(p)
-                    break
     text = "\n".join(newlines)
 
     # 2) markdown -> html
-    body = markdown.markdown(
-        text,
-        extensions=["tables", "fenced_code", "toc", "sane_lists", "attr_list", "nl2br"],
+    course_extension = CourseExtension(md_path)
+    renderer = markdown.Markdown(
+        extensions=["tables", "fenced_code", "toc", "sane_lists", "attr_list", "nl2br", course_extension],
+        extension_configs={"toc": {"toc_depth": "2-3"}},
     )
+    body = renderer.convert(text)
+    if renderer.toc_tokens:
+        toc = f'<details class="page-toc"><summary>本頁目錄</summary><nav aria-label="本頁章節">{renderer.toc}</nav></details>'
+        body = re.sub(r"</h1>", lambda m: m.group(0) + toc, body, count=1)
 
     # 3) 換回 mermaid（純文字，交給 mermaid.js 渲染）
     def unstash(m):
@@ -191,7 +284,7 @@ def convert_one(md_path, rel_to_root):
     gallery = ""
     if remaining:
         items = "".join(
-            f'<figure><img src="../figures/page-{p:03d}.png" alt="報告 p.{p}" loading="lazy">'
+            f'<figure><img src="../figures/page-{p:03d}.png" alt="報告 p.{p}" loading="lazy" decoding="async">'
             f'<figcaption>報告原圖 · 第 {p} 頁</figcaption></figure>'
             for p in remaining
         )
@@ -199,28 +292,22 @@ def convert_one(md_path, rel_to_root):
 
     body = embed_imgs(body)
     gallery = embed_imgs(gallery)
-    title = fname.replace(".md", "")
+    title = course_extension.processor.title
     depth = rel_to_root.count("/") + rel_to_root.count("\\")
     up = "../" * depth
-    home = f'{up}index.html' if depth else 'index.html'
-    topbar = f'<div class="topbar"><a href="{home}">◀ 課程索引</a></div>'
+    home = f'{up}00-index.html'
+    topbar = f'<a class="skip-link" href="#content">跳至教材內容</a><nav class="topbar" aria-label="課程導覽"><a href="{home}">◀ 課程索引</a></nav>'
+    mermaid_js = MERMAID_JS if blocks else ""
 
     return f"""<!doctype html>
 <html lang="zh-Hant"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(title)}</title>
 <style>{CSS}</style></head>
-<body>{topbar}{body}{gallery}{MERMAID_JS}</body></html>"""
+<body>{topbar}<main id="content">{body}{gallery}</main>{mermaid_js}</body></html>"""
 
 def main():
-    mds = []
-    for dirpath, _, files in os.walk(ROOT):
-        for fn in files:
-            if fn.endswith(".md") and not fn.startswith("_"):
-                full = os.path.join(dirpath, fn)
-                rel = os.path.relpath(full, ROOT).replace("\\", "/")
-                mds.append((full, rel))
-    mds.sort(key=lambda x: x[1])
+    mds = iter_publishable_markdown()
 
     made = []
     for full, rel in mds:
@@ -235,12 +322,11 @@ def main():
     for h in made:
         top = h.split("/")[0] if "/" in h else "（根目錄）"
         groups.setdefault(top, []).append(h)
-    order = ["00-index.html", "_shared", "01-cyber", "02-influence", "03-surveillance",
-             "04-weapons", "05-bio", "06-scams", "07-distillation", "08-capability-research"]
+    order = ["（根目錄）", *PUBLISH_DIRS]
     def gkey(k):
         return order.index(k) if k in order else 99
     lines = ['<h1>課程教材索引（HTML 版）</h1>',
-             '<p>此 HTML 版由 build_html.py 從 Markdown 自動產生：Mermaid 圖已渲染、報告原圖已內嵌。用瀏覽器開啟即可，無需任何擴充套件。</p>']
+             '<p>選擇教材即可閱讀。各頁提供章節目錄與報告原圖；流程圖需連線載入。</p>']
     for g in sorted(groups, key=gkey):
         lines.append(f'<h2>{html.escape(g)}</h2><ul>')
         for h in sorted(groups[g]):
