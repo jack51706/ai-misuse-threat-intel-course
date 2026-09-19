@@ -70,7 +70,7 @@ flowchart TB
 - 產出：「When we checked again at 10:00 a.m., the agent had achieved RCE on Discourse Cloud and demonstrated access by reading `/etc/hosts`.」
 - 邊界：「This was not completly autonomous hacking, and skilled human guidance remained important.」
 
-**`/goal` 迴圈是什麼**：它是 Hacktron 代理框架（harness）的一個原語。人類只給模型一個高階目標（「拿下這台 Discourse 的 RCE」），不再逐步下指令；模型自己在「假設，動手（呼叫工具實際打靶），看結果，修正」之間反覆迭代，朝一個**可量測的成功條件**爬升（hill climbing），直到達成或放棄。人類在迴圈啟動後離開，事後回來查看（原文「When we checked again at 10:00 a.m.」），這就是本案「自主」二字的實指。
+**`/goal` 迴圈是什麼**：`/goal` 是 **Claude Code 內建的斜線指令**（作用是「設定一個目標／條件，讓 Claude 自主朝它推進」，與 `/loop`、`/schedule` 同屬自主執行類指令），本身就會跑一個目標導向的自主迴圈，不必另外自訂。要誠實標明：Hacktron 這篇 writeup **並未定義 `/goal`，也沒點名用的是 Claude Code 還是自家工具**，原文只有「placed Claude in an autonomous `/goal` loop」一句；但這個斜線指令的形式與行為，對應的正是 Claude Code 這類 CLI 內建的目標導向迴圈，而不是 Hacktron 專有的機制（先前一版誤植為 Hacktron harness 原語，此處更正）。機制上，人類只給模型一個高階目標（「拿下這台 Discourse 的 RCE」），不再逐步下指令；模型自己在「假設，動手（呼叫工具實際打靶），看結果，修正」之間反覆迭代，朝一個**可量測的成功條件**爬升（hill climbing），直到達成或放棄。人類在迴圈啟動後離開，事後回來查看（原文「When we checked again at 10:00 a.m.」），這就是本案「自主」二字的實指。
 
 這條迴圈把本案定位在課程自主光譜的**最上層**（對照 `../01-cyber/00-cyber-trends-and-skills.html` 的三層：對話式協助，人類逐步指揮，AI 編排自主執行），也是 GTG-10007 Figure 12「二進位反轉與利用開發迴圈」與 GTG-50020 Figure 16「autonomous exploitation pipeline」的合法鏡像（`../01-cyber/GTG-10007-exploit-foundry.html`、`../01-cyber/GTG-50020-ai-supply-chain.html`）。
 
