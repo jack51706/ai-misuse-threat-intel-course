@@ -4,7 +4,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
-from zipfile import ZipFile
+from zipfile import ZipFile, ZIP_STORED
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from package_labs import package_labs, DOWNLOAD, ALLOWED_FILES
@@ -33,7 +33,10 @@ class LabPackageTests(unittest.TestCase):
         self.assertEqual(first, package_labs(self.root))
         with ZipFile(self.root / first["local"]) as archive:
             self.assertEqual(set(archive.namelist()), ALLOWED_FILES | {"SHA256SUMS.json"})
-            for name, digest in json.loads(archive.read("SHA256SUMS.json")).items():
+            checks = json.loads(archive.read("SHA256SUMS.json"))
+            self.assertEqual(list(checks), sorted(checks))
+            self.assertTrue(all(info.compress_type == ZIP_STORED for info in archive.infolist()))
+            for name, digest in checks.items():
                 self.assertEqual(sha256(archive.read(name)).hexdigest(), digest)
 
     def test_missing_entry_point_is_rejected(self):

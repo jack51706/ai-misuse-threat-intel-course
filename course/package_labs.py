@@ -2,7 +2,7 @@
 from hashlib import sha256
 import json
 from pathlib import Path
-from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED
+from zipfile import ZipFile, ZipInfo, ZIP_STORED
 
 DOWNLOAD = "downloads/course-labs.zip"
 ALLOWED_FILES = frozenset({"run_labs.py", "README.md"} |
@@ -32,21 +32,22 @@ def package_labs(root):
         if path.is_file():
             if relative.as_posix() not in ALLOWED_FILES:
                 raise ValueError(f"未核可的實作下載檔案：{relative}")
-            # 統一換行，Windows 與 Linux 建置得到相同壓縮包。
+            # 統一文字換行，避免 Git 的平台換行設定改變材料雜湊。
             entries[relative.as_posix()] = path.read_text(encoding="utf-8").replace("\r\n", "\n").encode("utf-8")
     missing = ALLOWED_FILES - entries.keys()
     if missing:
         raise ValueError("實作下載包缺少必要檔案：" + ", ".join(sorted(missing)))
     manifest = {name: sha256(data).hexdigest() for name, data in entries.items()}
-    entries["SHA256SUMS.json"] = (json.dumps(manifest, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    entries["SHA256SUMS.json"] = (json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode("utf-8")
     target = root / "_site" / DOWNLOAD
     if not target.resolve().is_relative_to(root):
         raise ValueError("下載包輸出路徑超出教材目錄")
     target.parent.mkdir(parents=True, exist_ok=True)
-    with ZipFile(target, "w", compression=ZIP_DEFLATED) as archive:
+    # 材料很小；直接封裝可避免不同 zlib 版本產生不同壓縮位元組。
+    with ZipFile(target, "w", compression=ZIP_STORED) as archive:
         for name, data in sorted(entries.items()):
             info = ZipInfo(name, date_time=(2026, 1, 1, 0, 0, 0))
-            info.compress_type = ZIP_DEFLATED
+            info.compress_type = ZIP_STORED
             info.create_system = 3
             info.external_attr = 0o100644 << 16
             archive.writestr(info, data)
