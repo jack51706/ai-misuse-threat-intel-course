@@ -1,0 +1,23 @@
+{
+  "id": "microsoft-2026-09-ai-themed-attacks-defender",
+  "org": "Microsoft Threat Intelligence",
+  "org_zh": "微軟威脅情報團隊",
+  "title": "Detect and disrupt AI-themed attacks with Microsoft Defender",
+  "title_zh": "冒用 AI 品牌的攻擊與處置",
+  "published": "2026-09-10",
+  "url": "https://www.microsoft.com/en-us/security/blog/2026/09/10/detect-and-disrupt-ai-themed-attacks-with-microsoft-defender/",
+  "source_type": "official-threat-report",
+  "related_modules": [
+    "01-cyber",
+    "06-scams"
+  ],
+  "related_materials": [
+    "01-cyber/GTG-50021-fake-reseller.md",
+    "01-cyber/GTG-50020-ai-supply-chain.md",
+    "01-cyber/00-cyber-trends-and-skills.md",
+    "06-scams/GTG-15001-dating-app-network.md",
+    "_shared/02-claude-safeguards-and-bypass-paths.md"
+  ],
+  "summary_zh": "攻擊者不入侵 AI 服務，改冒用 ChatGPT 與 Claude 品牌行騙：Claude 主題 AiTM、Storm-3075 惡意廣告，是 GTG-50021 的外部對照。",
+  "added": "2026-09-21"
+}
