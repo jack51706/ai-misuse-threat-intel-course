@@ -1,0 +1,14 @@
+{
+  "id": "microsoft-2026-09-eviltokens-device-code-phishing",
+  "org": "Microsoft Threat Intelligence",
+  "org_zh": "微軟威脅情報團隊",
+  "title": "Unmasking EvilTokens: Getting to the root of device code phishing",
+  "title_zh": "AI 釣魚即服務與授權竊取",
+  "published": "2026-09-22",
+  "url": "https://www.microsoft.com/en-us/security/blog/2026/09/22/unmasking-eviltokens-getting-to-the-root-of-device-code-phishing/",
+  "source_type": "official-threat-report",
+  "related_modules": ["06-scams", "01-cyber", "02-influence"],
+  "related_materials": ["06-scams/GTG-15001-dating-app-network.md", "02-influence/GTG-54002-influence-as-a-service.md", "01-cyber/GTG-50021-fake-reseller.md"],
+  "summary_zh": "月費 500 美元的 AI 釣魚即服務平台，藉裝置代碼流程竊取授權而非密碼，危害逾萬個組織。",
+  "added": "2026-09-28"
+}

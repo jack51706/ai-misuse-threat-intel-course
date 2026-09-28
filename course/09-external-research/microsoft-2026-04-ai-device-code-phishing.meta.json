@@ -1,0 +1,14 @@
+{
+  "id": "microsoft-2026-04-ai-device-code-phishing",
+  "org": "Microsoft Threat Intelligence",
+  "org_zh": "微軟威脅情報團隊",
+  "title": "Inside an AI-enabled device code phishing campaign",
+  "title_zh": "AI 賦能裝置代碼釣魚活動",
+  "published": "2026-04-06",
+  "url": "https://www.microsoft.com/en-us/security/blog/2026/04/06/ai-enabled-device-code-phishing-campaign-april-2026/",
+  "source_type": "official-threat-report",
+  "related_modules": ["01-cyber", "06-scams"],
+  "related_materials": ["06-scams/GTG-15001-dating-app-network.md", "01-cyber/00-cyber-trends-and-skills.md", "01-cyber/GTG-50021-fake-reseller.md"],
+  "summary_zh": "裝置代碼釣魚的六階段鏈與即時代碼生成，同時是 AI 標籤強於 AI 證據的反面教材。",
+  "added": "2026-09-28"
+}

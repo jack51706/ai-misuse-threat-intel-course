@@ -1,5 +1,5 @@
 {
- "published": "2026-09-21T01:24:50",
+ "published": "2026-09-28T01:31:35",
  "files": {
   "shared/01-cross-cutting-analysis.html": {
    "local": "_site/content/shared/01-cross-cutting-analysis.html",
@@ -268,8 +268,8 @@
   },
   "09-external-research/00-external-research-intro.html": {
    "local": "_site/content/09-external-research/00-external-research-intro.html",
-   "sha256": "64bfa0a600444481c70143a44f483ea7f05973e580debe41890e01356bbac7bd",
-   "bytes": 18435
+   "sha256": "716418fb88c83c937f954c2b4603da33b3b53d65fdf10947ee1fedb32adc9231",
+   "bytes": 19814
   },
   "09-external-research/anthropic-2025-04-malicious-uses-report.html": {
    "local": "_site/content/09-external-research/anthropic-2025-04-malicious-uses-report.html",
@@ -336,6 +336,11 @@
    "sha256": "c3c64244429dabbc74842ae6e403043bd98920e83836f586c73c6f868d6fd706",
    "bytes": 75567
   },
+  "09-external-research/microsoft-2026-04-ai-device-code-phishing.html": {
+   "local": "_site/content/09-external-research/microsoft-2026-04-ai-device-code-phishing.html",
+   "sha256": "dd628639fc07d91c0ef24f0cc97291aef16266ac0dd6a1e0bd7c9fcc16d06cb5",
+   "bytes": 47675
+  },
   "09-external-research/microsoft-2026-06-ai-brands-as-bait.html": {
    "local": "_site/content/09-external-research/microsoft-2026-06-ai-brands-as-bait.html",
    "sha256": "6371dfa0c43e8f9f7307479557bca6a1229d7890576d7a5d8111188cf605e48e",
@@ -350,6 +355,16 @@
    "local": "_site/content/09-external-research/microsoft-2026-09-ai-themed-attacks-defender.html",
    "sha256": "0d7078ed9515c1adf4d64e5b234b85be282b093b12357b00b8578cba02166036",
    "bytes": 35168
+  },
+  "09-external-research/microsoft-2026-09-eviltokens-device-code-phishing.html": {
+   "local": "_site/content/09-external-research/microsoft-2026-09-eviltokens-device-code-phishing.html",
+   "sha256": "846baefea80baab6391ee804a58e66f6e4d91a8f74b3da3b7514d185cef2b317",
+   "bytes": 57029
+  },
+  "09-external-research/microsoft-2026-09-storm-3168-agentic-cloud.html": {
+   "local": "_site/content/09-external-research/microsoft-2026-09-storm-3168-agentic-cloud.html",
+   "sha256": "b19959cdf2303772be6c1fdd5f58a6965af2890eec801c1033410eada024a96c",
+   "bytes": 46938
   },
   "09-external-research/moda-2026-01-public-sector-ai-playbook.html": {
    "local": "_site/content/09-external-research/moda-2026-01-public-sector-ai-playbook.html",
@@ -418,8 +433,8 @@
   },
   "index.html": {
    "local": "_site/index.html",
-   "sha256": "cf871699aefcf87089f4ed724d2697a7dfbfe49cc0ca28094e8d0e9ae2c32493",
-   "bytes": 51408
+   "sha256": "54751bd9b1e2ddd39a07e913f89dd53302d54cb8f705dd780e2af5a1bf1accdf",
+   "bytes": 53058
   },
   "downloads/course-labs.zip": {
    "local": "_site/downloads/course-labs.zip",

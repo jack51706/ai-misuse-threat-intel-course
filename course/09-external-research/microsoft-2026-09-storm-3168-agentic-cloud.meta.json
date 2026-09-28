@@ -1,0 +1,20 @@
+{
+  "id": "microsoft-2026-09-storm-3168-agentic-cloud",
+  "org": "Microsoft Threat Intelligence",
+  "org_zh": "微軟威脅情報團隊",
+  "title": "Storm-3168: Agentic-driven cloud attacks using compromised service principals",
+  "title_zh": "Azure 服務主體盜用與破壞",
+  "published": "2026-09-25",
+  "url": "https://www.microsoft.com/en-us/security/blog/2026/09/25/storm-3168-agentic-driven-cloud-attacks-using-compromised-service-principals/",
+  "source_type": "official-threat-report",
+  "related_modules": [
+    "01-cyber"
+  ],
+  "related_materials": [
+    "01-cyber/GTG-50020-ai-supply-chain.md",
+    "01-cyber/GTG-10007-exploit-foundry.md",
+    "01-cyber/00-cyber-trends-and-skills.md"
+  ],
+  "summary_zh": "被盜 Azure 服務主體 35 分鐘內發動逾 150 次破壞，示範機器身分治理失效與 agentic 一詞的舉證落差。",
+  "added": "2026-09-28"
+}
