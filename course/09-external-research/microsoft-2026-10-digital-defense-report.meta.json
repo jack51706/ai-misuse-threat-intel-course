@@ -1,0 +1,21 @@
+{
+  "id": "microsoft-2026-10-digital-defense-report",
+  "org": "Microsoft",
+  "org_zh": "微軟",
+  "title": "Microsoft Digital Defense Report 2026",
+  "title_zh": "微軟數位防禦報告 2026",
+  "published": "2026-10-01",
+  "url": "https://www.microsoft.com/en-us/corporate-responsibility/topics/cybersecurity/reports/microsoft-digital-defense-report/",
+  "source_type": "official-threat-report",
+  "related_modules": ["01-cyber", "08-capability-research", "09-external-research"],
+  "related_materials": [
+    "01-cyber/GTG-10007-exploit-foundry.md",
+    "01-cyber/GTG-50021-fake-reseller.md",
+    "01-cyber/GTG-50029-hacktivist.md",
+    "08-capability-research/01-targeting-evals.md",
+    "09-external-research/gtig-2026-09-vulnerability-trends-ai-era.md",
+    "09-external-research/microsoft-2026-09-storm-3168-agentic-cloud.md"
+  ],
+  "summary_zh": "微軟年度報告把 AI 升為獨立章節，宣告武器化中位數低於 24 小時、ClickFix 擴及 110 萬台裝置。",
+  "added": "2026-10-05"
+}

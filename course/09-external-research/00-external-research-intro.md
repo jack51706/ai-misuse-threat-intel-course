@@ -31,6 +31,8 @@
 <!-- LEDGER:START -->
 | 機構 | 發布 | 原文標題 | 教材 |
 |---|---|---|---|
+| 微軟（Microsoft） | 2026-10-01 | [Microsoft Digital Defense Report 2026](https://www.microsoft.com/en-us/corporate-responsibility/topics/cybersecurity/reports/microsoft-digital-defense-report/) | [微軟數位防禦報告 2026](microsoft-2026-10-digital-defense-report.html) |
+| Google 威脅情報小組（Google GTIG） | 2026-09-30 | [Vulnerability Discovery and Exploitation Trends in the AI Era](https://cloud.google.com/blog/topics/threat-intelligence/vulnerability-discovery-and-exploitation-trends-in-the-ai-era) | [AI 時代的漏洞揭露與利用趨勢](gtig-2026-09-vulnerability-trends-ai-era.html) |
 | 微軟威脅情報團隊（Microsoft Threat Intelligence） | 2026-09-25 | [Storm-3168: Agentic-driven cloud attacks using compromised service principals](https://www.microsoft.com/en-us/security/blog/2026/09/25/storm-3168-agentic-driven-cloud-attacks-using-compromised-service-principals/) | [Azure 服務主體盜用與破壞](microsoft-2026-09-storm-3168-agentic-cloud.html) |
 | 微軟威脅情報團隊（Microsoft Threat Intelligence） | 2026-09-22 | [Unmasking EvilTokens: Getting to the root of device code phishing](https://www.microsoft.com/en-us/security/blog/2026/09/22/unmasking-eviltokens-getting-to-the-root-of-device-code-phishing/) | [AI 釣魚即服務與授權竊取](microsoft-2026-09-eviltokens-device-code-phishing.html) |
 | Hacktron AI（獨立資安研究）（Hacktron AI） | 2026-09-13 | [Hacking OpenAI (libheif Heist)](https://www.hacktron.ai/blog/hacking-openai) | [用 Claude Opus 5 攻進 OpenAI：libheif 影像鏈與 CTF 框定繞過](hacktron-2026-09-openai-libheif-rce.html) |

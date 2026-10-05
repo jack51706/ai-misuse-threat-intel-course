@@ -1,5 +1,5 @@
 {
- "published": "2026-09-28T01:31:35",
+ "published": "2026-10-05T01:36:58",
  "files": {
   "shared/01-cross-cutting-analysis.html": {
    "local": "_site/content/shared/01-cross-cutting-analysis.html",
@@ -268,8 +268,8 @@
   },
   "09-external-research/00-external-research-intro.html": {
    "local": "_site/content/09-external-research/00-external-research-intro.html",
-   "sha256": "716418fb88c83c937f954c2b4603da33b3b53d65fdf10947ee1fedb32adc9231",
-   "bytes": 19814
+   "sha256": "d68399ca3da3e7dc1cfb990ea0a8b653ee286de97f31cd38b993c1e104120cc7",
+   "bytes": 20636
   },
   "09-external-research/anthropic-2025-04-malicious-uses-report.html": {
    "local": "_site/content/09-external-research/anthropic-2025-04-malicious-uses-report.html",
@@ -321,6 +321,11 @@
    "sha256": "d39b020fe2ef40b4daca37144292f8316f41952d17a4760b66c8a6af0ba78b4c",
    "bytes": 163355
   },
+  "09-external-research/gtig-2026-09-vulnerability-trends-ai-era.html": {
+   "local": "_site/content/09-external-research/gtig-2026-09-vulnerability-trends-ai-era.html",
+   "sha256": "f7171d8ebfd9f08af8eed7149b1d954d6bbe682a6f56dec3a973e6c207d7bb5d",
+   "bytes": 78124
+  },
   "09-external-research/hacktron-2026-09-openai-libheif-rce.html": {
    "local": "_site/content/09-external-research/hacktron-2026-09-openai-libheif-rce.html",
    "sha256": "dce879187239945686da2b87529f7d81978bd6c78d06c8137101433c9818a98f",
@@ -365,6 +370,11 @@
    "local": "_site/content/09-external-research/microsoft-2026-09-storm-3168-agentic-cloud.html",
    "sha256": "b19959cdf2303772be6c1fdd5f58a6965af2890eec801c1033410eada024a96c",
    "bytes": 46938
+  },
+  "09-external-research/microsoft-2026-10-digital-defense-report.html": {
+   "local": "_site/content/09-external-research/microsoft-2026-10-digital-defense-report.html",
+   "sha256": "2d3d93c59cf161be985c335649f493efd62d1958de0c654935af5ff6572aefb7",
+   "bytes": 76299
   },
   "09-external-research/moda-2026-01-public-sector-ai-playbook.html": {
    "local": "_site/content/09-external-research/moda-2026-01-public-sector-ai-playbook.html",
@@ -433,8 +443,8 @@
   },
   "index.html": {
    "local": "_site/index.html",
-   "sha256": "54751bd9b1e2ddd39a07e913f89dd53302d54cb8f705dd780e2af5a1bf1accdf",
-   "bytes": 53058
+   "sha256": "e04e786e947e02b9851f214356c30036e6f09c04fad523162b33c2d32aa1e10c",
+   "bytes": 54046
   },
   "downloads/course-labs.zip": {
    "local": "_site/downloads/course-labs.zip",
