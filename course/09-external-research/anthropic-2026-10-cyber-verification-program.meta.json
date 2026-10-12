@@ -1,0 +1,14 @@
+{
+  "id": "anthropic-2026-10-cyber-verification-program",
+  "org": "Anthropic",
+  "org_zh": "Anthropic",
+  "title": "Expanding the Cyber Verification Program",
+  "title_zh": "網路能力分層審核與阻擋率",
+  "published": "2026-10-06",
+  "url": "https://www.anthropic.com/news/cyber-verification-program",
+  "source_type": "industry",
+  "related_modules": ["01-cyber", "04-weapons", "05-bio"],
+  "related_materials": ["01-cyber/00-cyber-trends-and-skills.md", "01-cyber/GTG-50021-fake-reseller.md", "05-bio/00-bio-intro-and-safeguards.md", "_shared/02-claude-safeguards-and-bypass-paths.md"],
+  "summary_zh": "Anthropic 網路能力三層審核制，首次公布受控放寬下的實測阻擋率。",
+  "added": "2026-10-12"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "anthropic-2026-10-cyber-mission",
+  "org": "Anthropic",
+  "org_zh": "Anthropic",
+  "title": "Introducing the Anthropic Cyber Mission",
+  "title_zh": "關鍵基礎設施與開源防禦計畫",
+  "published": "2026-10-08",
+  "url": "https://www.anthropic.com/news/anthropic-cyber-mission",
+  "source_type": "industry",
+  "related_modules": ["01-cyber", "03-surveillance", "04-weapons"],
+  "related_materials": ["01-cyber/00-cyber-trends-and-skills.md", "01-cyber/GTG-10007-exploit-foundry.md", "03-surveillance/GTG-30004-30005-30006-osint-recon.md", "04-weapons/GTG-17002-ew-sead-taiwan.md"],
+  "summary_zh": "Anthropic 防禦側計畫：關鍵基礎設施 11 家夥伴與免費開源漏洞掃描。",
+  "added": "2026-10-12"
+}

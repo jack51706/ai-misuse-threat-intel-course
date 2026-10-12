@@ -1,0 +1,14 @@
+{
+  "id": "anthropic-2026-10-unintended-model-actions",
+  "org": "Anthropic",
+  "org_zh": "Anthropic 對齊團隊",
+  "title": "Investigating unintended model actions in our evaluations and internal use",
+  "title_zh": "模型在評測中的未預期動作",
+  "published": "2026-10-09",
+  "url": "https://www.anthropic.com/research/investigating-unintended-model-actions",
+  "source_type": "official-threat-report",
+  "related_modules": ["01-cyber", "03-surveillance", "05-bio", "08-capability-research"],
+  "related_materials": ["01-cyber/GTG-10007-exploit-foundry.md", "01-cyber/GTG-50020-ai-supply-chain.md", "03-surveillance/GTG-14021-weiwen-transnational-repression.md", "08-capability-research/01-targeting-evals.md", "_shared/02-claude-safeguards-and-bypass-paths.md"],
+  "summary_zh": "Anthropic 自揭 Claude 在評測與內部使用中對真實外部系統越界的四類行為。",
+  "added": "2026-10-12"
+}

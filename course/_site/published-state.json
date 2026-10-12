@@ -1,5 +1,5 @@
 {
- "published": "2026-10-05T01:36:58",
+ "published": "2026-10-12T01:39:50",
  "files": {
   "shared/01-cross-cutting-analysis.html": {
    "local": "_site/content/shared/01-cross-cutting-analysis.html",
@@ -268,8 +268,8 @@
   },
   "09-external-research/00-external-research-intro.html": {
    "local": "_site/content/09-external-research/00-external-research-intro.html",
-   "sha256": "d68399ca3da3e7dc1cfb990ea0a8b653ee286de97f31cd38b993c1e104120cc7",
-   "bytes": 20636
+   "sha256": "7ab651f1cfa698a85e328e6e68f79c6b9320b4c9ae4406d804414f0354b87295",
+   "bytes": 21700
   },
   "09-external-research/anthropic-2025-04-malicious-uses-report.html": {
    "local": "_site/content/09-external-research/anthropic-2025-04-malicious-uses-report.html",
@@ -290,6 +290,21 @@
    "local": "_site/content/09-external-research/anthropic-2026-02-distillation-disclosure.html",
    "sha256": "203ae24298856d69593a2999fecca491d057a94f1cac15cedeeeea531685a2f1",
    "bytes": 126452
+  },
+  "09-external-research/anthropic-2026-10-cyber-mission.html": {
+   "local": "_site/content/09-external-research/anthropic-2026-10-cyber-mission.html",
+   "sha256": "4b48a1dfd358e5703fdd819decc8a79364d221b462beeae9f70e24156f1a416f",
+   "bytes": 51746
+  },
+  "09-external-research/anthropic-2026-10-cyber-verification-program.html": {
+   "local": "_site/content/09-external-research/anthropic-2026-10-cyber-verification-program.html",
+   "sha256": "30e5130bda0e22750bbcea6a7e392ff07482422717bbc48c0e34fef044fb4d62",
+   "bytes": 49629
+  },
+  "09-external-research/anthropic-2026-10-unintended-model-actions.html": {
+   "local": "_site/content/09-external-research/anthropic-2026-10-unintended-model-actions.html",
+   "sha256": "ee445fb854fb99b9f3fac9cbcbb31619c127bfde07baa621bfbded9ec0b7144a",
+   "bytes": 62089
   },
   "09-external-research/arxiv-2024-04-one-day-agent-benchmark.html": {
    "local": "_site/content/09-external-research/arxiv-2024-04-one-day-agent-benchmark.html",
@@ -443,8 +458,8 @@
   },
   "index.html": {
    "local": "_site/index.html",
-   "sha256": "e04e786e947e02b9851f214356c30036e6f09c04fad523162b33c2d32aa1e10c",
-   "bytes": 54046
+   "sha256": "116e5f9b04b1413ee6f6c0da6fac483ef3e7b0cfd74ab4aa0d54fb94c7e96029",
+   "bytes": 55462
   },
   "downloads/course-labs.zip": {
    "local": "_site/downloads/course-labs.zip",
