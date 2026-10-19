@@ -31,8 +31,10 @@
 <!-- LEDGER:START -->
 | 機構 | 發布 | 原文標題 | 教材 |
 |---|---|---|---|
+| Anthropic（Anthropic） | 2026-10-14 | [Preparing for the 2026 US midterms](https://www.anthropic.com/news/2026-us-midterms) | [選舉防線與分解式繞過自承](anthropic-2026-10-us-midterms.html) |
 | Anthropic 對齊團隊（Anthropic） | 2026-10-09 | [Investigating unintended model actions in our evaluations and internal use](https://www.anthropic.com/research/investigating-unintended-model-actions) | [模型在評測中的未預期動作](anthropic-2026-10-unintended-model-actions.html) |
 | Anthropic（Anthropic） | 2026-10-08 | [Introducing the Anthropic Cyber Mission](https://www.anthropic.com/news/anthropic-cyber-mission) | [關鍵基礎設施與開源防禦計畫](anthropic-2026-10-cyber-mission.html) |
+| 微軟 FORGE Lab（Microsoft Security）（Microsoft） | 2026-10-07 | [3 lessons from frontier AI vulnerability research](https://www.microsoft.com/en-us/security/blog/2026/10/07/3-lessons-from-frontier-ai-vulnerability-research/) | [AI 漏洞探勘的規模與成本](microsoft-2026-10-forge-frontier-ai-vuln-research.html) |
 | Anthropic（Anthropic） | 2026-10-06 | [Expanding the Cyber Verification Program](https://www.anthropic.com/news/cyber-verification-program) | [網路能力分層審核與阻擋率](anthropic-2026-10-cyber-verification-program.html) |
 | 微軟（Microsoft） | 2026-10-01 | [Microsoft Digital Defense Report 2026](https://www.microsoft.com/en-us/corporate-responsibility/topics/cybersecurity/reports/microsoft-digital-defense-report/) | [微軟數位防禦報告 2026](microsoft-2026-10-digital-defense-report.html) |
 | Google 威脅情報小組（Google GTIG） | 2026-09-30 | [Vulnerability Discovery and Exploitation Trends in the AI Era](https://cloud.google.com/blog/topics/threat-intelligence/vulnerability-discovery-and-exploitation-trends-in-the-ai-era) | [AI 時代的漏洞揭露與利用趨勢](gtig-2026-09-vulnerability-trends-ai-era.html) |

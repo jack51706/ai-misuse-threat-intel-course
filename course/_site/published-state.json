@@ -1,5 +1,5 @@
 {
- "published": "2026-10-12T01:39:50",
+ "published": "2026-10-19T01:33:54",
  "files": {
   "shared/01-cross-cutting-analysis.html": {
    "local": "_site/content/shared/01-cross-cutting-analysis.html",
@@ -268,8 +268,8 @@
   },
   "09-external-research/00-external-research-intro.html": {
    "local": "_site/content/09-external-research/00-external-research-intro.html",
-   "sha256": "7ab651f1cfa698a85e328e6e68f79c6b9320b4c9ae4406d804414f0354b87295",
-   "bytes": 21700
+   "sha256": "3357e2b4f74ce1fad64703fea39c3fb593ed8eb087537a907df9367f6954618c",
+   "bytes": 22439
   },
   "09-external-research/anthropic-2025-04-malicious-uses-report.html": {
    "local": "_site/content/09-external-research/anthropic-2025-04-malicious-uses-report.html",
@@ -305,6 +305,11 @@
    "local": "_site/content/09-external-research/anthropic-2026-10-unintended-model-actions.html",
    "sha256": "ee445fb854fb99b9f3fac9cbcbb31619c127bfde07baa621bfbded9ec0b7144a",
    "bytes": 62089
+  },
+  "09-external-research/anthropic-2026-10-us-midterms.html": {
+   "local": "_site/content/09-external-research/anthropic-2026-10-us-midterms.html",
+   "sha256": "91a0c96834d7fa5f84a010fae395a56b3c35e8b04d1cd9f6943718512dee7c88",
+   "bytes": 66135
   },
   "09-external-research/arxiv-2024-04-one-day-agent-benchmark.html": {
    "local": "_site/content/09-external-research/arxiv-2024-04-one-day-agent-benchmark.html",
@@ -391,6 +396,11 @@
    "sha256": "2d3d93c59cf161be985c335649f493efd62d1958de0c654935af5ff6572aefb7",
    "bytes": 76299
   },
+  "09-external-research/microsoft-2026-10-forge-frontier-ai-vuln-research.html": {
+   "local": "_site/content/09-external-research/microsoft-2026-10-forge-frontier-ai-vuln-research.html",
+   "sha256": "77d065797861028b6b5a8ca700603f7850912161b6e80cdd62d9c23018a29dd3",
+   "bytes": 69863
+  },
   "09-external-research/moda-2026-01-public-sector-ai-playbook.html": {
    "local": "_site/content/09-external-research/moda-2026-01-public-sector-ai-playbook.html",
    "sha256": "a78c336d2225bdb52041dd1f0936b2c4ac5af98b2a0bf0041993987505b85806",
@@ -458,8 +468,8 @@
   },
   "index.html": {
    "local": "_site/index.html",
-   "sha256": "116e5f9b04b1413ee6f6c0da6fac483ef3e7b0cfd74ab4aa0d54fb94c7e96029",
-   "bytes": 55462
+   "sha256": "ab956f32c86a9838e3940301dd907120520bc330d639f0854460040f4ebed908",
+   "bytes": 56330
   },
   "downloads/course-labs.zip": {
    "local": "_site/downloads/course-labs.zip",
